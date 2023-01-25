@@ -30,7 +30,7 @@ Public Class GenMenu
     End Enum
 
     Private Sub GenMenu_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        '
         'Dim p = DATABASE.SetInitializer(New MigrateDatabaseToLatestVersion(Of GmIdentityDbContext, Migrations.Configuration)())
 
 
