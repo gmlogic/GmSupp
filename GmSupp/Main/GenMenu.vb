@@ -53,7 +53,7 @@ Public Class GenMenu
 
         'SetDBs(dbs.Hglp)
         Me.WindowState = FormWindowState.Normal
-        Me.Text = "Hellagrolip"
+        Me.Text = "Αιτήσεις"
         'Dim message, title, defaultValue As String
         'Dim myValue As Object
         '' Set prompt.
@@ -192,7 +192,7 @@ Public Class GenMenu
             '    End If
             'End If
         End If
-        Me.Text = "Logistics Hellagrolip"
+        Me.Text = "Αιτήσεις"
 
         SetVisibleControls(CurUser, CurUserRole)
 
@@ -591,7 +591,10 @@ Public Class GenMenu
         Dim conString As New SqlConnectionStringBuilder(My.Settings.GenConnectionString)
 
         Me.TlSSTLabelConnStr.Text = "Data Source=" & conString.DataSource & ";Initial Catalog=" & conString.InitialCatalog & ";User ID=" & conString.UserID & " Company=" & CompName 'CONNECT_STRING
-        Me.TlSSTLabelVer.Text = My.Application.Info.Version.ToString
+        Me.TlSSTLabelVer.Text = String.Format(" CurrentVersion: {0}", My.Application.Info.Version.ToString)
+        If My.Application.IsNetworkDeployed Then
+            Me.TlSSTLabelVer.Text = String.Format(" CurrentVersion: {0}", My.Application.Deployment.CurrentVersion.ToString)
+        End If
         'Throw New NotImplementedException()
     End Sub
 

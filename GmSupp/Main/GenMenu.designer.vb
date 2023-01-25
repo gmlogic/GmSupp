@@ -85,6 +85,7 @@ Partial Class GenMenu
         Me.CentrToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.PFICToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.LKToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NVFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImportExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChangeSysDateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UsersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -120,7 +121,6 @@ Partial Class GenMenu
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.TestConnectionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NVFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
         Me.SuspendLayout()
@@ -455,27 +455,27 @@ Partial Class GenMenu
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.OptionsToolStripMenuItem.Text = "&Options"
         '
         'SearchFilesToolStripMenuItem
         '
         Me.SearchFilesToolStripMenuItem.Name = "SearchFilesToolStripMenuItem"
-        Me.SearchFilesToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SearchFilesToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.SearchFilesToolStripMenuItem.Text = "Search Files"
         '
         'SelectDBasesToolStripMenuItem
         '
         Me.SelectDBasesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TestToolStripMenuItem, Me.ProductionToolStripMenuItem})
         Me.SelectDBasesToolStripMenuItem.Name = "SelectDBasesToolStripMenuItem"
-        Me.SelectDBasesToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SelectDBasesToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.SelectDBasesToolStripMenuItem.Text = "Select DBases"
         '
         'TestToolStripMenuItem
         '
         Me.TestToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HglpToolStripMenuItem, Me.LNKToolStripMenuItem, Me.CentrToolStripMenuItem, Me.PFICToolStripMenuItem, Me.LKToolStripMenuItem})
         Me.TestToolStripMenuItem.Name = "TestToolStripMenuItem"
-        Me.TestToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.TestToolStripMenuItem.Size = New System.Drawing.Size(125, 22)
         Me.TestToolStripMenuItem.Tag = "0"
         Me.TestToolStripMenuItem.Text = "Test"
         '
@@ -518,54 +518,61 @@ Partial Class GenMenu
         '
         Me.ProductionToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HglpToolStripMenuItem1, Me.LNKToolStripMenuItem1, Me.CentrToolStripMenuItem1, Me.PFICToolStripMenuItem1, Me.LKToolStripMenuItem1, Me.NVFToolStripMenuItem})
         Me.ProductionToolStripMenuItem.Name = "ProductionToolStripMenuItem"
-        Me.ProductionToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ProductionToolStripMenuItem.Size = New System.Drawing.Size(125, 22)
         Me.ProductionToolStripMenuItem.Text = "Production"
         '
         'HglpToolStripMenuItem1
         '
         Me.HglpToolStripMenuItem1.Name = "HglpToolStripMenuItem1"
-        Me.HglpToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.HglpToolStripMenuItem1.Size = New System.Drawing.Size(99, 22)
         Me.HglpToolStripMenuItem1.Tag = "21"
         Me.HglpToolStripMenuItem1.Text = "Hglp"
         '
         'LNKToolStripMenuItem1
         '
         Me.LNKToolStripMenuItem1.Name = "LNKToolStripMenuItem1"
-        Me.LNKToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.LNKToolStripMenuItem1.Size = New System.Drawing.Size(99, 22)
         Me.LNKToolStripMenuItem1.Tag = "22"
         Me.LNKToolStripMenuItem1.Text = "LNK"
         '
         'CentrToolStripMenuItem1
         '
         Me.CentrToolStripMenuItem1.Name = "CentrToolStripMenuItem1"
-        Me.CentrToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.CentrToolStripMenuItem1.Size = New System.Drawing.Size(99, 22)
         Me.CentrToolStripMenuItem1.Tag = "23"
         Me.CentrToolStripMenuItem1.Text = "Centr"
         '
         'PFICToolStripMenuItem1
         '
         Me.PFICToolStripMenuItem1.Name = "PFICToolStripMenuItem1"
-        Me.PFICToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.PFICToolStripMenuItem1.Size = New System.Drawing.Size(99, 22)
         Me.PFICToolStripMenuItem1.Tag = "24"
         Me.PFICToolStripMenuItem1.Text = "PFIC"
         '
         'LKToolStripMenuItem1
         '
         Me.LKToolStripMenuItem1.Name = "LKToolStripMenuItem1"
-        Me.LKToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.LKToolStripMenuItem1.Size = New System.Drawing.Size(99, 22)
         Me.LKToolStripMenuItem1.Tag = "25"
         Me.LKToolStripMenuItem1.Text = "LK"
+        '
+        'NVFToolStripMenuItem
+        '
+        Me.NVFToolStripMenuItem.Name = "NVFToolStripMenuItem"
+        Me.NVFToolStripMenuItem.Size = New System.Drawing.Size(99, 22)
+        Me.NVFToolStripMenuItem.Tag = "27"
+        Me.NVFToolStripMenuItem.Text = "NVF"
         '
         'ImportExcelToolStripMenuItem
         '
         Me.ImportExcelToolStripMenuItem.Name = "ImportExcelToolStripMenuItem"
-        Me.ImportExcelToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ImportExcelToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.ImportExcelToolStripMenuItem.Text = "Import Excel"
         '
         'ChangeSysDateToolStripMenuItem
         '
         Me.ChangeSysDateToolStripMenuItem.Name = "ChangeSysDateToolStripMenuItem"
-        Me.ChangeSysDateToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ChangeSysDateToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.ChangeSysDateToolStripMenuItem.Text = "Change SysDate"
         '
         'UsersToolStripMenuItem
@@ -785,20 +792,13 @@ Partial Class GenMenu
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(156, 22)
         Me.AboutToolStripMenuItem.Text = "&About ..."
         '
-        'NVFToolStripMenuItem
-        '
-        Me.NVFToolStripMenuItem.Name = "NVFToolStripMenuItem"
-        Me.NVFToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.NVFToolStripMenuItem.Tag = "27"
-        Me.NVFToolStripMenuItem.Text = "NVF"
-        '
         'GenMenu
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1284, 658)
-        Me.Controls.Add(Me.MenuStrip)
         Me.Controls.Add(Me.StatusStrip)
+        Me.Controls.Add(Me.MenuStrip)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.IsMdiContainer = True
         Me.Name = "GenMenu"
