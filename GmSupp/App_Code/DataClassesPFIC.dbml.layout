@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DataClassesPFIC">
+  <DataContextMoniker Name="/DataClassesPFICDataContext" />
+  <nestedChildShapes>
+    <classShape Id="e4205e64-040e-4cb9-bad3-bc03b15f5fb9" isExpanded="false" absoluteBounds="4.75, 0.75, 2, 0.45">
+      <DataClassMoniker Name="/DataClassesPFICDataContext/MTREXTRA" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4e8ab25e-25c4-42e1-b481-f2be42c6bc1d" absoluteBounds="4.765, 1.21, 1.9700000000000002, 5.6338297526041661" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="be6bd67e-b412-4680-bc07-c09b3cd5386a" isExpanded="false" absoluteBounds="0.75, 0.75, 2, 0.45">
+      <DataClassMoniker Name="/DataClassesPFICDataContext/MTRL" />
+      <nestedChildShapes>
+        <elementListCompartment Id="72e8b7e0-4fc4-4e01-88e0-3e53ac455fc8" absoluteBounds="0.76499999999999968, 1.21, 1.9700000000000002, 37.363566080729164" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 0.975); (4.75 : 0.975)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataClassesPFICDataContext/MTRL/MTRL_MTREXTRA" />
+      <nodes>
+        <classShapeMoniker Id="be6bd67e-b412-4680-bc07-c09b3cd5386a" />
+        <classShapeMoniker Id="e4205e64-040e-4cb9-bad3-bc03b15f5fb9" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

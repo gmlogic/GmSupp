@@ -1,0 +1,3400 @@
+﻿Imports System.ComponentModel
+Imports System.Data.Linq
+Imports System.Data.SqlClient
+Imports System.IO
+Imports System.Text
+Imports System.Transactions
+Imports GmS1App.Hglp
+Imports OfficeOpenXml
+Imports OfficeOpenXml.Style
+'Imports NPOI.HPSF
+'Imports NPOI.HSSF.UserModel
+'Imports Microsoft.Office.Interop
+Imports Softone
+Imports System.Reflection
+
+Public Class GroupBalance
+#Region "01-Declare Variables"
+    Dim df As GmData
+    Dim db As New DataClassesHglpDataContext
+    Dim myArrF As String()
+    Dim myArrN As String()
+    Private m_Series As Integer
+    ' Declare a variable to indicate the commit scope.  
+    ' Set this value to false to use cell-level commit scope.  
+    Private rowScopeCommit As Boolean = True
+    Private CCCVShipms As List(Of ccCVShipment)
+    Dim fS1HiddenForm As New Form
+    Dim conn As String
+    Dim whLst As New List(Of Integer)
+#End Region
+#Region "02-Declare Propertys"
+    Public Property Series As Integer
+        Get
+            Return m_Series
+        End Get
+        Set(ByVal value As Integer)
+            m_Series = value
+        End Set
+    End Property
+
+#End Region
+#Region "03-Load Form"
+    Private Sub MyBase_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+
+        DateTimePicker1.Value = CDate("01/" & CTODate.Month & "/" & Year(CTODate))
+        DateTimePicker1.Value = CDate("01/01/" & Year(CTODate))
+        DateTimePicker2.Value = New Date(CTODate.Year, CTODate.Month, CTODate.Day, 23, 59, 59) 'CDate("01/01/" & Year(CTODate))
+        DateTimePickerLimit.Value = CDate("31/12/" & Year(CTODate) - 1)
+
+        StartDate = CDate("01/01/" & Year(CTODate))
+
+        Dim ip = GenMenu.GetLocalIP()
+        Dim Pass = ""
+        'MsgBox("Καλή Χρονιά !!!" & vbCrLf & "  -- 2018 --", MsgBoxStyle.Information)
+        Me.txtFields_CODE.Text = "*"
+        If ip = "192.168.10.71" Then
+            'DateTimePicker1.Value = StartDate 'CDate("01/" & CTODate.Month & "/" & Year(CTODate))
+            'DateTimePicker2.Value = CDate("30/03/2018")
+            'Me.txtFields_CODE.Text = "2400020000*" '"2103030071*"
+            'Me.TlSTxtWHOUSE.Text = "2"
+            'Me.TlSTxtTPRMS.Text = "2041,2521,2523"
+            'Me.radioBtnItemsStatement.Checked = True
+        End If
+        Dim conString As New SqlConnectionStringBuilder
+        conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
+        conn = conString.ConnectionString
+        GenMenu.TlSSTLabelConnStr.Text = "Data Source=" & conString.DataSource & ";Initial Catalog=" & conString.InitialCatalog & ";User ID=" & conString.UserID '
+
+        Me.GroupBoxCreditsRpt.Visible = False
+        If {"akrokos", "dkanellopoulos", "skamariaris", "skamariarisp"}.Contains(CurUser) Then
+            Me.radioBtnAnalytical.Visible = False
+            Me.radioBtnΑggregate.Visible = False
+            Me.radioBtnOI.Visible = False
+            Me.radioBtnOBal.Visible = False
+            Me.radioBtnProCr.Checked = True
+            Me.TlSTxtWHOUSE.Text = "2"
+            Me.TlSTxtTPRMS.Text = "2041,2521,2523"
+            Me.chkBoxZero.Visible = False
+        End If
+        Me.radioBtnOI.Enabled = False
+        If {"dmalandrakis", "iantypa", "kvasilaki", "mourailidou"}.Contains(CurUser) Then
+            Me.radioBtnOI.Enabled = True
+            Me.radioBtnOI.Checked = True
+            Me.radioBtnOBal.Visible = True
+            Me.TlSTxtWHOUSE.Text = "4,13,8,5"
+        End If
+
+        If Me.Tag = "Προμηθευτών" Or Me.Tag = "Διαχείρηση πληρωμών Μεταφορέων" Then
+            Me.ToolStripSalesMan.Visible = False
+            Me.radioBtnOI.Enabled = True
+            Me.radioBtnOI.Checked = True
+            Me.radioBtnOBal.Visible = False
+            Me.radioBtnΑggregate.Checked = True
+        End If
+
+        If Me.Tag = "Πελατών" Then
+            Me.radioBtnΑggregate.Checked = True
+            Me.radioBtnProCr.Visible = False 'Προχρεώσεις
+        Else
+            Me.radioBtnProCr.Visible = True 'Προχρεώσεις
+            Me.radioBtnProCr.Location = Me.radioBtnOBal.Location
+            Me.radioBtnOBal.Visible = False
+            Me.radioBtnSales.Visible = False
+        End If
+
+        If CurUser = "gmlogic" Then
+            Me.Panel1.Visible = True
+            Me.radioBtnOI.Enabled = True
+            Me.TlSTxtWHOUSE.Text = "4,13,8,5"
+            Me.TlSTxtTRDR.Text = "3000142" '"3000011" '"3000382" ' '"3000934" '"3000534" '"3000011" ' "3000153" '"5001104,5000386"
+            'Me.txtBoxChequeCODE.Text = "ΕΠΕΠ000607"
+            'Me.radioBtnOI.Checked = True
+            'Me.radioBtnCheque.Checked = True
+            Me.radioBtnSales.Checked = True
+            Me.radioBtnAnalytical.Checked = True
+            Me.radioBtnCalcBal.Checked = True
+            Me.DateTimePicker1.Value = CDate("01/01/2019")
+            Me.DateTimePicker2.Value = CTODate ' CDate("31/03/2018")
+            Me.chkBoxTest.Visible = True
+        End If
+
+        ' When the form loads, the KeyPreview property is set to True.
+        ' This lets the form capture keyboard events before
+        ' any other element in the form.
+        Me.KeyPreview = True
+        Me.txtTimeOut.Text = 300
+
+        ' Display the ProgressBar control.
+        Me.ToolStripProgressBar1.Visible = True
+        ' Set Minimum to 1 to represent the first file being copied.
+        Me.ToolStripProgressBar1.Minimum = 1
+        ' Set Maximum to the total number of files to copy.
+        Me.ToolStripProgressBar1.Maximum = 1 'filenames.Length
+        ' Set the initial value of the ProgressBar.
+        Me.ToolStripProgressBar1.Value = 1
+        ' Set the Step property to a value of 1 to represent each file being copied.
+        Me.ToolStripProgressBar1.Step = 1
+
+        ' Display the ProgressBar control.
+        Me.ToolStripProgressBar2.Visible = True
+        ' Set Minimum to 1 to represent the first file being copied.
+        Me.ToolStripProgressBar2.Minimum = 1
+        ' Set Maximum to the total number of files to copy.
+        Me.ToolStripProgressBar2.Maximum = 1 'filenames.Length
+        ' Set the initial value of the ProgressBar.
+        Me.ToolStripProgressBar2.Value = 1
+        ' Set the Step property to a value of 1 to represent each file being copied.
+        Me.ToolStripProgressBar2.Step = 1
+
+        Me.DateTimePicker3.Format = DateTimePickerFormat.Custom ' DateTimePickerFormat.Time
+        Me.DateTimePicker3.CustomFormat = "HH:mm"
+
+    End Sub
+    Private Sub MyBase_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+        If e.KeyCode = Keys.F3 Then
+            Me.cmdSelect.PerformClick()
+        End If
+        If e.Alt And e.KeyCode.ToString = "F" Then
+            ' When the user presses both the 'ALT' key and 'F' key,
+            ' KeyPreview is set to False, and a message appears.
+            ' This message is only displayed when KeyPreview is set to True.
+            Me.KeyPreview = False
+            MsgBox("KeyPreview Is True, And this Is from the FORM.")
+        End If
+    End Sub
+
+    Private Sub MyBase_FormClosing(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+        e.Cancel = (Not DataSafe())
+    End Sub
+#End Region
+#Region "04-Bas_Commands"
+    Private Sub Cmd_Edit()
+        Try
+            Try
+                Me.Cursor = Cursors.WaitCursor
+                Dim str As String = ""
+                'str = IIf(iActiveObjType = 1351, "SALDOC", "") + "[AUTOLOCATE=" + dgFINDOC.Rows(e.RowIndex).Cells("ID").Value.ToString + "]"
+                Dim drv As ccCVShipment = Me.MasterBindingSource.Current
+                str = "SALDOC[AUTOLOCATE=" & drv.FINDOC & "]"
+                s1Conn.ExecS1Command(str, fS1HiddenForm)
+                'FilldgFINDOC_gm(iActiveObjType)
+            Catch ex As Exception
+                MsgBox(ex.ToString, MsgBoxStyle.Critical, strAppName)
+            Finally
+                Me.Cursor = Cursors.Default
+            End Try
+            'If Me.boxOption_Paragelies.Checked Then
+            '    Exit Sub
+            'End If
+            'Dim TFormF
+            'TFormF = New ParagFBR
+            ''If Me.boxOption_Apografh.Checked Then
+            ''    TFormF = New ParagFBRAPG
+            ''End If
+            'Dim drv As FINDOC_MTRLINE = Me.MasterBindingSource.Current
+            'If drv.Series = 9590 Then '"ΑΠΟΓΡΑΦΗToolStripMenuItem" 
+            '    TFormF = New ParagFBRDIAK 'ParagFBRAPG
+            '    TFormF.NSeries = 9590
+            '    TFormF.NSOSOURCE = 1151
+            'End If
+            ''If Not Array.IndexOf({9520, 9521, 9522, 9523}, CType(drv.Series, Integer)) = -1 Then ' = 9520 Or drv.Series = 9521 or drv.Series=9522 or drv Then
+            'If {9520, 9521, 9522, 9523, 9524, 9526}.Contains(drv.Series) Then
+            '    TFormF = New ParagFBRDIAK
+            '    'ΕΣΩΤΕΡΙΚΗ ΔΙΑΚΙΝΗΣΗ - 9520 (-1095+1096)
+            '    'TFormF.NSeries = 9520
+            '    'TFormF.NSOSOURCE = 1151
+            'End If
+            ''TFormF.CurDrv = New MTRLINE
+            'Dim indx As Integer = drv.FINDOC
+            'TFormF.CurDrv = db.MTRLINEs.Where(Function(f) f.FINDOC = indx).FirstOrDefault
+            'TFormF.P_MTRLINES = drv.MTRLINES
+            'Dim Position As Integer = Me.MasterBindingSource.Position
+            'TFormF.DgdvRefresh = False
+            'TFormF.Text = Me.Tag & " - " & TFormF.Name
+            'TFormF.ShowDialog()
+            'If TFormF.DgdvRefresh = True Then
+            '    'Me.DataGridViewMaster.Refresh()
+            '    Cmd_Select()
+            '    ' Set the Position property to the results of the Find method. 
+            '    Dim rowFound As FINDOC_MTRLINE = (From g As FINDOC_MTRLINE In Me.MasterBindingSource Where g.FINDOC = TFormF.CurDrv.FINDOC).FirstOrDefault()
+            '    If Not IsNothing(rowFound) Then
+            '        Dim itemFound As Integer = Me.MasterBindingSource.IndexOf(rowFound)
+            '        Me.MasterBindingSource.Position = itemFound
+            '    End If
+            'End If
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+
+    Private Sub Cmd_Select()
+        'me.MasterDataGridView.DataSource = Nothing
+        'PanelFINDOCGrid.Visible = True
+        ''Use WebService Calls
+        'me.MasterDataGridView.DataSource = S1_WSGetBrowserData(s1Conn, "SALDOC", "", "FINDOC.TRNDATE=2014-01-01&FINDOC.TRNDATE_TO=2014-12-31")
+        'lblFINDOCRecords.Text = lblFINDOCRecords.Tag + me.MasterDataGridView.Rows.Count.ToString
+        Me.MasterDataGridView.DataSource = Nothing
+        Dim str As String = ""
+        Dim dsTRDR As New DataSet
+        Dim ixTable As XTable
+        Me.Cursor = Cursors.WaitCursor
+        Try
+
+            LoadData()
+            db.Log = Console.Out
+
+
+            Dim sodTyp = 0
+
+            Dim runningTotal As Double = 0
+            Dim getRunningTotal As Func(Of Double, Double) = Function(n)
+                                                                 runningTotal += n
+                                                                 Return runningTotal
+                                                             End Function
+
+            If Me.Tag = "Υπόλοιπα Ομάδων" Then
+                'Select  ISNULL(SUM(A1.TTRNVAL * (B1.FLG01 - B1.FLG02)), 0) As BAL
+                'From TPRMS As B1 INNER Join
+                '              TRDTRN As A1 On B1.COMPANY = A1.COMPANY And B1.SODTYPE = A1.SODTYPE And B1.TPRMS = A1.TPRMS
+                'Where (A1.TRDR = 1438) And (A1.COMPANY IN (1000)) And (A1.TRNDATE >= '20180501')
+
+                'tn.SODTYPE = 13, "Πελάτες", tn.SODTYPE = 12, "Προμηθευτές"
+
+                Dim x = From tn In db.TRDTRNs Join tpm In db.TPRMs On tpm.COMPANY Equals tn.COMPANY And tpm.SODTYPE Equals tn.SODTYPE And tpm.TPRMS Equals tn.TPRMS
+                        Join ex In db.TRDEXTRAs On tn.TRDR Equals ex.TRDR Join t In db.TRDRs On t.TRDR Equals tn.TRDR
+                        Where Not ex.NUM05 Is Nothing And (tn.COMPANY = 1000) And (tn.TRNDATE <= Me.DateTimePicker2.Value)
+                        Select omada = ex.NUM05, SODTYPEName = IIf(tn.SODTYPE = 13, "Πελάτες", "Προμηθευτές"),
+                            t.CODE, t.NAME, tn.SODTYPE, tn.TRDR,
+                            cusBal = DirectCast(IIf(tn.SODTYPE = 13, tn.TTRNVAL * (tpm.FLG01 - tpm.FLG02), 0.00), Double),
+                            supBal = DirectCast(IIf(tn.SODTYPE = 12, tn.TTRNVAL * (tpm.FLG01 - tpm.FLG02), 0.00), Double)
+
+
+                Dim q = From gg In x Group gg By gg.TRDR Into Group
+                        Select TRDR, Group.FirstOrDefault.omada, Group.FirstOrDefault.SODTYPE, Group.FirstOrDefault.SODTYPEName,
+                            Group.FirstOrDefault.CODE,
+                            Group.FirstOrDefault.NAME,
+                            SumCusBal = Group.Sum(Function(f) f.cusBal),
+                            SumSupBal = Group.Sum(Function(f) f.supBal)
+
+
+                Dim qwh = q.OrderBy(Function(f) f.omada).ThenByDescending(Function(f) f.SODTYPE)
+                'wh = wh.Where(Function(f) {1438}.Contains(f.STRDR))
+                Me.MasterBindingSource.DataSource = qwh
+            End If
+            'If Me.Tag = "Πελατών" Then
+            '    sodTyp = 13
+            '    '                Select Case SUM(prdb + db), SUM(prcr + cr), SUM((prdb + db) - (prcr + cr))
+            '    'FROM(SELECT         SUM(tdebit) As prdb, SUM(tcredit) As prcr, SUM(tdebit - tcredit) As prbal, 0 As db, 0 As cr, 0 As bal
+            '    '                          From VTRDTRN As A
+            '    '                          Where (TRDR = 110) And (Company IN (1000)) And (sodtype = 13) And (trndate < '20180101')
+            '    '                          UNION ALL
+            '    '                          Select Case 0 As prdb, 0 As prcr, 0 As prbal, SUM(tdebit) As db, SUM(tcredit) As cr, SUM(tdebit - tcredit) As bal
+            '    '                          From VTRDTRN As A
+            '    '                          Where (TRDR = 110) And (Not (tprms = 3000)) And (Company IN (1000)) And (sodtype = 13) And (trndate >= '20180101') AND (trndate < '20190101')) AS gg
+            '    '[Πωλητής]
+            '    Dim q = From vt In db.VTRDTRNs Join td In db.TRDRs On vt.trdr Equals td.TRDR
+            '            Select td.COMPANY, td.SODTYPE, td.TRDR, TRDRCODE = td.CODE, td.NAME, td.SALESMAN, pr_name2 = db.PRSNs.Where(Function(f) f.SODTYPE = 20 And f.PRSN = td.SALESMAN).FirstOrDefault.NAME2,
+            '                vt.sosource, vt.fincode, vt.trndate,
+            '                db = vt.tdebit,
+            '                cr = vt.tcredit,
+            '                bal = vt.tdebit - vt.tcredit
+
+            '    Dim q1 = From td In db.TRDRs
+            '             Select td.COMPANY, td.SODTYPE, td.TRDR, TRDRCODE = td.CODE, td.NAME, td.SALESMAN, pr_name2 = db.PRSNs.Where(Function(f) f.SODTYPE = 20 And f.PRSN = td.SALESMAN).FirstOrDefault.NAME2,
+            '                prdb = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate < CDate("01/01/" & Year(CTODate))).Sum(Function(f) f.tdebit),
+            '                prcr = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate < CDate("01/01/" & Year(CTODate))).Sum(Function(f) f.tcredit),
+            '                prbal = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate < CDate("01/01/" & Year(CTODate))).Sum(Function(f) f.tdebit - f.tcredit),
+            '                db = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate.Year >= DateTimePicker1.Value.Year And f.trndate.Year <= DateTimePicker2.Value.Year).Sum(Function(f) f.tdebit),
+            '                cr = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate.Year >= DateTimePicker1.Value.Year And f.trndate.Year <= DateTimePicker2.Value.Year).Sum(Function(f) f.tcredit),
+            '                bal = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate < CDate("01/01/" & Year(CTODate))).Sum(Function(f) f.tdebit - f.tcredit) + db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate.Year >= DateTimePicker1.Value.Year And f.trndate.Year <= DateTimePicker2.Value.Year).Sum(Function(f) f.tdebit - f.tcredit)
+
+            '    Dim qwh = q.Where(Function(f) f.COMPANY = 1000 And f.SODTYPE = sodTyp)
+            '    q = qwh.Where(Function(f) f.trndate >= DateTimePicker1.Value And f.trndate <= DateTimePicker2.Value)
+            '    q = q.OrderBy(Function(f) f.trndate).ThenBy(Function(f) f.sosource)
+            '    q = q.OrderBy(Function(f) f.TRDRCODE)
+            '    If Not Me.TlSTxtTRDR.Text = "" Then
+
+            '        qwh = q.Where(Function(f) f.TRDRCODE Like Me.TlSTxtTRDR.Text)
+            '    End If
+
+            '    If Not Me.TlSTxtPRSN.Text = "" Then
+            '        q = q.OrderBy(Function(f) f.pr_name2)
+            '        Dim ar As List(Of Integer) = db.PRSNs.Where(Function(f) Me.TlSTxtPRSN.Text.Split(",").Contains(f.CODE)).Select(Function(f) f.PRSN).ToList
+            '        qwh = q.Where(Function(f) ar.Contains(f.SALESMAN))
+            '    End If
+
+
+            '    'qwh = qwh.Where(Function(f) f.TRNDATE.Year >= DateTimePicker1.Value.Year And f.TRNDATE.Year <= DateTimePicker2.Value.Year)
+
+
+            '    Me.MasterBindingSource.DataSource = qwh
+
+            'End If
+
+            If Me.Tag = "Πελατών" Then
+                sodTyp = 13
+                'ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΗΜ/ΝΙΑ Δ/Α,Δ/Α,ΗΜ/ΝΙΑ,Κατάθεση-Φόρτωση,Χρέωση,Πίστωση,Υπόλοιπο,Ανεξόφλητα
+
+                Me.lblH01.Text = ""
+                Me.lblH02.Text = ""
+                Me.lblH03.Text = ""
+                Me.lblH04.Text = ""
+                Me.lblH05.Text = ""
+                Me.lblH06.Text = ""
+                Me.lblH07.Text = ""
+                Me.lblV01.Text = ""
+                Me.lblV02.Text = ""
+                Me.lblV03.Text = ""
+                Me.lblV04.Text = ""
+                Me.lblV05.Text = ""
+                Me.lblV06.Text = ""
+                Me.lblV07.Text = ""
+
+
+                Dim trdrCodes = ""
+                If Not Me.TlSTxtTRDR.Text = "" Then
+                    trdrCodes = Me.TlSTxtTRDR.Text
+                End If
+                Dim prsns = db.PRSNs.Where(Function(f) f.SODTYPE = 20).ToList
+                If Not Me.TlSTxtPRSN.Text = "" Then
+
+                    prsns = prsns.Where(Function(f) Me.TlSTxtPRSN.Text.Split(",").Contains(f.CODE)).ToList
+                    Dim prsnids = prsns.Select(Function(f) f.PRSN).ToList
+                    Dim codes = db.TRDRs.Where(Function(f) f.SODTYPE = sodTyp And prsnids.Contains(f.SALESMAN)).Select(Function(f) f.CODE).ToList
+
+                    For Each ss In codes
+                        trdrCodes &= "," & ss
+                    Next
+
+                End If
+
+                '1 ΚΑΤΑΝΟΜΑΖΟΜΕΝΟΣ
+                '2 ΜΗ ΚΑΤΑΝΟΜΑΖΟΜΕΝΟΣ
+                If Me.chkListBoxInsurance.CheckedItems.Count > 0 Then
+                    Dim chks As New List(Of Short)
+                    For Each ch As String In Me.chkListBoxInsurance.CheckedItems
+                        chks.Add(CShort(ch.Substring(0, 1)))
+                    Next
+                    If chks.Count > 0 Then
+                        Dim codes = db.TRDRs.Where(Function(f) chks.Contains(f.TRDEXTRA.UTBL03)).Select(Function(f) f.CODE).ToList
+
+                        For Each ss In codes
+                            trdrCodes &= "," & ss
+                        Next
+                    End If
+
+                End If
+                If trdrCodes.Count > 2100 Then
+                    'MsgBox("The server supports a maximum of 2100 parameters.Your choice is " & trdrCodes.Count)
+                    'Me.Cursor = Cursors.Default
+                    'ixTable = Nothing
+                    'Exit Sub
+                End If
+
+                Dim trdrs = db.TRDRs.Where(Function(f) trdrCodes.Split(",").Contains(f.CODE)).Select(Function(f) f.TRDR).ToList
+
+                Dim trdExtratbl As New List(Of TRDEXTRA)
+
+
+                'Πωλήσεις - Τζίροι
+                If Me.radioBtnSales.Checked Then
+
+
+                    Dim months As New List(Of monthsSales)
+
+                    'Dim d1 As DateTime = New DateTime(2002, 1, 1)
+                    'Dim d2 As DateTime = New DateTime(2000, 10, 1)
+                    'Dim M As Integer = Math.Abs((d1.Year - d2.Year))
+                    'Dim months As Integer = ((M * 12) + Math.Abs((d1.Month - d2.Month)))
+
+                    '01/10/2018 - 31/03/2019
+
+                    Dim ys = Me.DateTimePicker2.Value.Year - Me.DateTimePicker1.Value.Year
+
+                    Dim fmonths = 1
+                    If ys = 0 Then
+                        fmonths = Me.DateTimePicker1.Value.Month
+                    End If
+                    For i As Integer = fmonths To Me.DateTimePicker2.Value.Month
+                        Dim mm As New monthsSales
+                        mm.FiscPrd = Me.DateTimePicker2.Value.Year
+                        mm.Period = i
+                        months.Add(mm)
+                    Next
+
+                    For j As Integer = 1 To ys
+                        fmonths = 1
+                        If j = ys Then
+                            fmonths = Me.DateTimePicker1.Value.Month
+                        End If
+                        For i As Integer = 12 To fmonths Step -1
+                            Dim mm As New monthsSales
+                            mm.FiscPrd = Me.DateTimePicker2.Value.Year - j
+                            mm.Period = i
+                            months.Add(mm)
+                        Next
+                    Next
+                    months = months.OrderBy(Function(f) f.FiscPrd).ThenBy(Function(f) f.Period).ToList
+
+                    Dim trdbs = db.TRDBALSHEETs.Where(Function(f) trdrs.Contains(f.TRDR) And months.Select(Function(f1) f1.FiscPrd).Distinct.Contains(f.FISCPRD)).ToList
+
+                    If trdrs.Count > 0 Then
+                        Me.ToolStripProgressBar1.Maximum = trdrs.Count
+                        ' Set the initial value of the ProgressBar.
+                        Me.ToolStripProgressBar1.Value = 1
+                    End If
+
+
+                    Dim dt As New DataTable
+                    'myArrF = ("trdr,code,name,afm,tdSalesManName,oibal00,oibal01,oibal02,oibal03,oibal04,oibal05,oibal06,oibal07,oibal08,oibal09,oibal10,oibal11,oibal12,oibal13").Split(",")
+                    'myArrN = ("trdr,ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΑΦΜ,Πωλητής,ΕκΜεταφ,Ιανουάριος,Φεβρουάριος,Μάρτιος,Απρίλιος,Μάιος,Ιούνιος,Ιούλιος,Αύγουστος,Σεπτέμβριος,Οκτώβριος,Νοέμβριος,Δεκέμβριος,ΣυνΥπολ").Split(",")
+
+                    Dim col As New DataColumn
+                    dt.Columns.Add("trdr", GetType(Integer))
+
+                    dt.Columns.Add("code", GetType(String))
+                    dt.Columns.Item(dt.Columns.IndexOf("code")).Caption = "ΚΩΔ"
+                    dt.Columns.Add("name", GetType(String))
+                    dt.Columns.Item(dt.Columns.IndexOf("name")).Caption = "ΣΥΝΑΛΑΣΟΜΕΝΟΣ"
+                    dt.Columns.Add("afm", GetType(String))
+                    dt.Columns.Item(dt.Columns.IndexOf("afm")).Caption = "ΑΦΜ"
+                    dt.Columns.Add("tdSalesManName", GetType(String))
+                    dt.Columns.Item(dt.Columns.IndexOf("tdSalesManName")).Caption = "Πωλητής"
+                    dt.Columns.Add("NUM01", GetType(System.Double))
+                    dt.Columns.Item(dt.Columns.IndexOf("NUM01")).Caption = "Ασφ/κό όριο"
+
+                    For Each dd In months
+                        dt.Columns.Add(String.Format("{0:00}", dd.Period) & "_" & dd.FiscPrd, GetType(System.Decimal))
+                        dt.Columns.Item(dt.Columns.IndexOf(String.Format("{0:00}", dd.Period) & "_" & dd.FiscPrd)).Caption = String.Format("{0:00}", dd.Period) & "/" & dd.FiscPrd
+                    Next
+
+                    Dim trdrtbl = db.TRDRs.Where(Function(f) trdrs.Contains(f.TRDR)).ToList
+                    For Each td In trdrs
+                        Me.ToolStripProgressBar1.PerformStep()
+                        Try
+                            For Each mm In months
+                                Dim trdb = trdbs.Where(Function(f) f.TRDR = td And f.FISCPRD = mm.FiscPrd And f.PERIOD = mm.Period And Not f.LTURNOVR = 0).FirstOrDefault
+                                mm.bal = 0
+                                If Not IsNothing(trdb) Then
+                                    mm.bal = trdb.LDEBIT
+                                End If
+                            Next
+                            Dim dr As DataRow = dt.NewRow
+                            Dim trdr = trdrtbl.Where(Function(f) f.TRDR = td).FirstOrDefault
+                            dr("trdr") = td
+                            dr("code") = trdr.CODE
+                            dr("name") = trdr.NAME
+                            dr("afm") = trdr.AFM
+                            If Not IsNothing(trdr.SALESMAN) Then
+                                Dim prsn = prsns.Where(Function(f) f.PRSN = trdr.SALESMAN).FirstOrDefault
+                                If Not IsNothing(prsn) Then
+                                    dr("tdSalesManName") = prsn.NAME2
+                                End If
+                            End If
+                            dr("NUM01") = If(trdr.TRDEXTRA.NUM01, 0)
+
+                            For Each dd In months
+                                dr(String.Format("{0:00}", dd.Period) & "_" & dd.FiscPrd) = dd.bal
+                            Next
+                            dt.Rows.Add(dr)
+                        Catch ex As Exception
+
+                        End Try
+                    Next
+
+
+
+
+                    Dim dict As New Dictionary(Of String, Type)
+
+                    For Each dd In months
+                        dict.Add(String.Format("{0:00}", dd.Period) & "_" & dd.FiscPrd, System.Type.GetType("System.Decimal"))
+                    Next
+
+                    Dim qq = Utility.CreateClass("MyClass", dict)
+
+                    Dim columnNames As String() = dt.Columns.Cast(Of DataColumn).Select(Function(f) f.ColumnName).ToArray()
+
+
+
+                    myArrF = dt.Columns.Cast(Of DataColumn).Select(Function(f) f.ColumnName).ToArray()
+                    'dt.Columns.months.Select(Function(f) f.FiscPrd & "_" & f.Period).ToArray
+                    myArrN = dt.Columns.Cast(Of DataColumn).Select(Function(f) f.Caption).ToArray()
+
+                    'Dim head As String = ""
+                    'Me.MasterDataGridView.Columns.Clear()
+
+                    'For Each dd In months
+                    '    head &= dd.FiscPrd & "-" & dd.Period & ";"
+                    '    Me.MasterDataGridView.Columns.Add(dd.FiscPrd & "-" & dd.Period, dd.FiscPrd & "-" & dd.Period)
+                    'Next
+
+                    'With Me.MasterDataGridView
+                    '    .ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Sunken
+                    '    With (Me.MasterDataGridView.ColumnHeadersDefaultCellStyle)
+                    '        .BackColor = Drawing.Color.Orange '.Navy
+                    '        .ForeColor = Drawing.Color.Blue '.White
+                    '        '.Font = New Font(dgGen1.Font.Name, dgGen1.Font.Size + 2.0F, FontStyle.Bold)
+                    '    End With
+                    '    .EnableHeadersVisualStyles = False
+                    'End With
+
+                    'Dim dg As New DataGridViewRow
+                    'Me.MasterDataGridView.Rows.Add(dg)
+
+                    'For i As Integer = 0 To months.Count - 1
+                    '    Dim cell As DataGridViewCell = Me.MasterDataGridView.Rows(0).Cells(i)
+                    '    cell.Value = months(i).bal
+                    'Next
+
+
+
+
+                    ''Dim bals(months.Count) As Decimal
+
+                    ''Dim GG As New List(Of Array)
+
+                    ''Me.MasterBindingSource.DataSource = New SortableBindingList(Of monthsSales)(months.ToList)
+                    'Exit Sub
+
+                    'Dim ff = Utility.ConvertDataTable(Of DataTable)(dt).ToList
+                    Dim ff As List(Of DataRow) = dt.AsEnumerable().ToList()
+
+                    Me.MasterBindingSource.DataSource = dt 'ff.ToList
+                End If
+
+                'Αξιόγραφα
+                If Me.radioBtnCheque.Checked Then
+                    Dim q = db.ccCVChequeOpens.Where(Function(f) trdrs.Contains(f.TRDR)).ToList ' db.CHEQUEs.Where(Function(f) trdrs.Contains(f.TRDR)).ToList '.AsQueryable
+
+                    Dim qwh = q
+                    Dim dateName = "CRTDATE"
+                    If Not Me.radioBtnFinalDate.Checked Then
+
+                        'qwh = qwh.Where(Function(f) f.CRTDATE <= Me.DateTimePicker2.Value).ToList '.AsQueryable
+
+                        If ToolStripComboBox1.SelectedItem = "Εκδότης:" Then
+                            qwh = qwh.Where(Function(f) trdrs.Contains(f.TRDRPUBLISHER) And f.CRTDATE <= Me.DateTimePicker2.Value).ToList
+                        End If
+
+                        If ToolStripComboBox1.SelectedItem = "Αρχικός συναλ/νος:" Then
+                            qwh = qwh.Where(Function(f) trdrs.Contains(f.TRDR) And f.CRTDATE <= Me.DateTimePicker2.Value).ToList
+                        End If
+                    Else
+                        dateName = "FINALDATE"
+                        'qwh = qwh.Where(Function(f) f.FINALDATE <= Me.DateTimePicker2.Value).ToList '.AsQueryable
+
+                        If ToolStripComboBox1.SelectedItem = "Εκδότης:" Then
+                            qwh = qwh.Where(Function(f) trdrs.Contains(f.TRDRPUBLISHER) And f.FINALDATE > Me.DateTimePicker2.Value).ToList
+                        End If
+
+                        If ToolStripComboBox1.SelectedItem = "Αρχικός συναλ/νος:" Then
+                            qwh = qwh.Where(Function(f) trdrs.Contains(f.TRDR) And f.FINALDATE > Me.DateTimePicker2.Value).ToList
+                        End If
+                    End If
+
+                    'q = db.CHEQUEs.Where(Function(f) GetType(CHEQUE).GetProperty(dateName).GetValue(f, Nothing) <= Me.DateTimePicker2.Value).ToList '.AsQueryable
+
+
+
+
+
+                    If Not Me.txtBoxChequeCODE.Text = "" Then
+                        qwh = qwh.Where(Function(f) Me.txtBoxChequeCODE.Text.Split(",").Contains(f.CODE)).ToList 'Σειρά
+                    End If
+
+                    If Not Me.txtBoxChequeNUMBER.Text = "" Then
+                        qwh = qwh.Where(Function(f) Me.txtBoxChequeNUMBER.Text.Split(",").Contains(f.CHEQUENUMBER)).ToList 'Σειρά
+                    End If
+
+
+                    Dim fnchs As New List(Of fnCheQueOpenAllResult)
+
+                    If qwh.Count > 0 Then
+                        ' Set the initial value of the ProgressBar.
+                        Me.ToolStripProgressBar1.Value = 1
+                        Me.ToolStripProgressBar1.Maximum = qwh.Count
+                    End If
+
+
+                    For Each chq In qwh
+                        If Me.radioBtnΑggregate.Checked Then
+                            fnchs.Add(db.fnCheQueOpenAll(chq.CHEQUE, Me.DateTimePicker2.Value).OrderBy(Function(f) f.TRNDATE).ThenBy(Function(f) f.FINDOC).ToList.LastOrDefault)
+                        End If
+                        If Me.radioBtnAnalytical.Checked Then
+                            Dim fnch = db.fnCheQueOpenAll(chq.CHEQUE, Me.DateTimePicker2.Value).OrderBy(Function(f) f.TRNDATE).ThenBy(Function(f) f.FINDOC).ToList
+                            'Dim fnchflt = fnch.Where(Function(f) Not f.CHEQUEUPD = 0)
+                            'If fnchflt.Count = 1 Then
+                            '    Dim fnchf = fnch.FirstOrDefault
+                            '    If fnchf.PAYBAL = 1 Then 'Εξωφλημένο
+                            '        fnchf.CALCTRNBALANCE = 0
+                            '    End If
+                            'End If
+                            fnchs.AddRange(fnch)
+                        End If
+                        Me.ToolStripProgressBar1.PerformStep()
+                    Next
+
+                    Me.lblH07.Text = "Υπόλοιπο στήν Οριακή Ημ/νία"
+                    Me.lblV07.Text = String.Format("{0:N2}", fnchs.Sum(Function(f) f.TRNBALANCE))
+                    'If fnchs.Count > 0 Then
+
+                    '    For Each td In trdrs
+
+                    '        If ToolStripComboBox1.SelectedItem = "Εκδότης:" Then
+                    '            qwh = qwh.Where(Function(f) f.TRDRPUBLISHER = td And f.CRTDATE <= Me.DateTimePicker2.Value)
+                    '        End If
+
+                    '        If ToolStripComboBox1.SelectedItem = "Αρχικός συναλ/νος:" Then
+                    '            qwh = qwh.Where(Function(f) f.TRDR = td And f.CRTDATE <= Me.DateTimePicker2.Value)
+                    '        End If
+
+                    '        For Each chq In qwh
+                    '            fnchs.AddRange(db.fnCheQueOpenAll(chq.CHEQUE, Me.DateTimePicker2.Value).ToList)
+                    '        Next
+                    '    Next
+
+                    'End If
+
+                    'Me.MasterBindingSource.DataSource = New SortableBindingList(Of monthsBal)(res4.ToList)
+                    Me.MasterBindingSource.DataSource = New SortableBindingList(Of fnCheQueOpenAllResult)(fnchs.ToList)
+
+                End If
+
+                'Ανεξόφλητα παραστατικά or Υπόλοιπα Συναλ/μένων or Credits Reports
+                If Me.radioBtnOI.Checked Or Me.radioBtnOBal.Checked Or Me.radioBtnCreditsRpt.Checked Then
+                    Dim detb = False
+                    Dim details As New List(Of GetTrdrDetailResult)
+                    Dim curBals As New List(Of GetTrdrBalanceAllResult)
+                    Dim trdrtbl As New List(Of TRDR)
+                    If Me.radioBtnCalcDetails.Checked Then
+                        details = GetTrdrDetailBalance(curBals, prsns, Nothing, trdrCodes.Replace("*", "%").Trim, 1000, sodTyp, Me.DateTimePicker1.Value, Me.DateTimePicker2.Value, True)
+                    Else
+                        Dim res As IMultipleResults = db.GetTrdrBalance(Nothing, trdrCodes.Replace("*", "%").Trim, 1000, sodTyp, Me.DateTimePicker1.Value, Me.DateTimePicker2.Value, detb)
+
+                        'myArrN = ("Ημερ/νία,Παραστατικό,Κίνηση,Α.Χ.,Επωνυμία,Ποσ.1,Ποσ.εισαγωγών,Αξία εισαγωγών,Ποσ.εξαγωγών,Αξία εξαγωγών,Υπόλοιπο ποσ.,Υπόλοιπο αξία,Αιτιολογία").Split(",")
+
+                        'Dim res1 = res.GetResult(Of GetItemsStatementsResult1).ToList
+                        Dim befYeardBal = res.GetResult(Of GetTrdrBalanceBefYearResult).ToList
+                        curBals = res.GetResult(Of GetTrdrBalanceAllResult).ToList
+                        Dim befPrdBal = res.GetResult(Of GetTrdrBalanceResult).ToList
+
+                        'myArrN = ("Ημερ/νία,Παραστατικό,Κίνηση,Α.Χ.,Επωνυμία,Ποσ.1,Ποσ.εισαγωγών,Αξία εισαγωγών,Ποσ.εξαγωγών,Αξία εξαγωγών,Υπόλοιπο ποσ.,Υπόλοιπο αξία,Αιτιολογία").Split(",")
+                        details = res.GetResult(Of GetTrdrDetailResult).ToList
+
+                        Dim afterPrdBal = res.GetResult(Of GetTrdrDetailAfterResult).ToList
+
+                        Dim trdrDistinctCurBals = curBals.OrderBy(Function(f) f.TRDR).Distinct(Function(f) f.TRDR).Select(Function(f) f.TRDR).ToList
+
+                        'Dim dets As New List(Of GetTrdrDetailResult)
+
+                        Dim TrdrChqBal = res.GetResult(Of GetTrdrChequeOpenResult).ToList ' res.GetResult(Of GetTrdrChqueBalanceResult).ToList
+
+                        Dim finss = res.GetResult(Of GetTrdrFinPaytermsResult).ToList
+
+
+                        'Dim trdrs = db.TRDRs.Where(Function(f) trdrCodes.Split(",").Contains(f.CODE)).ToList
+
+                        If trdrDistinctCurBals.Count > 0 Then
+                            Me.ToolStripProgressBar1.Maximum = trdrDistinctCurBals.Count
+                            ' Set the initial value of the ProgressBar.
+                            Me.ToolStripProgressBar1.Value = 1
+                        End If
+
+
+                        trdrtbl = db.TRDRs.Where(Function(f) trdrDistinctCurBals.Contains(f.TRDR)).ToList
+                        trdrs = trdrtbl.Select(Function(f) f.TRDR).ToList
+
+                        trdExtratbl = db.TRDEXTRAs.Where(Function(f) trdrs.Contains(f.TRDR)).ToList
+
+                        Dim trfintbl = db.TRDFINDATAs.Where(Function(f) trdrs.Contains(f.TRDR)).ToList
+
+                        For Each td In trdrDistinctCurBals
+                            Me.ToolStripProgressBar1.PerformStep()
+                            Dim curBal = curBals.Where(Function(f) f.TRDR = td).ToList
+                            Dim detailsTd = details.Where(Function(f) f.trdr = td).ToList
+                            Dim trdr = trdrtbl.Where(Function(f) f.TRDR = td).FirstOrDefault
+                            Dim SALNAME = ""
+                            If Not IsNothing(trdr.SALESMAN) Then
+                                SALNAME = prsns.Where(Function(f) f.PRSN = trdr.SALESMAN).FirstOrDefault.NAME2
+                            End If
+                            Dim bal As Double = 0
+                            Dim chqOpen As Double = 0
+                            Dim mixBal As Double = 0
+                            Dim fins = finss.Where(Function(f) f.TRDR = td).ToList
+                            ' GetOpenTrdrBalance(trdrCodes.Replace("*", "%").Trim, sodTyp, Me.DateTimePicker1.Value, Me.DateTimePicker2.Value)
+                            Dim trfin = trfintbl.Where(Function(f) f.TRDR = td).FirstOrDefault
+                            If Not IsNothing(trfin) Then
+                                bal = trfin.LBAL
+                            End If
+                            'WHERE        (CASE WHEN B.SODTYPE IN (12, 16) THEN B.TRDRPOSSESSOR ELSE B.TRDR END = 37) AND (B.COMPANY = 1000) AND (B.ISCANCEL = 0) AND (A.COMPANY = 1000) AND (A.OPENBAL = 1)
+                            'ORDER BY B.FINALDATE
+                            'SODTYPE = 12,16	Προμηθευτές,Πιστωτές     81	Αξιόγραφα                                                                                                                     
+                            'Dim chqOpen = db.ccCVChequeOpens.Where(Function(f) IIf({12, 16}.Contains(f.SODTYPE), f.TRDRPOSSESSOR, f.TRDR) = td).ToList
+                            Dim chqOpens = TrdrChqBal.Where(Function(f) f.TRDR = td).ToList ' db.ccCVChequeOpens.Where(Function(f) f.TRDR = td And f.ISCANCEL = 0)
+                            If Me.radioBtnFinalDate.Checked Then
+                                chqOpens = chqOpens.Where(Function(f) f.FINALDATE > Me.DateTimePicker2.Value).ToList
+                            End If
+                            If chqOpens.Count > 0 Then
+                                'If Me.radioBtnCalcMixBal.Checked Then
+                                chqOpen = chqOpens.Sum(Function(f) f.LCHEQUEBAL)
+                                'End If
+                            End If
+                            mixBal = bal + chqOpen
+
+                            Dim rowNo = 0
+
+
+                            Dim detNew As New GetTrdrDetailResult
+                            detNew.rowNo = rowNo
+                            detNew.code = trdr.CODE
+                            detNew.name = trdr.NAME
+                            detNew.tdSalesManName = SALNAME
+                            'If Me.radioBtnDSORpt.Checked Then
+                            '    'myArrN = ("ΧΑΡΑΚΤΗΡΙΣΜΟΣ ΑΣΦΑΛΙΣΗΣ,ΚΩΔΙΚΟΣ,ΕΠΩΝΥΜΙΑ ΠΕΛΑΤΗ,ΑΦΜ,ΑΣΦΑΛΙΣΤΙΚΟ ΟΡΙΟ,ΛΗΞΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ,ΠΙΣΤΩΤΙΚΟ ΟΡΙΟ 1,ΛΗΞΗ ΠΙΣΤ ΟΡΙΟΥ 1,ΗΜΕΡΕΣ ΠΙΣΤΩΣΗΣ
+                            '    detNew.InsuranceChoice = If(trdr.TRDEXTRA.UTBL03 = 1, "ΚΑΤΑΝΟΜΑΖΟΜΕΝΟΣ", "ΜΗ ΚΑΤΑΝΟΜΑΖΟΜΕΝΟΣ") 'ΧΑΡΑΚΤΗΡΙΣΜΟΣ ΑΣΦΑΛΙΣΗΣ
+                            '    detNew.ExNum01 = trdr.TRDEXTRA.NUM01 'ΑΣΦΑΛΙΣΤΙΚΟ ΟΡΙΟ
+                            '    detNew.ExDate01 = trdr.TRDEXTRA.DATE01 'ΛΗΞΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ
+                            '    detNew.CRDLIMIT1 = trdr.CRDLIMIT1 'ΠΙΣΤΩΤΙΚΟ ΟΡΙΟ 1
+                            '    detNew.ExDate02 = trdr.TRDEXTRA.DATE02 'ΛΗΞΗ ΠΙΣΤ ΟΡΙΟΥ 1
+                            '    detNew.ExNum02 = trdr.TRDEXTRA.NUM02 'ΗΜΕΡΕΣ ΠΙΣΤΩΣΗΣ
+                            'End If
+                            detNew.fincode = "Εκ μεταφοράς"
+                            detNew.trndate = CDate("31/12/" & Me.DateTimePicker1.Value.Year - 1)
+                            'details.Add(detNew)
+
+                            For Each fin In fins
+                                detNew = New GetTrdrDetailResult
+                                For Each pi As PropertyInfo In GetType(GetTrdrFinPaytermsResult).GetProperties()
+                                    Dim name = pi.Name
+                                    Try
+                                        Dim val = GetType(GetTrdrFinPaytermsResult).GetProperty(name).GetValue(fin, Nothing)
+                                        If Not IsNothing(val) Then
+                                            If {"TRDR", "TRNDATE", "FINCODE", "FINDOC", "SOSOURCE"}.Contains(name) Then
+                                                name = name.ToString.ToLower
+                                            End If
+                                            GetType(GetTrdrDetailResult).GetProperty(name).SetValue(detNew, val, Nothing)
+                                        End If
+                                    Catch ex As Exception
+
+                                    End Try
+                                Next
+                                rowNo += 1
+                                detNew.rowNo = rowNo
+                                detNew.tdebit = fin.STAMNT
+                                detNew.code = trdr.CODE
+                                detNew.name = trdr.NAME
+                                detNew.afm = trdr.AFM
+                                detNew.tdSalesManName = SALNAME
+                                'If Me.radioBtnDSORpt.Checked Then
+                                '    'myArrN = ("ΧΑΡΑΚΤΗΡΙΣΜΟΣ ΑΣΦΑΛΙΣΗΣ,ΚΩΔΙΚΟΣ,ΕΠΩΝΥΜΙΑ ΠΕΛΑΤΗ,ΑΦΜ,ΑΣΦΑΛΙΣΤΙΚΟ ΟΡΙΟ,ΛΗΞΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ,ΠΙΣΤΩΤΙΚΟ ΟΡΙΟ 1,ΛΗΞΗ ΠΙΣΤ ΟΡΙΟΥ 1,ΗΜΕΡΕΣ ΠΙΣΤΩΣΗΣ
+                                '    detNew.InsuranceChoice = If(trdr.TRDEXTRA.UTBL03 = 1, "ΚΑΤΑΝΟΜΑΖΟΜΕΝΟΣ", "ΜΗ ΚΑΤΑΝΟΜΑΖΟΜΕΝΟΣ") 'ΧΑΡΑΚΤΗΡΙΣΜΟΣ ΑΣΦΑΛΙΣΗΣ
+                                '    detNew.ExNum01 = trdr.TRDEXTRA.NUM01 'ΑΣΦΑΛΙΣΤΙΚΟ ΟΡΙΟ
+                                '    detNew.ExDate01 = trdr.TRDEXTRA.DATE01 'ΛΗΞΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ
+                                '    detNew.CRDLIMIT1 = trdr.CRDLIMIT1 'ΠΙΣΤΩΤΙΚΟ ΟΡΙΟ 1
+                                '    detNew.ExDate02 = trdr.TRDEXTRA.DATE02 'ΛΗΞΗ ΠΙΣΤ ΟΡΙΟΥ 1
+                                '    detNew.ExNum02 = trdr.TRDEXTRA.NUM02 'ΗΜΕΡΕΣ ΠΙΣΤΩΣΗΣ
+                                'End If
+
+                                'detNew.trndate = Me.DateTimePicker2.Value
+                                'detNew.tdebit = 0
+                                'detNew.tcredit = 0
+                                'detNew.mixBal = 0
+                                'detNew.fincode = "CHEQUE"
+                                detailsTd.Add(detNew)
+                            Next
+
+                            'FIFO
+                            detailsTd = detailsTd.OrderByDescending(Function(f) f.rowNo).ToList
+
+                            Dim last = True
+                            If detailsTd.Count > 0 Then
+                                Me.ToolStripProgressBar2.Maximum = detailsTd.Count
+                                ' Set the initial value of the ProgressBar.
+                                Me.ToolStripProgressBar2.Value = 1
+                            End If
+
+
+                            For Each det In detailsTd '.OrderByDescending(Function(f) f.rowNo).ToList
+                                Me.ToolStripProgressBar2.PerformStep()
+                                If last Then
+                                    det.bal = bal
+                                    det.mixBal = mixBal
+                                    det.oChkQue = chqOpen
+                                    last = False
+                                End If
+                                det.oDays = CTODate.Subtract(det.trndate).Days
+
+                                If Me.radioBtnCalcBal.Checked Then
+                                    If bal - det.SOPNTAMNT > 0 Then
+                                        bal -= det.SOPNTAMNT
+                                        det.oiBal = det.SOPNTAMNT
+                                        If det.trndate.Year < Me.DateTimePicker1.Value.Year Then
+                                            'details(0).oiBal+=det.oiBal
+                                        End If
+                                    Else
+                                        det.oiBal = bal
+                                        Exit For
+                                    End If
+                                End If
+
+                                If Me.radioBtnCalcMixBal.Checked Then
+                                    If mixBal - det.SOPNTAMNT > 0 Then
+                                        mixBal -= det.SOPNTAMNT
+                                        det.oiMixBal = det.SOPNTAMNT
+                                        det.oiBal = det.oiMixBal 'Για να παίξει η ίδια κολώνα για Bal και για MixBal
+                                        If det.trndate.Year < Me.DateTimePicker1.Value.Year Then
+                                            'details(0).oiMixBal += det.oiMixBal
+                                        End If
+                                    Else
+                                        det.oiMixBal = mixBal
+                                        det.oiBal = det.oiMixBal 'Για να παίξει η ίδια κολώνα για Bal και για MixBal
+                                        Exit For
+                                    End If
+                                End If
+
+                            Next
+                            detailsTd = detailsTd.OrderBy(Function(f) f.rowNo).ToList
+
+                            details.AddRange(detailsTd)
+
+                        Next 'For Each td In trdrs
+
+                        'Dim curBal As List(Of GetTrdrBalanceAllResult) = Nothing
+
+                    End If
+
+
+                    'Μόνο Ανεξόφλητα and Αναλυτικά-Κινήσεις
+                    If Me.chkBoxoiBal.Checked And Me.radioBtnAnalytical.Checked And Not Me.radioBtnCalcDetails.Checked Then
+                        If Me.radioBtnCalcBal.Checked Then
+                            details = details.Where(Function(f) Not f.oiBal = 0).ToList
+                        End If
+                        If Me.radioBtnCalcMixBal.Checked Then
+                            details = details.Where(Function(f) Not f.oiMixBal = 0).ToList
+                        End If
+                    End If
+
+                    'Συγκεντρωτικά and Ανεξόφλητα παραστατικά
+                    If Me.radioBtnΑggregate.Checked And Me.radioBtnOI.Checked Then
+
+                        Dim q = (From g1 In details
+                                 Group g1 By g1.trdr, g1.code, g1.name, g1.tdSalesManName, g1.afm Into Group).ToList
+
+                        Dim res4 As New List(Of monthsBal)
+                        For Each q1 In q
+                            Dim curBal = curBals.Where(Function(f) f.TRDR = q1.trdr)
+                            Dim r4 As New monthsBal
+                            r4.trdr = q1.trdr
+                            r4.code = q1.code
+                            If r4.trdr = 2800 Then
+                                r4.trdr = 2800
+                            End If
+                            r4.name = q1.name
+                            r4.tdSalesManName = q1.tdSalesManName
+                            r4.afm = q1.afm
+                            Dim blrec = curBal.Where(Function(f) f.TRDR = q1.trdr).FirstOrDefault
+                            If IsNothing(blrec) Then
+                                Continue For
+                            End If
+
+                            Dim MaxPr = curBal.Where(Function(f) f.TRDR = q1.trdr).FirstOrDefault.MaxPeriod.Value
+                            Dim MaxFiPr = curBal.Where(Function(f) f.TRDR = q1.trdr).FirstOrDefault.MaxFiscPrd.Value
+
+                            r4.oibal00 = Math.Round(q1.Group.Where(Function(f) f.trndate.Year < Me.DateTimePicker1.Value.Year).Sum(Function(f) f.oiBal), 2, MidpointRounding.AwayFromZero)
+                            r4.oibal13 = r4.oibal00 'Ανεξώφλητη αξία από προηγ.Χρήση
+
+                            For i = 1 To 12
+                                Dim month = i
+                                Dim monthVal = Math.Round(q1.Group.Where(Function(f) f.trndate.Year = Me.DateTimePicker1.Value.Year And f.trndate.Month = month And Not f.oiBal = 0).Sum(Function(f) f.oiBal), 2, MidpointRounding.AwayFromZero)
+                                r4.GetType().GetProperty("oibal" & String.Format("{0:D2}", month)).SetValue(r4, monthVal, Nothing)
+                                r4.oibal13 += monthVal
+                            Next
+
+                            If Me.txtBoxMinBal.Text = "" Then
+                                res4.Add(r4)
+                            Else
+                                Dim tot As Decimal = 0
+                                For i = 0 To 12
+                                    tot += r4.GetType().GetProperty("oibal" & String.Format("{0:D2}", i)).GetValue(r4)
+                                Next
+
+                                Dim minBal As Double = 0
+                                If IsNumeric(Me.txtBoxMinBal.Text) Then
+                                    minBal = Me.txtBoxMinBal.Text
+                                End If
+                                If tot >= minBal Then
+                                    res4.Add(r4)
+                                End If
+                            End If
+                        Next
+
+                        res4 = res4.OrderBy(Function(f) f.tdSalesManName).ThenByDescending(Function(f) f.oibal13).ToList
+
+                        Me.MasterBindingSource.DataSource = New SortableBindingList(Of monthsBal)(res4.ToList)
+
+                        'Συγκεντρωτικά and Υπόλοιπα Συναλ/μένων
+                    ElseIf Me.radioBtnΑggregate.Checked And Me.radioBtnOBal.Checked Then
+
+                        Dim q = (From g1 In details
+                                 Group g1 By g1.trdr, g1.code, g1.name, g1.tdSalesManName, g1.afm Into Group).ToList
+
+                        Dim res4 As New List(Of GetTrdrDetailResult)
+
+                        For Each q1 In q
+                            Dim r4 As New GetTrdrDetailResult
+                            'tdSalesManName,code,name,tdebit,tcredit,bal,oiBal,oChkQue,oBal,oBalMax,oBalDate
+                            r4.tdSalesManName = q1.tdSalesManName
+                            r4.trdr = q1.trdr
+                            r4.code = q1.code
+                            If r4.trdr = 527 Then
+                                r4.trdr = 527
+                            End If
+                            r4.name = q1.name
+                            r4.afm = q1.afm
+                            r4.tdebit = q1.Group.Sum(Function(f) f.tdebit)
+                            r4.tcredit = q1.Group.Sum(Function(f) f.tcredit)
+                            r4.bal = q1.Group.OrderByDescending(Function(f) f.rowNo).FirstOrDefault.bal
+                            r4.oiBal = q1.Group.OrderByDescending(Function(f) f.rowNo).FirstOrDefault.oiBal
+                            r4.oChkQue = q1.Group.OrderByDescending(Function(f) f.rowNo).FirstOrDefault.oChkQue
+                            r4.mixBal = q1.Group.OrderByDescending(Function(f) f.rowNo).FirstOrDefault.mixBal
+                            r4.oBalMax = q1.Group.OrderByDescending(Function(f) f.oBalMax).FirstOrDefault.oBalMax
+                            r4.oBalDate = q1.Group.OrderByDescending(Function(f) f.oBalMax).FirstOrDefault.oBalDate
+                            res4.Add(r4)
+                        Next
+
+                        Me.MasterBindingSource.DataSource = New SortableBindingList(Of GetTrdrDetailResult)(res4.ToList)
+
+                    ElseIf Me.radioBtnCreditsRpt.Checked Then
+                        Dim q = (From g1 In details
+                                 Group g1 By g1.trdr Into Group).ToList
+
+                        Dim res4 As New List(Of GetTrdrDetailResult)
+
+                        For Each q1 In q
+                            Dim r4 As New GetTrdrDetailResult
+                            'tdSalesManName,code,name,tdebit,tcredit,bal,oiBal,oChkQue,oBal,oBalMax,oBalDate
+                            Dim trdr = trdrtbl.Where(Function(f) f.TRDR = q1.trdr).FirstOrDefault
+                            Dim trdExtra = trdExtratbl.Where(Function(f) f.TRDR = q1.trdr).FirstOrDefault
+                            If Not IsNothing(trdr.SALESMAN) Then
+                                r4.tdSalesManName = prsns.Where(Function(f) f.PRSN = trdr.SALESMAN).FirstOrDefault.NAME2
+                            End If
+                            r4.trdr = q1.trdr
+                            r4.code = trdr.CODE
+                            If r4.trdr = 527 Then
+                                r4.trdr = 527
+                            End If
+                            r4.name = trdr.NAME
+                            r4.afm = trdr.AFM
+                            r4.tdebit = q1.Group.Sum(Function(f) f.tdebit)
+                            r4.tcredit = q1.Group.Sum(Function(f) f.tcredit)
+                            r4.bal = q1.Group.OrderByDescending(Function(f) f.rowNo).FirstOrDefault.bal
+                            r4.oiBal = q1.Group.OrderByDescending(Function(f) f.rowNo).FirstOrDefault.oiBal
+                            r4.oChkQue = q1.Group.OrderByDescending(Function(f) f.rowNo).FirstOrDefault.oChkQue
+                            r4.mixBal = q1.Group.OrderByDescending(Function(f) f.rowNo).FirstOrDefault.mixBal
+                            r4.oBalMax = q1.Group.OrderByDescending(Function(f) f.oBalMax).FirstOrDefault.oBalMax
+                            r4.oBalDate = q1.Group.OrderByDescending(Function(f) f.oBalMax).FirstOrDefault.oBalDate
+
+
+                            If Me.radioBtnCreditsRpt.Checked Then
+                                If trdExtra.UTBL03 = 1 Then 'ΧΑΡΑΚΤΗΡΙΣΜΟΣ ΑΣΦΑΛΙΣΗΣ
+                                    r4.InsuranceChoice = "ΚΑΤΑΝΟΜΑΖΟΜΕΝΟΣ"
+                                End If
+                                If trdExtra.UTBL03 = 2 Then 'ΧΑΡΑΚΤΗΡΙΣΜΟΣ ΑΣΦΑΛΙΣΗΣ
+                                    r4.InsuranceChoice = "ΜΗ ΚΑΤΑΝΟΜΑΖΟΜΕΝΟΣ"
+                                End If
+                                r4.ExNum01 = trdExtra.NUM01 'ΑΣΦΑΛΙΣΤΙΚΟ ΟΡΙΟ
+                                r4.ExDate01 = trdExtra.DATE01 'ΛΗΞΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ
+                                r4.CRDLIMIT1 = trdr.CRDLIMIT1 'ΠΙΣΤΩΤΙΚΟ ΟΡΙΟ 1
+                                r4.ExDate02 = trdExtra.DATE02 'ΛΗΞΗ ΠΙΣΤ ΟΡΙΟΥ 1
+                                r4.ExNum02 = trdExtra.NUM02 'ΗΜΕΡΕΣ ΠΙΣΤΩΣΗΣ
+                                r4.mxe = r4.mixBal - r4.bal
+                                If Not IsNothing(r4.ExNum01) Then
+                                    r4.InsuranceLimitException = r4.ExNum01 - r4.mixBal
+                                End If
+                                If Not IsNothing(r4.CRDLIMIT1) Then
+                                    r4.CreditLimitException = r4.CRDLIMIT1 - r4.mixBal
+                                End If
+
+                                If Not IsNothing(r4.ExNum02) Then
+                                    r4.CreditCustomerException = q1.Group.Where(Function(f) f.oDays > r4.ExNum02).Sum(Function(f) If(Me.radioBtnCalcMixBal.Checked, f.oiMixBal, f.oiBal)) 'μεικτο υπόλοιπο > r4.ExNum02 ημερών πχ 90
+                                End If
+
+                                r4.BalMoreThan181 = q1.Group.Where(Function(f) f.oDays > 180).Sum(Function(f) If(Me.radioBtnCalcMixBal.Checked, f.oiMixBal, f.oiBal))  'μεικτό υπ > από 180 ημέρες, πιστ ασφαλιστηρίου
+                                '
+                                r4.Bal001_030 = q1.Group.Where(Function(f) f.oDays >= 1 And f.oDays <= 30).Sum(Function(f) If(Me.radioBtnCalcMixBal.Checked, f.oiMixBal, f.oiBal))
+                                r4.Bal031_060 = q1.Group.Where(Function(f) f.oDays >= 31 And f.oDays <= 60).Sum(Function(f) If(Me.radioBtnCalcMixBal.Checked, f.oiMixBal, f.oiBal))
+                                r4.Bal061_090 = q1.Group.Where(Function(f) f.oDays >= 61 And f.oDays <= 90).Sum(Function(f) If(Me.radioBtnCalcMixBal.Checked, f.oiMixBal, f.oiBal))
+                                r4.Bal091_120 = q1.Group.Where(Function(f) f.oDays >= 91 And f.oDays <= 120).Sum(Function(f) If(Me.radioBtnCalcMixBal.Checked, f.oiMixBal, f.oiBal))
+                                r4.Bal121_150 = q1.Group.Where(Function(f) f.oDays >= 121 And f.oDays <= 150).Sum(Function(f) If(Me.radioBtnCalcMixBal.Checked, f.oiMixBal, f.oiBal))
+                                r4.Bal151_180 = q1.Group.Where(Function(f) f.oDays >= 151 And f.oDays <= 180).Sum(Function(f) If(Me.radioBtnCalcMixBal.Checked, f.oiMixBal, f.oiBal))
+
+                            End If
+
+                            res4.Add(r4)
+                        Next
+
+                        Me.MasterBindingSource.DataSource = New SortableBindingList(Of GetTrdrDetailResult)(res4.ToList)
+
+                    Else
+                        Me.MasterBindingSource.DataSource = New SortableBindingList(Of GetTrdrDetailResult)(details.ToList)
+
+                        Me.lblH04.Text = "Χρέωση"
+                        Me.lblH05.Text = "Πίστωση"
+                        Me.lblH06.Text = "Ανοιχτό Υπόλοιπο"
+                        Me.lblH07.Text = "Μικτό υπόλοιπο"
+
+                        If details.Count > 0 Then
+                            Dim stdebit As Decimal = details.Sum(Function(f) f.tdebit)
+                            Dim stcredit As Decimal = details.Sum(Function(f) f.tcredit)
+                            Dim lastBal As Decimal = details.LastOrDefault.bal
+                            Dim lastMixBal As Decimal = details.LastOrDefault.mixBal
+                            Dim rstdebit = Math.Round(stdebit, 2, MidpointRounding.AwayFromZero)
+                            Dim rstcredit = Math.Round(stcredit, 2, MidpointRounding.AwayFromZero)
+                            Dim rlastBal = Math.Round(lastBal, 2, MidpointRounding.AwayFromZero)
+                            If Not (stdebit - stcredit = rlastBal) Then
+                                Me.lblV01.Text = String.Format("{0:N10}", stdebit - stcredit)
+                            End If
+
+                            Me.lblV04.Text = String.Format("{0:N2}", stdebit)
+                            Me.lblV05.Text = String.Format("{0:N2}", stcredit)
+                            Me.lblV06.Text = String.Format("{0:N2}", lastBal)
+                            Me.lblV07.Text = String.Format("{0:N2}", lastMixBal)
+                        End If
+                    End If
+
+                End If
+
+            End If
+            If Me.Tag = "Προμηθευτών" Or Me.Tag = "Διαχείρηση πληρωμών Μεταφορέων" Then
+                sodTyp = 12
+                'ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΗΜ/ΝΙΑ Δ/Α,Δ/Α,ΗΜ/ΝΙΑ,Κατάθεση-Φόρτωση,Χρέωση,Πίστωση,Υπόλοιπο,Ανεξόφλητα
+
+
+                'Dim q = (From vt In db.VTRDTRNs Join td In db.TRDRs On vt.trdr Equals td.TRDR
+                '         Select New carierPmnt With {.company = vt.company, .sodtype = vt.sodtype, .sosource = vt.sosource, .trdr = td.TRDR, .code = td.CODE, .name = td.NAME, .trndateDa = vt.trndate, .fincodeDa = vt.fincode, .trndate = vt.trndate, .fincode = vt.fincode,
+                '            .db = vt.tdebit,
+                '            .cr = vt.tcredit,
+                '            .bal = getRunningTotal(vt.tdebit - vt.tcredit),
+                '            .oiBal = 0
+                '            })
+
+                'Dim qwh = q.Where(Function(f) f.company = 1000 And f.sodtype = sodTyp)
+                'qwh = qwh.Where(Function(f) f.trndate >= DateTimePicker1.Value And f.trndate <= DateTimePicker2.Value)
+                'qwh = qwh.OrderBy(Function(f) f.trndate).ThenBy(Function(f) f.sosource)
+
+                ''Dim q1 = From td In db.TRDRs
+                ''         Select td.COMPANY, td.SODTYPE, td.TRDR, TRDRCODE = td.CODE, td.NAME, td.SALESMAN, pr_name2 = db.PRSNs.Where(Function(f) f.SODTYPE = 20 And f.PRSN = td.SALESMAN).FirstOrDefault.NAME2,
+                ''        prdb = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate < CDate("01/01/" & Year(CTODate))).Sum(Function(f) f.tdebit),
+                ''        prcr = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate < CDate("01/01/" & Year(CTODate))).Sum(Function(f) f.tcredit),
+                ''        prbal = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate < CDate("01/01/" & Year(CTODate))).Sum(Function(f) f.tdebit - f.tcredit),
+                ''        db = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate.Year >= DateTimePicker1.Value.Year And f.trndate.Year <= DateTimePicker2.Value.Year).Sum(Function(f) f.tdebit),
+                ''        cr = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate.Year >= DateTimePicker1.Value.Year And f.trndate.Year <= DateTimePicker2.Value.Year).Sum(Function(f) f.tcredit),
+                ''        bal = db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate < CDate("01/01/" & Year(CTODate))).Sum(Function(f) f.tdebit - f.tcredit) + db.VTRDTRNs.Where(Function(f) f.trdr = td.TRDR And f.trndate.Year >= DateTimePicker1.Value.Year And f.trndate.Year <= DateTimePicker2.Value.Year).Sum(Function(f) f.tdebit - f.tcredit)
+
+                ''q = q.Where(Function(f) f.COMPANY = 1000 And f.SODTYPE = sodTyp)
+                ''q = q.OrderBy(Function(f) f.TRDRCODE)
+                'If Not Me.TlSTxtTRDR.Text = "" Then
+                '    qwh = qwh.Where(Function(f) f.code Like Me.TlSTxtTRDR.Text)
+                'End If
+
+                'Dim bal = Math.Abs(qwh.ToList.LastOrDefault.bal)
+
+                'Dim qn As List(Of carierPmnt)
+                'qn = qwh.ToList
+                'qn = qn.OrderByDescending(Function(f) f.trndate).ThenByDescending(Function(f) f.sosource).ToList
+
+                'For Each q1 In qn
+                '    If q1.sosource = 1253 Then
+                '        q1.oiBal = q1.cr
+                '        bal -= q1.oiBal
+                '        If bal < 0 Then
+                '            q1.oiBal = 0
+                '        End If
+                '    End If
+
+                'Next
+                'qwh = qn.OrderBy(Function(f) f.trndate).ThenBy(Function(f) f.sosource).AsQueryable
+                ''If Not Me.TlSTxtPRSN.Text = "" Then
+                ''    q = q.OrderBy(Function(f) f.pr_name2)
+                ''    Dim ar As List(Of Integer) = db.PRSNs.Where(Function(f) Me.TlSTxtPRSN.Text.Split(",").Contains(f.CODE)).Select(Function(f) f.PRSN).ToList
+                ''    qwh = q.Where(Function(f) ar.Contains(f.SALESMAN))
+                ''End If
+
+                If Me.radioBtnOI.Checked Then
+
+                    Dim res As IMultipleResults = db.GetTrdrBalance(Nothing, Me.TlSTxtTRDR.Text.Replace("*", "%").Trim, 1000, sodTyp, Me.DateTimePicker1.Value, Me.DateTimePicker2.Value, True)
+
+                    'myArrN = ("Ημερ/νία,Παραστατικό,Κίνηση,Α.Χ.,Επωνυμία,Ποσ.1,Ποσ.εισαγωγών,Αξία εισαγωγών,Ποσ.εξαγωγών,Αξία εξαγωγών,Υπόλοιπο ποσ.,Υπόλοιπο αξία,Αιτιολογία").Split(",")
+
+                    'Dim res1 = res.GetResult(Of GetItemsStatementsResult1).ToList
+                    ''Dim curBal = res.GetResult(Of GetTrdrBalanceAllResult).ToList
+                    ''Dim befPrdBal = res.GetResult(Of GetTrdrBalanceResult).ToList
+
+                    'myArrN = ("Ημερ/νία,Παραστατικό,Κίνηση,Α.Χ.,Επωνυμία,Ποσ.1,Ποσ.εισαγωγών,Αξία εισαγωγών,Ποσ.εξαγωγών,Αξία εξαγωγών,Υπόλοιπο ποσ.,Υπόλοιπο αξία,Αιτιολογία").Split(",")
+                    'Dim details = res.GetResult(Of GetTrdrDetailResult).ToList
+
+
+
+                    'Dim res1 = res.GetResult(Of GetItemsStatementsResult1).ToList
+                    Dim befYeardBal = res.GetResult(Of GetTrdrBalanceBefYearResult).ToList
+                    Dim curBal = res.GetResult(Of GetTrdrBalanceAllResult).ToList
+                    Dim befPrdBal = res.GetResult(Of GetTrdrBalanceResult).ToList
+
+                    'myArrN = ("Ημερ/νία,Παραστατικό,Κίνηση,Α.Χ.,Επωνυμία,Ποσ.1,Ποσ.εισαγωγών,Αξία εισαγωγών,Ποσ.εξαγωγών,Αξία εξαγωγών,Υπόλοιπο ποσ.,Υπόλοιπο αξία,Αιτιολογία").Split(",")
+                    Dim details = res.GetResult(Of GetTrdrDetailResult).ToList
+                    Dim afterPrdBal = res.GetResult(Of GetTrdrDetailAfterResult).ToList
+
+                    For Each rr In details
+                        rr.bal = getRunningTotal(If(rr.tdebit, 0) - If(rr.tcredit, 0))
+                    Next
+
+                    details = details.OrderByDescending(Function(f) f.rowNo).ToList
+
+                    Dim trdrs = details.Distinct(Function(f) f.trdr).Select(Function(f) f.trdr)
+
+                    For Each td In trdrs
+                        Dim bal = curBal.Where(Function(f) f.TRDR = td).FirstOrDefault.pbal.Value
+
+                        For Each q1 In details.Where(Function(f) f.trdr = td) '.OrderByDescending(Function(f) f.rowNo).ToList
+                            q1.oiBal = Nothing
+                            'If Not Me.radioBtnΑggregate.Checked Then
+                            If bal > 0 Then
+                                'q1.oibal = bal
+                                Continue For
+                            End If
+                            'End If
+
+                            'If q1.fincode = "ΕΥΑΓΓΕΛΟΔΗΜΟΥ-ΤΠΥ Α 10307" Then
+                            '    q1.oibal = q1.oibal
+                            'End If
+                            If {1251, 1253}.Contains(q1.sosource) Then
+                                q1.oiBal = q1.tcredit
+                                bal += q1.tcredit
+                                If bal > 0 Then
+                                    q1.oiBal = q1.tcredit - bal
+                                    'Exit For
+                                End If
+                            End If
+                        Next
+                    Next
+
+
+                    details = details.OrderBy(Function(f) f.trdr).OrderBy(Function(f) f.rowNo).ToList
+                    If Me.radioBtnΑggregate.Checked Then
+                        '.oibal00 = Math.Round(res1.Where(Function(f) f.TRDR = TRDR).FirstOrDefault.pbal.Value, 2, MidpointRounding.AwayFromZero),
+                        'Where g1.oibal > 1
+                        'IIf(res1.Where(Function(f) f.TRDR = TRDR).FirstOrDefault.pbal > 0, res1.Where(Function(f) f.TRDR = TRDR).FirstOrDefault.pbal, Math.Round(Group.Where(Function(f) f.trndate.Year < Me.DateTimePicker1.Value.Year).Sum(Function(f) f.oibal)), 2, MidpointRounding.AwayFromZero),
+                        'Dim q = (From g1 In res3
+                        '         Group g1 By g1.TRDR, g1.CODE, g1.NAME Into Group
+                        '         Select New monthsBal With
+                        '            {.trdr = TRDR, .code = CODE, .name = NAME,
+                        '            .oibal00 = Math.Round(Group.Where(Function(f) f.trndate.Year < Me.DateTimePicker1.Value.Year).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal01 = Math.Round(Group.Where(Function(f) f.trndate.Month = 1 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal02 = Math.Round(Group.Where(Function(f) f.trndate.Month = 2 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal03 = Math.Round(Group.Where(Function(f) f.trndate.Month = 3 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal04 = Math.Round(Group.Where(Function(f) f.trndate.Month = 4 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal05 = Math.Round(Group.Where(Function(f) f.trndate.Month = 5 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal06 = Math.Round(Group.Where(Function(f) f.trndate.Month = 6 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal07 = Math.Round(Group.Where(Function(f) f.trndate.Month = 7 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal08 = Math.Round(Group.Where(Function(f) f.trndate.Month = 8 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal09 = Math.Round(Group.Where(Function(f) f.trndate.Month = 9 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal10 = Math.Round(Group.Where(Function(f) f.trndate.Month = 10 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal11 = Math.Round(Group.Where(Function(f) f.trndate.Month = 11 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal12 = Math.Round(Group.Where(Function(f) f.trndate.Month = 12 And f.oibal > 0).Sum(Function(f) f.oibal), 2, MidpointRounding.AwayFromZero),
+                        '            .oibal13 = Math.Round((.oibal00 + .oibal01 + .oibal02 + .oibal03 + .oibal04 + .oibal05 + .oibal06 + .oibal07 + .oibal08 + .oibal09 + .oibal10 + .oibal11 + .oibal12), 2, MidpointRounding.AwayFromZero)
+                        '    }).ToList
+
+                        Dim q = (From g1 In details
+                                 Group g1 By g1.trdr, g1.code, g1.name Into Group).ToList
+
+                        Dim res4 As New List(Of monthsBal)
+
+                        For Each q1 In q
+                            Dim r4 As New monthsBal
+                            r4.trdr = q1.trdr
+                            r4.code = q1.code
+                            r4.name = q1.name
+                            Dim bl = curBal.Where(Function(f) f.TRDR = q1.trdr).FirstOrDefault.pbal.Value
+                            Dim MaxPr = curBal.Where(Function(f) f.TRDR = q1.trdr).FirstOrDefault.MaxPeriod.Value
+                            Dim MaxFiPr = curBal.Where(Function(f) f.TRDR = q1.trdr).FirstOrDefault.MaxFiscPrd.Value
+
+                            Dim blt As Decimal = Math.Round(q1.Group.Where(Function(f) f.trndate.Year < Me.DateTimePicker1.Value.Year).Sum(Function(f) f.oiBal), 2, MidpointRounding.AwayFromZero)
+                            If Math.Abs(blt) < 1 Then
+                                blt = 0
+                            End If
+                            r4.oibal00 = blt
+                            Dim tot As Decimal = blt
+                            For i = 1 To 12
+                                blt = 0
+                                If bl > 0 Then
+                                    If MaxPr = i Then
+                                        blt = bl
+                                    End If
+                                Else
+                                    Dim month = i
+                                    blt = -Math.Round(q1.Group.Where(Function(f) f.trndate.Month = month And f.oiBal > 0).Sum(Function(f) f.oiBal), 2, MidpointRounding.AwayFromZero)
+                                    r4.oibal13 += blt
+                                End If
+                                If Math.Abs(blt) < 1 Then
+                                    blt = 0
+                                End If
+                                tot += blt
+                                r4.GetType().GetProperty("oibal" & String.Format("{0:D2}", i)).SetValue(r4, blt, Nothing)
+                            Next
+
+                            If Not tot = 0 Then
+                                res4.Add(r4)
+                            End If
+                        Next
+
+                        Me.MasterBindingSource.DataSource = New SortableBindingList(Of monthsBal)(res4.ToList)
+                    Else
+                        Me.MasterBindingSource.DataSource = New SortableBindingList(Of GetTrdrDetailResult)(details.ToList)
+                    End If
+
+                End If
+
+            End If
+
+            If Me.radioBtnProCr.Checked Then
+                Dim trdrs() As Integer = db.TRDRs.Where(Function(f) f.SODTYPE = 12 And Me.TlSTxtTRDR.Text.Split(",").Contains(f.CODE)).Select(Function(f) f.TRDR).ToArray
+                Dim res = From fi In db.ccCVSoCarrierProPayments
+                          Where (fi.TRNDATE >= Me.DateTimePicker1.Value) And (fi.TRNDATE < Me.DateTimePicker2.Value) And fi.fincodeTim Is Nothing
+
+                If Not trdrs.Length = 0 Then
+                    res = res.Where(Function(f) trdrs.Contains(f.TRDR))
+                End If
+
+                'Select Case New monthsBal With {.code = td.CODE, .name = td.NAME
+                '              }
+                Dim gg = res.Sum(Function(f) f.SUMAMNT)
+
+                Dim q = (From g1 In res
+                         Group g1 By g1.TRDR, g1.CODE, g1.NAME Into Group).ToList
+
+                Dim res4 As New List(Of monthsBal)
+
+                For Each q1 In q
+                    Dim r4 As New monthsBal
+                    r4.trdr = q1.TRDR
+                    r4.code = q1.CODE
+                    r4.name = q1.NAME
+                    'Dim bl = res1.Where(Function(f) f.TRDR = q1.TRDR).FirstOrDefault.pbal.Value
+                    'Dim MaxPr = res1.Where(Function(f) f.TRDR = q1.TRDR).FirstOrDefault.MaxPeriod.Value
+                    'Dim MaxFiPr = res1.Where(Function(f) f.TRDR = q1.TRDR).FirstOrDefault.MaxFiscPrd.Value
+
+                    Dim blt As Decimal = Math.Round(q1.Group.Where(Function(f) f.TRNDATE.Year < Me.DateTimePicker1.Value.Year).Sum(Function(f) f.SUMAMNT), 2, MidpointRounding.AwayFromZero)
+                    'If Math.Abs(blt) < 1 Then
+                    '    blt = 0
+                    'End If
+                    r4.oibal00 = blt
+                    Dim tot As Decimal = blt
+                    For i = 1 To 12
+                        'blt = 0
+                        'If bl > 0 Then
+                        '    If MaxPr = i Then
+                        '        blt = bl
+                        '    End If
+                        'Else
+                        Dim month = i
+                        blt = Math.Round(q1.Group.Where(Function(f) f.TRNDATE.Month = month).Sum(Function(f) f.SUMAMNT), 2, MidpointRounding.AwayFromZero)
+                        r4.oibal13 += blt
+                        'End If
+                        'If Math.Abs(blt) < 1 Then
+                        '    blt = 0
+                        'End If
+                        'tot += blt
+                        r4.GetType().GetProperty("oibal" & String.Format("{0:D2}", i)).SetValue(r4, blt, Nothing)
+                    Next
+
+                    'If Not tot = 0 Then
+                    res4.Add(r4)
+                    'End If
+                Next
+
+                Me.MasterBindingSource.DataSource = New SortableBindingList(Of monthsBal)(res4.ToList)
+            End If
+            Me.MasterDataGridView.DataSource = Me.MasterBindingSource
+
+            Me.lblV03.Text = ""
+
+            MasterDataGridView_Styling()
+            Me.BindingNavigatorSaveItem.Enabled = False
+        Catch ex As Exception
+            MsgBox(ex.ToString, MsgBoxStyle.Critical, strAppName)
+        Finally
+            Me.Cursor = Cursors.Default
+            ixTable = Nothing
+        End Try
+    End Sub
+
+    Private Function GetTrdrDetailBalance(ByRef curBals As List(Of GetTrdrBalanceAllResult), prsns As List(Of PRSN), ctrdr As Integer, trdrCodes As String, company As Integer, sodTyp As Integer, DTFrom As Date, DTTo As Date, detChk As Boolean) As List(Of GetTrdrDetailResult)
+        Dim details As List(Of GetTrdrDetailResult) = Nothing
+
+        Dim runningTotal As Double = 0
+        Dim getRunningTotal As Func(Of Double, Double) = Function(n)
+                                                             runningTotal += n
+                                                             Return runningTotal
+                                                         End Function
+
+        'Dim res As IMultipleResults = db.GetTrdrBalance(Nothing, trdrCodes.Replace("*", "%").Trim, 1000, sodTyp, Me.DateTimePicker1.Value, Me.DateTimePicker2.Value, True)
+        Dim res As IMultipleResults = db.GetTrdrBalance(ctrdr, trdrCodes, company, sodTyp, Me.DateTimePicker1.Value, Me.DateTimePicker2.Value, detChk)
+
+        'myArrN = ("Ημερ/νία,Παραστατικό,Κίνηση,Α.Χ.,Επωνυμία,Ποσ.1,Ποσ.εισαγωγών,Αξία εισαγωγών,Ποσ.εξαγωγών,Αξία εξαγωγών,Υπόλοιπο ποσ.,Υπόλοιπο αξία,Αιτιολογία").Split(",")
+
+        'Dim res1 = res.GetResult(Of GetItemsStatementsResult1).ToList
+        Dim befYeardBal = res.GetResult(Of GetTrdrBalanceBefYearResult).ToList
+        curBals = res.GetResult(Of GetTrdrBalanceAllResult).ToList
+        Dim befPrdBal = res.GetResult(Of GetTrdrBalanceResult).ToList
+
+        'myArrN = ("Ημερ/νία,Παραστατικό,Κίνηση,Α.Χ.,Επωνυμία,Ποσ.1,Ποσ.εισαγωγών,Αξία εισαγωγών,Ποσ.εξαγωγών,Αξία εξαγωγών,Υπόλοιπο ποσ.,Υπόλοιπο αξία,Αιτιολογία").Split(",")
+        details = res.GetResult(Of GetTrdrDetailResult).ToList
+
+        Dim afterPrdBal = res.GetResult(Of GetTrdrDetailAfterResult).ToList
+
+        Dim trdrs = curBals.OrderBy(Function(f) f.TRDR).Distinct(Function(f) f.TRDR).Select(Function(f) f.TRDR).ToList
+
+        Dim dets As New List(Of GetTrdrDetailResult)
+
+        Dim TrdrChqBal = res.GetResult(Of GetTrdrChequeOpenResult).ToList ' res.GetResult(Of GetTrdrChqueBalanceResult).ToList
+
+        If trdrs.Count > 0 Then
+            Me.ToolStripProgressBar1.Maximum = trdrs.Count
+            ' Set the initial value of the ProgressBar.
+            Me.ToolStripProgressBar1.Value = 1
+        End If
+
+
+
+        For Each td In trdrs
+            Me.ToolStripProgressBar1.PerformStep()
+            If td = 527 Then
+                td = 527
+            End If
+
+            Dim det0 As New GetTrdrDetailResult
+            det0.rowNo = 0
+            det0.trdr = td
+            det0.sosource = 1351
+            Dim detCount = details.Where(Function(f) f.trdr = td).Count
+            If detCount = 0 Then
+                Dim trdr = db.TRDRs.Where(Function(f) f.TRDR = td).FirstOrDefault
+                det0.code = trdr.CODE
+                det0.name = trdr.NAME
+                det0.tdSalesManName = prsns.Where(Function(f) f.PRSN = trdr.SALESMAN).FirstOrDefault.NAME2
+            Else
+                Dim det1 = details.Where(Function(f) f.trdr = td).FirstOrDefault
+                det0.code = det1.code
+                det0.name = det1.name
+                det0.tdSalesMan = det1.tdSalesMan
+                det0.vtSalesMan = det1.vtSalesMan
+            End If
+
+            det0.fincode = "Εκ μεταφοράς"
+            det0.trndate = CDate("31/12/" & Me.DateTimePicker1.Value.Year - 1)
+            If befYeardBal.Count > 0 Then
+                det0.tdebit = befYeardBal.Where(Function(f) f.TRDR = td).Sum(Function(f) f.prdb)
+                det0.tcredit = befYeardBal.Where(Function(f) f.TRDR = td).Sum(Function(f) f.prcr)
+                det0.tturnovr = befYeardBal.Where(Function(f) f.TRDR = td).Sum(Function(f) f.prtturnover)
+                det0.Vat = det0.tdebit - det0.tturnovr
+                If detCount = 0 AndAlso curBals.Count = 1 Then
+                    det0.tdebit = curBals.Where(Function(f) f.TRDR = td).Sum(Function(f) f.pdb)
+                    det0.tcredit = curBals.Where(Function(f) f.TRDR = td).Sum(Function(f) f.pcr)
+                    det0.tturnovr = curBals.Where(Function(f) f.TRDR = td).Sum(Function(f) f.ptturnover)
+                    det0.Vat = det0.tdebit - det0.tturnovr
+                End If
+                det0.bal = det0.tdebit - det0.tcredit
+                '3000493
+                det0.mixBal = det0.bal + det0.oiBal 'Μικτό υπόλοιπο
+                det0.oiBal = det0.bal
+            End If
+            details.Insert(0, det0)
+
+            If detCount = 0 Then
+                det0.oiBal = 0
+                Continue For
+            End If
+
+            'Υπόλοιπα Συναλ/μένων
+            If Me.radioBtnOBal.Checked Then
+                Dim limitDate = details.Where(Function(f) f.trdr = td).Max(Function(f) f.trndate)
+                If Me.DateTimePicker2.Value > limitDate Then
+                    Dim detLast = details.Where(Function(f) f.trdr = td).LastOrDefault
+                    Dim detNew As New GetTrdrDetailResult
+                    For Each pi As PropertyInfo In GetType(GetTrdrDetailResult).GetProperties()
+                        Try
+                            Dim val = GetType(GetTrdrDetailResult).GetProperty(pi.Name).GetValue(detLast, Nothing)
+                            If Not IsNothing(val) Then
+                                GetType(GetTrdrDetailResult).GetProperty(pi.Name).SetValue(detNew, val, Nothing)
+                            End If
+                        Catch ex As Exception
+
+                        End Try
+                    Next
+                    detNew.rowNo = details.Max(Function(f) f.rowNo) + 1
+                    detNew.trndate = Me.DateTimePicker2.Value
+                    detNew.tdebit = 0
+                    detNew.tcredit = 0
+                    detNew.mixBal = 0
+                    detNew.fincode = "CHEQUE"
+                    details.Add(detNew)
+                    'End If
+                End If
+            End If
+
+            dets = details.Where(Function(f) f.trdr = td).ToList
+
+            runningTotal = 0
+            For Each rr In dets
+                rr.bal = getRunningTotal(If(rr.tdebit, 0) - If(rr.tcredit, 0))
+            Next
+
+            dets = dets.OrderByDescending(Function(f) f.rowNo).ToList
+
+
+            'Τρέχων Ανοιχτό υπόλοιπο
+            Dim bal = curBals.Where(Function(f) f.TRDR = td).FirstOrDefault.pbal.Value
+
+            If afterPrdBal.Count > 0 Then
+                bal -= afterPrdBal.Where(Function(f) f.trdr = td And f.sosource = 1351 And f.tfprms = 102).Sum(Function(f) f.tdebit)
+            End If
+
+            'Τρέχων Μικτό υπόλοιπο
+            Dim tdChqBal = TrdrChqBal.Where(Function(f) f.TRDR = td).Sum(Function(f) f.LCHEQUEBAL)
+            Dim mixBal = bal
+            If Not IsNothing(tdChqBal) Then
+                mixBal = mixBal + tdChqBal
+            End If
+
+            Dim MaxRowNo As Integer = 0
+            If dets.Count > 0 Then
+                MaxRowNo = dets.Max(Function(f) f.rowNo)
+                Me.ToolStripProgressBar2.Maximum = dets.Count
+                ' Set the initial value of the ProgressBar.
+                Me.ToolStripProgressBar2.Value = 1
+            End If
+
+
+            For Each det In dets '.OrderByDescending(Function(f) f.rowNo).ToList
+                Me.ToolStripProgressBar2.PerformStep()
+                Try
+                    det.tdSalesManName = prsns.Where(Function(f) f.PRSN = det.tdSalesMan).FirstOrDefault.NAME2
+
+                    'Υπολογισμός Αξιογράφων στην οριακή Ημ/νία
+                    If Me.radioBtnOBal.Checked Then 'Ανοιχτά υπόλοιπα
+                        If Not Me.chkBoxOpenBalMax.Checked Then
+
+                        End If
+                        Dim cqs As New List(Of CHEQUE) 'Όλα τα αξιόγραφα για το q1.trdr
+                        If ToolStripComboBox1.SelectedItem = "Εκδότης:" Then
+                            cqs = db.CHEQUEs.Where(Function(f) f.TRDRPUBLISHER = det.trdr And f.CRTDATE <= det.trndate).ToList
+                        End If
+
+                        If ToolStripComboBox1.SelectedItem = "Αρχικός συναλ/νος:" Then
+                            cqs = db.CHEQUEs.Where(Function(f) f.TRDR = det.trdr And f.CRTDATE <= det.trndate).ToList
+                        End If
+
+                        Dim obal As Double? = 0
+
+                        For Each chq In cqs
+                            Dim fnch = db.fnCheQueBal(chq.CHEQUE, det.trndate).Where(Function(f) Not f.TRNBALANCE = 0).ToList
+                            obal += If(fnch.Sum(Function(f) f.TRNBALANCE), 0)
+                        Next
+
+                        det.oChkQue = If(obal, 0)
+                    End If
+
+                Catch ex As Exception
+
+                End Try
+                If Not det.tfprms = 102 Then
+                    'Continue For
+                End If
+
+                Try
+
+                    ' ------------- FIFO ----------------
+                    det.oiBal = Nothing
+                    det.oiMixBal = Nothing
+                    'If Not Me.radioBtnΑggregate.Checked Then
+                    If det.fincode = "2ΠΤΕΚ-Β120" Then '1ΑΤΙΜ-Α123" Then
+                        det.oiBal = det.oiBal
+                    End If
+
+                    If det.rowNo = MaxRowNo Then
+                        det.mixBal = mixBal
+                    Else
+                        'det.mixBal = det.bal + det.oChkQue 'Μικτό υπόλοιπο
+                    End If
+
+
+                    'det.turnovr = (det.flg03 * det.tturnovr)
+                    If det.fincode = "1ΤΙΜ-Α5060" Then
+                        det.fincode = "1ΤΙΜ-Α5060"
+                    End If
+                    det.Vat = If(det.tdebit, 0) - If(det.tturnovr, 0)
+
+                    If Me.radioBtnCalcBal.Checked And bal < 0 Then
+                        Continue For
+                    End If
+
+                    If Me.radioBtnCalcMixBal.Checked And mixBal < 0 Then
+                        Continue For
+                    End If
+
+                    det.oDays = CTODate.Subtract(det.trndate).Days - 1
+
+                    'q1.fprms 9961 Ακυρωτικό Τιμολογίου Πώλησης
+                    '1351 det.sosource Πωλήσεις and 1351---102,152 Τιμολόγιο πώλησης,Πιστωτικό Τιμολόγιο --- and not 9961	Ακυρωτικό Τιμολογίου Πώλησης
+
+                    Try
+                        If {1351}.Contains(det.sosource) And det.tfprms = 102 And Not {9961}.Contains(det.fprms) Then
+                            Dim tdebit As Double = det.tdebit
+                            If Not IsNothing(det.ffindocs) Then
+                                Dim tdet = dets.Where(Function(f) f.findoc = det.ffindocs).FirstOrDefault
+                                If Not IsNothing(tdet) Then
+                                    tdebit += tdet.tdebit
+                                End If
+                            End If
+
+                            det.oiBal = tdebit
+                            det.oiMixBal = tdebit
+                            bal -= tdebit
+                            mixBal -= tdebit
+                            If bal < 0 Then
+                                det.oiBal = tdebit + bal
+                                'Exit For
+                            End If
+
+                            If mixBal < 0 Then
+                                det.oiMixBal = tdebit + mixBal
+                                'Exit For
+                            End If
+                        End If
+
+                        If det.rowNo = 0 Then
+                            det.oiBal = bal
+                            det.oiMixBal = mixBal
+                        End If
+                        ' ------------- END FIFO ----------------
+
+                    Catch ex As Exception
+
+                    End Try
+                Catch ex As Exception
+
+                End Try
+            Next
+
+            Dim maxRec = dets.Where(Function(f) Not f.fincode = "Εκ μεταφοράς").OrderByDescending(Function(f) f.mixBal).FirstOrDefault
+
+            maxRec.oBalMax = maxRec.mixBal
+            maxRec.oBalDate = maxRec.trndate
+        Next
+
+
+        details = details.OrderBy(Function(f) f.trdr).ThenBy(Function(f) f.rowNo).ToList
+        Return details
+        Throw New NotImplementedException()
+    End Function
+
+    Private Function GetOpenTrdrBalance(trim As String, sodTyp As Integer, value1 As Date, value2 As Date) As List(Of ccCVFinPayTerm)
+        Throw New NotImplementedException()
+    End Function
+
+    Private Sub Cmd_SelectS1()
+
+        Me.Cursor = Cursors.WaitCursor
+        Dim myModule As XModule
+        myModule = s1Conn.CreateModule(" ThenSALDOC")
+        Try
+
+            myModule.LocateData("FINDOC:248")
+            '            GetDataSet(ModuleHandle, Name);
+            'Επιστρέφει το Dataset του Module
+            'GetParamValue(ModuleHandle, PrmName);
+            'Παράδειγμα fCustomer = GetDataSet(fModule,'CUSTOMER');
+            'Dim ds As DataSet = myModule.GetDataSet(myModule) 'fModule,'CUSTOMER')
+
+            Dim myTable As XTable
+            Dim newID As Integer = 0
+            ' myModule.InsertData()
+            Dim list As List(Of KeyValuePair(Of String, Integer)) =
+            New List(Of KeyValuePair(Of String, Integer))
+            list.Add(New KeyValuePair(Of String, Integer)("FINDOC.FINDOC", 1))
+            'list.Add(New KeyValuePair(Of String, Integer)("net", 2))
+            'list.Add(New KeyValuePair(Of String, Integer)("perls", 3))
+
+            myModule.LocateData(list)
+            myTable = myModule.GetTable("MTRL")
+            Dim ds As New DataSet
+            ds.Tables.Add(myTable.CreateDataTable(True))
+            'myTable.Current("CODE") = txtTRDRCode.Text.ToString
+            'myTable.Current("NAME") = txtTRDRName.Text.ToString
+            'myTable.Current("CITY") = txtTRDRCity.Text.ToString
+            'myTable.Current("PHONE01") = txtTRDRPhone01.Text.ToString
+            'newID = myModule.PostData()
+
+            'MsgBox("Customer added With ID= " + newID.ToString, MsgBoxStyle.Information, strAppName)
+            'txtTRDRCode.Text = "*"
+            'txtTRDRName.Text = ""
+            'txtTRDRCity.Text = ""
+            'txtTRDRPhone01.Text = ""
+
+            'FilldgTRDR(iActiveObjType)
+            Me.MasterBindingSource.DataSource = ds
+            Me.MasterDataGridView.DataSource = Me.MasterBindingSource.DataSource
+
+
+            Me.MasterDataGridView.AutoGenerateColumns = True
+
+        Catch ex As Exception
+            MsgBox(ex.ToString, MsgBoxStyle.Critical, strAppName)
+        Finally
+            Me.Cursor = Cursors.Default
+        End Try
+
+        myModule.Dispose()
+
+    End Sub
+
+#End Region
+#Region "02-Save Data"
+    ' Finish any current edits.
+    Private Sub EndAllEdits()
+        Me.Validate()
+        Me.MasterBindingSource.EndEdit()
+    End Sub
+    Private Function DataSafe() As Boolean
+        DataSafe = True
+        ' Finish any current edits.
+        EndAllEdits()
+
+        If db.GetChangeSet.Inserts.Count = 0 And db.GetChangeSet.Updates.Count = 0 And db.GetChangeSet.Deletes.Count = 0 Then Exit Function
+
+        ' Ask the user if we should save the changes.
+        Select Case MsgBox("Να αποθηκευθούν οι αλλαγές;", MsgBoxStyle.YesNoCancel + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, "") 'MeLabel)
+            Case MsgBoxResult.No
+                ' The data is not safe.
+            Case MsgBoxResult.Yes
+                ' Save the changes.
+                DataSafe = SaveData()
+            Case MsgBoxResult.Cancel
+                ' The user wants to cancel this operation.
+                ' Do not let the program discard the data.
+                If Not (db.GetChangeSet.Inserts.Count = 0 And db.GetChangeSet.Updates.Count = 0 And db.GetChangeSet.Deletes.Count = 0) Then
+                    db.Refresh(RefreshMode.OverwriteCurrentValues, db.GetChangeSet.Inserts)
+                    db.Refresh(RefreshMode.OverwriteCurrentValues, db.GetChangeSet.Updates)
+                    db.Refresh(RefreshMode.OverwriteCurrentValues, db.GetChangeSet.Deletes)
+                End If
+                Return False
+        End Select
+    End Function
+    ' Save changes to the database.
+    Friend Function SaveData() As Boolean
+        SaveData = False
+        Try
+            'If db.GetChangeSet.Deletes.Count = 0 Then 'Not Delete Action
+            '    If Not Conditions() Then
+            '        Exit Function
+            '    End If
+            'End If
+            If db.GetChangeSet.Inserts.Count = 0 And db.GetChangeSet.Updates.Count = 0 And db.GetChangeSet.Deletes.Count = 0 Then Exit Function
+            ' Initialize the return value to zero and create a StringWriter to display results. 
+            Dim writer As System.IO.StringWriter = New System.IO.StringWriter
+            Try
+                ' Create the TransactionScope to execute the commands, guaranteeing 
+                '  that both commands can commit or roll back as a single unit of work. 
+                Using scope As New TransactionScope()
+                    'LogSQL = sSQL
+                    db.Log = Nothing ' Console.Out
+                    db.SubmitChanges()
+
+                    ' The Complete method commits the transaction. If an exception has been thrown, 
+                    ' Complete is called and the transaction is rolled back.
+                    scope.Complete()
+                    SaveData = True
+                End Using
+            Catch ex As TransactionAbortedException
+                writer.WriteLine("TransactionAbortedException Message: {0}", ex.Message)
+            Catch ex As ApplicationException
+                writer.WriteLine("ApplicationException Message: {0}", ex.Message)
+            Catch ex As Exception
+                writer.WriteLine("Exception Message: {0}", ex.Message)
+            Finally
+                ' Close the connection
+                If db.Connection.State = ConnectionState.Open Then
+                    db.Connection.Close()
+                End If
+            End Try
+            ' Display messages.
+            If Not writer.ToString() = String.Empty Then
+                MsgBox(writer.ToString(), MsgBoxStyle.Exclamation, "Προσοχή !!!")
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical)
+        End Try
+        If SaveData = False Then
+            MsgBox("Προσοχή !!!.Ακύρωση Αλλαγών", MsgBoxStyle.Exclamation, "Προσοχή !!!")
+        End If
+    End Function
+#End Region
+#Region "96-MasterDataGridView"
+    Private Sub MasterDataGridView_CurrentCellDirtyStateChanged(sender As Object, e As System.EventArgs) Handles MasterDataGridView.CurrentCellDirtyStateChanged
+        Dim s As DataGridView = sender
+        If s.Columns(s.CurrentCell.ColumnIndex).Name = "ReOrder" Then
+            Exit Sub
+        End If
+        If MasterDataGridView.IsCurrentCellDirty Then
+            MasterDataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit)
+        End If
+    End Sub
+    Private Sub MasterDataGridView_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs)
+        'Cmd_Edit()
+    End Sub
+    Private Sub DataGridViewMaster_CellClick(sender As Object, e As System.Windows.Forms.DataGridViewCellEventArgs)
+        'Dim drv As DataRowView = Me.MasterBindingSource.Current
+
+        'Dim status = Me.MasterDataGridView.Columns(e.ColumnIndex)
+        'Me.StatusStrip1.Text = status
+    End Sub
+    Private Sub MasterDataGridView_Styling()
+        Try
+
+            Me.MasterDataGridView.AutoGenerateColumns = True
+            Me.MasterDataGridView.AutoResizeColumns()
+            If Me.Tag = "Υπόλοιπα Ομάδων" Then
+                myArrF = ("omada,SODTYPEName,CODE,NAME,SumCusBal,SumSupBal").Split(",")
+                myArrN = ("ΟΜΑΔΑ,ΠΕΛ-ΠΡΟΜ,ΚΩΔ,ΕΠΩΝΥΜΙΑ,ΠΕΛ-ΥΠΟΛ,ΠΡΟΜ-ΥΠΟΛ").Split(",")
+            End If
+            If Me.Tag = "Πελατών" Then
+                'Χρέωση	Πίστωση	Υπόλοιπο
+                ' TRDRCODE = td.CODE, td.NAME, td.SALESMAN, pr_name2 
+                'myArrF = ("TRDRCODE,NAME,pr_name2,trndate,fincode,prdb,prcr,prbal,db,cr,bal").Split(",")
+                'myArrN = ("ΚΩΔ,ΕΠΩΝΥΜΙΑ,Πωλητής,trndate,fincode,ΕκΜετΧρέωση,ΕκΜετΠίστωση,ΕκΜετΥπόλοιπο,Χρέωση,Πίστωση,Υπόλοιπο").Split(",")
+                'tdSalesManName,vtSalesManName
+
+                If Not Me.radioBtnSales.Checked Then
+                    myArrF = ("rowNo,fincode,code,name,afm,tdSalesManName,trndate,tdebit,tcredit,bal,oiBal,oiMixBal,oDays,oChkQue,mixBal,oBalMax,oBalDate,tturnovr,Vat").Split(",")
+                    myArrN = ("rowNo,Παρ/κό,ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΑΦΜ,Πωλητής,ΗΜ/ΝΙΑ,Αξία παρ/κου,Πίστωση,Ανοιχτό Υπόλοιπο,Ανεξόφλητα,Μικτό Ανεξόφλητα,oDays,Ανοιχτά Αξιόγραφα,Μικτό υπόλοιπο,OpenBalMax,oBalDate,Τζίρος,ΦΠΑ").Split(",")
+
+
+                    If Me.radioBtnCalcBal.Checked Then
+                        myArrF = ("rowNo,fincode,code,name,afm,tdSalesManName,trndate,tdebit,tcredit,bal,oiBal,oDays,oChkQue,oBalMax,oBalDate,tturnovr,Vat").Split(",")
+                        myArrN = ("rowNo,Παρ/κό,ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΑΦΜ,Πωλητής,ΗΜ/ΝΙΑ,Αξία παρ/κου,Πίστωση,Ανοιχτό Υπόλοιπο,Ανεξόφλητα,oDays,Ανοιχτά Αξιόγραφα,OpenBalMax,oBalDate,Τζίρος,ΦΠΑ").Split(",")
+                    End If
+
+                    If Me.radioBtnCalcMixBal.Checked Then
+                        myArrF = ("rowNo,fincode,code,name,afm,tdSalesManName,trndate,tdebit,tcredit,bal,mixBal,oiMixBal,oDays,oChkQue,oBalMax,oBalDate,tturnovr,Vat").Split(",")
+                        myArrN = ("rowNo,Παρ/κό,ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΑΦΜ,Πωλητής,ΗΜ/ΝΙΑ,Αξία παρ/κου,Πίστωση,Ανοιχτό Υπόλοιπο,Μικτό υπόλοιπο,Μικτό Ανεξόφλητα,oDays,Ανοιχτά Αξιόγραφα,OpenBalMax,oBalDate,Τζίρος,ΦΠΑ").Split(",")
+                    End If
+
+                    If Me.chkBoxTest.Checked Then
+                        myArrF = ("findoc,sosource,fincode,fprms,tfprms,code,name,tdSalesManName,trndate,tdebit,tcredit,bal,oiBal").Split(",")
+                        myArrN = ("findoc,sosource,Παρ/κό,fprms,tfprms,ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,Πωλητής,ΗΜ/ΝΙΑ,Αξία παρ/κου,Πίστωση,Υπόλοιπο,Ανεξόφλητα").Split(",")
+                    End If
+                End If
+                If Me.radioBtnΑggregate.Checked And Me.radioBtnOI.Checked Then
+                    myArrF = ("tdSalesManName,code,name,afm,oibal00,oibal01,oibal02,oibal03,oibal04,oibal05,oibal06,oibal07,oibal08,oibal09,oibal10,oibal11,oibal12,oibal13").Split(",")
+                    myArrN = ("Πωλητής,ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΑΦΜ,ΕκΜεταφ,Ιανουάριος,Φεβρουάριος,Μάρτιος,Απρίλιος,Μάιος,Ιούνιος,Ιούλιος,Αύγουστος,Σεπτέμβριος,Οκτώβριος,Νοέμβριος,Δεκέμβριος,ΣυνΥπολ").Split(",")
+                    If Me.chkBoxTest.Checked Then
+                        myArrF = ("trdr,code,name,afm,tdSalesManName,oibal00,oibal01,oibal02,oibal03,oibal04,oibal05,oibal06,oibal07,oibal08,oibal09,oibal10,oibal11,oibal12,oibal13").Split(",")
+                        myArrN = ("trdr,ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΑΦΜ,Πωλητής,ΕκΜεταφ,Ιανουάριος,Φεβρουάριος,Μάρτιος,Απρίλιος,Μάιος,Ιούνιος,Ιούλιος,Αύγουστος,Σεπτέμβριος,Οκτώβριος,Νοέμβριος,Δεκέμβριος,ΣυνΥπολ").Split(",")
+                    End If
+                End If
+
+                If Me.radioBtnΑggregate.Checked And Me.radioBtnOBal.Checked Then
+                    myArrF = ("tdSalesManName,code,name,afm,tdebit,tcredit,bal,oiBal,oiMixBal,oChkQue,mixBal,oBalMax,oBalDate,tturnovr,Vat").Split(",")
+                    myArrN = ("Πωλητής,ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΑΦΜ,Αξία παρ/κου,Πίστωση,Ανοιχτό Υπόλοιπο,Ανεξόφλητα,Μικτό Ανεξόφλητα,Ανοιχτά Αξιόγραφα,Μικτό υπόλοιπο,OpenBalMax,oBalDate,Τζίρος,ΦΠΑ").Split(",")
+                End If
+
+                If Me.radioBtnCheque.Checked Then
+                    'Α/Α	Κωδικός	Αριθμός	Τράπεζα	Παραλαβή	Λήξη	Αρχικός συναλ/νος	Κωδικός εκδοτη	Επωνυμία εκδοτη	Όνομα	Κατάσταση Τρέχουσα	Υπόλοιπο Τρέχων	Κατάσταση στην Οριακή Ημ/νία	Υπόλοιπο στήν Οριακή Ημ/νία	Κατηγορία κάτοχου	Όνομα κάτοχου	Αριθμός	Ποσό
+                    'Α/Α	Κωδικός - CODE	Αριθμός - SERIESNUM	Τράπεζα BANK.NAME	Παραλαβή - CRTDATE	Λήξη - FINALDATE	Αρχικός συναλ/νος TRDR.CODE	Κωδικός εκδοτη TRDRPUBLISHER.TRDR.CODE	Επωνυμία εκδοτη TRDRPUBLISHER.TRDR.NAME	Όνομα CREATORNAME	Κατάσταση Τρέχουσα CHEQUESTATES	Υπόλοιπο Τρέχων CHEQUEBAL	Κατάσταση στην Οριακή Ημ/νία	Υπόλοιπο στήν Οριακή Ημ/νία	Κατηγορία κάτοχου posstypefilter	Όνομα κάτοχου possname	Αριθμός CHEQUENUMBER	Ποσό CHEQUEVAL
+
+                    'CHEQUE,FINDOC,FINCODE,TRDR,TRNDATE,TRNSTATE,TRNTYPEPOSS,TRNFOLDER,TRNBALANCE,LTRNBALANCE,CHEQUEUPD,CHEQUEUPDNAME,NAME,OPENBAL,PAYBAL,CODE,SERIESNUM,BNKNAME,CRTDATE,FINALDATE,TDCODE,TDBCODE,TDBNAME,CREATORNAME,CHEQUESTATES,CHEQUEBAL,POSSTYPE,TRNHOLDERNAME,CHEQUENUMBER,CHEQUEVAL
+                    If Me.radioBtnΑggregate.Checked Then
+                        myArrF = ("CODE,SERIESNUM,BNKNAME,CRTDATE,FINALDATE,TDCODE,TDBCODE,TDBNAME,CREATORNAME,CHEQUESTATESNAME,CHEQUEBAL,TRNSTATENAME,TRNBALANCE,POSSTYPE,TRNHOLDERNAME,CHEQUENUMBER,CHEQUEVAL").Split(",")
+                        myArrN = ("Κωδικός,Αριθμός,Τράπεζα,Παραλαβή,Λήξη,Αρχικός συναλ/νος,Κωδικός εκδοτη,Επωνυμία εκδοτη,Όνομα,Κατάσταση Τρέχουσα,Υπόλοιπο Τρέχων,Κατάσταση στην Οριακή Ημ/νία,Υπόλοιπο στήν Οριακή Ημ/νία,Κατηγορία κάτοχου,Όνομα κάτοχου,Αριθμός,Ποσό").Split(",")
+                    End If
+                    If Me.radioBtnAnalytical.Checked Then
+                        myArrF = ("CODE,SERIESNUM,BNKNAME,CRTDATE,FINALDATE,TDCODE,TDBCODE,TDBNAME,CREATORNAME,CHEQUESTATESNAME,CHEQUEBAL,TRNSTATENAME,TRNBALANCE,POSSTYPE,TRNHOLDERNAME,CHEQUENUMBER,CHEQUEVAL,TRNDATE,FINCODE,CHQTPRMSNAME,LINEVAL,CHEQUEUPD,CHEQUEUPDNAME,TRDFLINESCHEQUESTATESNAME,CHEQUE,FINDOC,TRDR,TRNSTATE,TRNTYPEPOSS,TRNFOLDER,OPENBAL,PAYBAL").Split(",")
+                        myArrN = ("Κωδικός,Αριθμός,Τράπεζα,Παραλαβή,Λήξη,Αρχικός συναλ/νος,Κωδικός εκδοτη,Επωνυμία εκδοτη,Όνομα,Κατάσταση Τρέχουσα,Υπόλοιπο Τρέχων,Κατάσταση στην Οριακή Ημ/νία,Υπόλοιπο στήν Οριακή Ημ/νία,Κατηγορία κάτοχου,Όνομα κάτοχου,Αριθμός,Ποσό,Ημερ/νία,Παραστατικό,Κίνηση,Αξία,CHEQUEUPD,Ενημέρωση,Νέα κατάσταση,CHEQUE,FINDOC,TRDR,TRNSTATE,TRNTYPEPOSS,TRNFOLDER,OPENBAL,PAYBAL").Split(",")
+                    End If
+                End If
+
+                'Credits Reports
+                If Me.radioBtnCreditsRpt.Checked Then
+                    If Me.ddlDSORpt.SelectedItem = "ΥΠΕΡΒΑΣΕΙΣ ΟΡΙΩΝ-ΠΙΣΤΩΣΗΣ" Then
+                        'ΧΑΡΑΚΤΗΡΙΣΜΟΣ ΑΣΦΑΛΙΣΗΣ	ΚΩΔΙΚΟΣ	ΕΠΩΝΥΜΙΑ ΠΕΛΑΤΗ	ΑΦΜ	ΑΣΦΑΛΙΣΤΙΚΟ ΟΡΙΟ	ΛΗΞΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ	ΠΙΣΤΩΤΙΚΟ ΟΡΙΟ 1	ΛΗΞΗ ΠΙΣΤ ΟΡΙΟΥ1	ΗΜΕΡΕΣ ΠΙΣΤΩΣΗΣ	ΑΝΟΙΚΤΟ ΥΠΟΛΟΙΠΟ	ΜΧΕ	ΜΕΙΚΤΟ ΥΠΟΛΟΙΠΟ	ΥΠΕΡΒΑΣΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ	ΥΠΕΡΒΑΣΗ ΠΙΣΤΩΤΚΟΥ ΟΡΙΟΥ	ΥΠΕΡΒΑΣΗ ΠΙΣΤΩΣΗΣ ΠΕΛΑΤΗ	ΥΠΕΡΒΑΣΗ ΕΞΑΜΗΝΟΥ
+                        'ΚΑΤΟΝΟΜΑΖΟΜΕΝΟΣ 3000011	ΚΑΡΑΣΤΑΘΗΣ ΒΑΣ. & ΣΙΑ Ε.Ε.	084044720	250.000, 0	31/07/2019	0, 1 	…./.../…....	πχ 90	78.206, 11 	580.000, 0 	658.206, 11 - 408.206, 11 - 658.206, 10 - 409.559, 42 	0
+                        'SOFT1/ ΕΛΕΥΘ ΠΕΔΙΑ/ ΑΣΦΑΛ ΟΡΙΟ	SOFT1/ ΕΛΕΥΘ ΠΕΔΙΑ/ ΛΗΞΗ ΑΣΦΑΛ ΟΡΙΟΥ	SOFT1/ ΧΡΗΜ/ΚΑ	SOFT1/ ΧΡΗΜ/ΚΑ/ ΔΕΝ ΥΠΑΡΧΕΙ	SOFT1/ ΒΑΣΙΚΑ ΣΤΟΙΧΕΙΑ / ΔΕΝ ΥΠΑΡΧΕΙ						μεικτο υπόλοιπο > 90 ημερών	μεικτό υπ>από 6 μήνες, πιστ ασφαλιστηρίου
+                        '                                από καρτέλα GMS	από καρτέλα GMS
+                        '            GMS/ ΚΑΡΤΕΛΑ ΜΕΙΚΤΟΥ ΥΠΟΛΟΙΠΟΥ / ΑΝΕΞΟΦΛΗΤΑ ΤΙΜΟΛΟΓΙΑ		
+                        'rowNo,findoc,company,sodtype,sosource,series,fprms,tfprms,tprms,trdr,code,name,tdSalesMan,vtSalesMan,tdSalesManName,vtSalesManName,trndateDa,fincodeDa,ffindocs,trndate,fincode,tdebit,tcredit,flg03,lturnovr,tturnovr,ltrnval,ttrnval,
+                        'bal, oiBal, oiMixBal, oChkQue, mixBal, oBalMax, oBalDate, oDays, turnovr, Vat, afm, InsuranceChoice, ExNum01, ExDate01, CRDLIMIT1, ExDate02, ExNum02, mxe, InsuranceLimitException, CreditLimitException, CreditCustomerException, HalfYearException, CurrentMonthBal, OlderMonth01Bal, OlderMonth02Bal, OlderMonth03Bal, OlderMonth04Bal, OlderMonth05Bal, OlderMonth06Bal, MoreThanMonth06Bal, FINALDATE, SOREDIR, TVAL, TRDRRATE, SALESMAN, SALCODE, SALNAME, COLCODE, COLNAME, BUSUNITS, PJCODE, PJNAME, TRCODE, TRNAME, PAYMENT, SHIPMENT, SOCARRIER, OPNTVAL, SOCURRENCY, OITYPE, STAMNT, SOPNTAMNT,
+                        myArrF = ("InsuranceChoice,code,name,afm,ExNum01,ExDate01,CRDLIMIT1,ExDate02,ExNum02,bal,mxe,mixBal,InsuranceLimitException,CreditLimitException,CreditCustomerException,BalMoreThan181").Split(",")
+                        myArrN = ("ΧΑΡΑΚΤΗΡΙΣΜΟΣ ΑΣΦΑΛΙΣΗΣ,ΚΩΔΙΚΟΣ,ΕΠΩΝΥΜΙΑ ΠΕΛΑΤΗ,ΑΦΜ,ΑΣΦΑΛΙΣΤΙΚΟ ΟΡΙΟ,ΛΗΞΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ,ΠΙΣΤΩΤΙΚΟ ΟΡΙΟ 1,ΛΗΞΗ ΠΙΣΤ ΟΡΙΟΥ 1,ΗΜΕΡΕΣ ΠΙΣΤΩΣΗΣ,ΑΝΟΙΚΤΟ ΥΠΟΛΟΙΠΟ,ΜΧΕ,ΜΕΙΚΤΟ ΥΠΟΛΟΙΠΟ,ΥΠΕΡΒΑΣΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ,ΥΠΕΡΒΑΣΗ ΠΙΣΤΩΤΙΚΟΥ ΟΡΙΟΥ,ΥΠΕΡΒΑΣΗ ΠΙΣΤΩΣΗΣ ΠΕΛΑΤΗ,ΥΠΕΡΒΑΣΗ ΠΙΣΤΩΣΗΣ > 180 ΗΜΕΡΩΝ").Split(",")
+                    End If
+
+                    If Me.ddlDSORpt.SelectedItem = "ΧΡΟΝΟΛΟΓΙΚΗ ΑΝΑΛΥΣΗ ΜΕΙΚΤΩΝ ΥΠΟΛΟΙΠΩΝ" Then
+                        'ΧΑΡΑΚΤΗΡΙΣΜΟΣ ΑΣΦΑΛΙΣΗΣ	ΚΩΔΙΚΟΣ	ΕΠΩΝΥΜΙΑ ΠΕΛΑΤΗ	ΑΦΜ	ΑΣΦΑΛΙΣΤΙΚΟ ΟΡΙΟ	ΛΗΞΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ	ΠΙΣΤΩΤΙΚΟ ΟΡΙΟ 1	ΛΗΞΗ ΠΙΣΤ ΟΡΙΟΥ1	ΗΜΕΡΕΣ ΠΙΣΤΩΣΗΣ	ΑΝΟΙΚΤΟ ΥΠΟΛΟΙΠΟ	ΜΧΕ	ΜΕΙΚΤΟ ΥΠΟΛΟΙΠΟ	ΥΠΟΛΟΙΠΟ ΕΝΤΟΣ ΜΗΝΑ	ΥΠΟΛΟΙΠΟ  1 ΜΗΝΕΣ ΠΑΛΑΙΟΤΕΡΟ	ΥΠΟΛΟΙΠΟ  2 ΜΗΝΕΣ ΠΑΛΑΙΟΤΕΡΟ	ΥΠΟΛΟΙΠΟ  3 ΜΗΝΕΣ ΠΑΛΑΙΟΤΕΡΟ	ΥΠΟΛΟΙΠΟ  4 ΜΗΝΕΣ ΠΑΛΑΙΟΤΕΡΟ	ΥΠΟΛΟΙΠΟ  5 ΜΗΝΕΣ ΠΑΛΑΙΟΤΕΡΟ	ΥΠΟΛΟΙΠΟ 6 ΜΗΝΕΣ ΠΑΛΑΙΟΤΕΡΟ	ΥΠΟΛΟΙΠΟ >  ΤΩΝ 6 ΜΗΝΩΝ
+                        'ΚΑΤΟΝΟΜΑΖΟΜΕΝΟΣ 3000011	ΚΑΡΑΣΤΑΘΗΣ ΒΑΣ. & ΣΙΑ Ε.Ε.	084044720	250.000, 0	31/07/2019	0, 1 	…./.../…....	πχ 90	78.206, 11 	580.000, 0 	658.206, 11 	0	72.736, 0 	95.207, 29 	80.703, 40 	120.966, 52 	288.592, 90 	0, 0 	0, 0 
+                        'SOFT1/ ΕΛΕΥΘ ΠΕΔΙΑ/ ΑΣΦΑΛ ΟΡΙΟ	SOFT1/ ΕΛΕΥΘ ΠΕΔΙΑ/ ΛΗΞΗ ΑΣΦΑΛ ΟΡΙΟΥ	SOFT1/ ΧΡΗΜ/ΚΑ	SOFT1/ ΧΡΗΜ/ΚΑ/ ΔΕΝ ΥΠΑΡΧΕΙ	SOFT1/ ΒΑΣΙΚΑ ΣΤΟΙΧΕΙΑ / ΔΕΝ ΥΠΑΡΧΕΙ				Τιμολόγια (-πιστωτικά-μετρητά)τα οποία εκδόθηκαν εντός τρέχοντος μήνα	ΕΚΔΟΣΗΣ ΙΟΥΝΙΟΥ 2019	ΕΚΔΟΣΗΣ ΜΑΙΟΥ 2019	ΕΚΔΟΣΗΣ ΑΠΡΙΛΙΟΥ 2019	ΕΚΔΟΣΗΣ ΜΑΡΤΙΟΥ 2019	ΕΚΔΟΣΗΣ ΦΕΒΡΟΥΑΡΙΟΥ 2019	ΕΚΔΟΣΗΣ ΙΑΝΟΥΑΡΙΟΥ 2019	τιμολόγια (-πιστωτικά) που εκδόθηκαν πριν τους 6 μήνες
+                        'GMS/ ΚΑΡΤΕΛΑ ΜΕΙΚΤΟΥ ΥΠΟΛΟΙΠΟΥ / ΑΝΕΞΟΦΛΗΤΑ ΤΙΜΟΛΟΓΙΑ									
+
+                        myArrF = ("InsuranceChoice,code,name,afm,ExNum01,ExDate01,CRDLIMIT1,ExDate02,ExNum02,bal,mxe,mixBal,Bal001_030,Bal031_060,Bal061_090,Bal091_120,Bal121_150,Bal151_180,BalMoreThan181").Split(",")
+                        myArrN = ("ΧΑΡΑΚΤΗΡΙΣΜΟΣ ΑΣΦΑΛΙΣΗΣ,ΚΩΔΙΚΟΣ,ΕΠΩΝΥΜΙΑ ΠΕΛΑΤΗ,ΑΦΜ,ΑΣΦΑΛΙΣΤΙΚΟ ΟΡΙΟ,ΛΗΞΗ ΑΣΦΑΛΙΣΤΙΚΟΥ ΟΡΙΟΥ,ΠΙΣΤΩΤΙΚΟ ΟΡΙΟ 1,ΛΗΞΗ ΠΙΣΤ ΟΡΙΟΥ 1,ΗΜΕΡΕΣ ΠΙΣΤΩΣΗΣ,ΑΝΟΙΚΤΟ ΥΠΟΛΟΙΠΟ,ΜΧΕ,ΜΕΙΚΤΟ ΥΠΟΛΟΙΠΟ,ΥΠΟΛΟΙΠΟ 1-30 ΗΜΕΡΕΣ,ΥΠΟΛΟΙΠΟ 31-60 ΗΜΕΡΕΣ,ΥΠΟΛΟΙΠΟ 61-90 ΗΜΕΡΕΣ,ΥΠΟΛΟΙΠΟ 91-120 ΗΜΕΡΕΣ,ΥΠΟΛΟΙΠΟ 121-150 ΗΜΕΡΕΣ,ΥΠΟΛΟΙΠΟ 151-180 ΗΜΕΡΕΣ,ΥΠΟΛΟΙΠΟ > 181 ΗΜΕΡΕΣ").Split(",")
+
+                    End If
+                End If
+            End If
+            If Me.Tag = "Προμηθευτών" Or Me.Tag = "Διαχείρηση πληρωμών Μεταφορέων" Then
+                'code,name,trndateDa,fincodeDa,trndate,fincode
+                myArrF = ("findoc,sosource,CODE,NAME,trndateDa,fincodeDa,trndate,fincode,tdebit,tcredit,bal,oiBal").Split(",")
+                myArrN = ("findoc,sosourc,ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΗΜ/ΝΙΑ Δ/Α,Δ/Α,ΗΜ/ΝΙΑ,Κατάθεση-Φόρτωση,Χρέωση,Πίστωση,Υπόλοιπο,Ανεξόφλητα").Split(",")
+                If Me.radioBtnΑggregate.Checked Or Me.radioBtnProCr.Checked Then
+                    myArrF = ("trdr,CODE,NAME,oibal00,oibal01,oibal02,oibal03,oibal04,oibal05,oibal06,oibal07,oibal08,oibal09,oibal10,oibal11,oibal12,oibal13").Split(",")
+                    myArrN = ("trdr,ΚΩΔ,ΣΥΝΑΛΑΣΟΜΕΝΟΣ,ΕκΜεταφ,Ιανουάριος,Φεβρουάριος,Μάρτιος,Απρίλιος,Μάιος,Ιούνιος,Ιούλιος,Αύγουστος,Σεπτέμβριος,Οκτώβριος,Νοέμβριος,Δεκέμβριος,ΣυνΥπολ").Split(",")
+                End If
+
+            End If
+            'Add Bound Columns
+            Dim bad_item_columns() As Integer = {1, 2, 3, 4}
+            RemoveGridColumnsByCollection(MasterDataGridView, bad_item_columns, myArrF, myArrN, False) 'CheckBoxDetail.Checked)
+
+            For i As Integer = 0 To MasterDataGridView.Columns.Count - 1
+                Debug.Print(MasterDataGridView.Columns(i).DataPropertyName & vbTab & MasterDataGridView.Columns(i).Name)
+                MasterDataGridView.Columns(i).ReadOnly = True
+            Next
+            'AddOutOfOfficeColumn(Me.MasterDataGridView)
+
+
+            For Each col In MasterDataGridView.Columns
+                Try
+                    Dim t As Type = col.ValueType
+                    If Not IsNothing(t) Then
+                        With col
+                            If t.IsGenericType AndAlso t.GetGenericTypeDefinition = GetType(Nullable(Of )) Then
+                                If Not t.FullName.IndexOf("System.Double") = -1 Or Not t.FullName.IndexOf("System.Decimal") = -1 Or Not t.FullName.IndexOf("System.Money") = -1 Then
+                                    .DefaultCellStyle.Format = "N2"
+                                End If
+                                If Not t.FullName.IndexOf("System.DateTime, ") = -1 Or Not t.FullName.IndexOf("System.Decimal") = -1 Or Not t.FullName.IndexOf("System.Money") = -1 Then
+                                    If col.DataPropertyName = "TRNDATE" Then
+                                        .DefaultCellStyle.Format = "dd/MM/yyyy HH:mm"
+                                    End If
+
+                                End If
+                            End If
+                            If t.Name = "Double" Or t.Name = "Decimal" Or t.Name = "Money" _
+                                 Then
+                                .DefaultCellStyle.Format = "N2"
+                            End If
+                            'If col.ValueType.Name = "String" Then
+                            '    '.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                            '    '.Width = 200
+                            'End If
+                            'If col.ValueType.Name <> "String" Then
+                            '    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                            'End If
+                        End With
+                    End If
+                Catch ex As Exception
+                    MsgBox("Public Sub RemoveGridColumns" & vbCrLf & ex.Message)
+                End Try
+            Next
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub MasterDataGridView_Sorted(sender As Object, e As EventArgs) Handles MasterDataGridView.Sorted
+        MasterDataGridView_Styling()
+    End Sub
+    Private Sub TlSBtnCheck_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) ' Handles TlSBtnCheck.Click, TlSBtnUnCheck.Click
+        Dim s As ToolStripButton = sender
+        Dim check As Boolean = False
+        If s.Name = "TlSBtnCheck" Then
+            check = True
+        Else
+            check = False
+        End If
+        If Me.MasterDataGridView.SelectedRows.Count > 0 Then
+            Dim DrSel As DataGridViewSelectedRowCollection = Me.MasterDataGridView.SelectedRows
+            For Each ds As DataGridViewRow In DrSel
+                If Not ds.Cells("Check").Value = check Then
+                    ds.Cells("Check").Value = check
+                End If
+            Next
+            'For i As Integer = 0 To DrSel.Count - 1
+            '    m_DataSet.Tables(MasterTableName).DefaultView(DrSel(i).Index).Item("Check") = True
+            'Next
+        Else
+            For Each ds As DataGridViewRow In Me.MasterDataGridView.Rows
+                ds.Cells("Check").Value = check
+            Next
+            'For i As Integer = 0 To m_DataSet.Tables(MasterTableName).DefaultView.Count - 1
+            '    m_DataSet.Tables(MasterTableName).DefaultView(i).Item("Check") = True
+            'Next
+        End If
+    End Sub
+
+    Private Sub MasterDataGridView_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles MasterDataGridView.CellFormatting
+        If e.ColumnIndex > 0 AndAlso Not IsNothing(e.Value) Then
+            If e.Value.ToString = "0" Then
+                e.Value = ""
+                e.FormattingApplied = True
+            End If
+        End If
+    End Sub
+
+    Private Sub MasterDataGridView_CellValidating(sender As Object, e As System.Windows.Forms.DataGridViewCellValidatingEventArgs) Handles MasterDataGridView.CellValidating
+        Dim s As DataGridView = sender
+        If s.Columns(e.ColumnIndex).Name = "ReOrder" Then
+            Dim cell As DataGridViewCell = s.CurrentCell
+            Dim reOrder As String = cell.EditedFormattedValue
+            If reOrder = "" Then
+                Exit Sub
+            End If
+            If Not cell.FormattedValue.ToString = reOrder Then
+                Dim count = Me.MasterDataGridView.Rows.Cast(Of DataGridViewRow).Where(Function(f) Not f.Cells("ReOrder").EditedFormattedValue = Nothing).Count
+
+                Dim q As IQueryable(Of _reorder) = Me.MasterBindingSource.DataSource
+
+                If Not count = 1 Then
+                    MsgBox("Προσοχή !!! Δεν επιτρέπεται πολλαπλή επιλογή για ReOrder.", MsgBoxStyle.Critical, "")
+                    Exit Sub
+                End If
+                Dim item As _reorder = s.Rows(e.RowIndex).DataBoundItem
+
+                q = q.Where(Function(f) f.num05 >= reOrder)
+                Dim mx As New MTREXTRA
+                For Each q1 In q
+                    mx = db.MTREXTRAs.Where(Function(f) f.MTRL = q1.mtrl).FirstOrDefault
+                    mx.NUM05 += 1
+                Next
+                mx = db.MTREXTRAs.Where(Function(f) f.MTRL = item.mtrl).FirstOrDefault
+                mx.NUM05 = reOrder
+                Me.BindingNavigatorSaveItem.Enabled = True
+            End If
+        End If
+    End Sub
+
+    Private Sub DataGridView1_DataError(ByVal sender As Object, ByVal e As DataGridViewDataErrorEventArgs) Handles MasterDataGridView.DataError
+
+        If sender.Columns(e.ColumnIndex).Name = "ReOrder" Then
+            Exit Sub
+        End If
+
+        MessageBox.Show("Error happened " _
+            & e.Context.ToString() & vbCrLf & "Row,Col:" & e.RowIndex & "," & sender.Columns(e.ColumnIndex).Name)
+
+        If (e.Context = DataGridViewDataErrorContexts.Commit) _
+            Then
+            MessageBox.Show("Commit error")
+        End If
+        If (e.Context = DataGridViewDataErrorContexts _
+            .CurrentCellChange) Then
+            MessageBox.Show("Cell change")
+        End If
+        If (e.Context = DataGridViewDataErrorContexts.Parsing) _
+            Then
+            MessageBox.Show("parsing error")
+        End If
+        If (e.Context =
+            DataGridViewDataErrorContexts.LeaveControl) Then
+            MessageBox.Show("leave control error")
+        End If
+
+        If (TypeOf (e.Exception) Is ConstraintException) Then
+            Dim view As DataGridView = CType(sender, DataGridView)
+            view.Rows(e.RowIndex).ErrorText = "an error"
+            view.Rows(e.RowIndex).Cells(e.ColumnIndex) _
+                .ErrorText = "an error"
+
+            e.ThrowException = False
+        End If
+    End Sub
+    Private Sub MasterDataGridView_EditingControlShowing(sender As Object, e As System.Windows.Forms.DataGridViewEditingControlShowingEventArgs) Handles MasterDataGridView.EditingControlShowing
+        'Dim s As GmDataGridView = sender
+        'Dim cell As DataGridViewCell = s.CurrentCell
+        ''Dim r = cell.OwningRow.Cells("")..Cells("MTRL")
+        'If cell.ColumnIndex = 2 Then
+        '    'Dim c As ComboBox = CType(e.Control, ComboBox)
+        'End If
+
+    End Sub
+    Private Sub MasterDataGridView_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles MasterDataGridView.CellMouseDown
+        If e.Button = MouseButtons.Right Then
+            '''''Dim hti = MasterDataGridView.HitTest(e.X, e.Y)
+            '''''MasterDataGridView.ClearSelection()
+            '''''MasterDataGridView.Rows(e.RowIndex).Selected = True
+            ''''Dim fabs As New FormUsersSet
+            '''''fabs.Conn = FormMain.Conn
+            ''''fabs.OrUs = MasterDataGridView.Rows(e.RowIndex).DataBoundItem
+
+            '''''Dim sts As New List(Of CCCSTATUS)
+            '''''Dim st As New CCCSTATUS
+            '''''Dim count = 0
+            '''''For Each cc In ("--Επιλέγξτε--,ΕΡΓΑΣΙΑ,ΑΣΘΕΝΕΙΑ,ΑΔΕΙΑ,REPO,ΑΛΛΟ").Split(",")
+            '''''    st = New CCCSTATUS
+            '''''    st.ID = count
+            '''''    count += 1
+            '''''    If cc = "ΕΡΓΑΣΙΑ" Then
+            '''''        Continue For
+            '''''    End If
+            '''''    st.DESCR = cc
+            '''''    sts.Add(st)
+            '''''Next
+            '''''Me.StateBindingSource.DataSource = GetState()
+
+            ''''''
+            ''''''StateDataGridViewComboBoxColumn
+            ''''''
+            '''''Dim ddlState = fabs.ddlState
+            ''''''StateDataGridViewComboBoxColumn.DataPropertyName = "State"
+            '''''ddlState.DataSource = Me.StateBindingSource
+            '''''ddlState.DisplayMember = "DESCR"
+            ''''''StateDataGridViewComboBoxColumn.HeaderText = "State"
+            ''''''StateDataGridViewComboBoxColumn.Items.AddRange(New Object() {"--Επιλέγξτε--", "ΕΡΓΑΣΙΑ", "ΑΣΘΕΝΕΙΑ", "ΑΔΕΙΑ", "REPO", "ΑΛΛΟ"})
+            '''''ddlState.Name = "StateComboBox"
+            ''''''StateDataGridViewComboBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+            ''''''StateDataGridViewComboBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+            '''''ddlState.ValueMember = "ID"
+
+            ''''fabs.ShowDialog()
+            '''''Cmd_Select()
+        End If
+    End Sub
+    Private Sub DataGridViewMaster_ColumnWidthChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles MasterDataGridView.ColumnWidthChanged
+        'If Me.MasterTopDataGridView.Columns.Count > 0 Then
+        '    Me.MasterTopDataGridView.Columns(e.Column.Index).Width = e.Column.Width
+        'End If
+    End Sub
+    Private Sub DataGridViewMaster_Scroll(ByVal sender As Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles MasterDataGridView.Scroll
+        If e.ScrollOrientation = ScrollOrientation.HorizontalScroll Then
+            'Me.MasterTopDataGridView.HorizontalScrollingOffset = Me.MasterDataGridView.HorizontalScrollingOffset '_Scroll(DataGridView1, e)
+        End If
+    End Sub
+    Private Sub MasterDataGridView_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles MasterDataGridView.CellPainting
+        If e.RowIndex = -1 And e.ColumnIndex = 5 Then
+            'Dim cl As DataGridViewCell = Me.MasterDataGridView.Rows(-1).Cells(5)
+            'e.Graphics.FillRectangle(Brushes.Blue, e.CellBounds)
+            'e.PaintContent(e.ClipBounds)
+            'e.Handled = True
+        End If
+    End Sub
+
+#End Region
+#Region "97- Control Events"
+    'Private Sub BindingNavigatorAddNewItem_Click(sender As System.Object, e As System.EventArgs) Handles ΑΠΟΓΡΑΦΗToolStripMenuItem.Click, ΕΞΑΓΩΓΕΣToolStripMenuItem.Click, ΕΙΣΑΓΩΓΕΣToolStripMenuItem.Click
+    '    Cmd_Add(sender)
+    'End Sub
+    'Private Sub BindingNavigatorDeleteItem_Click(sender As System.Object, e As System.EventArgs) Handles BindingNavigatorDeleteItem.Click
+    '    Cmd_Delete()
+    'End Sub
+    'Private Sub BindingNavigatorSaveItem_Click(sender As System.Object, e As System.EventArgs)
+    '    Me.Validate()
+    '    Me.MasterBindingSource.EndEdit()
+    '    'Me.TableAdapterManager.UpdateAll(Me.Cross1DataSet)
+    'End Sub
+    Private Sub cmdSelect_Click(sender As System.Object, e As System.EventArgs) Handles cmdSelect.Click
+        Cmd_Select()
+    End Sub
+    Private Sub OpenToolStripButton_Click(sender As System.Object, e As System.EventArgs) Handles OpenToolStripButton.Click
+        Cmd_Edit()
+    End Sub
+    'Private Sub txtBoxLName_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtBoxLName.TextChanged
+    '    Dim s As TextBox = sender
+    '    Dim rowFound As Cross1.Member = (From g As Cross1.Member In Me.MasterBindingSource Where g.Name.ToString.ToUpper Like s.Text.Trim.ToUpper & "*").FirstOrDefault()
+    '    If Not IsNothing(rowFound) Then
+    '        'Dim itemFound As Integer = Me.MasterBindingSource.Find("Name", row3.Name.ToString)
+    '        Dim itemFound As Integer = Me.MasterBindingSource.IndexOf(rowFound)
+    '        Me.MasterBindingSource.Position = itemFound
+    '    End If
+    'End Sub
+    Private Sub BindingNavigatorAddNewItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorAddNewItem.Click
+        Try
+            Dim q = Me.MasterBindingSource.List.OfType(Of ccCVShipment).ToList().Where(Function(f) f.FINDOC = 0).FirstOrDefault
+            If IsNothing(q) Then
+                Me.MasterBindingSource.AddNew()
+                Dim nu As ccCVShipment = Me.MasterBindingSource.Current
+                'nu.user_type = "User"
+                'nu.createdOn = Now()
+            End If
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+    Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        If DateTimePicker1.Value = "01/01/" & Year(CTODate) Then
+            DateTimePicker1.Value = CTODate
+        Else
+            DateTimePicker1.Value = "01/01/" & Year(CTODate)
+        End If
+    End Sub
+
+
+
+    Private Sub TlSBtn_Click(sender As Object, e As EventArgs) Handles TlSBtnPRSN.Click, TlSBtnWHOUSE.Click, TlSBtnTRDR.Click
+        Dim ee As New System.ComponentModel.CancelEventArgs
+        ee.Cancel = False
+        TlSTextBox_Validating(sender, ee)
+    End Sub
+    Private Sub TlSTextBox_Validating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs)
+        Dim s As Object = sender
+        'e.Cancel = False
+        Dim Valid As Boolean = False
+        Dim SelectSender As String = ""
+        Select Case sender.GetType.Name
+            Case "TextBox"
+                SelectSender = s.Name
+            Case "ToolStripButton", "ToolStripTextBox"
+                SelectSender = s.Name
+            Case "MyDataGridView", "GmDgView"
+                SelectSender = s.Columns(s.CurrentCell.ColumnIndex).Name
+        End Select
+        Dim ReturnFields As New ArrayList
+        Dim errorMsg As String = ""
+        Dim View As Boolean = False
+        Dim GmTitle As String = ""
+        'Dim GmTableName As String = ""
+        Dim GmGroupSql As String = "" ' "SELECT DISTINCT CODE, DESCR as GENDSCR_DESCR, TYPE FROM GENDSCR WHERE Type = 2 ORDER BY TYPE,CODE"
+        Dim GmGroupSqlField As String = "" ' "GENDSCR_DESCR"
+        Dim GmCheck As Boolean = False
+        Dim ValidField As String = ""
+        Dim sender_TAG As String = ""
+        Dim Visible As Boolean = False
+        Dim GmPelPro As Byte = 0
+        RsWhere = "1=1"
+        RsOrder = ""
+        Select Case SelectSender
+            'Case "TlSBtnSERIES", "TlSTxtSERIES"
+            '    TlSTxtSERIES.Tag = "SERIES"
+            '    ReturnFields.Add(TlSTxtSERIES)
+            '    GmTitle = "Σειρές"
+            '    RsTables = "SERIES"
+
+            '    Company = 1000
+
+            '    RsWhere = "Company = " & Company & " AND SOSOURCE = 1351 AND ISACTIVE=1" 'SODTYPE = 13" ' AND TPRMS IN (2001, 2002, 5011, 9051)"
+            '    RsOrder = "SERIES"
+            '    'SELECT A.COMPANY,A.SOSOURCE,A.SOREDIR,A.SERIES,A.CODE,A.FPRMS,A.NAME,A.ISACTIVE,A.BRANCH,A.WHOUSE FROM SERIES A WHERE A.COMPANY=1000 AND A.COMPANY IN (1000) AND A.SOSOURCE=1351 AND A.ISACTIVE=1 ORDER BY A.SERIES,A.COMPANY,A.SOSOURCE
+            '    sSQL = "SELECT SERIES,CODE,NAME FROM SERIES "
+            '    sender_TAG = ReturnFields(0).Tag
+            '    myArrF = ("SERIES,CODE,NAME").Split(",")
+            '    myArrN = ("Σειρά,Σύντμηση,Περιγραφή").Split(",")
+            '    GmCheck = True
+
+            'Case "TlSBtnFPRMS", "TlSTxtFPRMS"
+            '    TlSTxtFPRMS.Tag = "FPRMS"
+            '    ReturnFields.Add(TlSTxtFPRMS)
+            '    GmTitle = "Τύποι"
+            '    RsTables = "FPRMS"
+
+            '    Company = 1000
+
+            '    RsWhere = "Company = " & Company & " AND SOSOURCE = 1351 AND ISACTIVE=1"
+            '    RsOrder = "FPRMS"
+            '    sSQL = "SELECT FPRMS, NAME FROM FPRMS "
+            '    sender_TAG = ReturnFields(0).Tag
+            '    myArrF = ("FPRMS,NAME").Split(",")
+            '    myArrN = ("Τύπος,Περιγραφή").Split(",")
+            '    GmCheck = True
+
+            Case "TlSBtnTRDR", "TlSTxtTRDR"
+                TlSTxtTRDR.Tag = "CODE"
+                ReturnFields.Add(TlSTxtTRDR)
+                GmTitle = "Ευρετήριο Πελατών"
+                RsTables = "TRDR"
+
+                Company = 1000
+
+                Dim sodTyp = 0
+                If Me.Tag = "Πελατών" Then
+                    sodTyp = 13
+                End If
+                If Me.Tag = "Προμηθευτών" Or Me.Tag = "Διαχείρηση πληρωμών Μεταφορέων" Then
+                    sodTyp = 12
+                End If
+                RsWhere = "Company = " & Company & " AND SODTYPE=" & sodTyp & " AND ISACTIVE=1" & IIf(sodTyp = 12, " AND JOBTYPE = 1054", "") 'TPRMS IN (2001, 2002, 5011, 9051)"
+
+                RsOrder = "CODE"
+
+                sSQL = "SELECT CODE, NAME FROM TRDR "
+                sender_TAG = ReturnFields(0).Tag
+                myArrF = ("CODE,NAME").Split(",")
+                myArrN = ("Κωδικός,Επωνυμία").Split(",")
+                GmCheck = True
+            'Case "TlSBtnMTRL", "TlSTxtMTRL"
+            '    TlSTxtMTRL.Tag = "CODE"
+            '    ReturnFields.Add(TlSTxtMTRL)
+            '    GmTitle = "Ευρετήριο Ειδών"
+            '    RsTables = "MTRL"
+
+            '    Company = 1000
+
+            '    RsWhere = "Company = " & Company & " AND SODTYPE=51 AND ISACTIVE=1" ' AND TPRMS IN (2001, 2002, 5011, 9051)"
+            '    RsOrder = "CODE"
+
+            '    sSQL = "SELECT CODE, NAME FROM MTRL "
+            '    sender_TAG = ReturnFields(0).Tag
+            '    myArrF = ("CODE,NAME").Split(",")
+            '    myArrN = ("Κωδικός,Περιγραφή").Split(",")
+
+            Case "TlSBtnPRSN", "TlSTxtPRSN"
+                TlSTxtPRSN.Tag = "CODE"
+                ReturnFields.Add(TlSTxtPRSN)
+                GmTitle = "Ευρετήριο Πωλητών"
+                RsTables = "PRSN"
+
+                Company = 1000
+
+                RsWhere = "Company = " & Company & " AND SODTYPE=20 AND TPRSN=0" 'SODTYPE = 13" ' AND TPRMS IN (2001, 2002, 5011, 9051)"
+                RsOrder = "CODE,PRSN"
+                'SELECT A.COMPANY,A.SODTYPE,A.PRSN,A.CODE,A.NAME,A.NAME2,A.NAME3,A.ISACTIVE,A.TPRSN,A.AFM,A.IDENTITYNUM FROM PRSN A WHERE A.COMPANY=1000 AND A.SODTYPE=20 AND A.TPRSN=0 ORDER BY A.CODE,A.PRSN
+                sSQL = "SELECT CODE,NAME,NAME2 FROM PRSN "
+                sender_TAG = ReturnFields(0).Tag
+                myArrF = ("CODE,NAME2,NAME").Split(",")
+                myArrN = ("Κωδικός,Επώνυμο,Όνομα").Split(",")
+                GmCheck = True
+
+            Case "TlSBtnWHOUSE", "TlSTxtWHOUSE"
+                TlSTxtWHOUSE.Tag = "WHOUSE"
+                'TlSTxtTimKin_Descr.Tag = "TPRMS_NAME"
+                ReturnFields.Add(TlSTxtWHOUSE)
+                'ReturnFields.Add(TlSTxtTimKin_Descr)
+                ''''''''''''''''''''''''''''''''''''''''
+                GmTitle = "Ευρετήριο ΑΠΟΘΗΚΩΝ"
+                RsTables = "WHOUSE"
+                '(dbo.FINDOC.COMPANY = 1000) And (dbo.FINDOC.SOSOURCE = 1351) And (dbo.FINDOC.SOREDIR = 0) And (dbo.FINDOC.TRNDATE >= '20170701') AND (dbo.FINDOC.TRNDATE < '20170801') AND (dbo.FINDOC.TFPRMS IN (201))
+                '         And (dbo.FINDOC.SODTYPE = 13) And (dbo.FINDOC.FULLYTRANSF IN (0, 2)) And (dbo.MTRLINES.PENDING >= 1)
+                Company = 1000
+
+                RsWhere = "Company = " & Company '& " AND SOSOURCE = 1351" 'SODTYPE = 13" ' AND TPRMS IN (2001, 2002, 5011, 9051)"
+                RsWhere = Trim(RsWhere)
+                RsOrder = "SHORTCUT"
+                'sSQL = "SELECT TPRMS, NAME AS TPRMS_NAME FROM TPRMS"
+                sSQL = "SELECT WHOUSE, SHORTCUT, NAME FROM dbo.WHOUSE"
+                'GmPelPro = 3 'Δεν υπάρχη PelPro Field
+                'sender_TAG = Replace(ReturnFields(0).Tag, "P1_", "", , , CompareMethod.Text)
+                sender_TAG = ReturnFields(0).Tag
+                myArrF = ("WHOUSE,SHORTCUT,NAME").Split(",")
+                myArrN = ("A.X,Εγκατάσταση,Ονομασία").Split(",")
+                GmCheck = True
+
+        End Select
+        Dim m_dtGen As DataTable = Nothing
+        Try
+            If Not ReturnFields(0).Text = "" Then 'Εαν records > 1 Να ανοίξη την SearchFR με κρητίρια
+                ValidField = Trim(ReturnFields(0).Text)
+                If Not ValidField.IndexOf("*").Equals(-1) Then
+                    ValidField = ValidField.Replace("*", "%")
+                    RsWhere = Trim(RsWhere) & " AND " & sender_TAG & " LIKE '" & ValidField & "'"
+                ElseIf Not ValidField.IndexOf(",").Equals(-1) Then
+                    ValidField = "'" & ValidField.Replace(",", "','") & "'"
+                    RsWhere = Trim(RsWhere) & " AND " & sender_TAG & " IN (" & ValidField & ")"
+                Else
+                    RsWhere = Trim(RsWhere) & " AND " & sender_TAG & " = '" & ValidField & "'"
+                End If
+                'Visible = True
+            Else 'ReturnFields(0).Text = ""
+                If Not sender.GetType.Name = "ToolStripButton" Then 'sender.GetType.Name <> "ToolStripButton"
+                    '    'Δηλαδή  If ReturnFields(0).Text = "" αλλά δεν προέρχετε από ToolStripButton να μή κάνη τίποτα
+                    For i As Integer = 0 To ReturnFields.Count - 1
+                        ReturnFields(i).Text = ""
+                        ReturnFields(i).ToolTipText = ""
+                    Next
+
+                    'sender.Focus()
+                    e.Cancel = False
+                    Exit Sub
+                    'Visible = True
+                End If
+            End If
+            'RsTables = SelectPelPro(RsTables, PelPro)
+            'RsWhere = SelectPelPro(RsWhere, PelPro)
+            'RsOrder = SelectPelPro(RsOrder, PelPro)
+            Dim mSql As String = sSQL & IIf(RsWhere = "", "", " WHERE " & RsWhere) & IIf(RsOrder = "", "", " ORDER BY " & RsOrder)
+            m_dtGen = GmData.GetTableSQL(conn, CommandType.Text, mSql, , RsTables)
+        Catch ex As Exception
+            MsgBox("Error" & vbCrLf & ex.Message & vbCrLf & ex.Source & ex.StackTrace)
+        End Try
+        m_dvGen = New DataView(m_dtGen)
+        If m_dvGen.Count = 0 Then
+            Select Case SelectSender
+                Case "TlSBtnSERIES", "TlSTxtSERIES"
+                    errorMsg = "Δεν βρέθηκε η Εγγραφή."
+                Case "TlSBtnFPRMS", "TlSTxtFPRMS"
+                    errorMsg = "Δεν βρέθηκε η Εγγραφή."
+                Case "TlSBtnTRDR", "TlSTxtTRDR"
+                    errorMsg = "Δεν βρέθηκε η Εγγραφή."
+                Case "TlSBtnMTRL", "TlSTxtMTRL"
+                    errorMsg = "Δεν βρέθηκε η Εγγραφή."
+                Case "TlSBtnPRSN", "TlSTxtPRSN"
+                    errorMsg = "Δεν βρέθηκε η Εγγραφή."
+                Case "TlSBtnWHOUSE", "TlSTxtWHOUSE"
+                    errorMsg = "Δεν βρέθηκε η Εγγραφή."
+            End Select
+            MsgBox(errorMsg)
+            For i As Integer = 0 To ReturnFields.Count - 1
+                ReturnFields(i).Text = ""
+                ReturnFields(i).ToolTipText = ""
+            Next
+            'sender.Focus()
+            e.Cancel = False
+            Exit Sub
+            View = False
+        ElseIf m_dvGen.Count = 1 Then
+            View = False 'Ενιαία επιλογή με SearchFR εάν επιστρέψη record = 1 
+        End If
+        If View Or sender.GetType.Name = "ToolStripButton" Then
+            For i As Integer = 0 To ReturnFields.Count - 1
+                ReturnFields(i).Text = ""
+                ReturnFields(i).ToolTipText = ""
+            Next
+            If Not s.GetType.Name = "ToolStripButton" Then
+                ErrorProvider1.SetError(s.Control, "")
+            End If
+
+            Dim Point As System.Drawing.Point = New System.Drawing.Point(s.GetCurrentParent.Left + 5, s.GetCurrentParent.Top)
+            Dim ar As New ArrayList
+            Dim m_ds As New DataSet
+            m_ds = GmData.GmFillDataSet(m_ds, m_dtGen, m_dtGen.TableName)
+
+            Dim TSearchFR As New SearchFR
+            TSearchFR.Conn = conn
+            TSearchFR.m_ds = m_ds
+            TSearchFR.Text = GmTitle
+            TSearchFR.GmCheck = GmCheck
+            TSearchFR.sSQL = sSQL
+            TSearchFR.GmPelPro = Nothing 'GmPelPro
+            TSearchFR.RsWhere = RsWhere
+            TSearchFR.RsOrder = RsOrder
+            TSearchFR.GmGroupSql = GmGroupSql
+            TSearchFR.GmGroupSqlField = GmGroupSqlField
+            TSearchFR.RsTables = RsTables
+            TSearchFR.myArrF = myArrF
+            TSearchFR.myArrN = myArrN
+            TSearchFR.Location = Point
+            'TSearchFR.Visible = View
+            'TSearchFR.RetTBL = New DataTable
+            'TSearchFR.Me_Load(ar, GmTitle, GmCheck, sSQL, RsWhere, RsOrder, GmGroupSql, GmGroupSqlField, RsTables, myArrF, myArrN, Point, True)
+            TSearchFR.ShowDialog()
+
+            Dim Dt As DataTable = TSearchFR.RetTBL
+            If Not TSearchFR.RetTBL Is Nothing Then
+
+                'ReturnFields.Add(TlSTxtPCODE)
+                'ReturnFields.Add(TlSTxtPELNAME1)
+                If TSearchFR.GmCheck = True Then
+                    Dt.DefaultView.RowFilter = "Check = True "
+                End If
+                Dim dv = Dt.DefaultView
+                If dv.Count > 0 Then
+                    If dv.Count = 1 Then
+                        'ReturnFields(0).Text = Trim(Dt.Rows(0)(0)) '("P1_PCODE")
+                        'ReturnFields(1).Text = Trim(Dt.Rows(0)(1)) '("P1_PELNAME1")
+                        m_dvGen = dv 'Ενιαία επιλογή με SearchFR εάν επιστρέψη record = 1
+                    Else
+                        Dim Result As String = ""
+                        For i As Integer = 0 To dv.Count - 1
+                            Result += Trim(dv(i)(0)) & "," '("P1_PCODE")
+                        Next
+                        ReturnFields(0).Text = Trim(Mid(Result, 1, Len(Trim(Result)) - 1))
+                    End If
+                    ReturnFields(0).ToolTipText = ReturnFields(0).Text
+                    'GmDgLookUp_FillNew = SearceArrayList
+                Else
+                    '    MsgBox("Δεν υπάρχουν Εγγραφές")
+                    'If Not IsNumeric(TextBox1.Text) Then
+                    If Not s.GetType.Name = "ToolStripButton" Then
+                        'ErrorProvider1.SetError(s.Control, "Δέν βρέθηκε Εγγραφή")
+                    End If
+                    'Else
+                    '    ' Clear the error.
+                    '    ErrorProvider1.SetError(TextBox1, "")
+                    'End If
+                End If
+            Else
+                MsgBox("error:SearceArrayList", MsgBoxStyle.Critical)
+            End If
+        End If
+
+        If m_dvGen.Count = 1 Then
+            'Dim data_row As DataRowView
+            'data_row = bindingTim1.Current()
+            Select Case SelectSender
+                Case "TlSBtnPROM", "TlSTxtPROM"
+                    ReturnFields(0).Text = Trim(IIf(m_dvGen(0)("CODE").Equals(DBNull.Value), "", m_dvGen(0)("CODE")))
+                    'ReturnFields(1).Text = Trim(IIf(m_dvGen(0)("NAME").Equals(DBNull.Value), "", m_dvGen(0)("NAME")))
+                Case "TlSBtnPOUDRA", "TlSTxtPOUDRA"
+                    ReturnFields(0).Text = Trim(IIf(m_dvGen(0)("CODE").Equals(DBNull.Value), "", m_dvGen(0)("CODE")))
+                    ReturnFields(1).Text = Trim(IIf(m_dvGen(0)("NAME").Equals(DBNull.Value), "", m_dvGen(0)("NAME")))
+
+                Case "TlSBtnSERIES", "TlSTxtSERIES"
+                    ReturnFields(0).Text = GmNull(m_dvGen(0)("SERIES"), GetType(Short))
+                Case "TlSBtnFPRMS", "TlSTxtFPRMS"
+                    ReturnFields(0).Text = GmNull(m_dvGen(0)("FPRMS"), GetType(Short))
+                Case "TlSBtnTRDR", "TlSTxtTRDR"
+                    ReturnFields(0).Text = If(m_dvGen(0)("CODE"), "")
+                Case "TlSBtnMTRL", "TlSTxtMTRL"
+                    ReturnFields(0).Text = If(m_dvGen(0)("CODE"), "")
+                Case "TlSBtnPRSN", "TlSTxtPRSN"
+                    ReturnFields(0).Text = If(m_dvGen(0)("CODE"), "")
+                Case "TlSBtnWHOUSE", "TlSTxtWHOUSE"
+                    'ReturnFields(0).Text = GmNull(m_dvGen(0)("TPRMS"), GetType(Short))
+                    'ReturnFields(1).Text = GmNull(m_dvGen(0)("TPRMS_NAME"), GetType(String
+                    ReturnFields(0).Text = GmNull(m_dvGen(0)("WHOUSE"), GetType(Short))
+
+            End Select
+        End If
+        If ReturnFields.Count = 3 Then
+            ReturnFields(ReturnFields.Count - 1).Focus()
+        End If
+    End Sub
+
+    'Private Sub TlSBtnWHOUSE_Click(sender As Object, e As EventArgs) Handles TlSBtnWHOUSE.Click
+    '    Dim ee As New System.ComponentModel.CancelEventArgs
+    '    ee.Cancel = False
+    '    ToolStripTextBox_Validating(sender, ee)
+    'End Sub
+    Private Sub ToolStripTextBox_Validating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles TlSTxtWHOUSE.Validating
+        Dim s As Object = sender
+        'e.Cancel = False
+        Dim Valid As Boolean = False
+        Dim SelectSender As String = ""
+        Select Case sender.GetType.Name
+            Case "TextBox"
+                SelectSender = s.Name
+            Case "ToolStripButton", "ToolStripTextBox"
+                SelectSender = s.Name
+            Case "MyDataGridView", "GmDgView"
+                SelectSender = s.Columns(s.CurrentCell.ColumnIndex).Name
+        End Select
+        Dim ReturnFields As New ArrayList
+        Dim errorMsg As String = ""
+        Dim View As Boolean = False
+        Dim GmTitle As String = ""
+        'Dim GmTableName As String = ""
+        Dim GmGroupSql As String = "" ' "SELECT DISTINCT CODE, DESCR as GENDSCR_DESCR, TYPE FROM GENDSCR WHERE Type = 2 ORDER BY TYPE,CODE"
+        Dim GmGroupSqlField As String = "" ' "GENDSCR_DESCR"
+        Dim GmCheck As Boolean = False
+        Dim ValidField As String = ""
+        Dim sender_TAG As String = ""
+        Dim Visible As Boolean = False
+        Dim GmPelPro As Byte = 0
+        RsWhere = "1=1"
+        RsOrder = ""
+        Select Case SelectSender
+
+            Case "TlSBtnWHOUSE", "TlSTxtWHOUSE"
+                TlSTxtWHOUSE.Tag = "WHOUSE"
+                'TlSTxtTimKin_Descr.Tag = "TPRMS_NAME"
+                ReturnFields.Add(TlSTxtWHOUSE)
+                'ReturnFields.Add(TlSTxtTimKin_Descr)
+                ''''''''''''''''''''''''''''''''''''''''
+                GmTitle = "Ευρετήριο ΑΠΟΘΗΚΩΝ"
+                RsTables = "WHOUSE"
+                '(dbo.FINDOC.COMPANY = 1000) And (dbo.FINDOC.SOSOURCE = 1351) And (dbo.FINDOC.SOREDIR = 0) And (dbo.FINDOC.TRNDATE >= '20170701') AND (dbo.FINDOC.TRNDATE < '20170801') AND (dbo.FINDOC.TFPRMS IN (201))
+                '         And (dbo.FINDOC.SODTYPE = 13) And (dbo.FINDOC.FULLYTRANSF IN (0, 2)) And (dbo.MTRLINES.PENDING >= 1)
+                Company = 1000
+
+                RsWhere = "Company = " & Company '& " AND SOSOURCE = 1351" 'SODTYPE = 13" ' AND TPRMS IN (2001, 2002, 5011, 9051)"
+                RsWhere = Trim(RsWhere)
+                RsOrder = "SHORTCUT"
+                'sSQL = "SELECT TPRMS, NAME AS TPRMS_NAME FROM TPRMS"
+                sSQL = "SELECT WHOUSE, SHORTCUT, NAME FROM dbo.WHOUSE"
+                'GmPelPro = 3 'Δεν υπάρχη PelPro Field
+                'sender_TAG = Replace(ReturnFields(0).Tag, "P1_", "", , , CompareMethod.Text)
+                sender_TAG = ReturnFields(0).Tag
+                myArrF = ("WHOUSE,SHORTCUT,NAME").Split(",")
+                myArrN = ("A.X,Εγκατάσταση,Ονομασία").Split(",")
+                View = True
+        End Select
+        Dim m_dtGen As DataTable = Nothing
+        Try
+            If Not ReturnFields(0).Text = "" Then 'Εαν records > 1 Να ανοίξη την SearchFR με κρητίρια
+                ValidField = Trim(ReturnFields(0).Text)
+                If Not ValidField.IndexOf("*").Equals(-1) Then
+                    ValidField = ValidField.Replace("*", "%")
+                    RsWhere = Trim(RsWhere) & " AND " & sender_TAG & " LIKE '" & ValidField & "'"
+                ElseIf Not ValidField.IndexOf(",").Equals(-1) Then
+                    ValidField = "'" & ValidField.Replace(",", "','") & "'"
+                    RsWhere = Trim(RsWhere) & " AND " & sender_TAG & " IN (" & ValidField & ")"
+                Else
+                    RsWhere = Trim(RsWhere) & " AND " & sender_TAG & " = '" & ValidField & "'"
+                End If
+                'Visible = True
+            Else 'ReturnFields(0).Text = ""
+                If Not sender.GetType.Name = "ToolStripButton" Then 'sender.GetType.Name <> "ToolStripButton"
+                    '    'Δηλαδή  If ReturnFields(0).Text = "" αλλά δεν προέρχετε από ToolStripButton να μή κάνη τίποτα
+                    For i As Integer = 0 To ReturnFields.Count - 1
+                        ReturnFields(i).Text = ""
+                        ReturnFields(i).ToolTipText = ""
+                    Next
+
+                    'sender.Focus()
+                    e.Cancel = False
+                    Exit Sub
+                    'Visible = True
+                End If
+            End If
+            'RsTables = SelectPelPro(RsTables, PelPro)
+            'RsWhere = SelectPelPro(RsWhere, PelPro)
+            'RsOrder = SelectPelPro(RsOrder, PelPro)
+            Dim mSql As String = sSQL & IIf(RsWhere = "", "", " WHERE " & RsWhere) & IIf(RsOrder = "", "", " ORDER BY " & RsOrder)
+
+            'df = New GmData(sysDB, conn) 'My.Settings.GenConnectionString)
+            'm_dtGen = df.GmFillTable(mSql, RsTables)
+            m_dtGen = GmData.GetTableSQL(conn, CommandType.Text, mSql, , RsTables)
+            'Dim dtb As New DataTable
+            'Using cnn As New SqlConnection(conn)
+            '    cnn.Open()
+            '    Using cmd As New SqlCommand(mSql, cnn)
+            '        'cmd.Parameters.AddWithValue("@COMPANY", 1000)
+            '        'cmd.Parameters.AddWithValue("@SODTYPE", 51) '51 Αποθήκη
+            '        'cmd.Parameters.AddWithValue("@DFROM", CDate("01/07/2017")) 'make sure you assign a value To startdate
+            '        'cmd.Parameters.AddWithValue("@DTO", CDate("01/08/2017")) 'make sure you assign a value To 
+
+            '        ''cmd.Parameters.AddWithValue("@MTRL", Nothing) ' AS INTEGER = 2115 --63 --NULL --384 --NULL
+
+            '        'cmd.Parameters.AddWithValue("@CODE", "2103030557") ''--'%305%'
+            '        'cmd.Parameters.AddWithValue("@WHOUSE", Me.TlSTxtWHOUSE.Text.Replace(",", "|")) '"2|4")
+            '        ''--DECLARE @MTRLS  AS VARCHAR(250) = ''
+
+
+            '        'cmd.Parameters.AddWithValue("@FISCPRD", 2017)
+            '        'cmd.Parameters.AddWithValue("@PERIOD", 7)
+
+            '        Try
+            '            Using dr As SqlDataReader = cmd.ExecuteReader()
+            '                'Dim tb = New DataTable()
+            '                dtb.Load(dr)
+            '                'Return tb
+            '            End Using
+            '        Catch ex As Exception
+            '            MsgBox(ex.ToString, MsgBoxStyle.Critical, strAppName)
+            '        End Try
+
+            '    End Using
+
+
+
+            '    'Using dad As New SqlDataAdapter(str, cnn)
+            '    '    dad.Fill(dtb)
+            '    'End Using
+            '    cnn.Close()
+            'End Using
+            'm_dtGen = dtb
+            'm_dtGen.TableName = "WHOUSE"
+            If m_dtGen.Rows.Count = 0 And sender.GetType.Name = "ToolStripButton" Then ' If  "ToolStripButton" SearchFR = Όλα
+                'RsWhere = "1=1"
+                'If GmPelPro = 0 Or GmPelPro = 1 Then
+                '    RsWhere = Trim(RsWhere) & " and PELPRO = " & PelPro
+                'End If
+                'mSql = sSQL & IIf(RsWhere = "", "", " WHERE " & RsWhere) & IIf(RsOrder = "", "", " ORDER BY " & RsOrder)
+                'm_dtGen = df.GmFillTable(mSql, RsTables)
+            End If
+        Catch ex As Exception
+            MsgBox("Error" & vbCrLf & ex.Message & vbCrLf & ex.Source & ex.StackTrace)
+        End Try
+        m_dvGen = New DataView(m_dtGen)
+        If m_dvGen.Count = 0 Then
+            Select Case SelectSender
+                Case "TlSBtnPROM", "TlSBtnPOUDRA", "TlSTxtPROM", "TlSTxtPOUDRA"
+                    errorMsg = "Δεν βρέθηκε η Εγγραφή."
+                Case "TlSBtnTimKin", "TlSTxtTimKin"
+                    errorMsg = "Δεν βρέθηκε η Εγγραφή."
+                Case "TlSBtnWHOUSE", "TlSTxtWHOUSE"
+                    errorMsg = "Δεν βρέθηκε η Εγγραφή."
+            End Select
+            MsgBox(errorMsg)
+            For i As Integer = 0 To ReturnFields.Count - 1
+                ReturnFields(i).Text = ""
+                ReturnFields(i).ToolTipText = ""
+            Next
+            'sender.Focus()
+            e.Cancel = False
+            Exit Sub
+            View = False
+        ElseIf m_dvGen.Count = 1 Then
+            View = False 'Ενιαία επιλογή με SearchFR εάν επιστρέψη record = 1 
+        End If
+        If View Or sender.GetType.Name = "ToolStripButton" Then
+            For i As Integer = 0 To ReturnFields.Count - 1
+                ReturnFields(i).Text = ""
+                ReturnFields(i).ToolTipText = ""
+            Next
+            If Not s.GetType.Name = "ToolStripButton" Then
+                ErrorProvider1.SetError(s.Control, "")
+            End If
+            'If Visible Then
+            Dim Point As System.Drawing.Point = New System.Drawing.Point(s.GetCurrentParent.Left + 5, s.GetCurrentParent.Top)
+            Dim ar As New ArrayList
+            Dim m_ds As New DataSet
+            m_ds = GmData.GmFillDataSet(m_ds, m_dtGen, m_dtGen.TableName)
+            'ar.Add(m_ds)
+            'ar.Add(GmTitle)
+            'ar.Add(GmCheck)
+            'ar.Add(sSQL)
+            'ar.Add(GmPelPro)
+            'ar.Add(RsWhere)
+            'ar.Add(RsOrder)
+            'ar.Add(GmGroupSql)
+            'ar.Add(GmGroupSqlField)
+            'ar.Add(RsTables)
+            'ar.Add(myArrF)
+            'ar.Add(myArrN)
+            'ar.Add(Point)
+            'ar.Add(Visible)
+            Dim TSearchFR As New SearchFR
+            TSearchFR.Conn = conn
+            TSearchFR.m_ds = m_ds
+            TSearchFR.Text = GmTitle
+            TSearchFR.GmCheck = GmCheck
+            TSearchFR.sSQL = sSQL
+            TSearchFR.GmPelPro = Nothing 'GmPelPro
+            TSearchFR.RsWhere = RsWhere
+            TSearchFR.RsOrder = RsOrder
+            TSearchFR.GmGroupSql = GmGroupSql
+            TSearchFR.GmGroupSqlField = GmGroupSqlField
+            TSearchFR.RsTables = RsTables
+            TSearchFR.myArrF = myArrF
+            TSearchFR.myArrN = myArrN
+            TSearchFR.Location = Point
+            TSearchFR.GmCheck = True
+            'TSearchFR.Visible = View
+            'TSearchFR.RetTBL = New DataTable
+            'TSearchFR.Me_Load(ar, GmTitle, GmCheck, sSQL, RsWhere, RsOrder, GmGroupSql, GmGroupSqlField, RsTables, myArrF, myArrN, Point, True)
+            TSearchFR.ShowDialog()
+            'Dim SearceArrayList As ArrayList = TSearchFR.m_ArrayList 'SearchFR.Me_Load(ar, GmTitle, GmCheck, sSQL, RsWhere, RsOrder, GmGroupSql, GmGroupSqlField, RsTables, myArrF, myArrN, Point, True)
+            Dim Dt As DataTable = TSearchFR.RetTBL
+            If Not TSearchFR.RetTBL Is Nothing Then
+
+                'ReturnFields.Add(TlSTxtPCODE)
+                'ReturnFields.Add(TlSTxtPELNAME1)
+                If TSearchFR.GmCheck = True Then
+                    Dt.DefaultView.RowFilter = "Check = True "
+                End If
+                Dim dv = Dt.DefaultView
+                If dv.Count > 0 Then
+                    If dv.Count = 1 Then
+                        'ReturnFields(0).Text = Trim(Dt.Rows(0)(0)) '("P1_PCODE")
+                        'ReturnFields(1).Text = Trim(Dt.Rows(0)(1)) '("P1_PELNAME1")
+                        m_dvGen = dv 'Ενιαία επιλογή με SearchFR εάν επιστρέψη record = 1
+                    Else
+                        Dim Result As String = ""
+                        For i As Integer = 0 To dv.Count - 1
+                            Result += Trim(dv(i)(0)) & "," '("P1_PCODE")
+                        Next
+                        ReturnFields(0).Text = Trim(Mid(Result, 1, Len(Trim(Result)) - 1))
+                    End If
+                    ReturnFields(0).ToolTipText = ReturnFields(0).Text
+                    'GmDgLookUp_FillNew = SearceArrayList
+                Else
+                    '    MsgBox("Δεν υπάρχουν Εγγραφές")
+                    'If Not IsNumeric(TextBox1.Text) Then
+                    If Not s.GetType.Name = "ToolStripButton" Then
+                        'ErrorProvider1.SetError(s.Control, "Δέν βρέθηκε Εγγραφή")
+                    End If
+                    'Else
+                    '    ' Clear the error.
+                    '    ErrorProvider1.SetError(TextBox1, "")
+                    'End If
+                End If
+            Else
+                MsgBox("error:SearceArrayList", MsgBoxStyle.Critical)
+            End If
+        End If
+
+        If m_dvGen.Count = 1 Then
+            'Dim data_row As DataRowView
+            'data_row = bindingTim1.Current()
+            Select Case SelectSender
+                Case "TlSBtnPROM", "TlSTxtPROM"
+                    ReturnFields(0).Text = Trim(IIf(m_dvGen(0)("CODE").Equals(DBNull.Value), "", m_dvGen(0)("CODE")))
+                    'ReturnFields(1).Text = Trim(IIf(m_dvGen(0)("NAME").Equals(DBNull.Value), "", m_dvGen(0)("NAME")))
+                Case "TlSBtnPOUDRA", "TlSTxtPOUDRA"
+                    ReturnFields(0).Text = Trim(IIf(m_dvGen(0)("CODE").Equals(DBNull.Value), "", m_dvGen(0)("CODE")))
+                    ReturnFields(1).Text = Trim(IIf(m_dvGen(0)("NAME").Equals(DBNull.Value), "", m_dvGen(0)("NAME")))
+                Case "TlSBtnWHOUSE", "TlSTxtWHOUSE"
+                    'ReturnFields(0).Text = GmNull(m_dvGen(0)("TPRMS"), GetType(Short))
+                    'ReturnFields(1).Text = GmNull(m_dvGen(0)("TPRMS_NAME"), GetType(String
+                    ReturnFields(0).Text = GmNull(m_dvGen(0)("WHOUSE"), GetType(Short))
+            End Select
+            Dim data_row As DataRowView
+            'data_row = BindingSource1.Current()
+            Select Case SelectSender
+                Case "TlSBtnPROM", "TlSTxtPROM"
+                    data_row.Item("ETERIA") = GmNull(m_dvGen(0)("CDIMLINES"), GetType(Integer)) 'CInt(Me.GmDgLookUp1.GmReturnFields(2).Text)
+                'Case "TlSBtnPOUDRA", "TlSTxtPOUDRA"
+                '    If data_row.Item("ETERIA") Is DBNull.Value Then
+                '        MsgBox("Προσοχή !!! Δεν Βρέθηκε Προμηθευτής", MsgBoxStyle.Critical, "GmError")
+                '        For i As Integer = 0 To ReturnFields.Count - 1
+                '            ReturnFields(i).Text = ""
+                '            ReturnFields(i).ToolTipText = ""
+                '        Next
+                '        Exit Sub
+                '    End If
+                '    data_row.Item("COLOR") = GmNull(m_dvGen(0)("CDIMLINES"), GetType(Integer))
+                '    data_row.Item("VAL") = GmNull(m_dvGen(0)("CCCPRICE"), GetType(Double))
+                '    STOCKTextBox.Text = GmNull(m_dvGen(0)("CCCSSTOCK"), GetType(Double))
+                '    VALTextBox.Text = data_row.Item("VAL")
+                '    RsWhere = "Company = " & Company
+                '    RsWhere = RsWhere & " AND COLOR = " & data_row.Item("COLOR")
+                '    RsWhere = RsWhere & " AND ETERIA = " & data_row.Item("ETERIA")
+                '    sSQL = "SELECT TQTY " &
+                '           "FROM VTOTCCCPOUDRES AS VT " &
+                '           "WHERE " & RsWhere
+                '    Dim SumTable As DataTable = df.GmFillTable(sSQL, "VT")
+                '    'Dim m_dvSum As DataView = New DataView(SumTable)
+                '    If SumTable.Rows.Count = 1 Then
+                '        TYPOLQTY = SumTable.Rows(0)("TQTY")
+                '    Else
+                '        TYPOLQTY = 0
+                '    End If
+                '    Me.txtCTQTY.Text = Format(TYPOLQTY, "#,###") 'Format(data_row("TQTY") - data_row("QTY"), "#,###.#0")
+                Case "TlSBtnTimKin", "TlSTxtTimKin"
+                    data_row.Item("KK") = GmNull(m_dvGen(0)("TPRMS"), GetType(Short))
+            End Select
+        End If
+        If ReturnFields.Count = 3 Then
+            ReturnFields(ReturnFields.Count - 1).Focus()
+        End If
+    End Sub
+
+
+    Private Sub radioBtn_CheckedChanged(sender As Object, e As EventArgs) Handles radioBtnCreditsRpt.CheckedChanged
+        Dim s As RadioButton = sender
+        Me.GroupBoxCreditsRpt.Visible = False
+        Me.GroupBoxCreditsRpt.Visible = s.Checked
+    End Sub
+
+#End Region
+#Region "99-Start-GetData"
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        ' Add any initialization after the InitializeComponent() call.
+        'LoadDataInit() 'For Bind Any Control
+    End Sub
+    ' Load the data.
+    Private Sub LoadData()
+        db = New DataClassesHglpDataContext(conn) 'My.Settings.GenConnectionString)
+        db.CommandTimeout = Me.txtTimeOut.Text
+    End Sub
+    Private Sub LoadDataInit()
+        Try
+            'dbp = New DataClassesDataContext(CONNECT_STRING) 'My.Settings.ALFAConnectionString)
+            Dim conString As New SqlConnectionStringBuilder
+            db.Connection.ConnectionString = My.Settings.GenConnectionString
+            db.CommandTimeout = 360
+            'Data Source=192.168.1.102;Initial Catalog=Orario;Persist Security Info=True;User ID=ecollgl;Password=_ecollgl_
+            'Data Source=.\SqlExpress;Initial Catalog=Orario;Integrated Security=True
+            Me.MasterBindingSource.DataSource = db.ccCVShipments.Where(Function(f) f.FINDOC = 0)
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub BindingNavigatorSaveItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorSaveItem.Click
+        Me.DataSafe()
+        Cmd_Select()
+    End Sub
+
+    Private Sub MasterBindingSource_ListChanged(sender As Object, e As ListChangedEventArgs) Handles MasterBindingSource.ListChanged
+        'If e.ListChangedType = ListChangedType.ItemChanged Then
+        '    Dim nu As ccCVShipment = MasterBindingSource.Current
+        '    'nu.modifiedOn = Now()
+        '    Me.BindingNavigatorSaveItem.Enabled = True
+        'End If
+        'If e.ListChangedType = ListChangedType.ItemAdded Then
+        '    Me.BindingNavigatorSaveItem.Enabled = True
+        'End If
+    End Sub
+
+    Private Sub MasterBindingSource_AddingNew(sender As Object, e As AddingNewEventArgs) Handles MasterBindingSource.AddingNew
+
+    End Sub
+
+    Private Sub BindingNavigatorDeleteItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorDeleteItem.Click
+
+    End Sub
+
+    Private Sub ExcelToolStripButton_Click(sender As Object, e As EventArgs) Handles ExcelToolStripButton.Click
+        'Dim myStream As Stream
+        Dim saveFileDialog1 As New SaveFileDialog()
+
+        saveFileDialog1.Filter = "xlsx files (*.xlsx)|*.xlsx|All files (*.*)|*.*"
+        saveFileDialog1.FilterIndex = 1
+        saveFileDialog1.RestoreDirectory = True
+        Dim filename As String = Me.Text
+
+        saveFileDialog1.FileName = filename & " " & Today().ToShortDateString.Replace("/", "-")
+        If saveFileDialog1.ShowDialog() = DialogResult.OK Then
+
+            ExportDataToExcel(saveFileDialog1.FileName, Me.Text)
+
+            'myStream = saveFileDialog1.OpenFile()
+            'If (myStream IsNot Nothing) Then
+            '    ' Code to write the stream goes here.
+            '    myStream.Close()
+            'End If
+        End If
+    End Sub
+    ''' <summary>
+    ''' Creates the data table.
+    ''' </summary>
+    ''' <returns>DataTable</returns>
+    Private Shared Function CreateDataTable() As DataTable
+        Dim dt As New DataTable()
+        For i As Integer = 0 To 9
+            dt.Columns.Add(i.ToString())
+        Next
+
+        For i As Integer = 0 To 9
+            Dim dr As DataRow = dt.NewRow()
+            For Each dc As DataColumn In dt.Columns
+                dr(dc.ToString()) = i
+            Next
+
+            dt.Rows.Add(dr)
+        Next
+        Return dt
+    End Function
+    Private Sub ExportDataToExcel(fileName As String, title As String)
+
+        Using p As New ExcelPackage()
+            Try
+
+                'Here setting some document properties
+                p.Workbook.Properties.Author = "GmLogic"
+                p.Workbook.Properties.Title = fileName '"ExprotData"
+
+                'Create a sheet
+                p.Workbook.Worksheets.Add(title)
+
+                For Each ws As ExcelWorksheet In p.Workbook.Worksheets
+                    Dim lst = Me.MasterBindingSource.DataSource
+                    'Dim ws As ExcelWorksheet = p.Workbook.Worksheets("Εκκρεμείς παραγγελίες")
+                    'ws.Name = "Sample Worksheet"
+                    'Setting Sheet's name
+
+                    ws.Cells.Style.Font.Size = 11
+                    'Default font size for whole sheet
+                    ws.Cells.Style.Font.Name = "Calibri"
+                    'Default Font name for whole sheet
+                    'Dim dt As DataTable = CreateDataTable() ' Me.MasterBindingSource.DataSource 
+                    'Dim q As IQueryable(Of whRpt) = CType(Me.MasterBindingSource.DataSource, List(Of whRpt)).AsQueryable
+                    'dt = Utility.LINQToDataTable(db, q)
+                    'My Function which generates DataTable
+                    'Merging cells and create a center heading for out table
+                    'ws.Cells(1, 1).Value = "Sample DataTable Export"
+                    Dim colIndex As Integer = 1
+                    Dim rowIndex As Integer = 1
+
+                    'ws.Cells(rowIndex, colIndex, rowIndex, 15).Merge = True
+                    'ws.Cells(rowIndex, colIndex).Value = "ΛΝΚ Α.Ε"
+                    ws.Row(rowIndex).Style.Font.Size = 14
+                    'Creating Headings
+                    'Dim cellprH = ws.Cells(rowIndex - 1, colIndex)
+                    Dim cellH = ws.Cells(rowIndex, colIndex)
+                    'Setting the background color of header cells to Gray
+                    'Dim fillprH = cellprH.Style.Fill
+                    Dim fillH = cellH.Style.Fill
+                    'fillprH.PatternType = ExcelFillStyle.Solid
+                    fillH.PatternType = ExcelFillStyle.Solid
+                    'fillprH.BackgroundColor.SetColor(System.Drawing.Color.White)
+
+                    fillH.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(208, 206, 206)) 'Color.Orange)
+
+                    'Setting Top/left,right/bottom borders.
+                    Dim borderH = cellH.Style.Border
+                    borderH.Bottom.Style = InlineAssignHelper(borderH.Top.Style, InlineAssignHelper(borderH.Left.Style, InlineAssignHelper(borderH.Right.Style, ExcelBorderStyle.Thin)))
+
+                    'Setting Value in cell
+                    cellH.Value = Me.Text
+
+                    ws.Row(rowIndex).Style.Font.Bold = True
+                    ws.Row(rowIndex).Style.VerticalAlignment = ExcelVerticalAlignment.Center
+                    ws.Row(rowIndex).Height = 35.25
+                    ws.Cells(rowIndex, colIndex, rowIndex, myArrN.Length).Merge = True
+                    cellH.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center
+
+                    rowIndex += 1
+                    colIndex = 1
+                    For Each col In myArrN
+                        'Creating Headings
+                        Dim cellpr = ws.Cells(rowIndex - 1, colIndex)
+                        Dim cell = ws.Cells(rowIndex, colIndex)
+                        'Setting the background color of header cells to Gray
+                        Dim fillpr = cellpr.Style.Fill
+                        Dim fill = cell.Style.Fill
+                        fillpr.PatternType = ExcelFillStyle.Solid
+                        fill.PatternType = ExcelFillStyle.Solid
+                        fillpr.BackgroundColor.SetColor(System.Drawing.Color.White)
+
+                        fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(208, 206, 206)) 'Color.Orange)
+
+                        'Setting Top/left,right/bottom borders.
+                        Dim border = cell.Style.Border
+                        border.Bottom.Style = InlineAssignHelper(border.Top.Style, InlineAssignHelper(border.Left.Style, InlineAssignHelper(border.Right.Style, ExcelBorderStyle.Thin)))
+
+                        'Setting Value in cell
+                        cell.Value = col
+                        'cell.AutoFitColumns()
+                        colIndex += 1
+                    Next
+                    'ws.Column(ColNLst.Count).Width = 44.57
+
+                    ws.Row(rowIndex).Style.Font.Bold = True
+                    ws.Row(rowIndex).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center
+                    ws.Row(rowIndex).Style.VerticalAlignment = ExcelVerticalAlignment.Center
+
+                    Dim rowDataIndex = rowIndex + 1
+
+                    If Me.radioBtnSales.Checked Then
+                        lst = CType(lst, DataTable).AsEnumerable
+                    End If
+
+                    For Each ro In lst ' DataGridViewRow In Me.MasterDataGridView.Rows
+                        ' Adding Data into rows
+                        colIndex = 1
+                        rowIndex += 1
+
+                        For Each col_Name In myArrF 'As  DataGridViewColumn In Me.MasterDataGridView.Columns
+                            If col_Name = "Check" Then
+                                Continue For
+                            End If
+                            Dim cell = ws.Cells(rowIndex, colIndex)
+                            Try
+                                If Not Me.radioBtnSales.Checked Then
+                                    cell.Value = ro.GetType().GetProperty(col_Name).GetValue(ro) 'ro.Cells(col.Name).Value 'dr(dc.ColumnName) 
+                                Else
+                                    cell.Value = ro(col_Name)
+                                End If
+
+                                'Setting Value in cell
+                                With cell
+                                    Dim t As Type
+                                    If Not Me.radioBtnSales.Checked Then
+                                        t = ro.GetType().GetProperty(col_Name).PropertyType 'col.ValueType
+                                    Else
+                                        t = ro(col_Name).GetType
+                                    End If
+
+                                    If Not IsNothing(t) Then
+                                        If t.IsGenericType AndAlso t.GetGenericTypeDefinition = GetType(Nullable(Of )) Then
+                                            If Not t.FullName.IndexOf("System.Double") = -1 Or Not t.FullName.IndexOf("System.Decimal") = -1 Or Not t.FullName.IndexOf("System.Money") = -1 Then
+                                                .Value = CType(cell.Value, Double)
+                                                .Style.Numberformat.Format = "#,##0.00"
+                                            End If
+                                            If Not t.FullName.IndexOf("System.DateTime") Then
+                                                If {"INSDATE", "TRNDATE"}.Contains(col_Name) Then
+                                                    .Style.Numberformat.Format = "dd/MM/yyyy HH:mm"
+                                                Else
+                                                    .Style.Numberformat.Format = "dd/MM/yyyy"
+                                                End If
+                                            End If
+                                        End If
+
+                                        If t.Name = "Double" Or t.Name = "Decimal" Or t.Name = "Money" Then
+                                            .Value = CType(cell.Value, Double)
+                                            .Style.Numberformat.Format = "#,##0.00"
+                                        End If
+                                        If t.Name = "DateTime" Then
+                                            '.Value = CType(ro.Cells(col.Name).Value, Double)
+                                            If col_Name = "INSDATE" Then
+                                                .Style.Numberformat.Format = "dd/MM/yyyy HH:mm"
+                                            Else
+                                                .Style.Numberformat.Format = "dd/MM/yyyy"
+                                            End If
+
+                                        End If
+                                    End If
+                                    If t.IsGenericType AndAlso t.GetGenericTypeDefinition = GetType(Nullable(Of )) Then
+                                        If Not t.FullName.IndexOf("System.Decimal") Then
+                                            .Value = CType(cell.Value, Double)
+                                            .Style.Numberformat.Format = "#,##0.00"
+                                        End If
+                                    End If
+                                    If t.Name = "Double" Or t.Name = "Decimal" Or t.Name = "Money" Then
+                                        .Value = CType(cell.Value, Double)
+                                        .Style.Numberformat.Format = "#,##0.00"
+                                    End If
+                                End With
+                            Catch ex As Exception
+                                MsgBox("Error col_Name:" & col_Name & vbCrLf & ex.Message)
+                            End Try
+
+
+                            'Setting borders of cell
+                            Dim border = cell.Style.Border
+                            border.Left.Style = InlineAssignHelper(border.Right.Style, ExcelBorderStyle.Thin)
+                            'ws.Cells(rowIndex, colIndex).AutoFitColumns()
+                            colIndex += 1
+                        Next
+                    Next
+
+                    rowIndex += 1
+                    Dim cellFoot = ws.Cells(rowIndex, 1)
+                    cellFoot.Value = "Σύνολα"
+                    cellFoot.Style.Fill.PatternType = ExcelFillStyle.Solid
+                    cellFoot.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(208, 206, 206))
+                    Dim startCol = 1
+                    Dim endCol = myArrF.Count
+                    'Dim criteria = ws.Cells(rowIndex, 2)
+                    'criteria.Value = "<0"
+                    For i As Integer = startCol + 1 To endCol ' ColNLst.Count
+                        Dim cellsum = ws.Cells(rowIndex, i)
+                        Dim cellsumpr = ws.Cells(rowIndex - 1, i)
+                        If Not cellsumpr.Style.Numberformat.Format = "#,##0.00" Then
+                            Continue For
+                        End If
+
+                        With cellsum
+                            'Setting Sum Formula 
+                            '.Formula = ("Sum(" + ws.Cells(3, i).Address & ":") + ws.Cells(rowIndex - 1, i).Address & ")"
+                            '=SUMIF(F2:F9;">0";F2:F9)
+
+                            'Dim formula As String = "SUMIF(" + ws.Cells(3, i).Address & ":" + ws.Cells(rowIndex - 1, i).Address & "," & ws.Cells(rowIndex, 2).Address & "," & ws.Cells(3, i).Address & ":" + ws.Cells(rowIndex - 1, i).Address & ")"
+                            'Spoiler: The solution is to use "," instead of ";" when working with formulas in your code.
+                            Dim formula As String = "SUMIF(" + ws.Cells(3, i).Address & ":" + ws.Cells(rowIndex - 1, i).Address & "," & """<>0""" & "," & ws.Cells(3, i).Address & ":" + ws.Cells(rowIndex - 1, i).Address & ")"
+                            If Me.radioBtnΑggregate.Checked Then
+                                formula = "SUMIF(" + ws.Cells(3, i).Address & ":" + ws.Cells(rowIndex - 1, i).Address & "," & """<0""" & "," & ws.Cells(3, i).Address & ":" + ws.Cells(rowIndex - 1, i).Address & ")"
+                            End If
+                            .Formula = formula '("SUMIF(" + ws.Cells(3, i).Address & ":") + ws.Cells(rowIndex - 1, i).Address & ";" & Chr(34) & "<0" & Chr(34) & ";" & ws.Cells(3, i).Address & ":" + ws.Cells(rowIndex - 1, i).Address & ")"
+                            .Style.Numberformat.Format = "#,##0.00"
+
+                            'Setting Background fill color to Gray
+                            .Style.Fill.PatternType = ExcelFillStyle.Solid
+                            .Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow)
+                        End With
+                    Next
+                    ws.Cells(ws.Dimension.Address).AutoFitColumns()
+
+                Next
+
+                'Generate A File with Random name
+                Dim bin As [Byte]() = p.GetAsByteArray()
+                Dim file__1 As String = fileName ' "e:\temp\" & Guid.NewGuid().ToString() & ".xlsx"
+                Try
+                    File.WriteAllBytes(file__1, bin)
+                Catch ex As Exception
+                    MsgBox(ex.Message)
+                End Try
+
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
+        End Using
+    End Sub
+    Private Sub ExportToExcelold(fileName As String)
+        Using p As New ExcelPackage()
+            'Here setting some document properties
+            p.Workbook.Properties.Author = "GmLogic"
+            p.Workbook.Properties.Title = Me.Text ' "Υπόλοιπα ομάδων"
+
+            'Create a sheet
+            p.Workbook.Worksheets.Add("Sheet1")
+            Dim ws As ExcelWorksheet = p.Workbook.Worksheets(1)
+            'ws.Name = "Sample Worksheet"
+            'Setting Sheet's name
+            ws.Cells.Style.Font.Size = 11
+            'Default font size for whole sheet
+            ws.Cells.Style.Font.Name = "Calibri"
+            'Default Font name for whole sheet
+
+            'Dim dt As DataTable = CreateDataTable() ' Me.MasterBindingSource.DataSource 
+            'Dim q As IQueryable(Of whRpt) = CType(Me.MasterBindingSource.DataSource, List(Of whRpt)).AsQueryable
+            'dt = Utility.LINQToDataTable(db, q)
+            'My Function which generates DataTable
+            'Merging cells and create a center heading for out table
+            'ws.Cells(1, 1).Value = "Sample DataTable Export"
+            Dim colIndex As Integer = 1
+            Dim rowIndex As Integer = 1
+
+            ws.Cells(rowIndex, 2, 1, 3).Merge = True
+            ws.Cells(rowIndex, 2).Value = Me.Text & " " & Me.DateTimePicker2.Value.ToShortDateString
+            ws.Row(rowIndex).Style.Font.Size = 14
+            ws.Row(rowIndex).Style.Font.Bold = True
+            ws.Row(rowIndex).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center
+            ws.Row(rowIndex).Style.VerticalAlignment = ExcelVerticalAlignment.Center
+            ws.Row(rowIndex).Height = 35.25
+            ws.Column(2).Width = 44.57
+
+            Dim ColNLst As New List(Of String)
+            For Each col As DataGridViewColumn In Me.MasterDataGridView.Columns
+                If col.Name = "Check" Then
+                    Continue For
+                End If
+                ColNLst.Add(col.Name)
+            Next
+
+            rowIndex += 1
+            For Each col In ColNLst
+                'Creating Headings
+                Dim cellpr = ws.Cells(rowIndex - 1, colIndex)
+                Dim cell = ws.Cells(rowIndex, colIndex)
+                'Setting the background color of header cells to Gray
+                Dim fillpr = cellpr.Style.Fill
+                Dim fill = cell.Style.Fill
+                fillpr.PatternType = ExcelFillStyle.Solid
+                fill.PatternType = ExcelFillStyle.Solid
+                fillpr.BackgroundColor.SetColor(System.Drawing.Color.White)
+                fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow)
+
+                'Setting Top/left,right/bottom borders.
+                Dim border = cell.Style.Border
+                border.Bottom.Style = InlineAssignHelper(border.Top.Style, InlineAssignHelper(border.Left.Style, InlineAssignHelper(border.Right.Style, ExcelBorderStyle.Thin)))
+
+                'Setting Value in cell
+                cell.Value = col
+
+                colIndex += 1
+            Next
+
+            'ws.Column(ColNLst.Count).Width = 44.57
+
+            ws.Row(rowIndex).Style.Font.Bold = True
+            ws.Row(rowIndex).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center
+            ws.Row(rowIndex).Style.VerticalAlignment = ExcelVerticalAlignment.Center
+
+
+            For Each ro As DataGridViewRow In Me.MasterDataGridView.Rows
+                ' Adding Data into rows
+                colIndex = 1
+                rowIndex += 1
+
+                For Each col As DataGridViewColumn In Me.MasterDataGridView.Columns
+                    If col.Name = "Check" Then
+                        Continue For
+                    End If
+                    Dim cell = ws.Cells(rowIndex, colIndex)
+                    cell.Value = ro.Cells(col.Name).Value 'dr(dc.ColumnName) 
+                    'Setting Value in cell
+                    Try
+                        With cell
+                            Dim t As Type = col.ValueType
+                            If Not IsNothing(t) Then
+                                If t.IsGenericType AndAlso t.GetGenericTypeDefinition = GetType(Nullable(Of )) Then
+                                    If Not t.FullName.IndexOf("System.Decimal") Then
+                                        .Value = CType(ro.Cells(col.Name).Value, Double)
+                                        .Style.Numberformat.Format = "#,##0.00"
+                                    End If
+                                End If
+                                If t.Name = "Double" Or t.Name = "Decimal" Or t.Name = "Money" Then
+                                    .Value = CType(ro.Cells(col.Name).Value, Double)
+                                    .Style.Numberformat.Format = "#,##0.00"
+                                End If
+                                '    If col.ValueType.Name = "String" Then
+                                '        '.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                                '        '.Width = 200
+                                '    End If
+                                '    If col.ValueType.Name <> "String" Then
+                                '        .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                                '    End If
+                            End If
+                        End With
+                    Catch ex As Exception
+                        MsgBox(ex.Message)
+                    End Try
+
+
+                    'Setting borders of cell
+                    Dim border = cell.Style.Border
+                    border.Left.Style = InlineAssignHelper(border.Right.Style, ExcelBorderStyle.Thin)
+                    colIndex += 1
+                Next
+
+            Next
+            For i As Integer = 5 To ColNLst.Count
+                Dim cellsum = ws.Cells(rowIndex + 1, i)
+                With cellsum
+                    'Setting Sum Formula
+                    .Formula = ("Sum(" + ws.Cells(3, i).Address & ":") + ws.Cells(rowIndex, i).Address & ")"
+                    .Style.Numberformat.Format = "#,##0.00"
+
+                    'Setting Background fill color to Gray
+                    .Style.Fill.PatternType = ExcelFillStyle.Solid
+                    .Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow)
+                End With
+            Next
+
+
+
+            'Generate A File with Random name
+            Dim bin As [Byte]() = p.GetAsByteArray()
+            Dim file__1 As String = fileName ' "e:\temp\" & Guid.NewGuid().ToString() & ".xlsx"
+            Try
+                File.WriteAllBytes(file__1, bin)
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
+
+        End Using
+    End Sub
+    Private Sub ExportToExcel1(fileName As String)
+        Using p As New ExcelPackage()
+            'Here setting some document properties
+            p.Workbook.Properties.Author = "Zeeshan Umar"
+            p.Workbook.Properties.Title = "Office Open XML Sample"
+
+            'Create a sheet
+            p.Workbook.Worksheets.Add("Sample WorkSheet")
+            Dim ws As ExcelWorksheet = p.Workbook.Worksheets(1)
+            ws.Name = "Sample Worksheet"
+            'Setting Sheet's name
+            ws.Cells.Style.Font.Size = 11
+            'Default font size for whole sheet
+            ws.Cells.Style.Font.Name = "Calibri"
+            'Default Font name for whole sheet
+
+            Dim dt As DataTable = CreateDataTable() ' Me.MasterBindingSource.DataSource 
+            Dim q As IQueryable(Of whRpt) = CType(Me.MasterBindingSource.DataSource, List(Of whRpt)).AsQueryable
+            dt = Utility.LINQToDataTable(db, q)
+            'My Function which generates DataTable
+            'Merging cells and create a center heading for out table
+            ws.Cells(1, 1).Value = "Sample DataTable Export"
+            ws.Cells(1, 1, 1, dt.Columns.Count).Merge = True
+            ws.Cells(1, 1, 1, dt.Columns.Count).Style.Font.Bold = True
+            ws.Cells(1, 1, 1, dt.Columns.Count).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center
+
+            Dim colIndex As Integer = 1
+            Dim rowIndex As Integer = 2
+
+            For Each dc As DataColumn In dt.Columns
+                'Creating Headings
+                Dim cell = ws.Cells(rowIndex, colIndex)
+
+                'Setting the background color of header cells to Gray
+                Dim fill = cell.Style.Fill
+                fill.PatternType = ExcelFillStyle.Solid
+                fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow)
+
+
+                'Setting Top/left,right/bottom borders.
+                Dim border = cell.Style.Border
+                border.Bottom.Style = InlineAssignHelper(border.Top.Style, InlineAssignHelper(border.Left.Style, InlineAssignHelper(border.Right.Style, ExcelBorderStyle.Thin)))
+
+                'Setting Value in cell
+                cell.Value = "Heading " + dc.ColumnName
+
+                colIndex += 1
+            Next
+
+            For Each dr As DataRow In dt.Rows
+                ' Adding Data into rows
+                colIndex = 1
+                rowIndex += 1
+                For Each dc As DataColumn In dt.Columns
+                    Dim cell = ws.Cells(rowIndex, colIndex)
+                    'Setting Value in cell
+                    cell.Value = Convert.ToInt32(dr(dc.ColumnName)) 'dr(dc.ColumnName) 
+
+                    'Setting borders of cell
+                    Dim border = cell.Style.Border
+                    border.Left.Style = InlineAssignHelper(border.Right.Style, ExcelBorderStyle.Thin)
+                    colIndex += 1
+                Next
+            Next
+
+            colIndex = 0
+            For Each dc As DataColumn In dt.Columns
+                'Creating Headings
+                colIndex += 1
+                Dim cell = ws.Cells(rowIndex, colIndex)
+
+                'Setting Sum Formula
+                cell.Formula = ("Sum(" + ws.Cells(3, colIndex).Address & ":") + ws.Cells(rowIndex - 1, colIndex).Address & ")"
+
+                'Setting Background fill color to Gray
+                cell.Style.Fill.PatternType = ExcelFillStyle.Solid
+                cell.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow)
+            Next
+
+            'Generate A File with Random name
+            Dim bin As [Byte]() = p.GetAsByteArray()
+            Dim file__1 As String = fileName ' "e:\temp\" & Guid.NewGuid().ToString() & ".xlsx"
+            File.WriteAllBytes(file__1, bin)
+        End Using
+    End Sub
+    Private Shared Function InlineAssignHelper(Of T)(ByRef target As T, value As T) As T
+        target = value
+        Return value
+    End Function
+
+    Private Sub txtFINCODE_KeyDown(sender As Object, e As KeyEventArgs) Handles txtFINCODE.KeyDown
+        Console.WriteLine("KeyValue: " & e.KeyValue.ToString & "    KeyCode: " & e.KeyCode.ToString & " KeyData: " & e.KeyData.ToString)
+
+        If e.Shift And e.KeyCode = Keys.D8 Then
+            MessageBox.Show(sender.Text)
+        End If
+    End Sub
+
+#End Region
+End Class
+Friend Class monthsBal
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property FiscPrd As Integer
+    Public Property oibal00 As Decimal
+    Public Property oibal01 As Decimal
+    Public Property oibal02 As Decimal
+    Public Property oibal03 As Decimal
+    Public Property oibal04 As Decimal
+    Public Property oibal05 As Decimal
+    Public Property oibal06 As Decimal
+    Public Property oibal07 As Decimal
+    Public Property oibal08 As Decimal
+    Public Property oibal09 As Decimal
+    Public Property oibal10 As Decimal
+    Public Property oibal11 As Decimal
+    Public Property oibal12 As Decimal
+    Public Property oibal13 As Decimal
+    Public Property trdr As Integer
+    Public Property code As String
+    Public Property name As String
+    Public Property tdSalesManName As String
+    Public Property afm As String
+
+End Class
+Friend Class monthsSales
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property FiscPrd As Integer
+    Public Property Period As Integer
+    Public Property bal As Decimal
+    Public Property trdr As Integer
+
+End Class
+Friend Class carierPmnt
+
+    Public Property code As String
+    Public Property cr As Double?
+    Public Property db As Double?
+    Public Property bal As Double
+    Public Property oiBal As Double
+    Public Property fincode As String
+    Public Property fincodeDa As String
+    Public Property name As String
+    Public Property trdr As Integer
+    Public Property trndate As Date
+    Public Property trndateDa As Date
+    Public Property sosource As Integer
+    Public Property sodtype As Short
+    Public Property company As Short
+End Class

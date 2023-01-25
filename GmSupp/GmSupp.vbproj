@@ -1,0 +1,758 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9A2B5D3A-5C2E-4792-A15C-A8F1E4600A06}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>GmSupp.My.MyApplication</StartupObject>
+    <RootNamespace>GmSupp</RootNamespace>
+    <AssemblyName>GmSupp</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>\\192.168.10.12\gmapp\GmSupp\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Unc</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>398</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>GmSupp.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>GmSupp.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>7BE849C54823437945AE4F12D48A0EBFCCD7F2E5</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>GmSupp_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>hellagrolip-sm.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>
+    </TargetZone>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BarcodeLib, Version=1.3.0.0, Culture=neutral, PublicKeyToken=5f09bda868cc39e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\BarcodeLib.1.3.0.0\lib\net20\BarcodeLib.dll</HintPath>
+    </Reference>
+    <Reference Include="CheckBoxComboBox">
+      <HintPath>bin\Debug\CheckBoxComboBox.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.5.1.0\lib\net45\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.11.0.3366.16\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.11.0.3366.16\lib\Microsoft.ReportViewer.DataVisualization.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.11.0.3366.16\lib\Microsoft.ReportViewer.Design.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.11.0.3366.16\lib\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebDesign, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.11.0.3366.16\lib\Microsoft.ReportViewer.WebDesign.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.11.0.3366.16\lib\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.11.0.3366.16\lib\Microsoft.ReportViewer.WinForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.11.0.1\lib\net20\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="QRCoder, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.4.1\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
+    <Reference Include="Softone.Lib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=307c481590b30bd3, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Softone\Softone.Lib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Common, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.Common.4.3.0\lib\net451\System.Data.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.SqlClient, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.8.1\lib\net451\System.Data.SqlClient.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Interactive, Version=4.1.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Interactive.4.1.1\lib\net45\System.Interactive.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="TableDependency.SqlClient, Version=8.5.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SqlTableDependency.8.5.8\lib\net451\TableDependency.SqlClient.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Code\DataClassesRevera.vb">
+      <DependentUpon>DataClassesRevera.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\ChequeInSpecificDate.Designer.vb">
+      <DependentUpon>ChequeInSpecificDate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\ChequeInSpecificDate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\GroupBalance.Designer.vb">
+      <DependentUpon>GroupBalance.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\GroupBalance.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\ModifyDocBR.designer.vb">
+      <DependentUpon>ModifyDocBR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\ModifyDocBR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\StoresBR.Designer.vb">
+      <DependentUpon>StoresBR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\StoresBR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\WhousesBR.Designer.vb">
+      <DependentUpon>WhousesBR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\WhousesBR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Infrastructure\GmIdentityDbContext.vb" />
+    <Compile Include="Infrastructure\GmIdentityUser.vb" />
+    <Compile Include="Infrastructure\GmUserManager.vb" />
+    <Compile Include="LK\GenBarCode.designer.vb">
+      <DependentUpon>GenBarCode.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LK\GenBarCode.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LK\RawPrinterHelper.vb" />
+    <Compile Include="LK\TestBarcode.designer.vb">
+      <DependentUpon>TestBarcode.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LK\TestBarcode.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Migrations\202004182320152_GmS1App.Designer.vb">
+      <DependentUpon>202004182320152_GmS1App.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004182320152_GmS1App.vb" />
+    <Compile Include="Migrations\202109140854292_UpdateUser.Designer.vb">
+      <DependentUpon>202109140854292_UpdateUser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202109140854292_UpdateUser.vb" />
+    <Compile Include="Revera\WHouseBalFROld.Designer.vb">
+      <DependentUpon>WHouseBalFROld.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Revera\WHouseBalFROld.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Revera\WHouseBalFR.Designer.vb">
+      <DependentUpon>WHouseBalFR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Revera\WHouseBalFR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controllers\GmEntityAccountsController.vb" />
+    <Compile Include="Controls\GmSearchCtrl.Designer.vb">
+      <DependentUpon>GmSearchCtrl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GmSearchCtrl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GmChkListBox.Designer.vb">
+      <DependentUpon>GmChkListBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GmChkListBox.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\AAGenLogin.designer.vb">
+      <DependentUpon>AAGenLogin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AAGenLogin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LK\BCLabelsBr.Designer.vb">
+      <DependentUpon>BCLabelsBr.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LK\BCLabelsBr.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\AAGenModule.vb" />
+    <Compile Include="Main\AboutBox1.designer.vb">
+      <DependentUpon>AboutBox1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Main\AboutBox1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="App_Code\calcCredits.vb" />
+    <Compile Include="App_Code\DataClassesHglp.designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataClassesHglp.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="App_Code\DataClassesHglp.vb">
+      <DependentUpon>DataClassesHglp.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="App_Code\DataClassesCentrofaro.designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataClassesCentrofaro.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="App_Code\DataClassesLNK.designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataClassesLNK.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="App_Code\DataClassesPFIC.designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataClassesPFIC.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="App_Code\DataClassesRevera.designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataClassesRevera.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="App_Code\GmData.vb" />
+    <Compile Include="App_Code\GmDataN.vb" />
+    <Compile Include="App_Code\RunningTotals.vb" />
+    <Compile Include="App_Code\SortableBindingList.vb" />
+    <Compile Include="App_Code\Util.vb" />
+    <Compile Include="App_Code\Utility.vb" />
+    <Compile Include="App_Code\WebService_Functions.vb" />
+    <Compile Include="Revera\correspond.Designer.vb">
+      <DependentUpon>correspond.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Revera\correspond.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Revera\Import_Negative_Equitys.designer.vb">
+      <DependentUpon>Import_Negative_Equitys.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Revera\Import_Negative_Equitys.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Revera\WHouseBal.Designer.vb">
+      <DependentUpon>WHouseBal.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Revera\WHouseBal.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\GenMenu.designer.vb">
+      <DependentUpon>GenMenu.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Main\GenMenu.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\fPrintForm.designer.vb">
+      <DependentUpon>fPrintForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\fPrintForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\OpenItemBR.Designer.vb">
+      <DependentUpon>OpenItemBR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\OpenItemBR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\ImportExcel.Designer.vb">
+      <DependentUpon>ImportExcel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\ImportExcel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\ManageCarrierPaypents.Designer.vb">
+      <DependentUpon>ManageCarrierPaypents.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\ManageCarrierPaypents.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\Routings.Designer.vb">
+      <DependentUpon>Routings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\Routings.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\RoutingsFM.Designer.vb">
+      <DependentUpon>RoutingsFM.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\RoutingsFM.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\ShipmentsBR.Designer.vb">
+      <DependentUpon>ShipmentsBR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\ShipmentsBR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hglp\SoCarrierFM.Designer.vb">
+      <DependentUpon>SoCarrierFM.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\SoCarrierFM.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\LoginForm1.designer.vb">
+      <DependentUpon>LoginForm1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Main\LoginForm1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App_Code\ModuleParams.vb" />
+    <Compile Include="Migrations\Configuration.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Hglp\PriceList.Designer.vb">
+      <DependentUpon>PriceList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hglp\PriceList.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PFIC\ΕxpensesMtrl.Designer.vb">
+      <DependentUpon>ΕxpensesMtrl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="PFIC\ΕxpensesMtrl.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App_Code\CentroDataSet.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CentroDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\BCLabelsBrOLd.Designer.vb">
+      <DependentUpon>BCLabelsBrOLd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\BCLabelsBrOLd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportViewer.Designer.vb">
+      <DependentUpon>ReportViewer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ReportViewer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SDK_Functions.vb" />
+    <Compile Include="Forms\SearchFR.designer.vb">
+      <DependentUpon>SearchFR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SearchFR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SearchNewFR.designer.vb">
+      <DependentUpon>SearchNewFR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SearchNewFR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Hglp\ChequeInSpecificDate.resx">
+      <DependentUpon>ChequeInSpecificDate.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\GroupBalance.resx">
+      <DependentUpon>GroupBalance.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\ModifyDocBR.resx">
+      <DependentUpon>ModifyDocBR.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\StoresBR.resx">
+      <DependentUpon>StoresBR.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\WhousesBR.resx">
+      <DependentUpon>WhousesBR.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LK\GenBarCode.resx">
+      <DependentUpon>GenBarCode.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LK\TestBarcode.resx">
+      <DependentUpon>TestBarcode.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004182320152_GmS1App.resx">
+      <DependentUpon>202004182320152_GmS1App.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202109140854292_UpdateUser.resx">
+      <DependentUpon>202109140854292_UpdateUser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Revera\WHouseBalFROld.resx">
+      <DependentUpon>WHouseBalFROld.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Revera\WHouseBalFR.resx">
+      <DependentUpon>WHouseBalFR.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GmSearchCtrl.resx">
+      <DependentUpon>GmSearchCtrl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GmChkListBox.resx">
+      <DependentUpon>GmChkListBox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AAGenLogin.resx">
+      <DependentUpon>AAGenLogin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LK\BCLabelsBr.resx">
+      <DependentUpon>BCLabelsBr.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\AboutBox1.resx">
+      <DependentUpon>AboutBox1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Applicat01.rdlc" />
+    <EmbeddedResource Include="Reports\BCLabel2.rdlc" />
+    <EmbeddedResource Include="Reports\BCLabel1.rdlc" />
+    <EmbeddedResource Include="Reports\BCLabelsBrOLd.resx">
+      <DependentUpon>BCLabelsBrOLd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\BCLabel.rdlc" />
+    <EmbeddedResource Include="Reports\ReportViewer.resx">
+      <DependentUpon>ReportViewer.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="App_Code\DataClassesRevera.dbml.layout">
+      <DependentUpon>DataClassesRevera.dbml</DependentUpon>
+    </None>
+    <EmbeddedResource Include="Revera\WHouseBal.resx">
+      <DependentUpon>WHouseBal.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SearchNewFR.resx">
+      <DependentUpon>SearchNewFR.vb</DependentUpon>
+    </EmbeddedResource>
+    <None Include="App_Code\DataClassesHglp.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DataClassesHglp.designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="App_Code\DataClassesLNK.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DataClassesLNK.designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="App_Code\DataClassesPFIC.dbml.layout">
+      <DependentUpon>DataClassesPFIC.dbml</DependentUpon>
+    </None>
+    <None Include="App_Code\DataClassesLNK.dbml.layout">
+      <DependentUpon>DataClassesLNK.dbml</DependentUpon>
+    </None>
+    <None Include="App_Code\DataClassesHglp.dbml.layout">
+      <DependentUpon>DataClassesHglp.dbml</DependentUpon>
+    </None>
+    <EmbeddedResource Include="Hglp\fPrintForm.resx">
+      <DependentUpon>fPrintForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\OpenItemBR.resx">
+      <DependentUpon>OpenItemBR.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\ImportExcel.resx">
+      <DependentUpon>ImportExcel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\ManageCarrierPaypents.resx">
+      <DependentUpon>ManageCarrierPaypents.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\Routings.resx">
+      <DependentUpon>Routings.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\RoutingsFM.resx">
+      <DependentUpon>RoutingsFM.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\SoCarrierFM.resx">
+      <DependentUpon>SoCarrierFM.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\PriceList.resx">
+      <DependentUpon>PriceList.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PFIC\ΕxpensesMtrl.resx">
+      <DependentUpon>ΕxpensesMtrl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SearchFR.resx">
+      <DependentUpon>SearchFR.vb</DependentUpon>
+    </EmbeddedResource>
+    <None Include="App_Code\DataClassesCentrofaro.dbml.layout">
+      <DependentUpon>DataClassesCentrofaro.dbml</DependentUpon>
+    </None>
+    <EmbeddedResource Include="Revera\correspond.resx">
+      <DependentUpon>correspond.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Revera\Import_Negative_Equitys.resx">
+      <DependentUpon>Import_Negative_Equitys.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\GenMenu.resx">
+      <DependentUpon>GenMenu.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hglp\ShipmentsBR.resx">
+      <DependentUpon>ShipmentsBR.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LoginForm1.resx">
+      <DependentUpon>LoginForm1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="App_Code\DataClassesPFIC.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DataClassesPFIC.designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="App_Code\DataClassesRevera.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DataClassesRevera.designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="My Project\DataSources\ccCBCLabel.datasource" />
+    <None Include="My Project\DataSources\GmSupp.Hglp.cccPriceList.datasource" />
+    <None Include="My Project\DataSources\GmSupp.Hglp.ccCRouting.datasource" />
+    <None Include="My Project\DataSources\GmSupp.Hglp.ccCTrdBCity.datasource" />
+    <None Include="My Project\DataSources\GmSupp.Hglp.DISTRICT.datasource" />
+    <None Include="My Project\DataSources\GmSupp.Revera.ccCVMtrLine.datasource" />
+    <None Include="packages.config" />
+    <None Include="App_Code\CentroDataSet.xsc">
+      <DependentUpon>CentroDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="App_Code\CentroDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CentroDataSet.Designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="App_Code\CentroDataSet.xss">
+      <DependentUpon>CentroDataSet.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Code\DataClassesCentrofaro.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DataClassesCentrofaro.designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="GmSupp_TemporaryKey.pfx" />
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x64\msvcr100.dll">
+      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x64\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x86\msvcr100.dll">
+      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x86\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="hellagrolip-sm.ico" />
+    <None Include="Resources\Ok.jpg" />
+    <Content Include="SqlServerTypes\Loader.cs" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <None Include="Resources\if_export_excel_64174.ico" />
+    <None Include="Resources\EXCEL_257.ico" />
+    <None Include="Resources\Printer Folder.png" />
+    <None Include="Resources\Printer Folder1.png" />
+    <Content Include="S1Scripts\ccCDocsUpd.js" />
+    <Content Include="S1Scripts\ImportDocsLK_REV.js" />
+    <Content Include="S1Scripts\ImportDocsPFIC_REV.js" />
+    <Content Include="S1Scripts\ImportDocsLNK_REV.js" />
+    <Content Include="S1Scripts\ImportDocs.js" />
+    <Content Include="S1Scripts\Βασική προβολή πωλήσεων αποθηκών.js" />
+    <Content Include="S1Scripts\PFIC Βασική προβολή πωλήσεων.js" />
+    <Content Include="S1Scripts\Gm ΕΛΛΑΓΡΟΛΙΠ - Αναλώσεις%28Μεταβολές κωδικών%29.js" />
+    <Content Include="S1Scripts\Αγορές REV.js" />
+    <Content Include="S1Scripts\Βασική προβολή πωλήσεων.js" />
+    <Content Include="S1Scripts\ΕΛΛΑΓΡΟΛΙΠ Παραγωγή.js" />
+    <Content Include="S1Scripts\Βασική προβολή παραγωγής LNK.js" />
+    <Content Include="S1Scripts\Βασική προβολή πωλήσεων ΝΕΕΣ ΠΟΛΙΤΙΚΕΣ.js" />
+    <Content Include="S1Scripts\ΕΛΛΑΓΡΟΛΙΠ ΝΠ.js" />
+    <Content Include="S1Scripts\Τιμοκατάλογοι.js" />
+    <Content Include="SqlFiles\Get WHOUSE Bal1.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GmS1App\GmS1Lib\GmS1Lib.vbproj">
+      <Project>{c729c3da-81b8-4cac-8106-768bf08d4f19}</Project>
+      <Name>GmS1Lib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

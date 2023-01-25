@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 39" name="DataClassesCentrofaro">
+  <DataContextMoniker Name="/DataClassesCentrofaroDataContext" />
+  <nestedChildShapes>
+    <classShape Id="eb2c31f4-ab85-4f1d-847a-28f9ac1389e0" isExpanded="false" absoluteBounds="0.75, 2.875, 2, 0.45000000000000018">
+      <DataClassMoniker Name="/DataClassesCentrofaroDataContext/TRDR" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b3cfe2d6-7d59-4af7-a6b9-d15d1ff41558" absoluteBounds="0.76500000000000012, 3.335, 1.9700000000000002, 22.940958658854164" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a02021ac-3499-4229-9744-2bb5b93048c8" isExpanded="false" absoluteBounds="0.75, 0.75, 2, 0.44999999999999996">
+      <DataClassMoniker Name="/DataClassesCentrofaroDataContext/FINPAYTERM" />
+      <nestedChildShapes>
+        <elementListCompartment Id="650c18b7-bfd5-4a27-b554-c26f3024bff2" absoluteBounds="0.76499999999999968, 1.21, 1.9700000000000002, 6.979939778645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(1.43419230769231 : 1.2); (1.43419230769231 : 1.45); (2.08084615384615 : 1.45); (2.08084615384615 : 1.2)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/DataClassesCentrofaroDataContext/FINPAYTERM/FINPAYTERM_FINPAYTERM" />
+      <nodes>
+        <classShapeMoniker Id="a02021ac-3499-4229-9744-2bb5b93048c8" />
+        <classShapeMoniker Id="a02021ac-3499-4229-9744-2bb5b93048c8" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="47cd6cca-bbf4-4df5-82f3-6e48b56c2132" isExpanded="false" absoluteBounds="3.5, 2.875, 2, 0.45000000000000018">
+      <DataClassMoniker Name="/DataClassesCentrofaroDataContext/TRDEXTRA" />
+      <nestedChildShapes>
+        <elementListCompartment Id="06601174-0117-4339-bd07-57328af31c54" absoluteBounds="3.5150000000000006, 3.3350000000000009, 1.9700000000000002, 6.0184326171875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 3.1); (3.5 : 3.1)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataClassesCentrofaroDataContext/TRDR/TRDR_TRDEXTRA" />
+      <nodes>
+        <classShapeMoniker Id="eb2c31f4-ab85-4f1d-847a-28f9ac1389e0" />
+        <classShapeMoniker Id="47cd6cca-bbf4-4df5-82f3-6e48b56c2132" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="ca290c4c-8266-4adc-b5b9-3d5117b4a128" absoluteBounds="0.75, 4.75, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/DataClassesCentrofaroDataContext/cccTrdDep" />
+      <nestedChildShapes>
+        <elementListCompartment Id="79bfa532-f5e5-40f2-b7a2-96fd50ed55ff" absoluteBounds="0.76500000000000012, 5.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cfb93639-9f48-4088-9b7b-54e9d302afc6" isExpanded="false" absoluteBounds="3.75, 4.75, 2, 0.44999999999999929">
+      <DataClassMoniker Name="/DataClassesCentrofaroDataContext/cccMultiCompData" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bb4bff97-a1ea-426e-a1eb-3ffb8c45f1cd" absoluteBounds="3.765, 5.21, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="58013016-da7e-48b1-a717-be6f93e878c2" absoluteBounds="6.75, 0.75, 2, 2.3478011067708344">
+      <DataClassMoniker Name="/DataClassesCentrofaroDataContext/cccMultiCompCC" />
+      <nestedChildShapes>
+        <elementListCompartment Id="eaa341aa-b9b0-4a7e-bda6-298db7a5986f" absoluteBounds="6.7650000000000006, 1.21, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0ce3cf58-a1eb-4420-b685-6c726d6ec45f" absoluteBounds="3.5, 0.875, 2, 37.923566080729167">
+      <DataClassMoniker Name="/DataClassesCentrofaroDataContext/MTRL" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5af4e2a4-e216-48b9-b7b9-40c77ce32282" absoluteBounds="3.515, 1.335, 1.9700000000000002, 37.363566080729164" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
