@@ -103,12 +103,6 @@ Partial Public Class DataClassesReveraDataContext
     End Sub
     Partial Private Sub DeleteSERIESNUM(instance As Revera.SERIESNUM)
     End Sub
-    Partial Private Sub InsertMTRLINE(instance As Revera.MTRLINE)
-    End Sub
-    Partial Private Sub UpdateMTRLINE(instance As Revera.MTRLINE)
-    End Sub
-    Partial Private Sub DeleteMTRLINE(instance As Revera.MTRLINE)
-    End Sub
     Partial Private Sub InsertBRANCH(instance As Revera.BRANCH)
     End Sub
     Partial Private Sub UpdateBRANCH(instance As Revera.BRANCH)
@@ -138,6 +132,12 @@ Partial Public Class DataClassesReveraDataContext
     Partial Private Sub UpdateFINDOC(instance As Revera.FINDOC)
     End Sub
     Partial Private Sub DeleteFINDOC(instance As Revera.FINDOC)
+    End Sub
+    Partial Private Sub InsertMTRLINE(instance As Revera.MTRLINE)
+    End Sub
+    Partial Private Sub UpdateMTRLINE(instance As Revera.MTRLINE)
+    End Sub
+    Partial Private Sub DeleteMTRLINE(instance As Revera.MTRLINE)
     End Sub
   #End Region
 	
@@ -238,12 +238,6 @@ Partial Public Class DataClassesReveraDataContext
 		End Get
 	End Property
 	
-	Public ReadOnly Property MTRLINEs() As System.Data.Linq.Table(Of Revera.MTRLINE)
-		Get
-			Return Me.GetTable(Of Revera.MTRLINE)
-		End Get
-	End Property
-	
 	Public ReadOnly Property BRANCHes() As System.Data.Linq.Table(Of Revera.BRANCH)
 		Get
 			Return Me.GetTable(Of Revera.BRANCH)
@@ -277,6 +271,12 @@ Partial Public Class DataClassesReveraDataContext
 	Public ReadOnly Property FINDOCs() As System.Data.Linq.Table(Of Revera.FINDOC)
 		Get
 			Return Me.GetTable(Of Revera.FINDOC)
+		End Get
+	End Property
+	
+	Public ReadOnly Property MTRLINEs() As System.Data.Linq.Table(Of Revera.MTRLINE)
+		Get
+			Return Me.GetTable(Of Revera.MTRLINE)
 		End Get
 	End Property
 	
@@ -5176,9 +5176,9 @@ Namespace Revera
 		
 		Private _HASBAIL As Short
 		
-		Private _MTRLINEs As EntitySet(Of MTRLINE)
-		
 		Private _MTRDOCs As EntitySet(Of MTRDOC)
+		
+		Private _MTRLINEs As EntitySet(Of MTRLINE)
 		
     #Region "Extensibility Method Definitions"
     Partial Private Sub OnLoaded()
@@ -5923,8 +5923,8 @@ Namespace Revera
 		
 		Public Sub New()
 			MyBase.New
-			Me._MTRLINEs = New EntitySet(Of MTRLINE)(AddressOf Me.attach_MTRLINEs, AddressOf Me.detach_MTRLINEs)
 			Me._MTRDOCs = New EntitySet(Of MTRDOC)(AddressOf Me.attach_MTRDOCs, AddressOf Me.detach_MTRDOCs)
+			Me._MTRLINEs = New EntitySet(Of MTRLINE)(AddressOf Me.attach_MTRLINEs, AddressOf Me.detach_MTRLINEs)
 			OnCreated
 		End Sub
 		
@@ -8896,16 +8896,6 @@ Namespace Revera
 			End Set
 		End Property
 		
-		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="MTRL_MTRLINE", Storage:="_MTRLINEs", ThisKey:="MTRL", OtherKey:="MTRL")>  _
-		Public Property MTRLINEs() As EntitySet(Of MTRLINE)
-			Get
-				Return Me._MTRLINEs
-			End Get
-			Set
-				Me._MTRLINEs.Assign(value)
-			End Set
-		End Property
-		
 		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="MTRL_MTRDOC", Storage:="_MTRDOCs", ThisKey:="MTRL", OtherKey:="MTRL")>  _
 		Public Property MTRDOCs() As EntitySet(Of MTRDOC)
 			Get
@@ -8913,6 +8903,16 @@ Namespace Revera
 			End Get
 			Set
 				Me._MTRDOCs.Assign(value)
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="MTRL_MTRLINE", Storage:="_MTRLINEs", ThisKey:="MTRL", OtherKey:="MTRL")>  _
+		Public Property MTRLINEs() As EntitySet(Of MTRLINE)
+			Get
+				Return Me._MTRLINEs
+			End Get
+			Set
+				Me._MTRLINEs.Assign(value)
 			End Set
 		End Property
 		
@@ -8934,22 +8934,22 @@ Namespace Revera
 			End If
 		End Sub
 		
-		Private Sub attach_MTRLINEs(ByVal entity As MTRLINE)
-			Me.SendPropertyChanging
-			entity.MTRL1 = Me
-		End Sub
-		
-		Private Sub detach_MTRLINEs(ByVal entity As MTRLINE)
-			Me.SendPropertyChanging
-			entity.MTRL1 = Nothing
-		End Sub
-		
 		Private Sub attach_MTRDOCs(ByVal entity As MTRDOC)
 			Me.SendPropertyChanging
 			entity.MTRL1 = Me
 		End Sub
 		
 		Private Sub detach_MTRDOCs(ByVal entity As MTRDOC)
+			Me.SendPropertyChanging
+			entity.MTRL1 = Nothing
+		End Sub
+		
+		Private Sub attach_MTRLINEs(ByVal entity As MTRLINE)
+			Me.SendPropertyChanging
+			entity.MTRL1 = Me
+		End Sub
+		
+		Private Sub detach_MTRLINEs(ByVal entity As MTRLINE)
 			Me.SendPropertyChanging
 			entity.MTRL1 = Nothing
 		End Sub
@@ -11530,3129 +11530,6 @@ Namespace Revera
 					Me._SERIESNUM = value
 					Me.SendPropertyChanged("SERIESNUM")
 					Me.OnSERIESNUMChanged
-				End If
-			End Set
-		End Property
-		
-		Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
-		
-		Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-		
-		Protected Overridable Sub SendPropertyChanging()
-			If ((Me.PropertyChangingEvent Is Nothing)  _
-						= false) Then
-				RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
-			End If
-		End Sub
-		
-		Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
-			If ((Me.PropertyChangedEvent Is Nothing)  _
-						= false) Then
-				RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-			End If
-		End Sub
-	End Class
-	
-	<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MTRLINES")>  _
-	Partial Public Class MTRLINE
-		Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
-		
-		Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
-		
-		Private _COMPANY As Short
-		
-		Private _FINDOC As Integer
-		
-		Private _MTRLINES As Integer
-		
-		Private _LINENUM As Integer
-		
-		Private _SODTYPE As Short
-		
-		Private _MTRL As Integer
-		
-		Private _PENDING As Short
-		
-		Private _RESTMODE As System.Nullable(Of Short)
-		
-		Private _SOSOURCE As Integer
-		
-		Private _SOREDIR As Integer
-		
-		Private _SCODE As String
-		
-		Private _MTRTYPE As Short
-		
-		Private _SOTYPE As Short
-		
-		Private _WHOUSE As System.Nullable(Of Short)
-		
-		Private _WHOUSESEC As System.Nullable(Of Short)
-		
-		Private _MTRUNIT As System.Nullable(Of Short)
-		
-		Private _VAT As Short
-		
-		Private _PRJC As System.Nullable(Of Integer)
-		
-		Private _PRJLINES As System.Nullable(Of Integer)
-		
-		Private _PRJCSTAGE As System.Nullable(Of Short)
-		
-		Private _MTRPRJCBLD As System.Nullable(Of Short)
-		
-		Private _SOEXPTYPE As System.Nullable(Of Short)
-		
-		Private _SALESMAN As System.Nullable(Of Integer)
-		
-		Private _RSRC As System.Nullable(Of Integer)
-		
-		Private _MTRLOT As System.Nullable(Of Integer)
-		
-		Private _ASSDEPR As System.Nullable(Of Integer)
-		
-		Private _WHOUSEBIN As System.Nullable(Of Short)
-		
-		Private _WHOUSEBINSEC As System.Nullable(Of Short)
-		
-		Private _BUSUNITS As System.Nullable(Of Short)
-		
-		Private _MTRSEASON As System.Nullable(Of Short)
-		
-		Private _MTRCATEGORY As System.Nullable(Of Short)
-		
-		Private _PRCPOLICY As System.Nullable(Of Short)
-		
-		Private _SPCS As System.Nullable(Of Integer)
-		
-		Private _MTRPACK As System.Nullable(Of Integer)
-		
-		Private _QTYP As System.Nullable(Of Double)
-		
-		Private _QTY As System.Nullable(Of Double)
-		
-		Private _QTY1 As Double
-		
-		Private _QTY2 As Double
-		
-		Private _QTY1COV As Double
-		
-		Private _QTY1CANC As Double
-		
-		Private _QTY1FCOV As Double
-		
-		Private _SHIPDATE As System.Nullable(Of Date)
-		
-		Private _DELIVDATE As System.Nullable(Of Date)
-		
-		Private _WEIGHT As System.Nullable(Of Double)
-		
-		Private _VOLUME As System.Nullable(Of Double)
-		
-		Private _INTVAL As System.Nullable(Of Double)
-		
-		Private _INTVAT As System.Nullable(Of Double)
-		
-		Private _BGINTCOUNTRY As System.Nullable(Of Short)
-		
-		Private _BGINTDISTRICT As System.Nullable(Of Short)
-		
-		Private _DUTY As System.Nullable(Of Double)
-		
-		Private _PLSMVAL As System.Nullable(Of Double)
-		
-		Private _PLSMVAT As System.Nullable(Of Double)
-		
-		Private _PRICE As System.Nullable(Of Double)
-		
-		Private _PRICE1 As System.Nullable(Of Double)
-		
-		Private _LINEVAL As System.Nullable(Of Double)
-		
-		Private _LLINEVAL As System.Nullable(Of Double)
-		
-		Private _EXPVAL As System.Nullable(Of Double)
-		
-		Private _LEXPVAL As Double
-		
-		Private _LEXPVAL1 As System.Nullable(Of Double)
-		
-		Private _LEXPVATVAL1 As System.Nullable(Of Double)
-		
-		Private _DISC1PRC As System.Nullable(Of Double)
-		
-		Private _DISC2PRC As System.Nullable(Of Double)
-		
-		Private _DISC3PRC As System.Nullable(Of Double)
-		
-		Private _DISC1VAL As System.Nullable(Of Double)
-		
-		Private _LDISC1VAL As System.Nullable(Of Double)
-		
-		Private _DISC2VAL As System.Nullable(Of Double)
-		
-		Private _LDISC2VAL As System.Nullable(Of Double)
-		
-		Private _DISC3VAL As System.Nullable(Of Double)
-		
-		Private _LDISC3VAL As System.Nullable(Of Double)
-		
-		Private _NETLINEVAL As Double
-		
-		Private _LNETLINEVAL As Double
-		
-		Private _VATAMNT As Double
-		
-		Private _LVATAMNT As Double
-		
-		Private _LVATNOEXM As System.Nullable(Of Double)
-		
-		Private _SALESCVAL As System.Nullable(Of Double)
-		
-		Private _EFKVAL As Double
-		
-		Private _COMMENTS As String
-		
-		Private _COMMENTS1 As String
-		
-		Private _COMMENTS2 As String
-		
-		Private _DIMENSION1 As System.Nullable(Of Double)
-		
-		Private _DIMENSION2 As System.Nullable(Of Double)
-		
-		Private _DIMENSION3 As System.Nullable(Of Double)
-		
-		Private _TRNLINEVAL As System.Nullable(Of Double)
-		
-		Private _LTRNLINEVAL As System.Nullable(Of Double)
-		
-		Private _PRCRULEDATA As String
-		
-		Private _INSTALMENTS As System.Nullable(Of Short)
-		
-		Private _WASTE As System.Nullable(Of Double)
-		
-		Private _COSTCOEF As System.Nullable(Of Double)
-		
-		Private _CONVPRC As System.Nullable(Of Double)
-		
-		Private _STAGE As System.Nullable(Of Short)
-		
-		Private _STAGELINENUM As System.Nullable(Of Short)
-		
-		Private _ACNMSK As String
-		
-		Private _ACNMSK1 As String
-		
-		Private _FINDOCS As System.Nullable(Of Integer)
-		
-		Private _MTRLINESS As System.Nullable(Of Integer)
-		
-		Private _FINDOCL As System.Nullable(Of Integer)
-		
-		Private _MTRLINESL As System.Nullable(Of Integer)
-		
-		Private _SOANAL As String
-		
-		Private _SXMSKK As System.Nullable(Of Integer)
-		
-		Private _SXPERC As System.Nullable(Of Double)
-		
-		Private _BGLEXCISE As System.Nullable(Of Double)
-		
-		Private _AUTOPRDDOC As Short
-		
-		Private _ACNMSKS As String
-		
-		Private _ACNMSKX As String
-		
-		Private _COSTCNTR As System.Nullable(Of Integer)
-		
-		Private _ITECALCTYPE As System.Nullable(Of Short)
-		
-		Private _GUARTIME As System.Nullable(Of Short)
-		
-		Private _SRVDEBITTYPE As System.Nullable(Of Short)
-		
-		Private _PACKSTATUS As System.Nullable(Of Short)
-		
-		Private _PACKCODE1 As String
-		
-		Private _PACKCODE2 As String
-		
-		Private _LWMARKUP As System.Nullable(Of Double)
-		
-		Private _LRMARKUP As System.Nullable(Of Double)
-		
-		Private _NUM01 As System.Nullable(Of Double)
-		
-		Private _NUM02 As System.Nullable(Of Double)
-		
-		Private _NUM03 As System.Nullable(Of Double)
-		
-		Private _NUM04 As System.Nullable(Of Double)
-		
-		Private _BOOL01 As System.Nullable(Of Short)
-		
-		Private _BOOL02 As System.Nullable(Of Short)
-		
-		Private _DATE01 As System.Nullable(Of Date)
-		
-		Private _DATE02 As System.Nullable(Of Date)
-		
-		Private _UFTBL01 As System.Nullable(Of Short)
-		
-		Private _UFTBL02 As System.Nullable(Of Short)
-		
-		Private _cccTrdDep As System.Nullable(Of Integer)
-		
-		Private _cccTrdr As System.Nullable(Of Integer)
-		
-		Private _INST As System.Nullable(Of Integer)
-		
-		Private _CNTR As System.Nullable(Of Integer)
-		
-		Private _VAT1 As System.Nullable(Of Integer)
-		
-		Private _CUSTOMSLOT As System.Nullable(Of Integer)
-		
-		Private _CMTRUNIT As System.Nullable(Of Short)
-		
-		Private _QUANTITY As System.Nullable(Of Double)
-		
-		Private _GROSSMASS As System.Nullable(Of Double)
-		
-		Private _NETMASS As System.Nullable(Of Double)
-		
-		Private _BOND As System.Nullable(Of Integer)
-		
-		Private _PSPCS As System.Nullable(Of Integer)
-		
-		Private _ACNDOCCATEGORY As System.Nullable(Of Integer)
-		
-		Private _MTRL1 As EntityRef(Of MTRL)
-		
-		Private _FINDOC1 As EntityRef(Of FINDOC)
-		
-    #Region "Extensibility Method Definitions"
-    Partial Private Sub OnLoaded()
-    End Sub
-    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
-    End Sub
-    Partial Private Sub OnCreated()
-    End Sub
-    Partial Private Sub OnCOMPANYChanging(value As Short)
-    End Sub
-    Partial Private Sub OnCOMPANYChanged()
-    End Sub
-    Partial Private Sub OnFINDOCChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnFINDOCChanged()
-    End Sub
-    Partial Private Sub OnMTRLINESChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnMTRLINESChanged()
-    End Sub
-    Partial Private Sub OnLINENUMChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnLINENUMChanged()
-    End Sub
-    Partial Private Sub OnSODTYPEChanging(value As Short)
-    End Sub
-    Partial Private Sub OnSODTYPEChanged()
-    End Sub
-    Partial Private Sub OnMTRLChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnMTRLChanged()
-    End Sub
-    Partial Private Sub OnPENDINGChanging(value As Short)
-    End Sub
-    Partial Private Sub OnPENDINGChanged()
-    End Sub
-    Partial Private Sub OnRESTMODEChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnRESTMODEChanged()
-    End Sub
-    Partial Private Sub OnSOSOURCEChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnSOSOURCEChanged()
-    End Sub
-    Partial Private Sub OnSOREDIRChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnSOREDIRChanged()
-    End Sub
-    Partial Private Sub OnSCODEChanging(value As String)
-    End Sub
-    Partial Private Sub OnSCODEChanged()
-    End Sub
-    Partial Private Sub OnMTRTYPEChanging(value As Short)
-    End Sub
-    Partial Private Sub OnMTRTYPEChanged()
-    End Sub
-    Partial Private Sub OnSOTYPEChanging(value As Short)
-    End Sub
-    Partial Private Sub OnSOTYPEChanged()
-    End Sub
-    Partial Private Sub OnWHOUSEChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnWHOUSEChanged()
-    End Sub
-    Partial Private Sub OnWHOUSESECChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnWHOUSESECChanged()
-    End Sub
-    Partial Private Sub OnMTRUNITChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnMTRUNITChanged()
-    End Sub
-    Partial Private Sub OnVATChanging(value As Short)
-    End Sub
-    Partial Private Sub OnVATChanged()
-    End Sub
-    Partial Private Sub OnPRJCChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnPRJCChanged()
-    End Sub
-    Partial Private Sub OnPRJLINESChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnPRJLINESChanged()
-    End Sub
-    Partial Private Sub OnPRJCSTAGEChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnPRJCSTAGEChanged()
-    End Sub
-    Partial Private Sub OnMTRPRJCBLDChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnMTRPRJCBLDChanged()
-    End Sub
-    Partial Private Sub OnSOEXPTYPEChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnSOEXPTYPEChanged()
-    End Sub
-    Partial Private Sub OnSALESMANChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnSALESMANChanged()
-    End Sub
-    Partial Private Sub OnRSRCChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnRSRCChanged()
-    End Sub
-    Partial Private Sub OnMTRLOTChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnMTRLOTChanged()
-    End Sub
-    Partial Private Sub OnASSDEPRChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnASSDEPRChanged()
-    End Sub
-    Partial Private Sub OnWHOUSEBINChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnWHOUSEBINChanged()
-    End Sub
-    Partial Private Sub OnWHOUSEBINSECChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnWHOUSEBINSECChanged()
-    End Sub
-    Partial Private Sub OnBUSUNITSChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnBUSUNITSChanged()
-    End Sub
-    Partial Private Sub OnMTRSEASONChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnMTRSEASONChanged()
-    End Sub
-    Partial Private Sub OnMTRCATEGORYChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnMTRCATEGORYChanged()
-    End Sub
-    Partial Private Sub OnPRCPOLICYChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnPRCPOLICYChanged()
-    End Sub
-    Partial Private Sub OnSPCSChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnSPCSChanged()
-    End Sub
-    Partial Private Sub OnMTRPACKChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnMTRPACKChanged()
-    End Sub
-    Partial Private Sub OnQTYPChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnQTYPChanged()
-    End Sub
-    Partial Private Sub OnQTYChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnQTYChanged()
-    End Sub
-    Partial Private Sub OnQTY1Changing(value As Double)
-    End Sub
-    Partial Private Sub OnQTY1Changed()
-    End Sub
-    Partial Private Sub OnQTY2Changing(value As Double)
-    End Sub
-    Partial Private Sub OnQTY2Changed()
-    End Sub
-    Partial Private Sub OnQTY1COVChanging(value As Double)
-    End Sub
-    Partial Private Sub OnQTY1COVChanged()
-    End Sub
-    Partial Private Sub OnQTY1CANCChanging(value As Double)
-    End Sub
-    Partial Private Sub OnQTY1CANCChanged()
-    End Sub
-    Partial Private Sub OnQTY1FCOVChanging(value As Double)
-    End Sub
-    Partial Private Sub OnQTY1FCOVChanged()
-    End Sub
-    Partial Private Sub OnSHIPDATEChanging(value As System.Nullable(Of Date))
-    End Sub
-    Partial Private Sub OnSHIPDATEChanged()
-    End Sub
-    Partial Private Sub OnDELIVDATEChanging(value As System.Nullable(Of Date))
-    End Sub
-    Partial Private Sub OnDELIVDATEChanged()
-    End Sub
-    Partial Private Sub OnWEIGHTChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnWEIGHTChanged()
-    End Sub
-    Partial Private Sub OnVOLUMEChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnVOLUMEChanged()
-    End Sub
-    Partial Private Sub OnINTVALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnINTVALChanged()
-    End Sub
-    Partial Private Sub OnINTVATChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnINTVATChanged()
-    End Sub
-    Partial Private Sub OnBGINTCOUNTRYChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnBGINTCOUNTRYChanged()
-    End Sub
-    Partial Private Sub OnBGINTDISTRICTChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnBGINTDISTRICTChanged()
-    End Sub
-    Partial Private Sub OnDUTYChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnDUTYChanged()
-    End Sub
-    Partial Private Sub OnPLSMVALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnPLSMVALChanged()
-    End Sub
-    Partial Private Sub OnPLSMVATChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnPLSMVATChanged()
-    End Sub
-    Partial Private Sub OnPRICEChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnPRICEChanged()
-    End Sub
-    Partial Private Sub OnPRICE1Changing(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnPRICE1Changed()
-    End Sub
-    Partial Private Sub OnLINEVALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLINEVALChanged()
-    End Sub
-    Partial Private Sub OnLLINEVALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLLINEVALChanged()
-    End Sub
-    Partial Private Sub OnEXPVALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnEXPVALChanged()
-    End Sub
-    Partial Private Sub OnLEXPVALChanging(value As Double)
-    End Sub
-    Partial Private Sub OnLEXPVALChanged()
-    End Sub
-    Partial Private Sub OnLEXPVAL1Changing(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLEXPVAL1Changed()
-    End Sub
-    Partial Private Sub OnLEXPVATVAL1Changing(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLEXPVATVAL1Changed()
-    End Sub
-    Partial Private Sub OnDISC1PRCChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnDISC1PRCChanged()
-    End Sub
-    Partial Private Sub OnDISC2PRCChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnDISC2PRCChanged()
-    End Sub
-    Partial Private Sub OnDISC3PRCChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnDISC3PRCChanged()
-    End Sub
-    Partial Private Sub OnDISC1VALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnDISC1VALChanged()
-    End Sub
-    Partial Private Sub OnLDISC1VALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLDISC1VALChanged()
-    End Sub
-    Partial Private Sub OnDISC2VALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnDISC2VALChanged()
-    End Sub
-    Partial Private Sub OnLDISC2VALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLDISC2VALChanged()
-    End Sub
-    Partial Private Sub OnDISC3VALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnDISC3VALChanged()
-    End Sub
-    Partial Private Sub OnLDISC3VALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLDISC3VALChanged()
-    End Sub
-    Partial Private Sub OnNETLINEVALChanging(value As Double)
-    End Sub
-    Partial Private Sub OnNETLINEVALChanged()
-    End Sub
-    Partial Private Sub OnLNETLINEVALChanging(value As Double)
-    End Sub
-    Partial Private Sub OnLNETLINEVALChanged()
-    End Sub
-    Partial Private Sub OnVATAMNTChanging(value As Double)
-    End Sub
-    Partial Private Sub OnVATAMNTChanged()
-    End Sub
-    Partial Private Sub OnLVATAMNTChanging(value As Double)
-    End Sub
-    Partial Private Sub OnLVATAMNTChanged()
-    End Sub
-    Partial Private Sub OnLVATNOEXMChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLVATNOEXMChanged()
-    End Sub
-    Partial Private Sub OnSALESCVALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnSALESCVALChanged()
-    End Sub
-    Partial Private Sub OnEFKVALChanging(value As Double)
-    End Sub
-    Partial Private Sub OnEFKVALChanged()
-    End Sub
-    Partial Private Sub OnCOMMENTSChanging(value As String)
-    End Sub
-    Partial Private Sub OnCOMMENTSChanged()
-    End Sub
-    Partial Private Sub OnCOMMENTS1Changing(value As String)
-    End Sub
-    Partial Private Sub OnCOMMENTS1Changed()
-    End Sub
-    Partial Private Sub OnCOMMENTS2Changing(value As String)
-    End Sub
-    Partial Private Sub OnCOMMENTS2Changed()
-    End Sub
-    Partial Private Sub OnDIMENSION1Changing(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnDIMENSION1Changed()
-    End Sub
-    Partial Private Sub OnDIMENSION2Changing(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnDIMENSION2Changed()
-    End Sub
-    Partial Private Sub OnDIMENSION3Changing(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnDIMENSION3Changed()
-    End Sub
-    Partial Private Sub OnTRNLINEVALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnTRNLINEVALChanged()
-    End Sub
-    Partial Private Sub OnLTRNLINEVALChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLTRNLINEVALChanged()
-    End Sub
-    Partial Private Sub OnPRCRULEDATAChanging(value As String)
-    End Sub
-    Partial Private Sub OnPRCRULEDATAChanged()
-    End Sub
-    Partial Private Sub OnINSTALMENTSChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnINSTALMENTSChanged()
-    End Sub
-    Partial Private Sub OnWASTEChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnWASTEChanged()
-    End Sub
-    Partial Private Sub OnCOSTCOEFChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnCOSTCOEFChanged()
-    End Sub
-    Partial Private Sub OnCONVPRCChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnCONVPRCChanged()
-    End Sub
-    Partial Private Sub OnSTAGEChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnSTAGEChanged()
-    End Sub
-    Partial Private Sub OnSTAGELINENUMChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnSTAGELINENUMChanged()
-    End Sub
-    Partial Private Sub OnACNMSKChanging(value As String)
-    End Sub
-    Partial Private Sub OnACNMSKChanged()
-    End Sub
-    Partial Private Sub OnACNMSK1Changing(value As String)
-    End Sub
-    Partial Private Sub OnACNMSK1Changed()
-    End Sub
-    Partial Private Sub OnFINDOCSChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnFINDOCSChanged()
-    End Sub
-    Partial Private Sub OnMTRLINESSChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnMTRLINESSChanged()
-    End Sub
-    Partial Private Sub OnFINDOCLChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnFINDOCLChanged()
-    End Sub
-    Partial Private Sub OnMTRLINESLChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnMTRLINESLChanged()
-    End Sub
-    Partial Private Sub OnSOANALChanging(value As String)
-    End Sub
-    Partial Private Sub OnSOANALChanged()
-    End Sub
-    Partial Private Sub OnSXMSKKChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnSXMSKKChanged()
-    End Sub
-    Partial Private Sub OnSXPERCChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnSXPERCChanged()
-    End Sub
-    Partial Private Sub OnBGLEXCISEChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnBGLEXCISEChanged()
-    End Sub
-    Partial Private Sub OnAUTOPRDDOCChanging(value As Short)
-    End Sub
-    Partial Private Sub OnAUTOPRDDOCChanged()
-    End Sub
-    Partial Private Sub OnACNMSKSChanging(value As String)
-    End Sub
-    Partial Private Sub OnACNMSKSChanged()
-    End Sub
-    Partial Private Sub OnACNMSKXChanging(value As String)
-    End Sub
-    Partial Private Sub OnACNMSKXChanged()
-    End Sub
-    Partial Private Sub OnCOSTCNTRChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnCOSTCNTRChanged()
-    End Sub
-    Partial Private Sub OnITECALCTYPEChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnITECALCTYPEChanged()
-    End Sub
-    Partial Private Sub OnGUARTIMEChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnGUARTIMEChanged()
-    End Sub
-    Partial Private Sub OnSRVDEBITTYPEChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnSRVDEBITTYPEChanged()
-    End Sub
-    Partial Private Sub OnPACKSTATUSChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnPACKSTATUSChanged()
-    End Sub
-    Partial Private Sub OnPACKCODE1Changing(value As String)
-    End Sub
-    Partial Private Sub OnPACKCODE1Changed()
-    End Sub
-    Partial Private Sub OnPACKCODE2Changing(value As String)
-    End Sub
-    Partial Private Sub OnPACKCODE2Changed()
-    End Sub
-    Partial Private Sub OnLWMARKUPChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLWMARKUPChanged()
-    End Sub
-    Partial Private Sub OnLRMARKUPChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnLRMARKUPChanged()
-    End Sub
-    Partial Private Sub OnNUM01Changing(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnNUM01Changed()
-    End Sub
-    Partial Private Sub OnNUM02Changing(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnNUM02Changed()
-    End Sub
-    Partial Private Sub OnNUM03Changing(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnNUM03Changed()
-    End Sub
-    Partial Private Sub OnNUM04Changing(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnNUM04Changed()
-    End Sub
-    Partial Private Sub OnBOOL01Changing(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnBOOL01Changed()
-    End Sub
-    Partial Private Sub OnBOOL02Changing(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnBOOL02Changed()
-    End Sub
-    Partial Private Sub OnDATE01Changing(value As System.Nullable(Of Date))
-    End Sub
-    Partial Private Sub OnDATE01Changed()
-    End Sub
-    Partial Private Sub OnDATE02Changing(value As System.Nullable(Of Date))
-    End Sub
-    Partial Private Sub OnDATE02Changed()
-    End Sub
-    Partial Private Sub OnUFTBL01Changing(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnUFTBL01Changed()
-    End Sub
-    Partial Private Sub OnUFTBL02Changing(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnUFTBL02Changed()
-    End Sub
-    Partial Private Sub OncccTrdDepChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OncccTrdDepChanged()
-    End Sub
-    Partial Private Sub OncccTrdrChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OncccTrdrChanged()
-    End Sub
-    Partial Private Sub OnINSTChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnINSTChanged()
-    End Sub
-    Partial Private Sub OnCNTRChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnCNTRChanged()
-    End Sub
-    Partial Private Sub OnVAT1Changing(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnVAT1Changed()
-    End Sub
-    Partial Private Sub OnCUSTOMSLOTChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnCUSTOMSLOTChanged()
-    End Sub
-    Partial Private Sub OnCMTRUNITChanging(value As System.Nullable(Of Short))
-    End Sub
-    Partial Private Sub OnCMTRUNITChanged()
-    End Sub
-    Partial Private Sub OnQUANTITYChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnQUANTITYChanged()
-    End Sub
-    Partial Private Sub OnGROSSMASSChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnGROSSMASSChanged()
-    End Sub
-    Partial Private Sub OnNETMASSChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnNETMASSChanged()
-    End Sub
-    Partial Private Sub OnBONDChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnBONDChanged()
-    End Sub
-    Partial Private Sub OnPSPCSChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnPSPCSChanged()
-    End Sub
-    Partial Private Sub OnACNDOCCATEGORYChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OnACNDOCCATEGORYChanged()
-    End Sub
-    #End Region
-		
-		Public Sub New()
-			MyBase.New
-			Me._MTRL1 = CType(Nothing, EntityRef(Of MTRL))
-			Me._FINDOC1 = CType(Nothing, EntityRef(Of FINDOC))
-			OnCreated
-		End Sub
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMPANY", DbType:="SmallInt NOT NULL")>  _
-		Public Property COMPANY() As Short
-			Get
-				Return Me._COMPANY
-			End Get
-			Set
-				If ((Me._COMPANY = value)  _
-							= false) Then
-					Me.OnCOMPANYChanging(value)
-					Me.SendPropertyChanging
-					Me._COMPANY = value
-					Me.SendPropertyChanged("COMPANY")
-					Me.OnCOMPANYChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINDOC", DbType:="Int NOT NULL", IsPrimaryKey:=true)>  _
-		Public Property FINDOC() As Integer
-			Get
-				Return Me._FINDOC
-			End Get
-			Set
-				If ((Me._FINDOC = value)  _
-							= false) Then
-					If Me._FINDOC1.HasLoadedOrAssignedValue Then
-						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
-					End If
-					Me.OnFINDOCChanging(value)
-					Me.SendPropertyChanging
-					Me._FINDOC = value
-					Me.SendPropertyChanged("FINDOC")
-					Me.OnFINDOCChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRLINES", DbType:="Int NOT NULL", IsPrimaryKey:=true)>  _
-		Public Property MTRLINES() As Integer
-			Get
-				Return Me._MTRLINES
-			End Get
-			Set
-				If ((Me._MTRLINES = value)  _
-							= false) Then
-					Me.OnMTRLINESChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRLINES = value
-					Me.SendPropertyChanged("MTRLINES")
-					Me.OnMTRLINESChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LINENUM", DbType:="Int NOT NULL")>  _
-		Public Property LINENUM() As Integer
-			Get
-				Return Me._LINENUM
-			End Get
-			Set
-				If ((Me._LINENUM = value)  _
-							= false) Then
-					Me.OnLINENUMChanging(value)
-					Me.SendPropertyChanging
-					Me._LINENUM = value
-					Me.SendPropertyChanged("LINENUM")
-					Me.OnLINENUMChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SODTYPE", DbType:="SmallInt NOT NULL")>  _
-		Public Property SODTYPE() As Short
-			Get
-				Return Me._SODTYPE
-			End Get
-			Set
-				If ((Me._SODTYPE = value)  _
-							= false) Then
-					Me.OnSODTYPEChanging(value)
-					Me.SendPropertyChanging
-					Me._SODTYPE = value
-					Me.SendPropertyChanged("SODTYPE")
-					Me.OnSODTYPEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRL", DbType:="Int NOT NULL")>  _
-		Public Property MTRL() As Integer
-			Get
-				Return Me._MTRL
-			End Get
-			Set
-				If ((Me._MTRL = value)  _
-							= false) Then
-					If Me._MTRL1.HasLoadedOrAssignedValue Then
-						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
-					End If
-					Me.OnMTRLChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRL = value
-					Me.SendPropertyChanged("MTRL")
-					Me.OnMTRLChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PENDING", DbType:="SmallInt NOT NULL")>  _
-		Public Property PENDING() As Short
-			Get
-				Return Me._PENDING
-			End Get
-			Set
-				If ((Me._PENDING = value)  _
-							= false) Then
-					Me.OnPENDINGChanging(value)
-					Me.SendPropertyChanging
-					Me._PENDING = value
-					Me.SendPropertyChanged("PENDING")
-					Me.OnPENDINGChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_RESTMODE", DbType:="SmallInt")>  _
-		Public Property RESTMODE() As System.Nullable(Of Short)
-			Get
-				Return Me._RESTMODE
-			End Get
-			Set
-				If (Me._RESTMODE.Equals(value) = false) Then
-					Me.OnRESTMODEChanging(value)
-					Me.SendPropertyChanging
-					Me._RESTMODE = value
-					Me.SendPropertyChanged("RESTMODE")
-					Me.OnRESTMODEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOSOURCE", DbType:="Int NOT NULL")>  _
-		Public Property SOSOURCE() As Integer
-			Get
-				Return Me._SOSOURCE
-			End Get
-			Set
-				If ((Me._SOSOURCE = value)  _
-							= false) Then
-					Me.OnSOSOURCEChanging(value)
-					Me.SendPropertyChanging
-					Me._SOSOURCE = value
-					Me.SendPropertyChanged("SOSOURCE")
-					Me.OnSOSOURCEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOREDIR", DbType:="Int NOT NULL")>  _
-		Public Property SOREDIR() As Integer
-			Get
-				Return Me._SOREDIR
-			End Get
-			Set
-				If ((Me._SOREDIR = value)  _
-							= false) Then
-					Me.OnSOREDIRChanging(value)
-					Me.SendPropertyChanging
-					Me._SOREDIR = value
-					Me.SendPropertyChanged("SOREDIR")
-					Me.OnSOREDIRChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SCODE", DbType:="VarChar(50)")>  _
-		Public Property SCODE() As String
-			Get
-				Return Me._SCODE
-			End Get
-			Set
-				If (String.Equals(Me._SCODE, value) = false) Then
-					Me.OnSCODEChanging(value)
-					Me.SendPropertyChanging
-					Me._SCODE = value
-					Me.SendPropertyChanged("SCODE")
-					Me.OnSCODEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRTYPE", DbType:="SmallInt NOT NULL")>  _
-		Public Property MTRTYPE() As Short
-			Get
-				Return Me._MTRTYPE
-			End Get
-			Set
-				If ((Me._MTRTYPE = value)  _
-							= false) Then
-					Me.OnMTRTYPEChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRTYPE = value
-					Me.SendPropertyChanged("MTRTYPE")
-					Me.OnMTRTYPEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOTYPE", DbType:="SmallInt NOT NULL")>  _
-		Public Property SOTYPE() As Short
-			Get
-				Return Me._SOTYPE
-			End Get
-			Set
-				If ((Me._SOTYPE = value)  _
-							= false) Then
-					Me.OnSOTYPEChanging(value)
-					Me.SendPropertyChanging
-					Me._SOTYPE = value
-					Me.SendPropertyChanged("SOTYPE")
-					Me.OnSOTYPEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSE", DbType:="SmallInt")>  _
-		Public Property WHOUSE() As System.Nullable(Of Short)
-			Get
-				Return Me._WHOUSE
-			End Get
-			Set
-				If (Me._WHOUSE.Equals(value) = false) Then
-					Me.OnWHOUSEChanging(value)
-					Me.SendPropertyChanging
-					Me._WHOUSE = value
-					Me.SendPropertyChanged("WHOUSE")
-					Me.OnWHOUSEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSESEC", DbType:="SmallInt")>  _
-		Public Property WHOUSESEC() As System.Nullable(Of Short)
-			Get
-				Return Me._WHOUSESEC
-			End Get
-			Set
-				If (Me._WHOUSESEC.Equals(value) = false) Then
-					Me.OnWHOUSESECChanging(value)
-					Me.SendPropertyChanging
-					Me._WHOUSESEC = value
-					Me.SendPropertyChanged("WHOUSESEC")
-					Me.OnWHOUSESECChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRUNIT", DbType:="SmallInt")>  _
-		Public Property MTRUNIT() As System.Nullable(Of Short)
-			Get
-				Return Me._MTRUNIT
-			End Get
-			Set
-				If (Me._MTRUNIT.Equals(value) = false) Then
-					Me.OnMTRUNITChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRUNIT = value
-					Me.SendPropertyChanged("MTRUNIT")
-					Me.OnMTRUNITChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_VAT", DbType:="SmallInt NOT NULL")>  _
-		Public Property VAT() As Short
-			Get
-				Return Me._VAT
-			End Get
-			Set
-				If ((Me._VAT = value)  _
-							= false) Then
-					Me.OnVATChanging(value)
-					Me.SendPropertyChanging
-					Me._VAT = value
-					Me.SendPropertyChanged("VAT")
-					Me.OnVATChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRJC", DbType:="Int")>  _
-		Public Property PRJC() As System.Nullable(Of Integer)
-			Get
-				Return Me._PRJC
-			End Get
-			Set
-				If (Me._PRJC.Equals(value) = false) Then
-					Me.OnPRJCChanging(value)
-					Me.SendPropertyChanging
-					Me._PRJC = value
-					Me.SendPropertyChanged("PRJC")
-					Me.OnPRJCChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRJLINES", DbType:="Int")>  _
-		Public Property PRJLINES() As System.Nullable(Of Integer)
-			Get
-				Return Me._PRJLINES
-			End Get
-			Set
-				If (Me._PRJLINES.Equals(value) = false) Then
-					Me.OnPRJLINESChanging(value)
-					Me.SendPropertyChanging
-					Me._PRJLINES = value
-					Me.SendPropertyChanged("PRJLINES")
-					Me.OnPRJLINESChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRJCSTAGE", DbType:="SmallInt")>  _
-		Public Property PRJCSTAGE() As System.Nullable(Of Short)
-			Get
-				Return Me._PRJCSTAGE
-			End Get
-			Set
-				If (Me._PRJCSTAGE.Equals(value) = false) Then
-					Me.OnPRJCSTAGEChanging(value)
-					Me.SendPropertyChanging
-					Me._PRJCSTAGE = value
-					Me.SendPropertyChanged("PRJCSTAGE")
-					Me.OnPRJCSTAGEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRPRJCBLD", DbType:="SmallInt")>  _
-		Public Property MTRPRJCBLD() As System.Nullable(Of Short)
-			Get
-				Return Me._MTRPRJCBLD
-			End Get
-			Set
-				If (Me._MTRPRJCBLD.Equals(value) = false) Then
-					Me.OnMTRPRJCBLDChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRPRJCBLD = value
-					Me.SendPropertyChanged("MTRPRJCBLD")
-					Me.OnMTRPRJCBLDChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOEXPTYPE", DbType:="SmallInt")>  _
-		Public Property SOEXPTYPE() As System.Nullable(Of Short)
-			Get
-				Return Me._SOEXPTYPE
-			End Get
-			Set
-				If (Me._SOEXPTYPE.Equals(value) = false) Then
-					Me.OnSOEXPTYPEChanging(value)
-					Me.SendPropertyChanging
-					Me._SOEXPTYPE = value
-					Me.SendPropertyChanged("SOEXPTYPE")
-					Me.OnSOEXPTYPEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SALESMAN", DbType:="Int")>  _
-		Public Property SALESMAN() As System.Nullable(Of Integer)
-			Get
-				Return Me._SALESMAN
-			End Get
-			Set
-				If (Me._SALESMAN.Equals(value) = false) Then
-					Me.OnSALESMANChanging(value)
-					Me.SendPropertyChanging
-					Me._SALESMAN = value
-					Me.SendPropertyChanged("SALESMAN")
-					Me.OnSALESMANChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_RSRC", DbType:="Int")>  _
-		Public Property RSRC() As System.Nullable(Of Integer)
-			Get
-				Return Me._RSRC
-			End Get
-			Set
-				If (Me._RSRC.Equals(value) = false) Then
-					Me.OnRSRCChanging(value)
-					Me.SendPropertyChanging
-					Me._RSRC = value
-					Me.SendPropertyChanged("RSRC")
-					Me.OnRSRCChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRLOT", DbType:="Int")>  _
-		Public Property MTRLOT() As System.Nullable(Of Integer)
-			Get
-				Return Me._MTRLOT
-			End Get
-			Set
-				If (Me._MTRLOT.Equals(value) = false) Then
-					Me.OnMTRLOTChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRLOT = value
-					Me.SendPropertyChanged("MTRLOT")
-					Me.OnMTRLOTChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ASSDEPR", DbType:="Int")>  _
-		Public Property ASSDEPR() As System.Nullable(Of Integer)
-			Get
-				Return Me._ASSDEPR
-			End Get
-			Set
-				If (Me._ASSDEPR.Equals(value) = false) Then
-					Me.OnASSDEPRChanging(value)
-					Me.SendPropertyChanging
-					Me._ASSDEPR = value
-					Me.SendPropertyChanged("ASSDEPR")
-					Me.OnASSDEPRChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSEBIN", DbType:="SmallInt")>  _
-		Public Property WHOUSEBIN() As System.Nullable(Of Short)
-			Get
-				Return Me._WHOUSEBIN
-			End Get
-			Set
-				If (Me._WHOUSEBIN.Equals(value) = false) Then
-					Me.OnWHOUSEBINChanging(value)
-					Me.SendPropertyChanging
-					Me._WHOUSEBIN = value
-					Me.SendPropertyChanged("WHOUSEBIN")
-					Me.OnWHOUSEBINChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSEBINSEC", DbType:="SmallInt")>  _
-		Public Property WHOUSEBINSEC() As System.Nullable(Of Short)
-			Get
-				Return Me._WHOUSEBINSEC
-			End Get
-			Set
-				If (Me._WHOUSEBINSEC.Equals(value) = false) Then
-					Me.OnWHOUSEBINSECChanging(value)
-					Me.SendPropertyChanging
-					Me._WHOUSEBINSEC = value
-					Me.SendPropertyChanged("WHOUSEBINSEC")
-					Me.OnWHOUSEBINSECChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BUSUNITS", DbType:="SmallInt")>  _
-		Public Property BUSUNITS() As System.Nullable(Of Short)
-			Get
-				Return Me._BUSUNITS
-			End Get
-			Set
-				If (Me._BUSUNITS.Equals(value) = false) Then
-					Me.OnBUSUNITSChanging(value)
-					Me.SendPropertyChanging
-					Me._BUSUNITS = value
-					Me.SendPropertyChanged("BUSUNITS")
-					Me.OnBUSUNITSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRSEASON", DbType:="SmallInt")>  _
-		Public Property MTRSEASON() As System.Nullable(Of Short)
-			Get
-				Return Me._MTRSEASON
-			End Get
-			Set
-				If (Me._MTRSEASON.Equals(value) = false) Then
-					Me.OnMTRSEASONChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRSEASON = value
-					Me.SendPropertyChanged("MTRSEASON")
-					Me.OnMTRSEASONChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRCATEGORY", DbType:="SmallInt")>  _
-		Public Property MTRCATEGORY() As System.Nullable(Of Short)
-			Get
-				Return Me._MTRCATEGORY
-			End Get
-			Set
-				If (Me._MTRCATEGORY.Equals(value) = false) Then
-					Me.OnMTRCATEGORYChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRCATEGORY = value
-					Me.SendPropertyChanged("MTRCATEGORY")
-					Me.OnMTRCATEGORYChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRCPOLICY", DbType:="SmallInt")>  _
-		Public Property PRCPOLICY() As System.Nullable(Of Short)
-			Get
-				Return Me._PRCPOLICY
-			End Get
-			Set
-				If (Me._PRCPOLICY.Equals(value) = false) Then
-					Me.OnPRCPOLICYChanging(value)
-					Me.SendPropertyChanging
-					Me._PRCPOLICY = value
-					Me.SendPropertyChanged("PRCPOLICY")
-					Me.OnPRCPOLICYChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SPCS", DbType:="Int")>  _
-		Public Property SPCS() As System.Nullable(Of Integer)
-			Get
-				Return Me._SPCS
-			End Get
-			Set
-				If (Me._SPCS.Equals(value) = false) Then
-					Me.OnSPCSChanging(value)
-					Me.SendPropertyChanging
-					Me._SPCS = value
-					Me.SendPropertyChanged("SPCS")
-					Me.OnSPCSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRPACK", DbType:="Int")>  _
-		Public Property MTRPACK() As System.Nullable(Of Integer)
-			Get
-				Return Me._MTRPACK
-			End Get
-			Set
-				If (Me._MTRPACK.Equals(value) = false) Then
-					Me.OnMTRPACKChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRPACK = value
-					Me.SendPropertyChanged("MTRPACK")
-					Me.OnMTRPACKChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTYP", DbType:="Float")>  _
-		Public Property QTYP() As System.Nullable(Of Double)
-			Get
-				Return Me._QTYP
-			End Get
-			Set
-				If (Me._QTYP.Equals(value) = false) Then
-					Me.OnQTYPChanging(value)
-					Me.SendPropertyChanging
-					Me._QTYP = value
-					Me.SendPropertyChanged("QTYP")
-					Me.OnQTYPChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY", DbType:="Float")>  _
-		Public Property QTY() As System.Nullable(Of Double)
-			Get
-				Return Me._QTY
-			End Get
-			Set
-				If (Me._QTY.Equals(value) = false) Then
-					Me.OnQTYChanging(value)
-					Me.SendPropertyChanging
-					Me._QTY = value
-					Me.SendPropertyChanged("QTY")
-					Me.OnQTYChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY1", DbType:="Float NOT NULL")>  _
-		Public Property QTY1() As Double
-			Get
-				Return Me._QTY1
-			End Get
-			Set
-				If ((Me._QTY1 = value)  _
-							= false) Then
-					Me.OnQTY1Changing(value)
-					Me.SendPropertyChanging
-					Me._QTY1 = value
-					Me.SendPropertyChanged("QTY1")
-					Me.OnQTY1Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY2", DbType:="Float NOT NULL")>  _
-		Public Property QTY2() As Double
-			Get
-				Return Me._QTY2
-			End Get
-			Set
-				If ((Me._QTY2 = value)  _
-							= false) Then
-					Me.OnQTY2Changing(value)
-					Me.SendPropertyChanging
-					Me._QTY2 = value
-					Me.SendPropertyChanged("QTY2")
-					Me.OnQTY2Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY1COV", DbType:="Float NOT NULL")>  _
-		Public Property QTY1COV() As Double
-			Get
-				Return Me._QTY1COV
-			End Get
-			Set
-				If ((Me._QTY1COV = value)  _
-							= false) Then
-					Me.OnQTY1COVChanging(value)
-					Me.SendPropertyChanging
-					Me._QTY1COV = value
-					Me.SendPropertyChanged("QTY1COV")
-					Me.OnQTY1COVChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY1CANC", DbType:="Float NOT NULL")>  _
-		Public Property QTY1CANC() As Double
-			Get
-				Return Me._QTY1CANC
-			End Get
-			Set
-				If ((Me._QTY1CANC = value)  _
-							= false) Then
-					Me.OnQTY1CANCChanging(value)
-					Me.SendPropertyChanging
-					Me._QTY1CANC = value
-					Me.SendPropertyChanged("QTY1CANC")
-					Me.OnQTY1CANCChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY1FCOV", DbType:="Float NOT NULL")>  _
-		Public Property QTY1FCOV() As Double
-			Get
-				Return Me._QTY1FCOV
-			End Get
-			Set
-				If ((Me._QTY1FCOV = value)  _
-							= false) Then
-					Me.OnQTY1FCOVChanging(value)
-					Me.SendPropertyChanging
-					Me._QTY1FCOV = value
-					Me.SendPropertyChanged("QTY1FCOV")
-					Me.OnQTY1FCOVChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SHIPDATE", DbType:="DateTime")>  _
-		Public Property SHIPDATE() As System.Nullable(Of Date)
-			Get
-				Return Me._SHIPDATE
-			End Get
-			Set
-				If (Me._SHIPDATE.Equals(value) = false) Then
-					Me.OnSHIPDATEChanging(value)
-					Me.SendPropertyChanging
-					Me._SHIPDATE = value
-					Me.SendPropertyChanged("SHIPDATE")
-					Me.OnSHIPDATEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DELIVDATE", DbType:="DateTime")>  _
-		Public Property DELIVDATE() As System.Nullable(Of Date)
-			Get
-				Return Me._DELIVDATE
-			End Get
-			Set
-				If (Me._DELIVDATE.Equals(value) = false) Then
-					Me.OnDELIVDATEChanging(value)
-					Me.SendPropertyChanging
-					Me._DELIVDATE = value
-					Me.SendPropertyChanged("DELIVDATE")
-					Me.OnDELIVDATEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WEIGHT", DbType:="Float")>  _
-		Public Property WEIGHT() As System.Nullable(Of Double)
-			Get
-				Return Me._WEIGHT
-			End Get
-			Set
-				If (Me._WEIGHT.Equals(value) = false) Then
-					Me.OnWEIGHTChanging(value)
-					Me.SendPropertyChanging
-					Me._WEIGHT = value
-					Me.SendPropertyChanged("WEIGHT")
-					Me.OnWEIGHTChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_VOLUME", DbType:="Float")>  _
-		Public Property VOLUME() As System.Nullable(Of Double)
-			Get
-				Return Me._VOLUME
-			End Get
-			Set
-				If (Me._VOLUME.Equals(value) = false) Then
-					Me.OnVOLUMEChanging(value)
-					Me.SendPropertyChanging
-					Me._VOLUME = value
-					Me.SendPropertyChanged("VOLUME")
-					Me.OnVOLUMEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_INTVAL", DbType:="Float")>  _
-		Public Property INTVAL() As System.Nullable(Of Double)
-			Get
-				Return Me._INTVAL
-			End Get
-			Set
-				If (Me._INTVAL.Equals(value) = false) Then
-					Me.OnINTVALChanging(value)
-					Me.SendPropertyChanging
-					Me._INTVAL = value
-					Me.SendPropertyChanged("INTVAL")
-					Me.OnINTVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_INTVAT", DbType:="Float")>  _
-		Public Property INTVAT() As System.Nullable(Of Double)
-			Get
-				Return Me._INTVAT
-			End Get
-			Set
-				If (Me._INTVAT.Equals(value) = false) Then
-					Me.OnINTVATChanging(value)
-					Me.SendPropertyChanging
-					Me._INTVAT = value
-					Me.SendPropertyChanged("INTVAT")
-					Me.OnINTVATChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BGINTCOUNTRY", DbType:="SmallInt")>  _
-		Public Property BGINTCOUNTRY() As System.Nullable(Of Short)
-			Get
-				Return Me._BGINTCOUNTRY
-			End Get
-			Set
-				If (Me._BGINTCOUNTRY.Equals(value) = false) Then
-					Me.OnBGINTCOUNTRYChanging(value)
-					Me.SendPropertyChanging
-					Me._BGINTCOUNTRY = value
-					Me.SendPropertyChanged("BGINTCOUNTRY")
-					Me.OnBGINTCOUNTRYChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BGINTDISTRICT", DbType:="SmallInt")>  _
-		Public Property BGINTDISTRICT() As System.Nullable(Of Short)
-			Get
-				Return Me._BGINTDISTRICT
-			End Get
-			Set
-				If (Me._BGINTDISTRICT.Equals(value) = false) Then
-					Me.OnBGINTDISTRICTChanging(value)
-					Me.SendPropertyChanging
-					Me._BGINTDISTRICT = value
-					Me.SendPropertyChanged("BGINTDISTRICT")
-					Me.OnBGINTDISTRICTChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DUTY", DbType:="Float")>  _
-		Public Property DUTY() As System.Nullable(Of Double)
-			Get
-				Return Me._DUTY
-			End Get
-			Set
-				If (Me._DUTY.Equals(value) = false) Then
-					Me.OnDUTYChanging(value)
-					Me.SendPropertyChanging
-					Me._DUTY = value
-					Me.SendPropertyChanged("DUTY")
-					Me.OnDUTYChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PLSMVAL", DbType:="Float")>  _
-		Public Property PLSMVAL() As System.Nullable(Of Double)
-			Get
-				Return Me._PLSMVAL
-			End Get
-			Set
-				If (Me._PLSMVAL.Equals(value) = false) Then
-					Me.OnPLSMVALChanging(value)
-					Me.SendPropertyChanging
-					Me._PLSMVAL = value
-					Me.SendPropertyChanged("PLSMVAL")
-					Me.OnPLSMVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PLSMVAT", DbType:="Float")>  _
-		Public Property PLSMVAT() As System.Nullable(Of Double)
-			Get
-				Return Me._PLSMVAT
-			End Get
-			Set
-				If (Me._PLSMVAT.Equals(value) = false) Then
-					Me.OnPLSMVATChanging(value)
-					Me.SendPropertyChanging
-					Me._PLSMVAT = value
-					Me.SendPropertyChanged("PLSMVAT")
-					Me.OnPLSMVATChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRICE", DbType:="Float")>  _
-		Public Property PRICE() As System.Nullable(Of Double)
-			Get
-				Return Me._PRICE
-			End Get
-			Set
-				If (Me._PRICE.Equals(value) = false) Then
-					Me.OnPRICEChanging(value)
-					Me.SendPropertyChanging
-					Me._PRICE = value
-					Me.SendPropertyChanged("PRICE")
-					Me.OnPRICEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRICE1", DbType:="Float")>  _
-		Public Property PRICE1() As System.Nullable(Of Double)
-			Get
-				Return Me._PRICE1
-			End Get
-			Set
-				If (Me._PRICE1.Equals(value) = false) Then
-					Me.OnPRICE1Changing(value)
-					Me.SendPropertyChanging
-					Me._PRICE1 = value
-					Me.SendPropertyChanged("PRICE1")
-					Me.OnPRICE1Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LINEVAL", DbType:="Float")>  _
-		Public Property LINEVAL() As System.Nullable(Of Double)
-			Get
-				Return Me._LINEVAL
-			End Get
-			Set
-				If (Me._LINEVAL.Equals(value) = false) Then
-					Me.OnLINEVALChanging(value)
-					Me.SendPropertyChanging
-					Me._LINEVAL = value
-					Me.SendPropertyChanged("LINEVAL")
-					Me.OnLINEVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LLINEVAL", DbType:="Float")>  _
-		Public Property LLINEVAL() As System.Nullable(Of Double)
-			Get
-				Return Me._LLINEVAL
-			End Get
-			Set
-				If (Me._LLINEVAL.Equals(value) = false) Then
-					Me.OnLLINEVALChanging(value)
-					Me.SendPropertyChanging
-					Me._LLINEVAL = value
-					Me.SendPropertyChanged("LLINEVAL")
-					Me.OnLLINEVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_EXPVAL", DbType:="Float")>  _
-		Public Property EXPVAL() As System.Nullable(Of Double)
-			Get
-				Return Me._EXPVAL
-			End Get
-			Set
-				If (Me._EXPVAL.Equals(value) = false) Then
-					Me.OnEXPVALChanging(value)
-					Me.SendPropertyChanging
-					Me._EXPVAL = value
-					Me.SendPropertyChanged("EXPVAL")
-					Me.OnEXPVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LEXPVAL", DbType:="Float NOT NULL")>  _
-		Public Property LEXPVAL() As Double
-			Get
-				Return Me._LEXPVAL
-			End Get
-			Set
-				If ((Me._LEXPVAL = value)  _
-							= false) Then
-					Me.OnLEXPVALChanging(value)
-					Me.SendPropertyChanging
-					Me._LEXPVAL = value
-					Me.SendPropertyChanged("LEXPVAL")
-					Me.OnLEXPVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LEXPVAL1", DbType:="Float")>  _
-		Public Property LEXPVAL1() As System.Nullable(Of Double)
-			Get
-				Return Me._LEXPVAL1
-			End Get
-			Set
-				If (Me._LEXPVAL1.Equals(value) = false) Then
-					Me.OnLEXPVAL1Changing(value)
-					Me.SendPropertyChanging
-					Me._LEXPVAL1 = value
-					Me.SendPropertyChanged("LEXPVAL1")
-					Me.OnLEXPVAL1Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LEXPVATVAL1", DbType:="Float")>  _
-		Public Property LEXPVATVAL1() As System.Nullable(Of Double)
-			Get
-				Return Me._LEXPVATVAL1
-			End Get
-			Set
-				If (Me._LEXPVATVAL1.Equals(value) = false) Then
-					Me.OnLEXPVATVAL1Changing(value)
-					Me.SendPropertyChanging
-					Me._LEXPVATVAL1 = value
-					Me.SendPropertyChanged("LEXPVATVAL1")
-					Me.OnLEXPVATVAL1Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC1PRC", DbType:="Float")>  _
-		Public Property DISC1PRC() As System.Nullable(Of Double)
-			Get
-				Return Me._DISC1PRC
-			End Get
-			Set
-				If (Me._DISC1PRC.Equals(value) = false) Then
-					Me.OnDISC1PRCChanging(value)
-					Me.SendPropertyChanging
-					Me._DISC1PRC = value
-					Me.SendPropertyChanged("DISC1PRC")
-					Me.OnDISC1PRCChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC2PRC", DbType:="Float")>  _
-		Public Property DISC2PRC() As System.Nullable(Of Double)
-			Get
-				Return Me._DISC2PRC
-			End Get
-			Set
-				If (Me._DISC2PRC.Equals(value) = false) Then
-					Me.OnDISC2PRCChanging(value)
-					Me.SendPropertyChanging
-					Me._DISC2PRC = value
-					Me.SendPropertyChanged("DISC2PRC")
-					Me.OnDISC2PRCChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC3PRC", DbType:="Float")>  _
-		Public Property DISC3PRC() As System.Nullable(Of Double)
-			Get
-				Return Me._DISC3PRC
-			End Get
-			Set
-				If (Me._DISC3PRC.Equals(value) = false) Then
-					Me.OnDISC3PRCChanging(value)
-					Me.SendPropertyChanging
-					Me._DISC3PRC = value
-					Me.SendPropertyChanged("DISC3PRC")
-					Me.OnDISC3PRCChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC1VAL", DbType:="Float")>  _
-		Public Property DISC1VAL() As System.Nullable(Of Double)
-			Get
-				Return Me._DISC1VAL
-			End Get
-			Set
-				If (Me._DISC1VAL.Equals(value) = false) Then
-					Me.OnDISC1VALChanging(value)
-					Me.SendPropertyChanging
-					Me._DISC1VAL = value
-					Me.SendPropertyChanged("DISC1VAL")
-					Me.OnDISC1VALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LDISC1VAL", DbType:="Float")>  _
-		Public Property LDISC1VAL() As System.Nullable(Of Double)
-			Get
-				Return Me._LDISC1VAL
-			End Get
-			Set
-				If (Me._LDISC1VAL.Equals(value) = false) Then
-					Me.OnLDISC1VALChanging(value)
-					Me.SendPropertyChanging
-					Me._LDISC1VAL = value
-					Me.SendPropertyChanged("LDISC1VAL")
-					Me.OnLDISC1VALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC2VAL", DbType:="Float")>  _
-		Public Property DISC2VAL() As System.Nullable(Of Double)
-			Get
-				Return Me._DISC2VAL
-			End Get
-			Set
-				If (Me._DISC2VAL.Equals(value) = false) Then
-					Me.OnDISC2VALChanging(value)
-					Me.SendPropertyChanging
-					Me._DISC2VAL = value
-					Me.SendPropertyChanged("DISC2VAL")
-					Me.OnDISC2VALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LDISC2VAL", DbType:="Float")>  _
-		Public Property LDISC2VAL() As System.Nullable(Of Double)
-			Get
-				Return Me._LDISC2VAL
-			End Get
-			Set
-				If (Me._LDISC2VAL.Equals(value) = false) Then
-					Me.OnLDISC2VALChanging(value)
-					Me.SendPropertyChanging
-					Me._LDISC2VAL = value
-					Me.SendPropertyChanged("LDISC2VAL")
-					Me.OnLDISC2VALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC3VAL", DbType:="Float")>  _
-		Public Property DISC3VAL() As System.Nullable(Of Double)
-			Get
-				Return Me._DISC3VAL
-			End Get
-			Set
-				If (Me._DISC3VAL.Equals(value) = false) Then
-					Me.OnDISC3VALChanging(value)
-					Me.SendPropertyChanging
-					Me._DISC3VAL = value
-					Me.SendPropertyChanged("DISC3VAL")
-					Me.OnDISC3VALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LDISC3VAL", DbType:="Float")>  _
-		Public Property LDISC3VAL() As System.Nullable(Of Double)
-			Get
-				Return Me._LDISC3VAL
-			End Get
-			Set
-				If (Me._LDISC3VAL.Equals(value) = false) Then
-					Me.OnLDISC3VALChanging(value)
-					Me.SendPropertyChanging
-					Me._LDISC3VAL = value
-					Me.SendPropertyChanged("LDISC3VAL")
-					Me.OnLDISC3VALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NETLINEVAL", DbType:="Float NOT NULL")>  _
-		Public Property NETLINEVAL() As Double
-			Get
-				Return Me._NETLINEVAL
-			End Get
-			Set
-				If ((Me._NETLINEVAL = value)  _
-							= false) Then
-					Me.OnNETLINEVALChanging(value)
-					Me.SendPropertyChanging
-					Me._NETLINEVAL = value
-					Me.SendPropertyChanged("NETLINEVAL")
-					Me.OnNETLINEVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LNETLINEVAL", DbType:="Float NOT NULL")>  _
-		Public Property LNETLINEVAL() As Double
-			Get
-				Return Me._LNETLINEVAL
-			End Get
-			Set
-				If ((Me._LNETLINEVAL = value)  _
-							= false) Then
-					Me.OnLNETLINEVALChanging(value)
-					Me.SendPropertyChanging
-					Me._LNETLINEVAL = value
-					Me.SendPropertyChanged("LNETLINEVAL")
-					Me.OnLNETLINEVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_VATAMNT", DbType:="Float NOT NULL")>  _
-		Public Property VATAMNT() As Double
-			Get
-				Return Me._VATAMNT
-			End Get
-			Set
-				If ((Me._VATAMNT = value)  _
-							= false) Then
-					Me.OnVATAMNTChanging(value)
-					Me.SendPropertyChanging
-					Me._VATAMNT = value
-					Me.SendPropertyChanged("VATAMNT")
-					Me.OnVATAMNTChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LVATAMNT", DbType:="Float NOT NULL")>  _
-		Public Property LVATAMNT() As Double
-			Get
-				Return Me._LVATAMNT
-			End Get
-			Set
-				If ((Me._LVATAMNT = value)  _
-							= false) Then
-					Me.OnLVATAMNTChanging(value)
-					Me.SendPropertyChanging
-					Me._LVATAMNT = value
-					Me.SendPropertyChanged("LVATAMNT")
-					Me.OnLVATAMNTChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LVATNOEXM", DbType:="Float")>  _
-		Public Property LVATNOEXM() As System.Nullable(Of Double)
-			Get
-				Return Me._LVATNOEXM
-			End Get
-			Set
-				If (Me._LVATNOEXM.Equals(value) = false) Then
-					Me.OnLVATNOEXMChanging(value)
-					Me.SendPropertyChanging
-					Me._LVATNOEXM = value
-					Me.SendPropertyChanged("LVATNOEXM")
-					Me.OnLVATNOEXMChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SALESCVAL", DbType:="Float")>  _
-		Public Property SALESCVAL() As System.Nullable(Of Double)
-			Get
-				Return Me._SALESCVAL
-			End Get
-			Set
-				If (Me._SALESCVAL.Equals(value) = false) Then
-					Me.OnSALESCVALChanging(value)
-					Me.SendPropertyChanging
-					Me._SALESCVAL = value
-					Me.SendPropertyChanged("SALESCVAL")
-					Me.OnSALESCVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_EFKVAL", DbType:="Float NOT NULL")>  _
-		Public Property EFKVAL() As Double
-			Get
-				Return Me._EFKVAL
-			End Get
-			Set
-				If ((Me._EFKVAL = value)  _
-							= false) Then
-					Me.OnEFKVALChanging(value)
-					Me.SendPropertyChanging
-					Me._EFKVAL = value
-					Me.SendPropertyChanged("EFKVAL")
-					Me.OnEFKVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMMENTS", DbType:="VarChar(255)")>  _
-		Public Property COMMENTS() As String
-			Get
-				Return Me._COMMENTS
-			End Get
-			Set
-				If (String.Equals(Me._COMMENTS, value) = false) Then
-					Me.OnCOMMENTSChanging(value)
-					Me.SendPropertyChanging
-					Me._COMMENTS = value
-					Me.SendPropertyChanged("COMMENTS")
-					Me.OnCOMMENTSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMMENTS1", DbType:="VarChar(2000)")>  _
-		Public Property COMMENTS1() As String
-			Get
-				Return Me._COMMENTS1
-			End Get
-			Set
-				If (String.Equals(Me._COMMENTS1, value) = false) Then
-					Me.OnCOMMENTS1Changing(value)
-					Me.SendPropertyChanging
-					Me._COMMENTS1 = value
-					Me.SendPropertyChanged("COMMENTS1")
-					Me.OnCOMMENTS1Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMMENTS2", DbType:="VarChar(512)")>  _
-		Public Property COMMENTS2() As String
-			Get
-				Return Me._COMMENTS2
-			End Get
-			Set
-				If (String.Equals(Me._COMMENTS2, value) = false) Then
-					Me.OnCOMMENTS2Changing(value)
-					Me.SendPropertyChanging
-					Me._COMMENTS2 = value
-					Me.SendPropertyChanged("COMMENTS2")
-					Me.OnCOMMENTS2Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DIMENSION1", DbType:="Float")>  _
-		Public Property DIMENSION1() As System.Nullable(Of Double)
-			Get
-				Return Me._DIMENSION1
-			End Get
-			Set
-				If (Me._DIMENSION1.Equals(value) = false) Then
-					Me.OnDIMENSION1Changing(value)
-					Me.SendPropertyChanging
-					Me._DIMENSION1 = value
-					Me.SendPropertyChanged("DIMENSION1")
-					Me.OnDIMENSION1Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DIMENSION2", DbType:="Float")>  _
-		Public Property DIMENSION2() As System.Nullable(Of Double)
-			Get
-				Return Me._DIMENSION2
-			End Get
-			Set
-				If (Me._DIMENSION2.Equals(value) = false) Then
-					Me.OnDIMENSION2Changing(value)
-					Me.SendPropertyChanging
-					Me._DIMENSION2 = value
-					Me.SendPropertyChanged("DIMENSION2")
-					Me.OnDIMENSION2Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DIMENSION3", DbType:="Float")>  _
-		Public Property DIMENSION3() As System.Nullable(Of Double)
-			Get
-				Return Me._DIMENSION3
-			End Get
-			Set
-				If (Me._DIMENSION3.Equals(value) = false) Then
-					Me.OnDIMENSION3Changing(value)
-					Me.SendPropertyChanging
-					Me._DIMENSION3 = value
-					Me.SendPropertyChanged("DIMENSION3")
-					Me.OnDIMENSION3Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TRNLINEVAL", DbType:="Float")>  _
-		Public Property TRNLINEVAL() As System.Nullable(Of Double)
-			Get
-				Return Me._TRNLINEVAL
-			End Get
-			Set
-				If (Me._TRNLINEVAL.Equals(value) = false) Then
-					Me.OnTRNLINEVALChanging(value)
-					Me.SendPropertyChanging
-					Me._TRNLINEVAL = value
-					Me.SendPropertyChanged("TRNLINEVAL")
-					Me.OnTRNLINEVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LTRNLINEVAL", DbType:="Float")>  _
-		Public Property LTRNLINEVAL() As System.Nullable(Of Double)
-			Get
-				Return Me._LTRNLINEVAL
-			End Get
-			Set
-				If (Me._LTRNLINEVAL.Equals(value) = false) Then
-					Me.OnLTRNLINEVALChanging(value)
-					Me.SendPropertyChanging
-					Me._LTRNLINEVAL = value
-					Me.SendPropertyChanged("LTRNLINEVAL")
-					Me.OnLTRNLINEVALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRCRULEDATA", DbType:="VarChar(1024)")>  _
-		Public Property PRCRULEDATA() As String
-			Get
-				Return Me._PRCRULEDATA
-			End Get
-			Set
-				If (String.Equals(Me._PRCRULEDATA, value) = false) Then
-					Me.OnPRCRULEDATAChanging(value)
-					Me.SendPropertyChanging
-					Me._PRCRULEDATA = value
-					Me.SendPropertyChanged("PRCRULEDATA")
-					Me.OnPRCRULEDATAChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_INSTALMENTS", DbType:="SmallInt")>  _
-		Public Property INSTALMENTS() As System.Nullable(Of Short)
-			Get
-				Return Me._INSTALMENTS
-			End Get
-			Set
-				If (Me._INSTALMENTS.Equals(value) = false) Then
-					Me.OnINSTALMENTSChanging(value)
-					Me.SendPropertyChanging
-					Me._INSTALMENTS = value
-					Me.SendPropertyChanged("INSTALMENTS")
-					Me.OnINSTALMENTSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WASTE", DbType:="Float")>  _
-		Public Property WASTE() As System.Nullable(Of Double)
-			Get
-				Return Me._WASTE
-			End Get
-			Set
-				If (Me._WASTE.Equals(value) = false) Then
-					Me.OnWASTEChanging(value)
-					Me.SendPropertyChanging
-					Me._WASTE = value
-					Me.SendPropertyChanged("WASTE")
-					Me.OnWASTEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COSTCOEF", DbType:="Float")>  _
-		Public Property COSTCOEF() As System.Nullable(Of Double)
-			Get
-				Return Me._COSTCOEF
-			End Get
-			Set
-				If (Me._COSTCOEF.Equals(value) = false) Then
-					Me.OnCOSTCOEFChanging(value)
-					Me.SendPropertyChanging
-					Me._COSTCOEF = value
-					Me.SendPropertyChanged("COSTCOEF")
-					Me.OnCOSTCOEFChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CONVPRC", DbType:="Float")>  _
-		Public Property CONVPRC() As System.Nullable(Of Double)
-			Get
-				Return Me._CONVPRC
-			End Get
-			Set
-				If (Me._CONVPRC.Equals(value) = false) Then
-					Me.OnCONVPRCChanging(value)
-					Me.SendPropertyChanging
-					Me._CONVPRC = value
-					Me.SendPropertyChanged("CONVPRC")
-					Me.OnCONVPRCChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_STAGE", DbType:="SmallInt")>  _
-		Public Property STAGE() As System.Nullable(Of Short)
-			Get
-				Return Me._STAGE
-			End Get
-			Set
-				If (Me._STAGE.Equals(value) = false) Then
-					Me.OnSTAGEChanging(value)
-					Me.SendPropertyChanging
-					Me._STAGE = value
-					Me.SendPropertyChanged("STAGE")
-					Me.OnSTAGEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_STAGELINENUM", DbType:="SmallInt")>  _
-		Public Property STAGELINENUM() As System.Nullable(Of Short)
-			Get
-				Return Me._STAGELINENUM
-			End Get
-			Set
-				If (Me._STAGELINENUM.Equals(value) = false) Then
-					Me.OnSTAGELINENUMChanging(value)
-					Me.SendPropertyChanging
-					Me._STAGELINENUM = value
-					Me.SendPropertyChanged("STAGELINENUM")
-					Me.OnSTAGELINENUMChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMSK", DbType:="VarChar(25)")>  _
-		Public Property ACNMSK() As String
-			Get
-				Return Me._ACNMSK
-			End Get
-			Set
-				If (String.Equals(Me._ACNMSK, value) = false) Then
-					Me.OnACNMSKChanging(value)
-					Me.SendPropertyChanging
-					Me._ACNMSK = value
-					Me.SendPropertyChanged("ACNMSK")
-					Me.OnACNMSKChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMSK1", DbType:="VarChar(25)")>  _
-		Public Property ACNMSK1() As String
-			Get
-				Return Me._ACNMSK1
-			End Get
-			Set
-				If (String.Equals(Me._ACNMSK1, value) = false) Then
-					Me.OnACNMSK1Changing(value)
-					Me.SendPropertyChanging
-					Me._ACNMSK1 = value
-					Me.SendPropertyChanged("ACNMSK1")
-					Me.OnACNMSK1Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINDOCS", DbType:="Int")>  _
-		Public Property FINDOCS() As System.Nullable(Of Integer)
-			Get
-				Return Me._FINDOCS
-			End Get
-			Set
-				If (Me._FINDOCS.Equals(value) = false) Then
-					Me.OnFINDOCSChanging(value)
-					Me.SendPropertyChanging
-					Me._FINDOCS = value
-					Me.SendPropertyChanged("FINDOCS")
-					Me.OnFINDOCSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRLINESS", DbType:="Int")>  _
-		Public Property MTRLINESS() As System.Nullable(Of Integer)
-			Get
-				Return Me._MTRLINESS
-			End Get
-			Set
-				If (Me._MTRLINESS.Equals(value) = false) Then
-					Me.OnMTRLINESSChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRLINESS = value
-					Me.SendPropertyChanged("MTRLINESS")
-					Me.OnMTRLINESSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINDOCL", DbType:="Int")>  _
-		Public Property FINDOCL() As System.Nullable(Of Integer)
-			Get
-				Return Me._FINDOCL
-			End Get
-			Set
-				If (Me._FINDOCL.Equals(value) = false) Then
-					Me.OnFINDOCLChanging(value)
-					Me.SendPropertyChanging
-					Me._FINDOCL = value
-					Me.SendPropertyChanged("FINDOCL")
-					Me.OnFINDOCLChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRLINESL", DbType:="Int")>  _
-		Public Property MTRLINESL() As System.Nullable(Of Integer)
-			Get
-				Return Me._MTRLINESL
-			End Get
-			Set
-				If (Me._MTRLINESL.Equals(value) = false) Then
-					Me.OnMTRLINESLChanging(value)
-					Me.SendPropertyChanging
-					Me._MTRLINESL = value
-					Me.SendPropertyChanged("MTRLINESL")
-					Me.OnMTRLINESLChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOANAL", DbType:="Text", UpdateCheck:=UpdateCheck.Never)>  _
-		Public Property SOANAL() As String
-			Get
-				Return Me._SOANAL
-			End Get
-			Set
-				If (String.Equals(Me._SOANAL, value) = false) Then
-					Me.OnSOANALChanging(value)
-					Me.SendPropertyChanging
-					Me._SOANAL = value
-					Me.SendPropertyChanged("SOANAL")
-					Me.OnSOANALChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SXMSKK", DbType:="Int")>  _
-		Public Property SXMSKK() As System.Nullable(Of Integer)
-			Get
-				Return Me._SXMSKK
-			End Get
-			Set
-				If (Me._SXMSKK.Equals(value) = false) Then
-					Me.OnSXMSKKChanging(value)
-					Me.SendPropertyChanging
-					Me._SXMSKK = value
-					Me.SendPropertyChanged("SXMSKK")
-					Me.OnSXMSKKChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SXPERC", DbType:="Float")>  _
-		Public Property SXPERC() As System.Nullable(Of Double)
-			Get
-				Return Me._SXPERC
-			End Get
-			Set
-				If (Me._SXPERC.Equals(value) = false) Then
-					Me.OnSXPERCChanging(value)
-					Me.SendPropertyChanging
-					Me._SXPERC = value
-					Me.SendPropertyChanged("SXPERC")
-					Me.OnSXPERCChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BGLEXCISE", DbType:="Float")>  _
-		Public Property BGLEXCISE() As System.Nullable(Of Double)
-			Get
-				Return Me._BGLEXCISE
-			End Get
-			Set
-				If (Me._BGLEXCISE.Equals(value) = false) Then
-					Me.OnBGLEXCISEChanging(value)
-					Me.SendPropertyChanging
-					Me._BGLEXCISE = value
-					Me.SendPropertyChanged("BGLEXCISE")
-					Me.OnBGLEXCISEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_AUTOPRDDOC", DbType:="SmallInt NOT NULL")>  _
-		Public Property AUTOPRDDOC() As Short
-			Get
-				Return Me._AUTOPRDDOC
-			End Get
-			Set
-				If ((Me._AUTOPRDDOC = value)  _
-							= false) Then
-					Me.OnAUTOPRDDOCChanging(value)
-					Me.SendPropertyChanging
-					Me._AUTOPRDDOC = value
-					Me.SendPropertyChanged("AUTOPRDDOC")
-					Me.OnAUTOPRDDOCChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMSKS", DbType:="VarChar(25)")>  _
-		Public Property ACNMSKS() As String
-			Get
-				Return Me._ACNMSKS
-			End Get
-			Set
-				If (String.Equals(Me._ACNMSKS, value) = false) Then
-					Me.OnACNMSKSChanging(value)
-					Me.SendPropertyChanging
-					Me._ACNMSKS = value
-					Me.SendPropertyChanged("ACNMSKS")
-					Me.OnACNMSKSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMSKX", DbType:="VarChar(25)")>  _
-		Public Property ACNMSKX() As String
-			Get
-				Return Me._ACNMSKX
-			End Get
-			Set
-				If (String.Equals(Me._ACNMSKX, value) = false) Then
-					Me.OnACNMSKXChanging(value)
-					Me.SendPropertyChanging
-					Me._ACNMSKX = value
-					Me.SendPropertyChanged("ACNMSKX")
-					Me.OnACNMSKXChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COSTCNTR", DbType:="Int")>  _
-		Public Property COSTCNTR() As System.Nullable(Of Integer)
-			Get
-				Return Me._COSTCNTR
-			End Get
-			Set
-				If (Me._COSTCNTR.Equals(value) = false) Then
-					Me.OnCOSTCNTRChanging(value)
-					Me.SendPropertyChanging
-					Me._COSTCNTR = value
-					Me.SendPropertyChanged("COSTCNTR")
-					Me.OnCOSTCNTRChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ITECALCTYPE", DbType:="SmallInt")>  _
-		Public Property ITECALCTYPE() As System.Nullable(Of Short)
-			Get
-				Return Me._ITECALCTYPE
-			End Get
-			Set
-				If (Me._ITECALCTYPE.Equals(value) = false) Then
-					Me.OnITECALCTYPEChanging(value)
-					Me.SendPropertyChanging
-					Me._ITECALCTYPE = value
-					Me.SendPropertyChanged("ITECALCTYPE")
-					Me.OnITECALCTYPEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_GUARTIME", DbType:="SmallInt")>  _
-		Public Property GUARTIME() As System.Nullable(Of Short)
-			Get
-				Return Me._GUARTIME
-			End Get
-			Set
-				If (Me._GUARTIME.Equals(value) = false) Then
-					Me.OnGUARTIMEChanging(value)
-					Me.SendPropertyChanging
-					Me._GUARTIME = value
-					Me.SendPropertyChanged("GUARTIME")
-					Me.OnGUARTIMEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SRVDEBITTYPE", DbType:="SmallInt")>  _
-		Public Property SRVDEBITTYPE() As System.Nullable(Of Short)
-			Get
-				Return Me._SRVDEBITTYPE
-			End Get
-			Set
-				If (Me._SRVDEBITTYPE.Equals(value) = false) Then
-					Me.OnSRVDEBITTYPEChanging(value)
-					Me.SendPropertyChanging
-					Me._SRVDEBITTYPE = value
-					Me.SendPropertyChanged("SRVDEBITTYPE")
-					Me.OnSRVDEBITTYPEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PACKSTATUS", DbType:="SmallInt")>  _
-		Public Property PACKSTATUS() As System.Nullable(Of Short)
-			Get
-				Return Me._PACKSTATUS
-			End Get
-			Set
-				If (Me._PACKSTATUS.Equals(value) = false) Then
-					Me.OnPACKSTATUSChanging(value)
-					Me.SendPropertyChanging
-					Me._PACKSTATUS = value
-					Me.SendPropertyChanged("PACKSTATUS")
-					Me.OnPACKSTATUSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PACKCODE1", DbType:="VarChar(15)")>  _
-		Public Property PACKCODE1() As String
-			Get
-				Return Me._PACKCODE1
-			End Get
-			Set
-				If (String.Equals(Me._PACKCODE1, value) = false) Then
-					Me.OnPACKCODE1Changing(value)
-					Me.SendPropertyChanging
-					Me._PACKCODE1 = value
-					Me.SendPropertyChanged("PACKCODE1")
-					Me.OnPACKCODE1Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PACKCODE2", DbType:="VarChar(15)")>  _
-		Public Property PACKCODE2() As String
-			Get
-				Return Me._PACKCODE2
-			End Get
-			Set
-				If (String.Equals(Me._PACKCODE2, value) = false) Then
-					Me.OnPACKCODE2Changing(value)
-					Me.SendPropertyChanging
-					Me._PACKCODE2 = value
-					Me.SendPropertyChanged("PACKCODE2")
-					Me.OnPACKCODE2Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LWMARKUP", DbType:="Float")>  _
-		Public Property LWMARKUP() As System.Nullable(Of Double)
-			Get
-				Return Me._LWMARKUP
-			End Get
-			Set
-				If (Me._LWMARKUP.Equals(value) = false) Then
-					Me.OnLWMARKUPChanging(value)
-					Me.SendPropertyChanging
-					Me._LWMARKUP = value
-					Me.SendPropertyChanged("LWMARKUP")
-					Me.OnLWMARKUPChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LRMARKUP", DbType:="Float")>  _
-		Public Property LRMARKUP() As System.Nullable(Of Double)
-			Get
-				Return Me._LRMARKUP
-			End Get
-			Set
-				If (Me._LRMARKUP.Equals(value) = false) Then
-					Me.OnLRMARKUPChanging(value)
-					Me.SendPropertyChanging
-					Me._LRMARKUP = value
-					Me.SendPropertyChanged("LRMARKUP")
-					Me.OnLRMARKUPChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NUM01", DbType:="Float")>  _
-		Public Property NUM01() As System.Nullable(Of Double)
-			Get
-				Return Me._NUM01
-			End Get
-			Set
-				If (Me._NUM01.Equals(value) = false) Then
-					Me.OnNUM01Changing(value)
-					Me.SendPropertyChanging
-					Me._NUM01 = value
-					Me.SendPropertyChanged("NUM01")
-					Me.OnNUM01Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NUM02", DbType:="Float")>  _
-		Public Property NUM02() As System.Nullable(Of Double)
-			Get
-				Return Me._NUM02
-			End Get
-			Set
-				If (Me._NUM02.Equals(value) = false) Then
-					Me.OnNUM02Changing(value)
-					Me.SendPropertyChanging
-					Me._NUM02 = value
-					Me.SendPropertyChanged("NUM02")
-					Me.OnNUM02Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NUM03", DbType:="Float")>  _
-		Public Property NUM03() As System.Nullable(Of Double)
-			Get
-				Return Me._NUM03
-			End Get
-			Set
-				If (Me._NUM03.Equals(value) = false) Then
-					Me.OnNUM03Changing(value)
-					Me.SendPropertyChanging
-					Me._NUM03 = value
-					Me.SendPropertyChanged("NUM03")
-					Me.OnNUM03Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NUM04", DbType:="Float")>  _
-		Public Property NUM04() As System.Nullable(Of Double)
-			Get
-				Return Me._NUM04
-			End Get
-			Set
-				If (Me._NUM04.Equals(value) = false) Then
-					Me.OnNUM04Changing(value)
-					Me.SendPropertyChanging
-					Me._NUM04 = value
-					Me.SendPropertyChanged("NUM04")
-					Me.OnNUM04Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BOOL01", DbType:="SmallInt")>  _
-		Public Property BOOL01() As System.Nullable(Of Short)
-			Get
-				Return Me._BOOL01
-			End Get
-			Set
-				If (Me._BOOL01.Equals(value) = false) Then
-					Me.OnBOOL01Changing(value)
-					Me.SendPropertyChanging
-					Me._BOOL01 = value
-					Me.SendPropertyChanged("BOOL01")
-					Me.OnBOOL01Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BOOL02", DbType:="SmallInt")>  _
-		Public Property BOOL02() As System.Nullable(Of Short)
-			Get
-				Return Me._BOOL02
-			End Get
-			Set
-				If (Me._BOOL02.Equals(value) = false) Then
-					Me.OnBOOL02Changing(value)
-					Me.SendPropertyChanging
-					Me._BOOL02 = value
-					Me.SendPropertyChanged("BOOL02")
-					Me.OnBOOL02Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DATE01", DbType:="DateTime")>  _
-		Public Property DATE01() As System.Nullable(Of Date)
-			Get
-				Return Me._DATE01
-			End Get
-			Set
-				If (Me._DATE01.Equals(value) = false) Then
-					Me.OnDATE01Changing(value)
-					Me.SendPropertyChanging
-					Me._DATE01 = value
-					Me.SendPropertyChanged("DATE01")
-					Me.OnDATE01Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DATE02", DbType:="DateTime")>  _
-		Public Property DATE02() As System.Nullable(Of Date)
-			Get
-				Return Me._DATE02
-			End Get
-			Set
-				If (Me._DATE02.Equals(value) = false) Then
-					Me.OnDATE02Changing(value)
-					Me.SendPropertyChanging
-					Me._DATE02 = value
-					Me.SendPropertyChanged("DATE02")
-					Me.OnDATE02Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_UFTBL01", DbType:="SmallInt")>  _
-		Public Property UFTBL01() As System.Nullable(Of Short)
-			Get
-				Return Me._UFTBL01
-			End Get
-			Set
-				If (Me._UFTBL01.Equals(value) = false) Then
-					Me.OnUFTBL01Changing(value)
-					Me.SendPropertyChanging
-					Me._UFTBL01 = value
-					Me.SendPropertyChanged("UFTBL01")
-					Me.OnUFTBL01Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_UFTBL02", DbType:="SmallInt")>  _
-		Public Property UFTBL02() As System.Nullable(Of Short)
-			Get
-				Return Me._UFTBL02
-			End Get
-			Set
-				If (Me._UFTBL02.Equals(value) = false) Then
-					Me.OnUFTBL02Changing(value)
-					Me.SendPropertyChanging
-					Me._UFTBL02 = value
-					Me.SendPropertyChanged("UFTBL02")
-					Me.OnUFTBL02Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_cccTrdDep", DbType:="Int")>  _
-		Public Property cccTrdDep() As System.Nullable(Of Integer)
-			Get
-				Return Me._cccTrdDep
-			End Get
-			Set
-				If (Me._cccTrdDep.Equals(value) = false) Then
-					Me.OncccTrdDepChanging(value)
-					Me.SendPropertyChanging
-					Me._cccTrdDep = value
-					Me.SendPropertyChanged("cccTrdDep")
-					Me.OncccTrdDepChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_cccTrdr", DbType:="Int")>  _
-		Public Property cccTrdr() As System.Nullable(Of Integer)
-			Get
-				Return Me._cccTrdr
-			End Get
-			Set
-				If (Me._cccTrdr.Equals(value) = false) Then
-					Me.OncccTrdrChanging(value)
-					Me.SendPropertyChanging
-					Me._cccTrdr = value
-					Me.SendPropertyChanged("cccTrdr")
-					Me.OncccTrdrChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_INST", DbType:="Int")>  _
-		Public Property INST() As System.Nullable(Of Integer)
-			Get
-				Return Me._INST
-			End Get
-			Set
-				If (Me._INST.Equals(value) = false) Then
-					Me.OnINSTChanging(value)
-					Me.SendPropertyChanging
-					Me._INST = value
-					Me.SendPropertyChanged("INST")
-					Me.OnINSTChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CNTR", DbType:="Int")>  _
-		Public Property CNTR() As System.Nullable(Of Integer)
-			Get
-				Return Me._CNTR
-			End Get
-			Set
-				If (Me._CNTR.Equals(value) = false) Then
-					Me.OnCNTRChanging(value)
-					Me.SendPropertyChanging
-					Me._CNTR = value
-					Me.SendPropertyChanged("CNTR")
-					Me.OnCNTRChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_VAT1", DbType:="Int")>  _
-		Public Property VAT1() As System.Nullable(Of Integer)
-			Get
-				Return Me._VAT1
-			End Get
-			Set
-				If (Me._VAT1.Equals(value) = false) Then
-					Me.OnVAT1Changing(value)
-					Me.SendPropertyChanging
-					Me._VAT1 = value
-					Me.SendPropertyChanged("VAT1")
-					Me.OnVAT1Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CUSTOMSLOT", DbType:="Int")>  _
-		Public Property CUSTOMSLOT() As System.Nullable(Of Integer)
-			Get
-				Return Me._CUSTOMSLOT
-			End Get
-			Set
-				If (Me._CUSTOMSLOT.Equals(value) = false) Then
-					Me.OnCUSTOMSLOTChanging(value)
-					Me.SendPropertyChanging
-					Me._CUSTOMSLOT = value
-					Me.SendPropertyChanged("CUSTOMSLOT")
-					Me.OnCUSTOMSLOTChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CMTRUNIT", DbType:="SmallInt")>  _
-		Public Property CMTRUNIT() As System.Nullable(Of Short)
-			Get
-				Return Me._CMTRUNIT
-			End Get
-			Set
-				If (Me._CMTRUNIT.Equals(value) = false) Then
-					Me.OnCMTRUNITChanging(value)
-					Me.SendPropertyChanging
-					Me._CMTRUNIT = value
-					Me.SendPropertyChanged("CMTRUNIT")
-					Me.OnCMTRUNITChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QUANTITY", DbType:="Float")>  _
-		Public Property QUANTITY() As System.Nullable(Of Double)
-			Get
-				Return Me._QUANTITY
-			End Get
-			Set
-				If (Me._QUANTITY.Equals(value) = false) Then
-					Me.OnQUANTITYChanging(value)
-					Me.SendPropertyChanging
-					Me._QUANTITY = value
-					Me.SendPropertyChanged("QUANTITY")
-					Me.OnQUANTITYChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_GROSSMASS", DbType:="Float")>  _
-		Public Property GROSSMASS() As System.Nullable(Of Double)
-			Get
-				Return Me._GROSSMASS
-			End Get
-			Set
-				If (Me._GROSSMASS.Equals(value) = false) Then
-					Me.OnGROSSMASSChanging(value)
-					Me.SendPropertyChanging
-					Me._GROSSMASS = value
-					Me.SendPropertyChanged("GROSSMASS")
-					Me.OnGROSSMASSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NETMASS", DbType:="Float")>  _
-		Public Property NETMASS() As System.Nullable(Of Double)
-			Get
-				Return Me._NETMASS
-			End Get
-			Set
-				If (Me._NETMASS.Equals(value) = false) Then
-					Me.OnNETMASSChanging(value)
-					Me.SendPropertyChanging
-					Me._NETMASS = value
-					Me.SendPropertyChanged("NETMASS")
-					Me.OnNETMASSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BOND", DbType:="Int")>  _
-		Public Property BOND() As System.Nullable(Of Integer)
-			Get
-				Return Me._BOND
-			End Get
-			Set
-				If (Me._BOND.Equals(value) = false) Then
-					Me.OnBONDChanging(value)
-					Me.SendPropertyChanging
-					Me._BOND = value
-					Me.SendPropertyChanged("BOND")
-					Me.OnBONDChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PSPCS", DbType:="Int")>  _
-		Public Property PSPCS() As System.Nullable(Of Integer)
-			Get
-				Return Me._PSPCS
-			End Get
-			Set
-				If (Me._PSPCS.Equals(value) = false) Then
-					Me.OnPSPCSChanging(value)
-					Me.SendPropertyChanging
-					Me._PSPCS = value
-					Me.SendPropertyChanged("PSPCS")
-					Me.OnPSPCSChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNDOCCATEGORY", DbType:="Int")>  _
-		Public Property ACNDOCCATEGORY() As System.Nullable(Of Integer)
-			Get
-				Return Me._ACNDOCCATEGORY
-			End Get
-			Set
-				If (Me._ACNDOCCATEGORY.Equals(value) = false) Then
-					Me.OnACNDOCCATEGORYChanging(value)
-					Me.SendPropertyChanging
-					Me._ACNDOCCATEGORY = value
-					Me.SendPropertyChanged("ACNDOCCATEGORY")
-					Me.OnACNDOCCATEGORYChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="MTRL_MTRLINE", Storage:="_MTRL1", ThisKey:="MTRL", OtherKey:="MTRL", IsForeignKey:=true)>  _
-		Public Property MTRL1() As MTRL
-			Get
-				Return Me._MTRL1.Entity
-			End Get
-			Set
-				Dim previousValue As MTRL = Me._MTRL1.Entity
-				If ((Object.Equals(previousValue, value) = false)  _
-							OrElse (Me._MTRL1.HasLoadedOrAssignedValue = false)) Then
-					Me.SendPropertyChanging
-					If ((previousValue Is Nothing)  _
-								= false) Then
-						Me._MTRL1.Entity = Nothing
-						previousValue.MTRLINEs.Remove(Me)
-					End If
-					Me._MTRL1.Entity = value
-					If ((value Is Nothing)  _
-								= false) Then
-						value.MTRLINEs.Add(Me)
-						Me._MTRL = value.MTRL
-					Else
-						Me._MTRL = CType(Nothing, Integer)
-					End If
-					Me.SendPropertyChanged("MTRL1")
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="FINDOC_MTRLINE", Storage:="_FINDOC1", ThisKey:="FINDOC", OtherKey:="FINDOC", IsForeignKey:=true, DeleteOnNull:=true, DeleteRule:="CASCADE")>  _
-		Public Property FINDOC1() As FINDOC
-			Get
-				Return Me._FINDOC1.Entity
-			End Get
-			Set
-				Dim previousValue As FINDOC = Me._FINDOC1.Entity
-				If ((Object.Equals(previousValue, value) = false)  _
-							OrElse (Me._FINDOC1.HasLoadedOrAssignedValue = false)) Then
-					Me.SendPropertyChanging
-					If ((previousValue Is Nothing)  _
-								= false) Then
-						Me._FINDOC1.Entity = Nothing
-						previousValue.MTRLINEs.Remove(Me)
-					End If
-					Me._FINDOC1.Entity = value
-					If ((value Is Nothing)  _
-								= false) Then
-						value.MTRLINEs.Add(Me)
-						Me._FINDOC = value.FINDOC
-					Else
-						Me._FINDOC = CType(Nothing, Integer)
-					End If
-					Me.SendPropertyChanged("FINDOC1")
 				End If
 			End Set
 		End Property
@@ -19964,13 +16841,13 @@ Namespace Revera
 		
 		Private _FINPAYTERMs As EntitySet(Of FINPAYTERM)
 		
-		Private _MTRLINEs As EntitySet(Of MTRLINE)
-		
 		Private _MTRDOC As EntityRef(Of MTRDOC)
 		
 		Private _FINDOCs1 As EntitySet(Of FINDOC)
 		
 		Private _FINDOCs2 As EntitySet(Of FINDOC)
+		
+		Private _MTRLINEs As EntitySet(Of MTRLINE)
 		
 		Private _BRANCH1 As EntityRef(Of BRANCH)
 		
@@ -20670,10 +17547,10 @@ Namespace Revera
 		Public Sub New()
 			MyBase.New
 			Me._FINPAYTERMs = New EntitySet(Of FINPAYTERM)(AddressOf Me.attach_FINPAYTERMs, AddressOf Me.detach_FINPAYTERMs)
-			Me._MTRLINEs = New EntitySet(Of MTRLINE)(AddressOf Me.attach_MTRLINEs, AddressOf Me.detach_MTRLINEs)
 			Me._MTRDOC = CType(Nothing, EntityRef(Of MTRDOC))
 			Me._FINDOCs1 = New EntitySet(Of FINDOC)(AddressOf Me.attach_FINDOCs1, AddressOf Me.detach_FINDOCs1)
 			Me._FINDOCs2 = New EntitySet(Of FINDOC)(AddressOf Me.attach_FINDOCs2, AddressOf Me.detach_FINDOCs2)
+			Me._MTRLINEs = New EntitySet(Of MTRLINE)(AddressOf Me.attach_MTRLINEs, AddressOf Me.detach_MTRLINEs)
 			Me._BRANCH1 = CType(Nothing, EntityRef(Of BRANCH))
 			Me._FINDOC1 = CType(Nothing, EntityRef(Of FINDOC))
 			Me._FINDOC2 = CType(Nothing, EntityRef(Of FINDOC))
@@ -23476,16 +20353,6 @@ Namespace Revera
 			End Set
 		End Property
 		
-		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="FINDOC_MTRLINE", Storage:="_MTRLINEs", ThisKey:="FINDOC", OtherKey:="FINDOC")>  _
-		Public Property MTRLINEs() As EntitySet(Of MTRLINE)
-			Get
-				Return Me._MTRLINEs
-			End Get
-			Set
-				Me._MTRLINEs.Assign(value)
-			End Set
-		End Property
-		
 		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="FINDOC_MTRDOC", Storage:="_MTRDOC", ThisKey:="FINDOC", OtherKey:="FINDOC", IsUnique:=true, IsForeignKey:=false)>  _
 		Public Property MTRDOC() As MTRDOC
 			Get
@@ -23527,6 +20394,16 @@ Namespace Revera
 			End Get
 			Set
 				Me._FINDOCs2.Assign(value)
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="FINDOC_MTRLINE", Storage:="_MTRLINEs", ThisKey:="FINDOC", OtherKey:="FINDOC")>  _
+		Public Property MTRLINEs() As EntitySet(Of MTRLINE)
+			Get
+				Return Me._MTRLINEs
+			End Get
+			Set
+				Me._MTRLINEs.Assign(value)
 			End Set
 		End Property
 		
@@ -23704,16 +20581,6 @@ Namespace Revera
 			entity.FINDOC1 = Nothing
 		End Sub
 		
-		Private Sub attach_MTRLINEs(ByVal entity As MTRLINE)
-			Me.SendPropertyChanging
-			entity.FINDOC1 = Me
-		End Sub
-		
-		Private Sub detach_MTRLINEs(ByVal entity As MTRLINE)
-			Me.SendPropertyChanging
-			entity.FINDOC1 = Nothing
-		End Sub
-		
 		Private Sub attach_FINDOCs1(ByVal entity As FINDOC)
 			Me.SendPropertyChanging
 			entity.FINDOC1 = Me
@@ -23732,6 +20599,3249 @@ Namespace Revera
 		Private Sub detach_FINDOCs2(ByVal entity As FINDOC)
 			Me.SendPropertyChanging
 			entity.FINDOC2 = Nothing
+		End Sub
+		
+		Private Sub attach_MTRLINEs(ByVal entity As MTRLINE)
+			Me.SendPropertyChanging
+			entity.FINDOC1 = Me
+		End Sub
+		
+		Private Sub detach_MTRLINEs(ByVal entity As MTRLINE)
+			Me.SendPropertyChanging
+			entity.FINDOC1 = Nothing
+		End Sub
+	End Class
+	
+	<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MTRLINES")>  _
+	Partial Public Class MTRLINE
+		Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+		
+		Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+		
+		Private _COMPANY As Short
+		
+		Private _FINDOC As Integer
+		
+		Private _MTRLINES As Integer
+		
+		Private _LINENUM As Integer
+		
+		Private _SODTYPE As Short
+		
+		Private _MTRL As Integer
+		
+		Private _PENDING As Short
+		
+		Private _RESTMODE As System.Nullable(Of Short)
+		
+		Private _SOSOURCE As Integer
+		
+		Private _SOREDIR As Integer
+		
+		Private _SCODE As String
+		
+		Private _MTRTYPE As Short
+		
+		Private _SOTYPE As Short
+		
+		Private _WHOUSE As System.Nullable(Of Short)
+		
+		Private _WHOUSESEC As System.Nullable(Of Short)
+		
+		Private _MTRUNIT As System.Nullable(Of Short)
+		
+		Private _VAT As Short
+		
+		Private _PRJC As System.Nullable(Of Integer)
+		
+		Private _PRJLINES As System.Nullable(Of Integer)
+		
+		Private _PRJCSTAGE As System.Nullable(Of Short)
+		
+		Private _MTRPRJCBLD As System.Nullable(Of Short)
+		
+		Private _SOEXPTYPE As System.Nullable(Of Short)
+		
+		Private _SALESMAN As System.Nullable(Of Integer)
+		
+		Private _RSRC As System.Nullable(Of Integer)
+		
+		Private _MTRLOT As System.Nullable(Of Integer)
+		
+		Private _ASSDEPR As System.Nullable(Of Integer)
+		
+		Private _WHOUSEBIN As System.Nullable(Of Short)
+		
+		Private _WHOUSEBINSEC As System.Nullable(Of Short)
+		
+		Private _BUSUNITS As System.Nullable(Of Short)
+		
+		Private _MTRSEASON As System.Nullable(Of Short)
+		
+		Private _MTRCATEGORY As System.Nullable(Of Short)
+		
+		Private _PRCPOLICY As System.Nullable(Of Short)
+		
+		Private _SPCS As System.Nullable(Of Integer)
+		
+		Private _MTRPACK As System.Nullable(Of Integer)
+		
+		Private _QTYP As System.Nullable(Of Double)
+		
+		Private _QTY As System.Nullable(Of Double)
+		
+		Private _QTY1 As Double
+		
+		Private _QTY2 As Double
+		
+		Private _QTY1COV As Double
+		
+		Private _QTY1CANC As Double
+		
+		Private _QTY1FCOV As Double
+		
+		Private _SHIPDATE As System.Nullable(Of Date)
+		
+		Private _DELIVDATE As System.Nullable(Of Date)
+		
+		Private _WEIGHT As System.Nullable(Of Double)
+		
+		Private _VOLUME As System.Nullable(Of Double)
+		
+		Private _INTVAL As System.Nullable(Of Double)
+		
+		Private _INTVAT As System.Nullable(Of Double)
+		
+		Private _BGINTCOUNTRY As System.Nullable(Of Short)
+		
+		Private _BGINTDISTRICT As System.Nullable(Of Short)
+		
+		Private _DUTY As System.Nullable(Of Double)
+		
+		Private _PLSMVAL As System.Nullable(Of Double)
+		
+		Private _PLSMVAT As System.Nullable(Of Double)
+		
+		Private _PRICE As System.Nullable(Of Double)
+		
+		Private _PRICE1 As System.Nullable(Of Double)
+		
+		Private _LINEVAL As System.Nullable(Of Double)
+		
+		Private _LLINEVAL As System.Nullable(Of Double)
+		
+		Private _EXPVAL As System.Nullable(Of Double)
+		
+		Private _LEXPVAL As Double
+		
+		Private _LEXPVAL1 As System.Nullable(Of Double)
+		
+		Private _LEXPVATVAL1 As System.Nullable(Of Double)
+		
+		Private _DISC1PRC As System.Nullable(Of Double)
+		
+		Private _DISC2PRC As System.Nullable(Of Double)
+		
+		Private _DISC3PRC As System.Nullable(Of Double)
+		
+		Private _DISC1VAL As System.Nullable(Of Double)
+		
+		Private _LDISC1VAL As System.Nullable(Of Double)
+		
+		Private _DISC2VAL As System.Nullable(Of Double)
+		
+		Private _LDISC2VAL As System.Nullable(Of Double)
+		
+		Private _DISC3VAL As System.Nullable(Of Double)
+		
+		Private _LDISC3VAL As System.Nullable(Of Double)
+		
+		Private _NETLINEVAL As Double
+		
+		Private _LNETLINEVAL As Double
+		
+		Private _VATAMNT As Double
+		
+		Private _LVATAMNT As Double
+		
+		Private _LVATNOEXM As System.Nullable(Of Double)
+		
+		Private _SALESCVAL As System.Nullable(Of Double)
+		
+		Private _EFKVAL As Double
+		
+		Private _COMMENTS As String
+		
+		Private _COMMENTS1 As String
+		
+		Private _COMMENTS2 As String
+		
+		Private _DIMENSION1 As System.Nullable(Of Double)
+		
+		Private _DIMENSION2 As System.Nullable(Of Double)
+		
+		Private _DIMENSION3 As System.Nullable(Of Double)
+		
+		Private _TRNLINEVAL As System.Nullable(Of Double)
+		
+		Private _LTRNLINEVAL As System.Nullable(Of Double)
+		
+		Private _PRCRULEDATA As String
+		
+		Private _INSTALMENTS As System.Nullable(Of Short)
+		
+		Private _WASTE As System.Nullable(Of Double)
+		
+		Private _COSTCOEF As System.Nullable(Of Double)
+		
+		Private _CONVPRC As System.Nullable(Of Double)
+		
+		Private _STAGE As System.Nullable(Of Short)
+		
+		Private _STAGELINENUM As System.Nullable(Of Short)
+		
+		Private _ACNMSK As String
+		
+		Private _ACNMSK1 As String
+		
+		Private _FINDOCS As System.Nullable(Of Integer)
+		
+		Private _MTRLINESS As System.Nullable(Of Integer)
+		
+		Private _FINDOCL As System.Nullable(Of Integer)
+		
+		Private _MTRLINESL As System.Nullable(Of Integer)
+		
+		Private _SOANAL As String
+		
+		Private _SXMSKK As System.Nullable(Of Integer)
+		
+		Private _SXPERC As System.Nullable(Of Double)
+		
+		Private _BGLEXCISE As System.Nullable(Of Double)
+		
+		Private _AUTOPRDDOC As Short
+		
+		Private _ACNMSKS As String
+		
+		Private _ACNMSKX As String
+		
+		Private _COSTCNTR As System.Nullable(Of Integer)
+		
+		Private _ITECALCTYPE As System.Nullable(Of Short)
+		
+		Private _GUARTIME As System.Nullable(Of Short)
+		
+		Private _SRVDEBITTYPE As System.Nullable(Of Short)
+		
+		Private _PACKSTATUS As System.Nullable(Of Short)
+		
+		Private _PACKCODE1 As String
+		
+		Private _PACKCODE2 As String
+		
+		Private _LWMARKUP As System.Nullable(Of Double)
+		
+		Private _LRMARKUP As System.Nullable(Of Double)
+		
+		Private _NUM01 As System.Nullable(Of Double)
+		
+		Private _NUM02 As System.Nullable(Of Double)
+		
+		Private _NUM03 As System.Nullable(Of Double)
+		
+		Private _NUM04 As System.Nullable(Of Double)
+		
+		Private _BOOL01 As System.Nullable(Of Short)
+		
+		Private _BOOL02 As System.Nullable(Of Short)
+		
+		Private _DATE01 As System.Nullable(Of Date)
+		
+		Private _DATE02 As System.Nullable(Of Date)
+		
+		Private _UFTBL01 As System.Nullable(Of Short)
+		
+		Private _UFTBL02 As System.Nullable(Of Short)
+		
+		Private _cccTrdDep As System.Nullable(Of Integer)
+		
+		Private _cccTrdr As System.Nullable(Of Integer)
+		
+		Private _INST As System.Nullable(Of Integer)
+		
+		Private _CNTR As System.Nullable(Of Integer)
+		
+		Private _VAT1 As System.Nullable(Of Integer)
+		
+		Private _CUSTOMSLOT As System.Nullable(Of Integer)
+		
+		Private _CMTRUNIT As System.Nullable(Of Short)
+		
+		Private _QUANTITY As System.Nullable(Of Double)
+		
+		Private _GROSSMASS As System.Nullable(Of Double)
+		
+		Private _NETMASS As System.Nullable(Of Double)
+		
+		Private _BOND As System.Nullable(Of Integer)
+		
+		Private _PSPCS As System.Nullable(Of Integer)
+		
+		Private _ACNDOCCATEGORY As System.Nullable(Of Integer)
+		
+		Private _MYDATACODE As System.Nullable(Of Short)
+		
+		Private _ACNMODEL As System.Nullable(Of Short)
+		
+		Private _CPVCODE As System.Nullable(Of Integer)
+		
+		Private _ccCAFINDOC As System.Nullable(Of Integer)
+		
+		Private _ccCAMTRLINES As System.Nullable(Of Integer)
+		
+		Private _FINDOC1 As EntityRef(Of FINDOC)
+		
+		Private _MTRL1 As EntityRef(Of MTRL)
+		
+    #Region "Extensibility Method Definitions"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnCOMPANYChanging(value As Short)
+    End Sub
+    Partial Private Sub OnCOMPANYChanged()
+    End Sub
+    Partial Private Sub OnFINDOCChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnFINDOCChanged()
+    End Sub
+    Partial Private Sub OnMTRLINESChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnMTRLINESChanged()
+    End Sub
+    Partial Private Sub OnLINENUMChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnLINENUMChanged()
+    End Sub
+    Partial Private Sub OnSODTYPEChanging(value As Short)
+    End Sub
+    Partial Private Sub OnSODTYPEChanged()
+    End Sub
+    Partial Private Sub OnMTRLChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnMTRLChanged()
+    End Sub
+    Partial Private Sub OnPENDINGChanging(value As Short)
+    End Sub
+    Partial Private Sub OnPENDINGChanged()
+    End Sub
+    Partial Private Sub OnRESTMODEChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnRESTMODEChanged()
+    End Sub
+    Partial Private Sub OnSOSOURCEChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnSOSOURCEChanged()
+    End Sub
+    Partial Private Sub OnSOREDIRChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnSOREDIRChanged()
+    End Sub
+    Partial Private Sub OnSCODEChanging(value As String)
+    End Sub
+    Partial Private Sub OnSCODEChanged()
+    End Sub
+    Partial Private Sub OnMTRTYPEChanging(value As Short)
+    End Sub
+    Partial Private Sub OnMTRTYPEChanged()
+    End Sub
+    Partial Private Sub OnSOTYPEChanging(value As Short)
+    End Sub
+    Partial Private Sub OnSOTYPEChanged()
+    End Sub
+    Partial Private Sub OnWHOUSEChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnWHOUSEChanged()
+    End Sub
+    Partial Private Sub OnWHOUSESECChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnWHOUSESECChanged()
+    End Sub
+    Partial Private Sub OnMTRUNITChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnMTRUNITChanged()
+    End Sub
+    Partial Private Sub OnVATChanging(value As Short)
+    End Sub
+    Partial Private Sub OnVATChanged()
+    End Sub
+    Partial Private Sub OnPRJCChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnPRJCChanged()
+    End Sub
+    Partial Private Sub OnPRJLINESChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnPRJLINESChanged()
+    End Sub
+    Partial Private Sub OnPRJCSTAGEChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnPRJCSTAGEChanged()
+    End Sub
+    Partial Private Sub OnMTRPRJCBLDChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnMTRPRJCBLDChanged()
+    End Sub
+    Partial Private Sub OnSOEXPTYPEChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnSOEXPTYPEChanged()
+    End Sub
+    Partial Private Sub OnSALESMANChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnSALESMANChanged()
+    End Sub
+    Partial Private Sub OnRSRCChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnRSRCChanged()
+    End Sub
+    Partial Private Sub OnMTRLOTChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnMTRLOTChanged()
+    End Sub
+    Partial Private Sub OnASSDEPRChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnASSDEPRChanged()
+    End Sub
+    Partial Private Sub OnWHOUSEBINChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnWHOUSEBINChanged()
+    End Sub
+    Partial Private Sub OnWHOUSEBINSECChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnWHOUSEBINSECChanged()
+    End Sub
+    Partial Private Sub OnBUSUNITSChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnBUSUNITSChanged()
+    End Sub
+    Partial Private Sub OnMTRSEASONChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnMTRSEASONChanged()
+    End Sub
+    Partial Private Sub OnMTRCATEGORYChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnMTRCATEGORYChanged()
+    End Sub
+    Partial Private Sub OnPRCPOLICYChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnPRCPOLICYChanged()
+    End Sub
+    Partial Private Sub OnSPCSChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnSPCSChanged()
+    End Sub
+    Partial Private Sub OnMTRPACKChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnMTRPACKChanged()
+    End Sub
+    Partial Private Sub OnQTYPChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnQTYPChanged()
+    End Sub
+    Partial Private Sub OnQTYChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnQTYChanged()
+    End Sub
+    Partial Private Sub OnQTY1Changing(value As Double)
+    End Sub
+    Partial Private Sub OnQTY1Changed()
+    End Sub
+    Partial Private Sub OnQTY2Changing(value As Double)
+    End Sub
+    Partial Private Sub OnQTY2Changed()
+    End Sub
+    Partial Private Sub OnQTY1COVChanging(value As Double)
+    End Sub
+    Partial Private Sub OnQTY1COVChanged()
+    End Sub
+    Partial Private Sub OnQTY1CANCChanging(value As Double)
+    End Sub
+    Partial Private Sub OnQTY1CANCChanged()
+    End Sub
+    Partial Private Sub OnQTY1FCOVChanging(value As Double)
+    End Sub
+    Partial Private Sub OnQTY1FCOVChanged()
+    End Sub
+    Partial Private Sub OnSHIPDATEChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnSHIPDATEChanged()
+    End Sub
+    Partial Private Sub OnDELIVDATEChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnDELIVDATEChanged()
+    End Sub
+    Partial Private Sub OnWEIGHTChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnWEIGHTChanged()
+    End Sub
+    Partial Private Sub OnVOLUMEChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnVOLUMEChanged()
+    End Sub
+    Partial Private Sub OnINTVALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnINTVALChanged()
+    End Sub
+    Partial Private Sub OnINTVATChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnINTVATChanged()
+    End Sub
+    Partial Private Sub OnBGINTCOUNTRYChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnBGINTCOUNTRYChanged()
+    End Sub
+    Partial Private Sub OnBGINTDISTRICTChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnBGINTDISTRICTChanged()
+    End Sub
+    Partial Private Sub OnDUTYChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnDUTYChanged()
+    End Sub
+    Partial Private Sub OnPLSMVALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnPLSMVALChanged()
+    End Sub
+    Partial Private Sub OnPLSMVATChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnPLSMVATChanged()
+    End Sub
+    Partial Private Sub OnPRICEChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnPRICEChanged()
+    End Sub
+    Partial Private Sub OnPRICE1Changing(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnPRICE1Changed()
+    End Sub
+    Partial Private Sub OnLINEVALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLINEVALChanged()
+    End Sub
+    Partial Private Sub OnLLINEVALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLLINEVALChanged()
+    End Sub
+    Partial Private Sub OnEXPVALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnEXPVALChanged()
+    End Sub
+    Partial Private Sub OnLEXPVALChanging(value As Double)
+    End Sub
+    Partial Private Sub OnLEXPVALChanged()
+    End Sub
+    Partial Private Sub OnLEXPVAL1Changing(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLEXPVAL1Changed()
+    End Sub
+    Partial Private Sub OnLEXPVATVAL1Changing(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLEXPVATVAL1Changed()
+    End Sub
+    Partial Private Sub OnDISC1PRCChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnDISC1PRCChanged()
+    End Sub
+    Partial Private Sub OnDISC2PRCChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnDISC2PRCChanged()
+    End Sub
+    Partial Private Sub OnDISC3PRCChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnDISC3PRCChanged()
+    End Sub
+    Partial Private Sub OnDISC1VALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnDISC1VALChanged()
+    End Sub
+    Partial Private Sub OnLDISC1VALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLDISC1VALChanged()
+    End Sub
+    Partial Private Sub OnDISC2VALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnDISC2VALChanged()
+    End Sub
+    Partial Private Sub OnLDISC2VALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLDISC2VALChanged()
+    End Sub
+    Partial Private Sub OnDISC3VALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnDISC3VALChanged()
+    End Sub
+    Partial Private Sub OnLDISC3VALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLDISC3VALChanged()
+    End Sub
+    Partial Private Sub OnNETLINEVALChanging(value As Double)
+    End Sub
+    Partial Private Sub OnNETLINEVALChanged()
+    End Sub
+    Partial Private Sub OnLNETLINEVALChanging(value As Double)
+    End Sub
+    Partial Private Sub OnLNETLINEVALChanged()
+    End Sub
+    Partial Private Sub OnVATAMNTChanging(value As Double)
+    End Sub
+    Partial Private Sub OnVATAMNTChanged()
+    End Sub
+    Partial Private Sub OnLVATAMNTChanging(value As Double)
+    End Sub
+    Partial Private Sub OnLVATAMNTChanged()
+    End Sub
+    Partial Private Sub OnLVATNOEXMChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLVATNOEXMChanged()
+    End Sub
+    Partial Private Sub OnSALESCVALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnSALESCVALChanged()
+    End Sub
+    Partial Private Sub OnEFKVALChanging(value As Double)
+    End Sub
+    Partial Private Sub OnEFKVALChanged()
+    End Sub
+    Partial Private Sub OnCOMMENTSChanging(value As String)
+    End Sub
+    Partial Private Sub OnCOMMENTSChanged()
+    End Sub
+    Partial Private Sub OnCOMMENTS1Changing(value As String)
+    End Sub
+    Partial Private Sub OnCOMMENTS1Changed()
+    End Sub
+    Partial Private Sub OnCOMMENTS2Changing(value As String)
+    End Sub
+    Partial Private Sub OnCOMMENTS2Changed()
+    End Sub
+    Partial Private Sub OnDIMENSION1Changing(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnDIMENSION1Changed()
+    End Sub
+    Partial Private Sub OnDIMENSION2Changing(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnDIMENSION2Changed()
+    End Sub
+    Partial Private Sub OnDIMENSION3Changing(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnDIMENSION3Changed()
+    End Sub
+    Partial Private Sub OnTRNLINEVALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnTRNLINEVALChanged()
+    End Sub
+    Partial Private Sub OnLTRNLINEVALChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLTRNLINEVALChanged()
+    End Sub
+    Partial Private Sub OnPRCRULEDATAChanging(value As String)
+    End Sub
+    Partial Private Sub OnPRCRULEDATAChanged()
+    End Sub
+    Partial Private Sub OnINSTALMENTSChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnINSTALMENTSChanged()
+    End Sub
+    Partial Private Sub OnWASTEChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnWASTEChanged()
+    End Sub
+    Partial Private Sub OnCOSTCOEFChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnCOSTCOEFChanged()
+    End Sub
+    Partial Private Sub OnCONVPRCChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnCONVPRCChanged()
+    End Sub
+    Partial Private Sub OnSTAGEChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnSTAGEChanged()
+    End Sub
+    Partial Private Sub OnSTAGELINENUMChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnSTAGELINENUMChanged()
+    End Sub
+    Partial Private Sub OnACNMSKChanging(value As String)
+    End Sub
+    Partial Private Sub OnACNMSKChanged()
+    End Sub
+    Partial Private Sub OnACNMSK1Changing(value As String)
+    End Sub
+    Partial Private Sub OnACNMSK1Changed()
+    End Sub
+    Partial Private Sub OnFINDOCSChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnFINDOCSChanged()
+    End Sub
+    Partial Private Sub OnMTRLINESSChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnMTRLINESSChanged()
+    End Sub
+    Partial Private Sub OnFINDOCLChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnFINDOCLChanged()
+    End Sub
+    Partial Private Sub OnMTRLINESLChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnMTRLINESLChanged()
+    End Sub
+    Partial Private Sub OnSOANALChanging(value As String)
+    End Sub
+    Partial Private Sub OnSOANALChanged()
+    End Sub
+    Partial Private Sub OnSXMSKKChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnSXMSKKChanged()
+    End Sub
+    Partial Private Sub OnSXPERCChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnSXPERCChanged()
+    End Sub
+    Partial Private Sub OnBGLEXCISEChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnBGLEXCISEChanged()
+    End Sub
+    Partial Private Sub OnAUTOPRDDOCChanging(value As Short)
+    End Sub
+    Partial Private Sub OnAUTOPRDDOCChanged()
+    End Sub
+    Partial Private Sub OnACNMSKSChanging(value As String)
+    End Sub
+    Partial Private Sub OnACNMSKSChanged()
+    End Sub
+    Partial Private Sub OnACNMSKXChanging(value As String)
+    End Sub
+    Partial Private Sub OnACNMSKXChanged()
+    End Sub
+    Partial Private Sub OnCOSTCNTRChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnCOSTCNTRChanged()
+    End Sub
+    Partial Private Sub OnITECALCTYPEChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnITECALCTYPEChanged()
+    End Sub
+    Partial Private Sub OnGUARTIMEChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnGUARTIMEChanged()
+    End Sub
+    Partial Private Sub OnSRVDEBITTYPEChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnSRVDEBITTYPEChanged()
+    End Sub
+    Partial Private Sub OnPACKSTATUSChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnPACKSTATUSChanged()
+    End Sub
+    Partial Private Sub OnPACKCODE1Changing(value As String)
+    End Sub
+    Partial Private Sub OnPACKCODE1Changed()
+    End Sub
+    Partial Private Sub OnPACKCODE2Changing(value As String)
+    End Sub
+    Partial Private Sub OnPACKCODE2Changed()
+    End Sub
+    Partial Private Sub OnLWMARKUPChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLWMARKUPChanged()
+    End Sub
+    Partial Private Sub OnLRMARKUPChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnLRMARKUPChanged()
+    End Sub
+    Partial Private Sub OnNUM01Changing(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnNUM01Changed()
+    End Sub
+    Partial Private Sub OnNUM02Changing(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnNUM02Changed()
+    End Sub
+    Partial Private Sub OnNUM03Changing(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnNUM03Changed()
+    End Sub
+    Partial Private Sub OnNUM04Changing(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnNUM04Changed()
+    End Sub
+    Partial Private Sub OnBOOL01Changing(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnBOOL01Changed()
+    End Sub
+    Partial Private Sub OnBOOL02Changing(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnBOOL02Changed()
+    End Sub
+    Partial Private Sub OnDATE01Changing(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnDATE01Changed()
+    End Sub
+    Partial Private Sub OnDATE02Changing(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnDATE02Changed()
+    End Sub
+    Partial Private Sub OnUFTBL01Changing(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnUFTBL01Changed()
+    End Sub
+    Partial Private Sub OnUFTBL02Changing(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnUFTBL02Changed()
+    End Sub
+    Partial Private Sub OncccTrdDepChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OncccTrdDepChanged()
+    End Sub
+    Partial Private Sub OncccTrdrChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OncccTrdrChanged()
+    End Sub
+    Partial Private Sub OnINSTChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnINSTChanged()
+    End Sub
+    Partial Private Sub OnCNTRChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnCNTRChanged()
+    End Sub
+    Partial Private Sub OnVAT1Changing(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnVAT1Changed()
+    End Sub
+    Partial Private Sub OnCUSTOMSLOTChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnCUSTOMSLOTChanged()
+    End Sub
+    Partial Private Sub OnCMTRUNITChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnCMTRUNITChanged()
+    End Sub
+    Partial Private Sub OnQUANTITYChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnQUANTITYChanged()
+    End Sub
+    Partial Private Sub OnGROSSMASSChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnGROSSMASSChanged()
+    End Sub
+    Partial Private Sub OnNETMASSChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnNETMASSChanged()
+    End Sub
+    Partial Private Sub OnBONDChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnBONDChanged()
+    End Sub
+    Partial Private Sub OnPSPCSChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnPSPCSChanged()
+    End Sub
+    Partial Private Sub OnACNDOCCATEGORYChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnACNDOCCATEGORYChanged()
+    End Sub
+    Partial Private Sub OnMYDATACODEChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnMYDATACODEChanged()
+    End Sub
+    Partial Private Sub OnACNMODELChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnACNMODELChanged()
+    End Sub
+    Partial Private Sub OnCPVCODEChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnCPVCODEChanged()
+    End Sub
+    Partial Private Sub OnccCAFINDOCChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnccCAFINDOCChanged()
+    End Sub
+    Partial Private Sub OnccCAMTRLINESChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnccCAMTRLINESChanged()
+    End Sub
+    #End Region
+		
+		Public Sub New()
+			MyBase.New
+			Me._FINDOC1 = CType(Nothing, EntityRef(Of FINDOC))
+			Me._MTRL1 = CType(Nothing, EntityRef(Of MTRL))
+			OnCreated
+		End Sub
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMPANY", DbType:="SmallInt NOT NULL")>  _
+		Public Property COMPANY() As Short
+			Get
+				Return Me._COMPANY
+			End Get
+			Set
+				If ((Me._COMPANY = value)  _
+							= false) Then
+					Me.OnCOMPANYChanging(value)
+					Me.SendPropertyChanging
+					Me._COMPANY = value
+					Me.SendPropertyChanged("COMPANY")
+					Me.OnCOMPANYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINDOC", DbType:="Int NOT NULL", IsPrimaryKey:=true)>  _
+		Public Property FINDOC() As Integer
+			Get
+				Return Me._FINDOC
+			End Get
+			Set
+				If ((Me._FINDOC = value)  _
+							= false) Then
+					If Me._FINDOC1.HasLoadedOrAssignedValue Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
+					Me.OnFINDOCChanging(value)
+					Me.SendPropertyChanging
+					Me._FINDOC = value
+					Me.SendPropertyChanged("FINDOC")
+					Me.OnFINDOCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRLINES", DbType:="Int NOT NULL", IsPrimaryKey:=true)>  _
+		Public Property MTRLINES() As Integer
+			Get
+				Return Me._MTRLINES
+			End Get
+			Set
+				If ((Me._MTRLINES = value)  _
+							= false) Then
+					Me.OnMTRLINESChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRLINES = value
+					Me.SendPropertyChanged("MTRLINES")
+					Me.OnMTRLINESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LINENUM", DbType:="Int NOT NULL")>  _
+		Public Property LINENUM() As Integer
+			Get
+				Return Me._LINENUM
+			End Get
+			Set
+				If ((Me._LINENUM = value)  _
+							= false) Then
+					Me.OnLINENUMChanging(value)
+					Me.SendPropertyChanging
+					Me._LINENUM = value
+					Me.SendPropertyChanged("LINENUM")
+					Me.OnLINENUMChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SODTYPE", DbType:="SmallInt NOT NULL")>  _
+		Public Property SODTYPE() As Short
+			Get
+				Return Me._SODTYPE
+			End Get
+			Set
+				If ((Me._SODTYPE = value)  _
+							= false) Then
+					Me.OnSODTYPEChanging(value)
+					Me.SendPropertyChanging
+					Me._SODTYPE = value
+					Me.SendPropertyChanged("SODTYPE")
+					Me.OnSODTYPEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRL", DbType:="Int NOT NULL")>  _
+		Public Property MTRL() As Integer
+			Get
+				Return Me._MTRL
+			End Get
+			Set
+				If ((Me._MTRL = value)  _
+							= false) Then
+					If Me._MTRL1.HasLoadedOrAssignedValue Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
+					Me.OnMTRLChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRL = value
+					Me.SendPropertyChanged("MTRL")
+					Me.OnMTRLChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PENDING", DbType:="SmallInt NOT NULL")>  _
+		Public Property PENDING() As Short
+			Get
+				Return Me._PENDING
+			End Get
+			Set
+				If ((Me._PENDING = value)  _
+							= false) Then
+					Me.OnPENDINGChanging(value)
+					Me.SendPropertyChanging
+					Me._PENDING = value
+					Me.SendPropertyChanged("PENDING")
+					Me.OnPENDINGChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_RESTMODE", DbType:="SmallInt")>  _
+		Public Property RESTMODE() As System.Nullable(Of Short)
+			Get
+				Return Me._RESTMODE
+			End Get
+			Set
+				If (Me._RESTMODE.Equals(value) = false) Then
+					Me.OnRESTMODEChanging(value)
+					Me.SendPropertyChanging
+					Me._RESTMODE = value
+					Me.SendPropertyChanged("RESTMODE")
+					Me.OnRESTMODEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOSOURCE", DbType:="Int NOT NULL")>  _
+		Public Property SOSOURCE() As Integer
+			Get
+				Return Me._SOSOURCE
+			End Get
+			Set
+				If ((Me._SOSOURCE = value)  _
+							= false) Then
+					Me.OnSOSOURCEChanging(value)
+					Me.SendPropertyChanging
+					Me._SOSOURCE = value
+					Me.SendPropertyChanged("SOSOURCE")
+					Me.OnSOSOURCEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOREDIR", DbType:="Int NOT NULL")>  _
+		Public Property SOREDIR() As Integer
+			Get
+				Return Me._SOREDIR
+			End Get
+			Set
+				If ((Me._SOREDIR = value)  _
+							= false) Then
+					Me.OnSOREDIRChanging(value)
+					Me.SendPropertyChanging
+					Me._SOREDIR = value
+					Me.SendPropertyChanged("SOREDIR")
+					Me.OnSOREDIRChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SCODE", DbType:="VarChar(50)")>  _
+		Public Property SCODE() As String
+			Get
+				Return Me._SCODE
+			End Get
+			Set
+				If (String.Equals(Me._SCODE, value) = false) Then
+					Me.OnSCODEChanging(value)
+					Me.SendPropertyChanging
+					Me._SCODE = value
+					Me.SendPropertyChanged("SCODE")
+					Me.OnSCODEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRTYPE", DbType:="SmallInt NOT NULL")>  _
+		Public Property MTRTYPE() As Short
+			Get
+				Return Me._MTRTYPE
+			End Get
+			Set
+				If ((Me._MTRTYPE = value)  _
+							= false) Then
+					Me.OnMTRTYPEChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRTYPE = value
+					Me.SendPropertyChanged("MTRTYPE")
+					Me.OnMTRTYPEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOTYPE", DbType:="SmallInt NOT NULL")>  _
+		Public Property SOTYPE() As Short
+			Get
+				Return Me._SOTYPE
+			End Get
+			Set
+				If ((Me._SOTYPE = value)  _
+							= false) Then
+					Me.OnSOTYPEChanging(value)
+					Me.SendPropertyChanging
+					Me._SOTYPE = value
+					Me.SendPropertyChanged("SOTYPE")
+					Me.OnSOTYPEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSE", DbType:="SmallInt")>  _
+		Public Property WHOUSE() As System.Nullable(Of Short)
+			Get
+				Return Me._WHOUSE
+			End Get
+			Set
+				If (Me._WHOUSE.Equals(value) = false) Then
+					Me.OnWHOUSEChanging(value)
+					Me.SendPropertyChanging
+					Me._WHOUSE = value
+					Me.SendPropertyChanged("WHOUSE")
+					Me.OnWHOUSEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSESEC", DbType:="SmallInt")>  _
+		Public Property WHOUSESEC() As System.Nullable(Of Short)
+			Get
+				Return Me._WHOUSESEC
+			End Get
+			Set
+				If (Me._WHOUSESEC.Equals(value) = false) Then
+					Me.OnWHOUSESECChanging(value)
+					Me.SendPropertyChanging
+					Me._WHOUSESEC = value
+					Me.SendPropertyChanged("WHOUSESEC")
+					Me.OnWHOUSESECChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRUNIT", DbType:="SmallInt")>  _
+		Public Property MTRUNIT() As System.Nullable(Of Short)
+			Get
+				Return Me._MTRUNIT
+			End Get
+			Set
+				If (Me._MTRUNIT.Equals(value) = false) Then
+					Me.OnMTRUNITChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRUNIT = value
+					Me.SendPropertyChanged("MTRUNIT")
+					Me.OnMTRUNITChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_VAT", DbType:="SmallInt NOT NULL")>  _
+		Public Property VAT() As Short
+			Get
+				Return Me._VAT
+			End Get
+			Set
+				If ((Me._VAT = value)  _
+							= false) Then
+					Me.OnVATChanging(value)
+					Me.SendPropertyChanging
+					Me._VAT = value
+					Me.SendPropertyChanged("VAT")
+					Me.OnVATChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRJC", DbType:="Int")>  _
+		Public Property PRJC() As System.Nullable(Of Integer)
+			Get
+				Return Me._PRJC
+			End Get
+			Set
+				If (Me._PRJC.Equals(value) = false) Then
+					Me.OnPRJCChanging(value)
+					Me.SendPropertyChanging
+					Me._PRJC = value
+					Me.SendPropertyChanged("PRJC")
+					Me.OnPRJCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRJLINES", DbType:="Int")>  _
+		Public Property PRJLINES() As System.Nullable(Of Integer)
+			Get
+				Return Me._PRJLINES
+			End Get
+			Set
+				If (Me._PRJLINES.Equals(value) = false) Then
+					Me.OnPRJLINESChanging(value)
+					Me.SendPropertyChanging
+					Me._PRJLINES = value
+					Me.SendPropertyChanged("PRJLINES")
+					Me.OnPRJLINESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRJCSTAGE", DbType:="SmallInt")>  _
+		Public Property PRJCSTAGE() As System.Nullable(Of Short)
+			Get
+				Return Me._PRJCSTAGE
+			End Get
+			Set
+				If (Me._PRJCSTAGE.Equals(value) = false) Then
+					Me.OnPRJCSTAGEChanging(value)
+					Me.SendPropertyChanging
+					Me._PRJCSTAGE = value
+					Me.SendPropertyChanged("PRJCSTAGE")
+					Me.OnPRJCSTAGEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRPRJCBLD", DbType:="SmallInt")>  _
+		Public Property MTRPRJCBLD() As System.Nullable(Of Short)
+			Get
+				Return Me._MTRPRJCBLD
+			End Get
+			Set
+				If (Me._MTRPRJCBLD.Equals(value) = false) Then
+					Me.OnMTRPRJCBLDChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRPRJCBLD = value
+					Me.SendPropertyChanged("MTRPRJCBLD")
+					Me.OnMTRPRJCBLDChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOEXPTYPE", DbType:="SmallInt")>  _
+		Public Property SOEXPTYPE() As System.Nullable(Of Short)
+			Get
+				Return Me._SOEXPTYPE
+			End Get
+			Set
+				If (Me._SOEXPTYPE.Equals(value) = false) Then
+					Me.OnSOEXPTYPEChanging(value)
+					Me.SendPropertyChanging
+					Me._SOEXPTYPE = value
+					Me.SendPropertyChanged("SOEXPTYPE")
+					Me.OnSOEXPTYPEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SALESMAN", DbType:="Int")>  _
+		Public Property SALESMAN() As System.Nullable(Of Integer)
+			Get
+				Return Me._SALESMAN
+			End Get
+			Set
+				If (Me._SALESMAN.Equals(value) = false) Then
+					Me.OnSALESMANChanging(value)
+					Me.SendPropertyChanging
+					Me._SALESMAN = value
+					Me.SendPropertyChanged("SALESMAN")
+					Me.OnSALESMANChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_RSRC", DbType:="Int")>  _
+		Public Property RSRC() As System.Nullable(Of Integer)
+			Get
+				Return Me._RSRC
+			End Get
+			Set
+				If (Me._RSRC.Equals(value) = false) Then
+					Me.OnRSRCChanging(value)
+					Me.SendPropertyChanging
+					Me._RSRC = value
+					Me.SendPropertyChanged("RSRC")
+					Me.OnRSRCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRLOT", DbType:="Int")>  _
+		Public Property MTRLOT() As System.Nullable(Of Integer)
+			Get
+				Return Me._MTRLOT
+			End Get
+			Set
+				If (Me._MTRLOT.Equals(value) = false) Then
+					Me.OnMTRLOTChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRLOT = value
+					Me.SendPropertyChanged("MTRLOT")
+					Me.OnMTRLOTChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ASSDEPR", DbType:="Int")>  _
+		Public Property ASSDEPR() As System.Nullable(Of Integer)
+			Get
+				Return Me._ASSDEPR
+			End Get
+			Set
+				If (Me._ASSDEPR.Equals(value) = false) Then
+					Me.OnASSDEPRChanging(value)
+					Me.SendPropertyChanging
+					Me._ASSDEPR = value
+					Me.SendPropertyChanged("ASSDEPR")
+					Me.OnASSDEPRChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSEBIN", DbType:="SmallInt")>  _
+		Public Property WHOUSEBIN() As System.Nullable(Of Short)
+			Get
+				Return Me._WHOUSEBIN
+			End Get
+			Set
+				If (Me._WHOUSEBIN.Equals(value) = false) Then
+					Me.OnWHOUSEBINChanging(value)
+					Me.SendPropertyChanging
+					Me._WHOUSEBIN = value
+					Me.SendPropertyChanged("WHOUSEBIN")
+					Me.OnWHOUSEBINChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSEBINSEC", DbType:="SmallInt")>  _
+		Public Property WHOUSEBINSEC() As System.Nullable(Of Short)
+			Get
+				Return Me._WHOUSEBINSEC
+			End Get
+			Set
+				If (Me._WHOUSEBINSEC.Equals(value) = false) Then
+					Me.OnWHOUSEBINSECChanging(value)
+					Me.SendPropertyChanging
+					Me._WHOUSEBINSEC = value
+					Me.SendPropertyChanged("WHOUSEBINSEC")
+					Me.OnWHOUSEBINSECChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BUSUNITS", DbType:="SmallInt")>  _
+		Public Property BUSUNITS() As System.Nullable(Of Short)
+			Get
+				Return Me._BUSUNITS
+			End Get
+			Set
+				If (Me._BUSUNITS.Equals(value) = false) Then
+					Me.OnBUSUNITSChanging(value)
+					Me.SendPropertyChanging
+					Me._BUSUNITS = value
+					Me.SendPropertyChanged("BUSUNITS")
+					Me.OnBUSUNITSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRSEASON", DbType:="SmallInt")>  _
+		Public Property MTRSEASON() As System.Nullable(Of Short)
+			Get
+				Return Me._MTRSEASON
+			End Get
+			Set
+				If (Me._MTRSEASON.Equals(value) = false) Then
+					Me.OnMTRSEASONChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRSEASON = value
+					Me.SendPropertyChanged("MTRSEASON")
+					Me.OnMTRSEASONChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRCATEGORY", DbType:="SmallInt")>  _
+		Public Property MTRCATEGORY() As System.Nullable(Of Short)
+			Get
+				Return Me._MTRCATEGORY
+			End Get
+			Set
+				If (Me._MTRCATEGORY.Equals(value) = false) Then
+					Me.OnMTRCATEGORYChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRCATEGORY = value
+					Me.SendPropertyChanged("MTRCATEGORY")
+					Me.OnMTRCATEGORYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRCPOLICY", DbType:="SmallInt")>  _
+		Public Property PRCPOLICY() As System.Nullable(Of Short)
+			Get
+				Return Me._PRCPOLICY
+			End Get
+			Set
+				If (Me._PRCPOLICY.Equals(value) = false) Then
+					Me.OnPRCPOLICYChanging(value)
+					Me.SendPropertyChanging
+					Me._PRCPOLICY = value
+					Me.SendPropertyChanged("PRCPOLICY")
+					Me.OnPRCPOLICYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SPCS", DbType:="Int")>  _
+		Public Property SPCS() As System.Nullable(Of Integer)
+			Get
+				Return Me._SPCS
+			End Get
+			Set
+				If (Me._SPCS.Equals(value) = false) Then
+					Me.OnSPCSChanging(value)
+					Me.SendPropertyChanging
+					Me._SPCS = value
+					Me.SendPropertyChanged("SPCS")
+					Me.OnSPCSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRPACK", DbType:="Int")>  _
+		Public Property MTRPACK() As System.Nullable(Of Integer)
+			Get
+				Return Me._MTRPACK
+			End Get
+			Set
+				If (Me._MTRPACK.Equals(value) = false) Then
+					Me.OnMTRPACKChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRPACK = value
+					Me.SendPropertyChanged("MTRPACK")
+					Me.OnMTRPACKChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTYP", DbType:="Float")>  _
+		Public Property QTYP() As System.Nullable(Of Double)
+			Get
+				Return Me._QTYP
+			End Get
+			Set
+				If (Me._QTYP.Equals(value) = false) Then
+					Me.OnQTYPChanging(value)
+					Me.SendPropertyChanging
+					Me._QTYP = value
+					Me.SendPropertyChanged("QTYP")
+					Me.OnQTYPChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY", DbType:="Float")>  _
+		Public Property QTY() As System.Nullable(Of Double)
+			Get
+				Return Me._QTY
+			End Get
+			Set
+				If (Me._QTY.Equals(value) = false) Then
+					Me.OnQTYChanging(value)
+					Me.SendPropertyChanging
+					Me._QTY = value
+					Me.SendPropertyChanged("QTY")
+					Me.OnQTYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY1", DbType:="Float NOT NULL")>  _
+		Public Property QTY1() As Double
+			Get
+				Return Me._QTY1
+			End Get
+			Set
+				If ((Me._QTY1 = value)  _
+							= false) Then
+					Me.OnQTY1Changing(value)
+					Me.SendPropertyChanging
+					Me._QTY1 = value
+					Me.SendPropertyChanged("QTY1")
+					Me.OnQTY1Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY2", DbType:="Float NOT NULL")>  _
+		Public Property QTY2() As Double
+			Get
+				Return Me._QTY2
+			End Get
+			Set
+				If ((Me._QTY2 = value)  _
+							= false) Then
+					Me.OnQTY2Changing(value)
+					Me.SendPropertyChanging
+					Me._QTY2 = value
+					Me.SendPropertyChanged("QTY2")
+					Me.OnQTY2Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY1COV", DbType:="Float NOT NULL")>  _
+		Public Property QTY1COV() As Double
+			Get
+				Return Me._QTY1COV
+			End Get
+			Set
+				If ((Me._QTY1COV = value)  _
+							= false) Then
+					Me.OnQTY1COVChanging(value)
+					Me.SendPropertyChanging
+					Me._QTY1COV = value
+					Me.SendPropertyChanged("QTY1COV")
+					Me.OnQTY1COVChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY1CANC", DbType:="Float NOT NULL")>  _
+		Public Property QTY1CANC() As Double
+			Get
+				Return Me._QTY1CANC
+			End Get
+			Set
+				If ((Me._QTY1CANC = value)  _
+							= false) Then
+					Me.OnQTY1CANCChanging(value)
+					Me.SendPropertyChanging
+					Me._QTY1CANC = value
+					Me.SendPropertyChanged("QTY1CANC")
+					Me.OnQTY1CANCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QTY1FCOV", DbType:="Float NOT NULL")>  _
+		Public Property QTY1FCOV() As Double
+			Get
+				Return Me._QTY1FCOV
+			End Get
+			Set
+				If ((Me._QTY1FCOV = value)  _
+							= false) Then
+					Me.OnQTY1FCOVChanging(value)
+					Me.SendPropertyChanging
+					Me._QTY1FCOV = value
+					Me.SendPropertyChanged("QTY1FCOV")
+					Me.OnQTY1FCOVChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SHIPDATE", DbType:="DateTime")>  _
+		Public Property SHIPDATE() As System.Nullable(Of Date)
+			Get
+				Return Me._SHIPDATE
+			End Get
+			Set
+				If (Me._SHIPDATE.Equals(value) = false) Then
+					Me.OnSHIPDATEChanging(value)
+					Me.SendPropertyChanging
+					Me._SHIPDATE = value
+					Me.SendPropertyChanged("SHIPDATE")
+					Me.OnSHIPDATEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DELIVDATE", DbType:="DateTime")>  _
+		Public Property DELIVDATE() As System.Nullable(Of Date)
+			Get
+				Return Me._DELIVDATE
+			End Get
+			Set
+				If (Me._DELIVDATE.Equals(value) = false) Then
+					Me.OnDELIVDATEChanging(value)
+					Me.SendPropertyChanging
+					Me._DELIVDATE = value
+					Me.SendPropertyChanged("DELIVDATE")
+					Me.OnDELIVDATEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WEIGHT", DbType:="Float")>  _
+		Public Property WEIGHT() As System.Nullable(Of Double)
+			Get
+				Return Me._WEIGHT
+			End Get
+			Set
+				If (Me._WEIGHT.Equals(value) = false) Then
+					Me.OnWEIGHTChanging(value)
+					Me.SendPropertyChanging
+					Me._WEIGHT = value
+					Me.SendPropertyChanged("WEIGHT")
+					Me.OnWEIGHTChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_VOLUME", DbType:="Float")>  _
+		Public Property VOLUME() As System.Nullable(Of Double)
+			Get
+				Return Me._VOLUME
+			End Get
+			Set
+				If (Me._VOLUME.Equals(value) = false) Then
+					Me.OnVOLUMEChanging(value)
+					Me.SendPropertyChanging
+					Me._VOLUME = value
+					Me.SendPropertyChanged("VOLUME")
+					Me.OnVOLUMEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_INTVAL", DbType:="Float")>  _
+		Public Property INTVAL() As System.Nullable(Of Double)
+			Get
+				Return Me._INTVAL
+			End Get
+			Set
+				If (Me._INTVAL.Equals(value) = false) Then
+					Me.OnINTVALChanging(value)
+					Me.SendPropertyChanging
+					Me._INTVAL = value
+					Me.SendPropertyChanged("INTVAL")
+					Me.OnINTVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_INTVAT", DbType:="Float")>  _
+		Public Property INTVAT() As System.Nullable(Of Double)
+			Get
+				Return Me._INTVAT
+			End Get
+			Set
+				If (Me._INTVAT.Equals(value) = false) Then
+					Me.OnINTVATChanging(value)
+					Me.SendPropertyChanging
+					Me._INTVAT = value
+					Me.SendPropertyChanged("INTVAT")
+					Me.OnINTVATChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BGINTCOUNTRY", DbType:="SmallInt")>  _
+		Public Property BGINTCOUNTRY() As System.Nullable(Of Short)
+			Get
+				Return Me._BGINTCOUNTRY
+			End Get
+			Set
+				If (Me._BGINTCOUNTRY.Equals(value) = false) Then
+					Me.OnBGINTCOUNTRYChanging(value)
+					Me.SendPropertyChanging
+					Me._BGINTCOUNTRY = value
+					Me.SendPropertyChanged("BGINTCOUNTRY")
+					Me.OnBGINTCOUNTRYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BGINTDISTRICT", DbType:="SmallInt")>  _
+		Public Property BGINTDISTRICT() As System.Nullable(Of Short)
+			Get
+				Return Me._BGINTDISTRICT
+			End Get
+			Set
+				If (Me._BGINTDISTRICT.Equals(value) = false) Then
+					Me.OnBGINTDISTRICTChanging(value)
+					Me.SendPropertyChanging
+					Me._BGINTDISTRICT = value
+					Me.SendPropertyChanged("BGINTDISTRICT")
+					Me.OnBGINTDISTRICTChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DUTY", DbType:="Float")>  _
+		Public Property DUTY() As System.Nullable(Of Double)
+			Get
+				Return Me._DUTY
+			End Get
+			Set
+				If (Me._DUTY.Equals(value) = false) Then
+					Me.OnDUTYChanging(value)
+					Me.SendPropertyChanging
+					Me._DUTY = value
+					Me.SendPropertyChanged("DUTY")
+					Me.OnDUTYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PLSMVAL", DbType:="Float")>  _
+		Public Property PLSMVAL() As System.Nullable(Of Double)
+			Get
+				Return Me._PLSMVAL
+			End Get
+			Set
+				If (Me._PLSMVAL.Equals(value) = false) Then
+					Me.OnPLSMVALChanging(value)
+					Me.SendPropertyChanging
+					Me._PLSMVAL = value
+					Me.SendPropertyChanged("PLSMVAL")
+					Me.OnPLSMVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PLSMVAT", DbType:="Float")>  _
+		Public Property PLSMVAT() As System.Nullable(Of Double)
+			Get
+				Return Me._PLSMVAT
+			End Get
+			Set
+				If (Me._PLSMVAT.Equals(value) = false) Then
+					Me.OnPLSMVATChanging(value)
+					Me.SendPropertyChanging
+					Me._PLSMVAT = value
+					Me.SendPropertyChanged("PLSMVAT")
+					Me.OnPLSMVATChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRICE", DbType:="Float")>  _
+		Public Property PRICE() As System.Nullable(Of Double)
+			Get
+				Return Me._PRICE
+			End Get
+			Set
+				If (Me._PRICE.Equals(value) = false) Then
+					Me.OnPRICEChanging(value)
+					Me.SendPropertyChanging
+					Me._PRICE = value
+					Me.SendPropertyChanged("PRICE")
+					Me.OnPRICEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRICE1", DbType:="Float")>  _
+		Public Property PRICE1() As System.Nullable(Of Double)
+			Get
+				Return Me._PRICE1
+			End Get
+			Set
+				If (Me._PRICE1.Equals(value) = false) Then
+					Me.OnPRICE1Changing(value)
+					Me.SendPropertyChanging
+					Me._PRICE1 = value
+					Me.SendPropertyChanged("PRICE1")
+					Me.OnPRICE1Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LINEVAL", DbType:="Float")>  _
+		Public Property LINEVAL() As System.Nullable(Of Double)
+			Get
+				Return Me._LINEVAL
+			End Get
+			Set
+				If (Me._LINEVAL.Equals(value) = false) Then
+					Me.OnLINEVALChanging(value)
+					Me.SendPropertyChanging
+					Me._LINEVAL = value
+					Me.SendPropertyChanged("LINEVAL")
+					Me.OnLINEVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LLINEVAL", DbType:="Float")>  _
+		Public Property LLINEVAL() As System.Nullable(Of Double)
+			Get
+				Return Me._LLINEVAL
+			End Get
+			Set
+				If (Me._LLINEVAL.Equals(value) = false) Then
+					Me.OnLLINEVALChanging(value)
+					Me.SendPropertyChanging
+					Me._LLINEVAL = value
+					Me.SendPropertyChanged("LLINEVAL")
+					Me.OnLLINEVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_EXPVAL", DbType:="Float")>  _
+		Public Property EXPVAL() As System.Nullable(Of Double)
+			Get
+				Return Me._EXPVAL
+			End Get
+			Set
+				If (Me._EXPVAL.Equals(value) = false) Then
+					Me.OnEXPVALChanging(value)
+					Me.SendPropertyChanging
+					Me._EXPVAL = value
+					Me.SendPropertyChanged("EXPVAL")
+					Me.OnEXPVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LEXPVAL", DbType:="Float NOT NULL")>  _
+		Public Property LEXPVAL() As Double
+			Get
+				Return Me._LEXPVAL
+			End Get
+			Set
+				If ((Me._LEXPVAL = value)  _
+							= false) Then
+					Me.OnLEXPVALChanging(value)
+					Me.SendPropertyChanging
+					Me._LEXPVAL = value
+					Me.SendPropertyChanged("LEXPVAL")
+					Me.OnLEXPVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LEXPVAL1", DbType:="Float")>  _
+		Public Property LEXPVAL1() As System.Nullable(Of Double)
+			Get
+				Return Me._LEXPVAL1
+			End Get
+			Set
+				If (Me._LEXPVAL1.Equals(value) = false) Then
+					Me.OnLEXPVAL1Changing(value)
+					Me.SendPropertyChanging
+					Me._LEXPVAL1 = value
+					Me.SendPropertyChanged("LEXPVAL1")
+					Me.OnLEXPVAL1Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LEXPVATVAL1", DbType:="Float")>  _
+		Public Property LEXPVATVAL1() As System.Nullable(Of Double)
+			Get
+				Return Me._LEXPVATVAL1
+			End Get
+			Set
+				If (Me._LEXPVATVAL1.Equals(value) = false) Then
+					Me.OnLEXPVATVAL1Changing(value)
+					Me.SendPropertyChanging
+					Me._LEXPVATVAL1 = value
+					Me.SendPropertyChanged("LEXPVATVAL1")
+					Me.OnLEXPVATVAL1Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC1PRC", DbType:="Float")>  _
+		Public Property DISC1PRC() As System.Nullable(Of Double)
+			Get
+				Return Me._DISC1PRC
+			End Get
+			Set
+				If (Me._DISC1PRC.Equals(value) = false) Then
+					Me.OnDISC1PRCChanging(value)
+					Me.SendPropertyChanging
+					Me._DISC1PRC = value
+					Me.SendPropertyChanged("DISC1PRC")
+					Me.OnDISC1PRCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC2PRC", DbType:="Float")>  _
+		Public Property DISC2PRC() As System.Nullable(Of Double)
+			Get
+				Return Me._DISC2PRC
+			End Get
+			Set
+				If (Me._DISC2PRC.Equals(value) = false) Then
+					Me.OnDISC2PRCChanging(value)
+					Me.SendPropertyChanging
+					Me._DISC2PRC = value
+					Me.SendPropertyChanged("DISC2PRC")
+					Me.OnDISC2PRCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC3PRC", DbType:="Float")>  _
+		Public Property DISC3PRC() As System.Nullable(Of Double)
+			Get
+				Return Me._DISC3PRC
+			End Get
+			Set
+				If (Me._DISC3PRC.Equals(value) = false) Then
+					Me.OnDISC3PRCChanging(value)
+					Me.SendPropertyChanging
+					Me._DISC3PRC = value
+					Me.SendPropertyChanged("DISC3PRC")
+					Me.OnDISC3PRCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC1VAL", DbType:="Float")>  _
+		Public Property DISC1VAL() As System.Nullable(Of Double)
+			Get
+				Return Me._DISC1VAL
+			End Get
+			Set
+				If (Me._DISC1VAL.Equals(value) = false) Then
+					Me.OnDISC1VALChanging(value)
+					Me.SendPropertyChanging
+					Me._DISC1VAL = value
+					Me.SendPropertyChanged("DISC1VAL")
+					Me.OnDISC1VALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LDISC1VAL", DbType:="Float")>  _
+		Public Property LDISC1VAL() As System.Nullable(Of Double)
+			Get
+				Return Me._LDISC1VAL
+			End Get
+			Set
+				If (Me._LDISC1VAL.Equals(value) = false) Then
+					Me.OnLDISC1VALChanging(value)
+					Me.SendPropertyChanging
+					Me._LDISC1VAL = value
+					Me.SendPropertyChanged("LDISC1VAL")
+					Me.OnLDISC1VALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC2VAL", DbType:="Float")>  _
+		Public Property DISC2VAL() As System.Nullable(Of Double)
+			Get
+				Return Me._DISC2VAL
+			End Get
+			Set
+				If (Me._DISC2VAL.Equals(value) = false) Then
+					Me.OnDISC2VALChanging(value)
+					Me.SendPropertyChanging
+					Me._DISC2VAL = value
+					Me.SendPropertyChanged("DISC2VAL")
+					Me.OnDISC2VALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LDISC2VAL", DbType:="Float")>  _
+		Public Property LDISC2VAL() As System.Nullable(Of Double)
+			Get
+				Return Me._LDISC2VAL
+			End Get
+			Set
+				If (Me._LDISC2VAL.Equals(value) = false) Then
+					Me.OnLDISC2VALChanging(value)
+					Me.SendPropertyChanging
+					Me._LDISC2VAL = value
+					Me.SendPropertyChanged("LDISC2VAL")
+					Me.OnLDISC2VALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DISC3VAL", DbType:="Float")>  _
+		Public Property DISC3VAL() As System.Nullable(Of Double)
+			Get
+				Return Me._DISC3VAL
+			End Get
+			Set
+				If (Me._DISC3VAL.Equals(value) = false) Then
+					Me.OnDISC3VALChanging(value)
+					Me.SendPropertyChanging
+					Me._DISC3VAL = value
+					Me.SendPropertyChanged("DISC3VAL")
+					Me.OnDISC3VALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LDISC3VAL", DbType:="Float")>  _
+		Public Property LDISC3VAL() As System.Nullable(Of Double)
+			Get
+				Return Me._LDISC3VAL
+			End Get
+			Set
+				If (Me._LDISC3VAL.Equals(value) = false) Then
+					Me.OnLDISC3VALChanging(value)
+					Me.SendPropertyChanging
+					Me._LDISC3VAL = value
+					Me.SendPropertyChanged("LDISC3VAL")
+					Me.OnLDISC3VALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NETLINEVAL", DbType:="Float NOT NULL")>  _
+		Public Property NETLINEVAL() As Double
+			Get
+				Return Me._NETLINEVAL
+			End Get
+			Set
+				If ((Me._NETLINEVAL = value)  _
+							= false) Then
+					Me.OnNETLINEVALChanging(value)
+					Me.SendPropertyChanging
+					Me._NETLINEVAL = value
+					Me.SendPropertyChanged("NETLINEVAL")
+					Me.OnNETLINEVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LNETLINEVAL", DbType:="Float NOT NULL")>  _
+		Public Property LNETLINEVAL() As Double
+			Get
+				Return Me._LNETLINEVAL
+			End Get
+			Set
+				If ((Me._LNETLINEVAL = value)  _
+							= false) Then
+					Me.OnLNETLINEVALChanging(value)
+					Me.SendPropertyChanging
+					Me._LNETLINEVAL = value
+					Me.SendPropertyChanged("LNETLINEVAL")
+					Me.OnLNETLINEVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_VATAMNT", DbType:="Float NOT NULL")>  _
+		Public Property VATAMNT() As Double
+			Get
+				Return Me._VATAMNT
+			End Get
+			Set
+				If ((Me._VATAMNT = value)  _
+							= false) Then
+					Me.OnVATAMNTChanging(value)
+					Me.SendPropertyChanging
+					Me._VATAMNT = value
+					Me.SendPropertyChanged("VATAMNT")
+					Me.OnVATAMNTChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LVATAMNT", DbType:="Float NOT NULL")>  _
+		Public Property LVATAMNT() As Double
+			Get
+				Return Me._LVATAMNT
+			End Get
+			Set
+				If ((Me._LVATAMNT = value)  _
+							= false) Then
+					Me.OnLVATAMNTChanging(value)
+					Me.SendPropertyChanging
+					Me._LVATAMNT = value
+					Me.SendPropertyChanged("LVATAMNT")
+					Me.OnLVATAMNTChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LVATNOEXM", DbType:="Float")>  _
+		Public Property LVATNOEXM() As System.Nullable(Of Double)
+			Get
+				Return Me._LVATNOEXM
+			End Get
+			Set
+				If (Me._LVATNOEXM.Equals(value) = false) Then
+					Me.OnLVATNOEXMChanging(value)
+					Me.SendPropertyChanging
+					Me._LVATNOEXM = value
+					Me.SendPropertyChanged("LVATNOEXM")
+					Me.OnLVATNOEXMChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SALESCVAL", DbType:="Float")>  _
+		Public Property SALESCVAL() As System.Nullable(Of Double)
+			Get
+				Return Me._SALESCVAL
+			End Get
+			Set
+				If (Me._SALESCVAL.Equals(value) = false) Then
+					Me.OnSALESCVALChanging(value)
+					Me.SendPropertyChanging
+					Me._SALESCVAL = value
+					Me.SendPropertyChanged("SALESCVAL")
+					Me.OnSALESCVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_EFKVAL", DbType:="Float NOT NULL")>  _
+		Public Property EFKVAL() As Double
+			Get
+				Return Me._EFKVAL
+			End Get
+			Set
+				If ((Me._EFKVAL = value)  _
+							= false) Then
+					Me.OnEFKVALChanging(value)
+					Me.SendPropertyChanging
+					Me._EFKVAL = value
+					Me.SendPropertyChanged("EFKVAL")
+					Me.OnEFKVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMMENTS", DbType:="VarChar(255)")>  _
+		Public Property COMMENTS() As String
+			Get
+				Return Me._COMMENTS
+			End Get
+			Set
+				If (String.Equals(Me._COMMENTS, value) = false) Then
+					Me.OnCOMMENTSChanging(value)
+					Me.SendPropertyChanging
+					Me._COMMENTS = value
+					Me.SendPropertyChanged("COMMENTS")
+					Me.OnCOMMENTSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMMENTS1", DbType:="VarChar(2000)")>  _
+		Public Property COMMENTS1() As String
+			Get
+				Return Me._COMMENTS1
+			End Get
+			Set
+				If (String.Equals(Me._COMMENTS1, value) = false) Then
+					Me.OnCOMMENTS1Changing(value)
+					Me.SendPropertyChanging
+					Me._COMMENTS1 = value
+					Me.SendPropertyChanged("COMMENTS1")
+					Me.OnCOMMENTS1Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMMENTS2", DbType:="VarChar(512)")>  _
+		Public Property COMMENTS2() As String
+			Get
+				Return Me._COMMENTS2
+			End Get
+			Set
+				If (String.Equals(Me._COMMENTS2, value) = false) Then
+					Me.OnCOMMENTS2Changing(value)
+					Me.SendPropertyChanging
+					Me._COMMENTS2 = value
+					Me.SendPropertyChanged("COMMENTS2")
+					Me.OnCOMMENTS2Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DIMENSION1", DbType:="Float")>  _
+		Public Property DIMENSION1() As System.Nullable(Of Double)
+			Get
+				Return Me._DIMENSION1
+			End Get
+			Set
+				If (Me._DIMENSION1.Equals(value) = false) Then
+					Me.OnDIMENSION1Changing(value)
+					Me.SendPropertyChanging
+					Me._DIMENSION1 = value
+					Me.SendPropertyChanged("DIMENSION1")
+					Me.OnDIMENSION1Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DIMENSION2", DbType:="Float")>  _
+		Public Property DIMENSION2() As System.Nullable(Of Double)
+			Get
+				Return Me._DIMENSION2
+			End Get
+			Set
+				If (Me._DIMENSION2.Equals(value) = false) Then
+					Me.OnDIMENSION2Changing(value)
+					Me.SendPropertyChanging
+					Me._DIMENSION2 = value
+					Me.SendPropertyChanged("DIMENSION2")
+					Me.OnDIMENSION2Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DIMENSION3", DbType:="Float")>  _
+		Public Property DIMENSION3() As System.Nullable(Of Double)
+			Get
+				Return Me._DIMENSION3
+			End Get
+			Set
+				If (Me._DIMENSION3.Equals(value) = false) Then
+					Me.OnDIMENSION3Changing(value)
+					Me.SendPropertyChanging
+					Me._DIMENSION3 = value
+					Me.SendPropertyChanged("DIMENSION3")
+					Me.OnDIMENSION3Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TRNLINEVAL", DbType:="Float")>  _
+		Public Property TRNLINEVAL() As System.Nullable(Of Double)
+			Get
+				Return Me._TRNLINEVAL
+			End Get
+			Set
+				If (Me._TRNLINEVAL.Equals(value) = false) Then
+					Me.OnTRNLINEVALChanging(value)
+					Me.SendPropertyChanging
+					Me._TRNLINEVAL = value
+					Me.SendPropertyChanged("TRNLINEVAL")
+					Me.OnTRNLINEVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LTRNLINEVAL", DbType:="Float")>  _
+		Public Property LTRNLINEVAL() As System.Nullable(Of Double)
+			Get
+				Return Me._LTRNLINEVAL
+			End Get
+			Set
+				If (Me._LTRNLINEVAL.Equals(value) = false) Then
+					Me.OnLTRNLINEVALChanging(value)
+					Me.SendPropertyChanging
+					Me._LTRNLINEVAL = value
+					Me.SendPropertyChanged("LTRNLINEVAL")
+					Me.OnLTRNLINEVALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRCRULEDATA", DbType:="VarChar(1024)")>  _
+		Public Property PRCRULEDATA() As String
+			Get
+				Return Me._PRCRULEDATA
+			End Get
+			Set
+				If (String.Equals(Me._PRCRULEDATA, value) = false) Then
+					Me.OnPRCRULEDATAChanging(value)
+					Me.SendPropertyChanging
+					Me._PRCRULEDATA = value
+					Me.SendPropertyChanged("PRCRULEDATA")
+					Me.OnPRCRULEDATAChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_INSTALMENTS", DbType:="SmallInt")>  _
+		Public Property INSTALMENTS() As System.Nullable(Of Short)
+			Get
+				Return Me._INSTALMENTS
+			End Get
+			Set
+				If (Me._INSTALMENTS.Equals(value) = false) Then
+					Me.OnINSTALMENTSChanging(value)
+					Me.SendPropertyChanging
+					Me._INSTALMENTS = value
+					Me.SendPropertyChanged("INSTALMENTS")
+					Me.OnINSTALMENTSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WASTE", DbType:="Float")>  _
+		Public Property WASTE() As System.Nullable(Of Double)
+			Get
+				Return Me._WASTE
+			End Get
+			Set
+				If (Me._WASTE.Equals(value) = false) Then
+					Me.OnWASTEChanging(value)
+					Me.SendPropertyChanging
+					Me._WASTE = value
+					Me.SendPropertyChanged("WASTE")
+					Me.OnWASTEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COSTCOEF", DbType:="Float")>  _
+		Public Property COSTCOEF() As System.Nullable(Of Double)
+			Get
+				Return Me._COSTCOEF
+			End Get
+			Set
+				If (Me._COSTCOEF.Equals(value) = false) Then
+					Me.OnCOSTCOEFChanging(value)
+					Me.SendPropertyChanging
+					Me._COSTCOEF = value
+					Me.SendPropertyChanged("COSTCOEF")
+					Me.OnCOSTCOEFChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CONVPRC", DbType:="Float")>  _
+		Public Property CONVPRC() As System.Nullable(Of Double)
+			Get
+				Return Me._CONVPRC
+			End Get
+			Set
+				If (Me._CONVPRC.Equals(value) = false) Then
+					Me.OnCONVPRCChanging(value)
+					Me.SendPropertyChanging
+					Me._CONVPRC = value
+					Me.SendPropertyChanged("CONVPRC")
+					Me.OnCONVPRCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_STAGE", DbType:="SmallInt")>  _
+		Public Property STAGE() As System.Nullable(Of Short)
+			Get
+				Return Me._STAGE
+			End Get
+			Set
+				If (Me._STAGE.Equals(value) = false) Then
+					Me.OnSTAGEChanging(value)
+					Me.SendPropertyChanging
+					Me._STAGE = value
+					Me.SendPropertyChanged("STAGE")
+					Me.OnSTAGEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_STAGELINENUM", DbType:="SmallInt")>  _
+		Public Property STAGELINENUM() As System.Nullable(Of Short)
+			Get
+				Return Me._STAGELINENUM
+			End Get
+			Set
+				If (Me._STAGELINENUM.Equals(value) = false) Then
+					Me.OnSTAGELINENUMChanging(value)
+					Me.SendPropertyChanging
+					Me._STAGELINENUM = value
+					Me.SendPropertyChanged("STAGELINENUM")
+					Me.OnSTAGELINENUMChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMSK", DbType:="VarChar(25)")>  _
+		Public Property ACNMSK() As String
+			Get
+				Return Me._ACNMSK
+			End Get
+			Set
+				If (String.Equals(Me._ACNMSK, value) = false) Then
+					Me.OnACNMSKChanging(value)
+					Me.SendPropertyChanging
+					Me._ACNMSK = value
+					Me.SendPropertyChanged("ACNMSK")
+					Me.OnACNMSKChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMSK1", DbType:="VarChar(25)")>  _
+		Public Property ACNMSK1() As String
+			Get
+				Return Me._ACNMSK1
+			End Get
+			Set
+				If (String.Equals(Me._ACNMSK1, value) = false) Then
+					Me.OnACNMSK1Changing(value)
+					Me.SendPropertyChanging
+					Me._ACNMSK1 = value
+					Me.SendPropertyChanged("ACNMSK1")
+					Me.OnACNMSK1Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINDOCS", DbType:="Int")>  _
+		Public Property FINDOCS() As System.Nullable(Of Integer)
+			Get
+				Return Me._FINDOCS
+			End Get
+			Set
+				If (Me._FINDOCS.Equals(value) = false) Then
+					Me.OnFINDOCSChanging(value)
+					Me.SendPropertyChanging
+					Me._FINDOCS = value
+					Me.SendPropertyChanged("FINDOCS")
+					Me.OnFINDOCSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRLINESS", DbType:="Int")>  _
+		Public Property MTRLINESS() As System.Nullable(Of Integer)
+			Get
+				Return Me._MTRLINESS
+			End Get
+			Set
+				If (Me._MTRLINESS.Equals(value) = false) Then
+					Me.OnMTRLINESSChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRLINESS = value
+					Me.SendPropertyChanged("MTRLINESS")
+					Me.OnMTRLINESSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINDOCL", DbType:="Int")>  _
+		Public Property FINDOCL() As System.Nullable(Of Integer)
+			Get
+				Return Me._FINDOCL
+			End Get
+			Set
+				If (Me._FINDOCL.Equals(value) = false) Then
+					Me.OnFINDOCLChanging(value)
+					Me.SendPropertyChanging
+					Me._FINDOCL = value
+					Me.SendPropertyChanged("FINDOCL")
+					Me.OnFINDOCLChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRLINESL", DbType:="Int")>  _
+		Public Property MTRLINESL() As System.Nullable(Of Integer)
+			Get
+				Return Me._MTRLINESL
+			End Get
+			Set
+				If (Me._MTRLINESL.Equals(value) = false) Then
+					Me.OnMTRLINESLChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRLINESL = value
+					Me.SendPropertyChanged("MTRLINESL")
+					Me.OnMTRLINESLChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOANAL", DbType:="Text", UpdateCheck:=UpdateCheck.Never)>  _
+		Public Property SOANAL() As String
+			Get
+				Return Me._SOANAL
+			End Get
+			Set
+				If (String.Equals(Me._SOANAL, value) = false) Then
+					Me.OnSOANALChanging(value)
+					Me.SendPropertyChanging
+					Me._SOANAL = value
+					Me.SendPropertyChanged("SOANAL")
+					Me.OnSOANALChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SXMSKK", DbType:="Int")>  _
+		Public Property SXMSKK() As System.Nullable(Of Integer)
+			Get
+				Return Me._SXMSKK
+			End Get
+			Set
+				If (Me._SXMSKK.Equals(value) = false) Then
+					Me.OnSXMSKKChanging(value)
+					Me.SendPropertyChanging
+					Me._SXMSKK = value
+					Me.SendPropertyChanged("SXMSKK")
+					Me.OnSXMSKKChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SXPERC", DbType:="Float")>  _
+		Public Property SXPERC() As System.Nullable(Of Double)
+			Get
+				Return Me._SXPERC
+			End Get
+			Set
+				If (Me._SXPERC.Equals(value) = false) Then
+					Me.OnSXPERCChanging(value)
+					Me.SendPropertyChanging
+					Me._SXPERC = value
+					Me.SendPropertyChanged("SXPERC")
+					Me.OnSXPERCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BGLEXCISE", DbType:="Float")>  _
+		Public Property BGLEXCISE() As System.Nullable(Of Double)
+			Get
+				Return Me._BGLEXCISE
+			End Get
+			Set
+				If (Me._BGLEXCISE.Equals(value) = false) Then
+					Me.OnBGLEXCISEChanging(value)
+					Me.SendPropertyChanging
+					Me._BGLEXCISE = value
+					Me.SendPropertyChanged("BGLEXCISE")
+					Me.OnBGLEXCISEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_AUTOPRDDOC", DbType:="SmallInt NOT NULL")>  _
+		Public Property AUTOPRDDOC() As Short
+			Get
+				Return Me._AUTOPRDDOC
+			End Get
+			Set
+				If ((Me._AUTOPRDDOC = value)  _
+							= false) Then
+					Me.OnAUTOPRDDOCChanging(value)
+					Me.SendPropertyChanging
+					Me._AUTOPRDDOC = value
+					Me.SendPropertyChanged("AUTOPRDDOC")
+					Me.OnAUTOPRDDOCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMSKS", DbType:="VarChar(25)")>  _
+		Public Property ACNMSKS() As String
+			Get
+				Return Me._ACNMSKS
+			End Get
+			Set
+				If (String.Equals(Me._ACNMSKS, value) = false) Then
+					Me.OnACNMSKSChanging(value)
+					Me.SendPropertyChanging
+					Me._ACNMSKS = value
+					Me.SendPropertyChanged("ACNMSKS")
+					Me.OnACNMSKSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMSKX", DbType:="VarChar(25)")>  _
+		Public Property ACNMSKX() As String
+			Get
+				Return Me._ACNMSKX
+			End Get
+			Set
+				If (String.Equals(Me._ACNMSKX, value) = false) Then
+					Me.OnACNMSKXChanging(value)
+					Me.SendPropertyChanging
+					Me._ACNMSKX = value
+					Me.SendPropertyChanged("ACNMSKX")
+					Me.OnACNMSKXChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COSTCNTR", DbType:="Int")>  _
+		Public Property COSTCNTR() As System.Nullable(Of Integer)
+			Get
+				Return Me._COSTCNTR
+			End Get
+			Set
+				If (Me._COSTCNTR.Equals(value) = false) Then
+					Me.OnCOSTCNTRChanging(value)
+					Me.SendPropertyChanging
+					Me._COSTCNTR = value
+					Me.SendPropertyChanged("COSTCNTR")
+					Me.OnCOSTCNTRChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ITECALCTYPE", DbType:="SmallInt")>  _
+		Public Property ITECALCTYPE() As System.Nullable(Of Short)
+			Get
+				Return Me._ITECALCTYPE
+			End Get
+			Set
+				If (Me._ITECALCTYPE.Equals(value) = false) Then
+					Me.OnITECALCTYPEChanging(value)
+					Me.SendPropertyChanging
+					Me._ITECALCTYPE = value
+					Me.SendPropertyChanged("ITECALCTYPE")
+					Me.OnITECALCTYPEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_GUARTIME", DbType:="SmallInt")>  _
+		Public Property GUARTIME() As System.Nullable(Of Short)
+			Get
+				Return Me._GUARTIME
+			End Get
+			Set
+				If (Me._GUARTIME.Equals(value) = false) Then
+					Me.OnGUARTIMEChanging(value)
+					Me.SendPropertyChanging
+					Me._GUARTIME = value
+					Me.SendPropertyChanged("GUARTIME")
+					Me.OnGUARTIMEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SRVDEBITTYPE", DbType:="SmallInt")>  _
+		Public Property SRVDEBITTYPE() As System.Nullable(Of Short)
+			Get
+				Return Me._SRVDEBITTYPE
+			End Get
+			Set
+				If (Me._SRVDEBITTYPE.Equals(value) = false) Then
+					Me.OnSRVDEBITTYPEChanging(value)
+					Me.SendPropertyChanging
+					Me._SRVDEBITTYPE = value
+					Me.SendPropertyChanged("SRVDEBITTYPE")
+					Me.OnSRVDEBITTYPEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PACKSTATUS", DbType:="SmallInt")>  _
+		Public Property PACKSTATUS() As System.Nullable(Of Short)
+			Get
+				Return Me._PACKSTATUS
+			End Get
+			Set
+				If (Me._PACKSTATUS.Equals(value) = false) Then
+					Me.OnPACKSTATUSChanging(value)
+					Me.SendPropertyChanging
+					Me._PACKSTATUS = value
+					Me.SendPropertyChanged("PACKSTATUS")
+					Me.OnPACKSTATUSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PACKCODE1", DbType:="VarChar(15)")>  _
+		Public Property PACKCODE1() As String
+			Get
+				Return Me._PACKCODE1
+			End Get
+			Set
+				If (String.Equals(Me._PACKCODE1, value) = false) Then
+					Me.OnPACKCODE1Changing(value)
+					Me.SendPropertyChanging
+					Me._PACKCODE1 = value
+					Me.SendPropertyChanged("PACKCODE1")
+					Me.OnPACKCODE1Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PACKCODE2", DbType:="VarChar(15)")>  _
+		Public Property PACKCODE2() As String
+			Get
+				Return Me._PACKCODE2
+			End Get
+			Set
+				If (String.Equals(Me._PACKCODE2, value) = false) Then
+					Me.OnPACKCODE2Changing(value)
+					Me.SendPropertyChanging
+					Me._PACKCODE2 = value
+					Me.SendPropertyChanged("PACKCODE2")
+					Me.OnPACKCODE2Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LWMARKUP", DbType:="Float")>  _
+		Public Property LWMARKUP() As System.Nullable(Of Double)
+			Get
+				Return Me._LWMARKUP
+			End Get
+			Set
+				If (Me._LWMARKUP.Equals(value) = false) Then
+					Me.OnLWMARKUPChanging(value)
+					Me.SendPropertyChanging
+					Me._LWMARKUP = value
+					Me.SendPropertyChanged("LWMARKUP")
+					Me.OnLWMARKUPChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LRMARKUP", DbType:="Float")>  _
+		Public Property LRMARKUP() As System.Nullable(Of Double)
+			Get
+				Return Me._LRMARKUP
+			End Get
+			Set
+				If (Me._LRMARKUP.Equals(value) = false) Then
+					Me.OnLRMARKUPChanging(value)
+					Me.SendPropertyChanging
+					Me._LRMARKUP = value
+					Me.SendPropertyChanged("LRMARKUP")
+					Me.OnLRMARKUPChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NUM01", DbType:="Float")>  _
+		Public Property NUM01() As System.Nullable(Of Double)
+			Get
+				Return Me._NUM01
+			End Get
+			Set
+				If (Me._NUM01.Equals(value) = false) Then
+					Me.OnNUM01Changing(value)
+					Me.SendPropertyChanging
+					Me._NUM01 = value
+					Me.SendPropertyChanged("NUM01")
+					Me.OnNUM01Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NUM02", DbType:="Float")>  _
+		Public Property NUM02() As System.Nullable(Of Double)
+			Get
+				Return Me._NUM02
+			End Get
+			Set
+				If (Me._NUM02.Equals(value) = false) Then
+					Me.OnNUM02Changing(value)
+					Me.SendPropertyChanging
+					Me._NUM02 = value
+					Me.SendPropertyChanged("NUM02")
+					Me.OnNUM02Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NUM03", DbType:="Float")>  _
+		Public Property NUM03() As System.Nullable(Of Double)
+			Get
+				Return Me._NUM03
+			End Get
+			Set
+				If (Me._NUM03.Equals(value) = false) Then
+					Me.OnNUM03Changing(value)
+					Me.SendPropertyChanging
+					Me._NUM03 = value
+					Me.SendPropertyChanged("NUM03")
+					Me.OnNUM03Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NUM04", DbType:="Float")>  _
+		Public Property NUM04() As System.Nullable(Of Double)
+			Get
+				Return Me._NUM04
+			End Get
+			Set
+				If (Me._NUM04.Equals(value) = false) Then
+					Me.OnNUM04Changing(value)
+					Me.SendPropertyChanging
+					Me._NUM04 = value
+					Me.SendPropertyChanged("NUM04")
+					Me.OnNUM04Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BOOL01", DbType:="SmallInt")>  _
+		Public Property BOOL01() As System.Nullable(Of Short)
+			Get
+				Return Me._BOOL01
+			End Get
+			Set
+				If (Me._BOOL01.Equals(value) = false) Then
+					Me.OnBOOL01Changing(value)
+					Me.SendPropertyChanging
+					Me._BOOL01 = value
+					Me.SendPropertyChanged("BOOL01")
+					Me.OnBOOL01Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BOOL02", DbType:="SmallInt")>  _
+		Public Property BOOL02() As System.Nullable(Of Short)
+			Get
+				Return Me._BOOL02
+			End Get
+			Set
+				If (Me._BOOL02.Equals(value) = false) Then
+					Me.OnBOOL02Changing(value)
+					Me.SendPropertyChanging
+					Me._BOOL02 = value
+					Me.SendPropertyChanged("BOOL02")
+					Me.OnBOOL02Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DATE01", DbType:="DateTime")>  _
+		Public Property DATE01() As System.Nullable(Of Date)
+			Get
+				Return Me._DATE01
+			End Get
+			Set
+				If (Me._DATE01.Equals(value) = false) Then
+					Me.OnDATE01Changing(value)
+					Me.SendPropertyChanging
+					Me._DATE01 = value
+					Me.SendPropertyChanged("DATE01")
+					Me.OnDATE01Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DATE02", DbType:="DateTime")>  _
+		Public Property DATE02() As System.Nullable(Of Date)
+			Get
+				Return Me._DATE02
+			End Get
+			Set
+				If (Me._DATE02.Equals(value) = false) Then
+					Me.OnDATE02Changing(value)
+					Me.SendPropertyChanging
+					Me._DATE02 = value
+					Me.SendPropertyChanged("DATE02")
+					Me.OnDATE02Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_UFTBL01", DbType:="SmallInt")>  _
+		Public Property UFTBL01() As System.Nullable(Of Short)
+			Get
+				Return Me._UFTBL01
+			End Get
+			Set
+				If (Me._UFTBL01.Equals(value) = false) Then
+					Me.OnUFTBL01Changing(value)
+					Me.SendPropertyChanging
+					Me._UFTBL01 = value
+					Me.SendPropertyChanged("UFTBL01")
+					Me.OnUFTBL01Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_UFTBL02", DbType:="SmallInt")>  _
+		Public Property UFTBL02() As System.Nullable(Of Short)
+			Get
+				Return Me._UFTBL02
+			End Get
+			Set
+				If (Me._UFTBL02.Equals(value) = false) Then
+					Me.OnUFTBL02Changing(value)
+					Me.SendPropertyChanging
+					Me._UFTBL02 = value
+					Me.SendPropertyChanged("UFTBL02")
+					Me.OnUFTBL02Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_cccTrdDep", DbType:="Int")>  _
+		Public Property cccTrdDep() As System.Nullable(Of Integer)
+			Get
+				Return Me._cccTrdDep
+			End Get
+			Set
+				If (Me._cccTrdDep.Equals(value) = false) Then
+					Me.OncccTrdDepChanging(value)
+					Me.SendPropertyChanging
+					Me._cccTrdDep = value
+					Me.SendPropertyChanged("cccTrdDep")
+					Me.OncccTrdDepChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_cccTrdr", DbType:="Int")>  _
+		Public Property cccTrdr() As System.Nullable(Of Integer)
+			Get
+				Return Me._cccTrdr
+			End Get
+			Set
+				If (Me._cccTrdr.Equals(value) = false) Then
+					Me.OncccTrdrChanging(value)
+					Me.SendPropertyChanging
+					Me._cccTrdr = value
+					Me.SendPropertyChanged("cccTrdr")
+					Me.OncccTrdrChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_INST", DbType:="Int")>  _
+		Public Property INST() As System.Nullable(Of Integer)
+			Get
+				Return Me._INST
+			End Get
+			Set
+				If (Me._INST.Equals(value) = false) Then
+					Me.OnINSTChanging(value)
+					Me.SendPropertyChanging
+					Me._INST = value
+					Me.SendPropertyChanged("INST")
+					Me.OnINSTChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CNTR", DbType:="Int")>  _
+		Public Property CNTR() As System.Nullable(Of Integer)
+			Get
+				Return Me._CNTR
+			End Get
+			Set
+				If (Me._CNTR.Equals(value) = false) Then
+					Me.OnCNTRChanging(value)
+					Me.SendPropertyChanging
+					Me._CNTR = value
+					Me.SendPropertyChanged("CNTR")
+					Me.OnCNTRChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_VAT1", DbType:="Int")>  _
+		Public Property VAT1() As System.Nullable(Of Integer)
+			Get
+				Return Me._VAT1
+			End Get
+			Set
+				If (Me._VAT1.Equals(value) = false) Then
+					Me.OnVAT1Changing(value)
+					Me.SendPropertyChanging
+					Me._VAT1 = value
+					Me.SendPropertyChanged("VAT1")
+					Me.OnVAT1Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CUSTOMSLOT", DbType:="Int")>  _
+		Public Property CUSTOMSLOT() As System.Nullable(Of Integer)
+			Get
+				Return Me._CUSTOMSLOT
+			End Get
+			Set
+				If (Me._CUSTOMSLOT.Equals(value) = false) Then
+					Me.OnCUSTOMSLOTChanging(value)
+					Me.SendPropertyChanging
+					Me._CUSTOMSLOT = value
+					Me.SendPropertyChanged("CUSTOMSLOT")
+					Me.OnCUSTOMSLOTChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CMTRUNIT", DbType:="SmallInt")>  _
+		Public Property CMTRUNIT() As System.Nullable(Of Short)
+			Get
+				Return Me._CMTRUNIT
+			End Get
+			Set
+				If (Me._CMTRUNIT.Equals(value) = false) Then
+					Me.OnCMTRUNITChanging(value)
+					Me.SendPropertyChanging
+					Me._CMTRUNIT = value
+					Me.SendPropertyChanged("CMTRUNIT")
+					Me.OnCMTRUNITChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_QUANTITY", DbType:="Float")>  _
+		Public Property QUANTITY() As System.Nullable(Of Double)
+			Get
+				Return Me._QUANTITY
+			End Get
+			Set
+				If (Me._QUANTITY.Equals(value) = false) Then
+					Me.OnQUANTITYChanging(value)
+					Me.SendPropertyChanging
+					Me._QUANTITY = value
+					Me.SendPropertyChanged("QUANTITY")
+					Me.OnQUANTITYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_GROSSMASS", DbType:="Float")>  _
+		Public Property GROSSMASS() As System.Nullable(Of Double)
+			Get
+				Return Me._GROSSMASS
+			End Get
+			Set
+				If (Me._GROSSMASS.Equals(value) = false) Then
+					Me.OnGROSSMASSChanging(value)
+					Me.SendPropertyChanging
+					Me._GROSSMASS = value
+					Me.SendPropertyChanged("GROSSMASS")
+					Me.OnGROSSMASSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NETMASS", DbType:="Float")>  _
+		Public Property NETMASS() As System.Nullable(Of Double)
+			Get
+				Return Me._NETMASS
+			End Get
+			Set
+				If (Me._NETMASS.Equals(value) = false) Then
+					Me.OnNETMASSChanging(value)
+					Me.SendPropertyChanging
+					Me._NETMASS = value
+					Me.SendPropertyChanged("NETMASS")
+					Me.OnNETMASSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BOND", DbType:="Int")>  _
+		Public Property BOND() As System.Nullable(Of Integer)
+			Get
+				Return Me._BOND
+			End Get
+			Set
+				If (Me._BOND.Equals(value) = false) Then
+					Me.OnBONDChanging(value)
+					Me.SendPropertyChanging
+					Me._BOND = value
+					Me.SendPropertyChanged("BOND")
+					Me.OnBONDChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PSPCS", DbType:="Int")>  _
+		Public Property PSPCS() As System.Nullable(Of Integer)
+			Get
+				Return Me._PSPCS
+			End Get
+			Set
+				If (Me._PSPCS.Equals(value) = false) Then
+					Me.OnPSPCSChanging(value)
+					Me.SendPropertyChanging
+					Me._PSPCS = value
+					Me.SendPropertyChanged("PSPCS")
+					Me.OnPSPCSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNDOCCATEGORY", DbType:="Int")>  _
+		Public Property ACNDOCCATEGORY() As System.Nullable(Of Integer)
+			Get
+				Return Me._ACNDOCCATEGORY
+			End Get
+			Set
+				If (Me._ACNDOCCATEGORY.Equals(value) = false) Then
+					Me.OnACNDOCCATEGORYChanging(value)
+					Me.SendPropertyChanging
+					Me._ACNDOCCATEGORY = value
+					Me.SendPropertyChanged("ACNDOCCATEGORY")
+					Me.OnACNDOCCATEGORYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MYDATACODE", DbType:="SmallInt")>  _
+		Public Property MYDATACODE() As System.Nullable(Of Short)
+			Get
+				Return Me._MYDATACODE
+			End Get
+			Set
+				If (Me._MYDATACODE.Equals(value) = false) Then
+					Me.OnMYDATACODEChanging(value)
+					Me.SendPropertyChanging
+					Me._MYDATACODE = value
+					Me.SendPropertyChanged("MYDATACODE")
+					Me.OnMYDATACODEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMODEL", DbType:="SmallInt")>  _
+		Public Property ACNMODEL() As System.Nullable(Of Short)
+			Get
+				Return Me._ACNMODEL
+			End Get
+			Set
+				If (Me._ACNMODEL.Equals(value) = false) Then
+					Me.OnACNMODELChanging(value)
+					Me.SendPropertyChanging
+					Me._ACNMODEL = value
+					Me.SendPropertyChanged("ACNMODEL")
+					Me.OnACNMODELChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CPVCODE", DbType:="Int")>  _
+		Public Property CPVCODE() As System.Nullable(Of Integer)
+			Get
+				Return Me._CPVCODE
+			End Get
+			Set
+				If (Me._CPVCODE.Equals(value) = false) Then
+					Me.OnCPVCODEChanging(value)
+					Me.SendPropertyChanging
+					Me._CPVCODE = value
+					Me.SendPropertyChanged("CPVCODE")
+					Me.OnCPVCODEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ccCAFINDOC", DbType:="Int")>  _
+		Public Property ccCAFINDOC() As System.Nullable(Of Integer)
+			Get
+				Return Me._ccCAFINDOC
+			End Get
+			Set
+				If (Me._ccCAFINDOC.Equals(value) = false) Then
+					Me.OnccCAFINDOCChanging(value)
+					Me.SendPropertyChanging
+					Me._ccCAFINDOC = value
+					Me.SendPropertyChanged("ccCAFINDOC")
+					Me.OnccCAFINDOCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ccCAMTRLINES", DbType:="Int")>  _
+		Public Property ccCAMTRLINES() As System.Nullable(Of Integer)
+			Get
+				Return Me._ccCAMTRLINES
+			End Get
+			Set
+				If (Me._ccCAMTRLINES.Equals(value) = false) Then
+					Me.OnccCAMTRLINESChanging(value)
+					Me.SendPropertyChanging
+					Me._ccCAMTRLINES = value
+					Me.SendPropertyChanged("ccCAMTRLINES")
+					Me.OnccCAMTRLINESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="FINDOC_MTRLINE", Storage:="_FINDOC1", ThisKey:="FINDOC", OtherKey:="FINDOC", IsForeignKey:=true, DeleteOnNull:=true, DeleteRule:="CASCADE")>  _
+		Public Property FINDOC1() As FINDOC
+			Get
+				Return Me._FINDOC1.Entity
+			End Get
+			Set
+				Dim previousValue As FINDOC = Me._FINDOC1.Entity
+				If ((Object.Equals(previousValue, value) = false)  _
+							OrElse (Me._FINDOC1.HasLoadedOrAssignedValue = false)) Then
+					Me.SendPropertyChanging
+					If ((previousValue Is Nothing)  _
+								= false) Then
+						Me._FINDOC1.Entity = Nothing
+						previousValue.MTRLINEs.Remove(Me)
+					End If
+					Me._FINDOC1.Entity = value
+					If ((value Is Nothing)  _
+								= false) Then
+						value.MTRLINEs.Add(Me)
+						Me._FINDOC = value.FINDOC
+					Else
+						Me._FINDOC = CType(Nothing, Integer)
+					End If
+					Me.SendPropertyChanged("FINDOC1")
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="MTRL_MTRLINE", Storage:="_MTRL1", ThisKey:="MTRL", OtherKey:="MTRL", IsForeignKey:=true)>  _
+		Public Property MTRL1() As MTRL
+			Get
+				Return Me._MTRL1.Entity
+			End Get
+			Set
+				Dim previousValue As MTRL = Me._MTRL1.Entity
+				If ((Object.Equals(previousValue, value) = false)  _
+							OrElse (Me._MTRL1.HasLoadedOrAssignedValue = false)) Then
+					Me.SendPropertyChanging
+					If ((previousValue Is Nothing)  _
+								= false) Then
+						Me._MTRL1.Entity = Nothing
+						previousValue.MTRLINEs.Remove(Me)
+					End If
+					Me._MTRL1.Entity = value
+					If ((value Is Nothing)  _
+								= false) Then
+						value.MTRLINEs.Add(Me)
+						Me._MTRL = value.MTRL
+					Else
+						Me._MTRL = CType(Nothing, Integer)
+					End If
+					Me.SendPropertyChanged("MTRL1")
+				End If
+			End Set
+		End Property
+		
+		Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+		
+		Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+		
+		Protected Overridable Sub SendPropertyChanging()
+			If ((Me.PropertyChangingEvent Is Nothing)  _
+						= false) Then
+				RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+			End If
+		End Sub
+		
+		Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+			If ((Me.PropertyChangedEvent Is Nothing)  _
+						= false) Then
+				RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+			End If
 		End Sub
 	End Class
 	

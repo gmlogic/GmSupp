@@ -91,8 +91,8 @@ Namespace Revera
 
         Public Property NO_ As Integer
         Public Property FINDOC As Integer
-        Public MTRLINES As System.Nullable(Of Integer)
-        Public LINENUM As System.Nullable(Of Integer)
+        Public Property MTRLINES As Integer
+        Public Property LINENUM As Integer
         Public Property TRDR As System.Nullable(Of Integer)
         Public Property CODE As String
         Public Property NAME As String
@@ -129,6 +129,8 @@ Namespace Revera
         Public Property PRICE As System.Nullable(Of Double)
         Public Property PENDING As System.Nullable(Of Short)
         Public Property SODTYPE As Short
+        Public Property ccCAFINDOC As System.Nullable(Of Integer)
+        Public Property ccCAMTRLINES As System.Nullable(Of Integer)
 
         ''' <summary>
         ''' Εγκρ.Ποσ.1
@@ -173,6 +175,12 @@ Namespace Revera
         ''' </summary>
         ''' <returns></returns>
         Public Property UFTBL02 As Short?
+
+        ''' <summary>
+        ''' Calculated (fn_GmGetTransformsDocs,ccCSettingsLines 
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property ApplicationLog As String
 
     End Class
 End Namespace

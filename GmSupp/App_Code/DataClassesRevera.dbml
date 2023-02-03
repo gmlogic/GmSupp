@@ -395,8 +395,8 @@
       <Column Name="MTRLA" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="MTRLP" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="HASBAIL" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Association Name="MTRL_MTRLINE" Member="MTRLINEs" ThisKey="MTRL" OtherKey="MTRL" Type="MTRLINE" />
       <Association Name="MTRL_MTRDOC" Member="MTRDOCs" ThisKey="MTRL" OtherKey="MTRL" Type="MTRDOC" />
+      <Association Name="MTRL_MTRLINE" Member="MTRLINEs" ThisKey="MTRL" OtherKey="MTRL" Type="MTRLINE" />
     </Type>
   </Table>
   <Table Name="dbo.cccMultiCompData" Member="cccMultiCompDatas">
@@ -529,148 +529,6 @@
       <Column Name="SERIES" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="FISCPRD" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="SERIESNUM" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.MTRLINES" Member="MTRLINEs">
-    <Type Name="MTRLINE">
-      <Column Name="COMPANY" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="FINDOC" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="MTRLINES" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="LINENUM" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="SODTYPE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="MTRL" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="PENDING" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="RESTMODE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="SOSOURCE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="SOREDIR" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="SCODE" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="MTRTYPE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="SOTYPE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="WHOUSE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="WHOUSESEC" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="MTRUNIT" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="VAT" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="PRJC" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="PRJLINES" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="PRJCSTAGE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="MTRPRJCBLD" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="SOEXPTYPE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="SALESMAN" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="RSRC" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="MTRLOT" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="ASSDEPR" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="WHOUSEBIN" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="WHOUSEBINSEC" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="BUSUNITS" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="MTRSEASON" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="MTRCATEGORY" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="PRCPOLICY" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="SPCS" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="MTRPACK" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="QTYP" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="QTY" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="QTY1" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="QTY2" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="QTY1COV" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="QTY1CANC" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="QTY1FCOV" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="SHIPDATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="DELIVDATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="WEIGHT" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="VOLUME" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="INTVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="INTVAT" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="BGINTCOUNTRY" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="BGINTDISTRICT" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="DUTY" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="PLSMVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="PLSMVAT" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="PRICE" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="PRICE1" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="LINEVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="LLINEVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="EXPVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="LEXPVAL" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="LEXPVAL1" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="LEXPVATVAL1" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="DISC1PRC" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="DISC2PRC" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="DISC3PRC" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="DISC1VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="LDISC1VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="DISC2VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="LDISC2VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="DISC3VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="LDISC3VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="NETLINEVAL" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="LNETLINEVAL" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="VATAMNT" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="LVATAMNT" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="LVATNOEXM" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="SALESCVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="EFKVAL" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="COMMENTS" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="COMMENTS1" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
-      <Column Name="COMMENTS2" Type="System.String" DbType="VarChar(512)" CanBeNull="true" />
-      <Column Name="DIMENSION1" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="DIMENSION2" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="DIMENSION3" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="TRNLINEVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="LTRNLINEVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="PRCRULEDATA" Type="System.String" DbType="VarChar(1024)" CanBeNull="true" />
-      <Column Name="INSTALMENTS" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="WASTE" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="COSTCOEF" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="CONVPRC" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="STAGE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="STAGELINENUM" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="ACNMSK" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
-      <Column Name="ACNMSK1" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
-      <Column Name="FINDOCS" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="MTRLINESS" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="FINDOCL" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="MTRLINESL" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SOANAL" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="SXMSKK" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SXPERC" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="BGLEXCISE" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="AUTOPRDDOC" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="ACNMSKS" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
-      <Column Name="ACNMSKX" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
-      <Column Name="COSTCNTR" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="ITECALCTYPE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="GUARTIME" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="SRVDEBITTYPE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="PACKSTATUS" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="PACKCODE1" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
-      <Column Name="PACKCODE2" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
-      <Column Name="LWMARKUP" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="LRMARKUP" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="NUM01" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="NUM02" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="NUM03" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="NUM04" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="BOOL01" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="BOOL02" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="DATE01" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="DATE02" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="UFTBL01" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="UFTBL02" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="cccTrdDep" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="cccTrdr" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="INST" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CNTR" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="VAT1" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CUSTOMSLOT" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CMTRUNIT" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="QUANTITY" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="GROSSMASS" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="NETMASS" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="BOND" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="PSPCS" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="ACNDOCCATEGORY" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="MTRL_MTRLINE" Member="MTRL1" ThisKey="MTRL" OtherKey="MTRL" Type="MTRL" IsForeignKey="true" />
-      <Association Name="FINDOC_MTRLINE" Member="FINDOC1" ThisKey="FINDOC" OtherKey="FINDOC" Type="FINDOC" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.BRANCH" Member="BRANCHes">
@@ -1129,15 +987,162 @@
       <Column Name="ccCRUser" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
       <Column Name="ccCApplicant" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Association Name="FINDOC_FINPAYTERM" Member="FINPAYTERMs" ThisKey="FINDOC" OtherKey="FINDOC" Type="FINPAYTERM" />
-      <Association Name="FINDOC_MTRLINE" Member="MTRLINEs" ThisKey="FINDOC" OtherKey="FINDOC" Type="MTRLINE" />
       <Association Name="FINDOC_MTRDOC" Member="MTRDOC" ThisKey="FINDOC" OtherKey="FINDOC" Type="MTRDOC" Cardinality="One" />
       <Association Name="FINDOC_FINDOC" Member="FINDOCs1" ThisKey="FINDOC" OtherKey="FINDOCG" Type="FINDOC" />
       <Association Name="FINDOC_FINDOC1" Member="FINDOCs2" ThisKey="FINDOC" OtherKey="FINDOCS" Type="FINDOC" />
+      <Association Name="FINDOC_MTRLINE" Member="MTRLINEs" ThisKey="FINDOC" OtherKey="FINDOC" Type="MTRLINE" />
       <Association Name="BRANCH_FINDOC" Member="BRANCH1" ThisKey="COMPANY,BRANCH" OtherKey="COMPANY,BRANCH" Type="BRANCH" IsForeignKey="true" />
       <Association Name="FINDOC_FINDOC" Member="FINDOC1" ThisKey="FINDOCG" OtherKey="FINDOC" Type="FINDOC" IsForeignKey="true" />
       <Association Name="FINDOC_FINDOC1" Member="FINDOC2" ThisKey="FINDOCS" OtherKey="FINDOC" Type="FINDOC" IsForeignKey="true" />
       <Association Name="FPRM_FINDOC" Member="FPRM" ThisKey="COMPANY,SOSOURCE,FPRMS" OtherKey="COMPANY,SOSOURCE,FPRMS" Type="FPRM" IsForeignKey="true" />
       <Association Name="TRDR_FINDOC" Member="TRDR1" ThisKey="TRDR" OtherKey="TRDR" Type="TRDR" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MTRLINES" Member="MTRLINEs">
+    <Type Name="MTRLINE">
+      <Column Name="COMPANY" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="FINDOC" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MTRLINES" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LINENUM" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SODTYPE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="MTRL" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PENDING" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="RESTMODE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="SOSOURCE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SOREDIR" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SCODE" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="MTRTYPE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="SOTYPE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="WHOUSE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="WHOUSESEC" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="MTRUNIT" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="VAT" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PRJC" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PRJLINES" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PRJCSTAGE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="MTRPRJCBLD" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="SOEXPTYPE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="SALESMAN" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RSRC" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MTRLOT" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ASSDEPR" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="WHOUSEBIN" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="WHOUSEBINSEC" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="BUSUNITS" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="MTRSEASON" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="MTRCATEGORY" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="PRCPOLICY" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="SPCS" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MTRPACK" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="QTYP" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="QTY" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="QTY1" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="QTY2" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="QTY1COV" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="QTY1CANC" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="QTY1FCOV" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SHIPDATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DELIVDATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="WEIGHT" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="VOLUME" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="INTVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="INTVAT" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BGINTCOUNTRY" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="BGINTDISTRICT" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="DUTY" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PLSMVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PLSMVAT" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PRICE" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PRICE1" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LINEVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LLINEVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="EXPVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LEXPVAL" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="LEXPVAL1" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LEXPVATVAL1" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DISC1PRC" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DISC2PRC" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DISC3PRC" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DISC1VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LDISC1VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DISC2VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LDISC2VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DISC3VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LDISC3VAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="NETLINEVAL" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="LNETLINEVAL" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="VATAMNT" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="LVATAMNT" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="LVATNOEXM" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="SALESCVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="EFKVAL" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="COMMENTS" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="COMMENTS1" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
+      <Column Name="COMMENTS2" Type="System.String" DbType="VarChar(512)" CanBeNull="true" />
+      <Column Name="DIMENSION1" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DIMENSION2" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DIMENSION3" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="TRNLINEVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LTRNLINEVAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PRCRULEDATA" Type="System.String" DbType="VarChar(1024)" CanBeNull="true" />
+      <Column Name="INSTALMENTS" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="WASTE" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="COSTCOEF" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="CONVPRC" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="STAGE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="STAGELINENUM" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="ACNMSK" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
+      <Column Name="ACNMSK1" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
+      <Column Name="FINDOCS" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MTRLINESS" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FINDOCL" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MTRLINESL" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SOANAL" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="SXMSKK" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SXPERC" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BGLEXCISE" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="AUTOPRDDOC" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ACNMSKS" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
+      <Column Name="ACNMSKX" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
+      <Column Name="COSTCNTR" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ITECALCTYPE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="GUARTIME" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="SRVDEBITTYPE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="PACKSTATUS" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="PACKCODE1" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="PACKCODE2" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="LWMARKUP" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LRMARKUP" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="NUM01" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="NUM02" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="NUM03" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="NUM04" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BOOL01" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="BOOL02" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="DATE01" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DATE02" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="UFTBL01" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="UFTBL02" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="cccTrdDep" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="cccTrdr" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="INST" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CNTR" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VAT1" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CUSTOMSLOT" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CMTRUNIT" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="QUANTITY" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="GROSSMASS" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="NETMASS" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BOND" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PSPCS" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ACNDOCCATEGORY" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MYDATACODE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="ACNMODEL" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="CPVCODE" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ccCAFINDOC" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ccCAMTRLINES" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="FINDOC_MTRLINE" Member="FINDOC1" ThisKey="FINDOC" OtherKey="FINDOC" Type="FINDOC" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="MTRL_MTRLINE" Member="MTRL1" ThisKey="MTRL" OtherKey="MTRL" Type="MTRL" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.GetWHouseBalance" Method="GetWHouseBalance">

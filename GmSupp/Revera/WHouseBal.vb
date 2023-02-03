@@ -1232,8 +1232,8 @@ Public Class WHouseBal
                 myArrN = ("Κωδικός,Αιτ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις,FinDoc").Split(",")
             End If
             If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
-                myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,COMMENTS1,FINDOC").Split(",")
-                myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις,FinDoc").Split(",")
+                myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,COMMENTS1,ApplicationLog,FINDOC,MTRLINES,ccCAFINDOC,ccCAMTRLINES").Split(",")
+                myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις,Ιστορικό Αίτησης,FinDoc,MtrLines,ccCAFINDOC,ccCAMTRLINE").Split(",")
             End If
 
             'Add Bound Columns
@@ -2439,6 +2439,7 @@ Public Class WHouseBal
         If Me.VscsBindingSource.Count > 0 Then
             Me.Validate()
             Me.VscsBindingSource.EndEdit()
+            Dim fin As New Revera.FINDOC
             If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
                 Dim Qtys = CType(Me.VscsBindingSource.DataSource, SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)).Where(Function(f) If(f.NUM03, 0) = 0).FirstOrDefault
                 If Not IsNothing(Qtys) Then
@@ -2490,12 +2491,8 @@ Public Class WHouseBal
                 End If
                 'do save
 
-                Dim fin As New Revera.FINDOC
-
                 fin.TRNDATE = wfm.DateTimePicker1.Value.ToShortDateString
-
                 fin = Findoc_AddingNew(fin, 1251, 1000)
-
                 fin.TRDR = 39611 'Προμηθευτής Αίτησης' wfm.ddlSuppliers.SelectedValue
                 'fin.TRDR = wfm.ddlSuppliers.SelectedValue
                 'fin.TRDBRANCH = db.trd.
@@ -2675,6 +2672,12 @@ Public Class WHouseBal
 
                 'SendEmail(wfm)
                 If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
+                    fin = db.FINDOCs.Where(Function(f) f.FINDOC = fin.FINDOC).FirstOrDefault
+                    For Each mt In fin.MTRLINEs
+                        mt.ccCAFINDOC = mt.FINDOC
+                        mt.ccCAMTRLINES = mt.MTRLINES
+                    Next
+                    SaveData()
                     Me.TlsBtnClear.PerformClick()
                 End If
                 SetGmChkListBox() 'Clear Me.VscsBindingSource.DataSource 
@@ -2880,6 +2883,7 @@ Public Class WHouseBal
                         'Dim Res = db.ccCVMtrLines.Where(Function(f) f.FINDOC = findoc).ToList
                         Dim res = CType(Me.VscsBindingSource.DataSource, List(Of GetPendingOrdersDetailsResult)).Where(Function(f) f.FINDOC = finHeader.FINDOC).ToList
                         'Me.VscsBindingSource.DataSource = New SortableBindingList(Of Revera.ccCVMtrLine)(Res)
+                        res = GetApplicantLogs(res)
                         Me.MTRLINEsDataGridView.DataSource = res 'Me.VscsBindingSource
                         Me.BindingNavigatorNewDoc.BindingSource = New BindingSource With {.DataSource = res} 'Me.VscsBindingSource
                         MTRLINEsDataGridView_Styling()
@@ -2962,6 +2966,23 @@ Public Class WHouseBal
             End If
         End If
     End Sub
+
+    Private Function GetApplicantLogs(res As List(Of GetPendingOrdersDetailsResult)) As List(Of GetPendingOrdersDetailsResult)
+        For Each re In res
+            Dim msns = db.MTRLINEs.Where(Function(f) f.FINDOCS = re.FINDOC And f.MTRLINESS = re.MTRLINES)
+            If msns IsNot Nothing Then
+                dim ApplicationLog=""
+                For Each msn In msns
+                    Dim f1 = db.FINDOCs.Where(Function(f) f.FINDOC = msn.FINDOC).FirstOrDefault
+                    re.ApplicationLog = "[" & f1.FINCODE & "" & "," & f1.TRDRRATE & "," & f1.FINDOC & "," & msn.MTRLINES & "]"
+                Next
+
+            End If
+        Next
+
+        Return res
+        Throw New NotImplementedException()
+    End Function
 
     Private Sub VisibleHigher(v As Boolean)
         Me.ToolStripSeparator10.Visible = v
@@ -3336,8 +3357,6 @@ Public Class WHouseBal
             Cmd_Select()
         End If
     End Sub
-
-
 
 
 #End Region
