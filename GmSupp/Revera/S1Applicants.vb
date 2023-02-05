@@ -8,7 +8,7 @@ Imports GmSupp.Hglp
 Public Class S1Applicants
 #Region "01-Declare Variables"
     Dim df As GmData
-    Dim db As New DataClassesCentrofaroDataContext
+    Dim db As New DataClassesReveraDataContext
     Dim dbPFIC As New DataClassesPFICDataContext
     Dim dbLNK As New DataClassesLNKDataContext
     Dim myArrF As String()
@@ -175,21 +175,25 @@ Public Class S1Applicants
             'Μεταφορείς:
             'Δρομολόγια:
             'CheckZIP:
-            Dim q = From cd In db.cccMultiCompDatas Join m In db.MTRLs On cd.mtrl Equals m.MTRL
-                    Where m.COMPANY = CompanyS
-                    Select cd.cccMultiCompData, cd.CompanyT, cd.mtrl, m.CODE, m.NAME, cd.CodeExp
+            'Dim q = From cd In db.cccMultiCompDatas Join m In db.MTRLs On cd.mtrl Equals m.MTRL
+            '        Where m.COMPANY = CompanyS
+            '        Select cd.cccMultiCompData, cd.CompanyT, cd.mtrl, m.CODE, m.NAME, cd.CodeExp
 
-            Dim qwh = q.Where(Function(f) 1 = 1) 'And f {1351, 1253}.Contains(f.SOSOURCE) And f.ISCANCEL = 0 And f.APPRV = 1)
+            Dim q = db.ccCS1Applicants.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251)
 
-            qwh = qwh.Where(Function(f) f.CompanyT = CompanyT)
 
-            If Not Me.TlSTxtMTRL.Text = "" Then
-                qwh = qwh.Where(Function(f) f.CODE Like Me.TlSTxtMTRL.Text)
-            End If
 
-            If Me.chkBoxCodeExp.Checked Then
-                qwh = qwh.Where(Function(f) f.CodeExp Is Nothing)
-            End If
+            Dim qwh = q.Where(Function(f) f.SOSOURCE = 1251) 'And f {1351, 1253}.Contains(f.SOSOURCE) And f.ISCANCEL = 0 And f.APPRV = 1)
+
+            'qwh = qwh.Where(Function(f) f.CompanyT = CompanyT)
+
+            'If Not Me.TlSTxtMTRL.Text = "" Then
+            '    qwh = qwh.Where(Function(f) f.CODE Like Me.TlSTxtMTRL.Text)
+            'End If
+
+            'If Me.chkBoxCodeExp.Checked Then
+            '    qwh = qwh.Where(Function(f) f.CodeExp Is Nothing)
+            'End If
 
 
 
@@ -337,8 +341,8 @@ Public Class S1Applicants
             Me.MasterDataGridView.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
             'Me.MasterDataGridView.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect
 
-            myArrF = ("CompanyT,CODE,NAME").Split(",")
-            myArrN = ("Εταιρεία,Κωδικός,Περιγραφή").Split(",")
+            myArrF = ("COMPANY,SOSOURCE,UFTBL01,CODE,NAME,ISACTIVE,ccCUser,AspNetUsersName").Split(",")
+            myArrN = ("COMPANY,SOSOURCE,UFTBL01,CODE,NAME,ISACTIVE,ccCUser,AspNetUsersName").Split(",")
 
             'Add Bound Columns
             Dim bad_item_columns() As Integer = {1, 2, 3, 4}
@@ -348,7 +352,7 @@ Public Class S1Applicants
                 Debug.Print(MasterDataGridView.Columns(i).DataPropertyName & vbTab & MasterDataGridView.Columns(i).Name)
             Next
 
-
+            Exit Sub
 
             'Dim SumShVALDataGridViewTextBoxColumn As New DataGridViewTextBoxColumn
             'SumShVALDataGridViewTextBoxColumn.DataPropertyName = "SumShVAL"
@@ -518,7 +522,7 @@ Public Class S1Applicants
                     If ml.Count = 1 Then
 
                         Dim ccode As String = s.Rows(e.RowIndex).Cells("Κωδικός").Value
-                        Dim mm As Centro.MTRL = db.MTRLs.Where(Function(f) f.COMPANY = CompanyS And f.CODE = ccode).FirstOrDefault
+                        Dim mm As Centro.MTRL = Nothing 'db.MTRLs.Where(Function(f) f.COMPANY = CompanyS And f.CODE = ccode).FirstOrDefault
                         If Not IsNothing(mm) Then
                             Dim mtrl As Integer = mm.MTRL ' db.MTRLs.Where(Function(f) f.CODE = ccode).FirstOrDefault.MTRL
                             Dim companyT As Integer = s.Rows(e.RowIndex).Cells("Εταιρεία").Value
@@ -797,7 +801,7 @@ Public Class S1Applicants
     End Sub
     ' Load the data.
     Private Sub LoadData()
-        db = New DataClassesCentrofaroDataContext(conn) 'My.Settings.GenConnectionString)
+        db = New DataClassesReveraDataContext(conn) 'My.Settings.GenConnectionString)
     End Sub
     Private Sub LoadDataInit()
         Try

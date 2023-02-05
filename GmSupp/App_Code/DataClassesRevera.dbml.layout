@@ -100,7 +100,7 @@
         <elementListCompartment Id="dfda8109-f6ec-42d7-8b92-25f84c24e843" absoluteBounds="6.015, 2.585, 1.9700000000000002, 11.402872721354166" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(9.40625 : 7.125); (9.40625 : 2.35); (8.52083333333333 : 2.35 : JumpStart); (8.35416666666667 : 2.35 : JumpEnd); (8.30208333333333 : 2.35 : JumpStart); (8.13541666666667 : 2.35 : JumpEnd); (8 : 2.35)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(9.40625 : 7.125); (9.40625 : 2.35); (8.30208333333333 : 2.35 : JumpStart); (8.13541666666667 : 2.35 : JumpEnd); (8 : 2.35)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataClassesReveraDataContext/BRANCH/BRANCH_MTRDOC" />
       <nodes>
         <classShapeMoniker Id="870889b4-5dce-4f41-abc3-5a92f8cdc960" />
@@ -139,7 +139,7 @@
         <classShapeMoniker Id="e5aa21f2-8cf1-439e-a44f-7c402d6847d6" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.7187495 : 1.325); (8.7187495 : 2.2062475); (8.52083333333333 : 2.2062475 : JumpStart); (8.35416666666667 : 2.2062475 : JumpEnd); (8.30208333333333 : 2.2062475 : JumpStart); (8.13541666666667 : 2.2062475 : JumpEnd); (8 : 2.2062475)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(8.7187495 : 1.325); (8.7187495 : 2.2062475); (8.30208333333333 : 2.2062475 : JumpStart); (8.13541666666667 : 2.2062475 : JumpEnd); (8 : 2.2062475)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataClassesReveraDataContext/FINDOC/FINDOC_MTRDOC" />
       <nodes>
         <classShapeMoniker Id="164157a5-c507-4531-9620-202490e7a62c" />
@@ -167,14 +167,14 @@
         <classShapeMoniker Id="164157a5-c507-4531-9620-202490e7a62c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(3.28125 : 2.5); (3.28125 : 0.921875); (7 : 0.921875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(3.28125 : 2.5); (3.28125 : 0.9062505); (7 : 0.9062505)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/DataClassesReveraDataContext/FPRM/FPRM_FINDOC" />
       <nodes>
         <classShapeMoniker Id="6cf84dbd-eb8e-4ea1-879a-bf74c9437df4" />
         <classShapeMoniker Id="164157a5-c507-4531-9620-202490e7a62c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.75 : 4.331248); (7.1875 : 4.331248); (7.1875 : 2.6375); (8.13541666666667 : 2.6375 : JumpStart); (8.30208333333333 : 2.6375 : JumpEnd); (8.4375 : 2.6375); (8.4375 : 1.41875); (8 : 1.41875); (8 : 1.325)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(4.75 : 4.25); (4.75 : 3.8875); (5.8125 : 3.8875); (5.8125 : 1.14687725); (7 : 1.14687725)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/DataClassesReveraDataContext/TRDR/TRDR_FINDOC" />
       <nodes>
         <classShapeMoniker Id="802aeccf-f303-4562-b416-90a7448a7240" />
@@ -205,6 +205,12 @@
       <DataClassMoniker Name="/DataClassesReveraDataContext/UFTBL01" />
       <nestedChildShapes>
         <elementListCompartment Id="fabebcb0-0441-4b9c-9bc3-7a0ce888ff87" absoluteBounds="0.51500000000000012, 2.585, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0bd773b8-5798-4531-844a-2e4ae8d7c8bb" isExpanded="false" absoluteBounds="0.5, 1.625, 2, 0.45">
+      <DataClassMoniker Name="/DataClassesReveraDataContext/ccCS1Applicant" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4571c1d3-fa3b-4224-982c-990c82a48506" absoluteBounds="0.51500000000000012, 2.085, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

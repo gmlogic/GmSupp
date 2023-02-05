@@ -486,6 +486,7 @@ Public Class GenMenu
         If curUserRole = "Admins" Then
             Me.ΑποθήκηToolStripMenuItem.Visible = True
             Me.UsersToolStripMenuItem.Visible = True
+            Me.S1ApplicantsToolStripMenuItem.Visible = True
             Exit Sub
         End If
         If CompName.Replace("SERTORIUS", "REVERA") = "REVERA" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(curUserRole)) Then
@@ -495,6 +496,7 @@ Public Class GenMenu
             Me.BarCodeGeneratorToolStripMenuItem.Visible = False
             Me.ΔημιουργίαToolStripMenuItem.Visible = False
             Me.ΔιαγραφήToolStripMenuItem.Visible = False
+            Me.S1ApplicantsToolStripMenuItem.Visible = False
             SetDBs(dbs.REVERA)
             Exit Sub
         End If

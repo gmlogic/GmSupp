@@ -1141,6 +1141,18 @@
       <Column Name="ccCUser" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.ccCS1Applicants" Member="ccCS1Applicants">
+    <Type Name="ccCS1Applicant">
+      <Column Name="COMPANY" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="SOSOURCE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UFTBL01" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="CODE" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="NAME" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ISACTIVE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ccCUser" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AspNetUsersName" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.GetWHouseBalance" Method="GetWHouseBalance">
     <Parameter Name="COMPANY" Parameter="cOMPANY" Type="System.Int16" DbType="SmallInt" />
     <Parameter Name="SODTYPE" Parameter="sODTYPE" Type="System.Int16" DbType="SmallInt" />

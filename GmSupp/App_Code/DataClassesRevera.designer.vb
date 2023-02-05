@@ -280,6 +280,12 @@ Partial Public Class DataClassesReveraDataContext
 		End Get
 	End Property
 	
+	Public ReadOnly Property ccCS1Applicants() As System.Data.Linq.Table(Of Revera.ccCS1Applicant)
+		Get
+			Return Me.GetTable(Of Revera.ccCS1Applicant)
+		End Get
+	End Property
+	
 	<Global.System.Data.Linq.Mapping.FunctionAttribute(Name:="dbo.GetWHouseBalance")>  _
 	Public Function GetWHouseBalance(<Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="COMPANY", DbType:="SmallInt")> ByVal cOMPANY As System.Nullable(Of Short), <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="SODTYPE", DbType:="SmallInt")> ByVal sODTYPE As System.Nullable(Of Short), <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="CODE", DbType:="VarChar(25)")> ByVal cODE As String, <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="NAME", DbType:="VarChar(128)")> ByVal nAME As String, <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="CODE1", DbType:="VarChar(25)")> ByVal cODE1 As String, <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="CODE2", DbType:="VarChar(25)")> ByVal cODE2 As String, <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="MTRPLACE", DbType:="VarChar(25)")> ByVal mTRPLACE As String, <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="REMAINLIMMIN", DbType:="Float")> ByVal rEMAINLIMMIN As System.Nullable(Of Double), <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="REMAINLIMMAX", DbType:="Float")> ByVal rEMAINLIMMAX As System.Nullable(Of Double), <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="REORDERLEVEL", DbType:="Float")> ByVal rEORDERLEVEL As System.Nullable(Of Double), <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="REMARKS", DbType:="VarChar(2000)")> ByVal rEMARKS As String, <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="QTY1", DbType:="Float")> ByVal qTY1 As System.Nullable(Of Double), <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="MTRL", DbType:="Int")> ByVal mTRL As System.Nullable(Of Integer), <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="DFROM", DbType:="DateTime")> ByVal dFROM As System.Nullable(Of Date), <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="DTO", DbType:="DateTime")> ByVal dTO As System.Nullable(Of Date)) As ISingleResult(Of Revera.GetWHouseBalanceResult)
 		Dim result As IExecuteResult = Me.ExecuteMethodCall(Me, CType(MethodInfo.GetCurrentMethod,MethodInfo), cOMPANY, sODTYPE, cODE, nAME, cODE1, cODE2, mTRPLACE, rEMAINLIMMIN, rEMAINLIMMAX, rEORDERLEVEL, rEMARKS, qTY1, mTRL, dFROM, dTO)
@@ -23755,6 +23761,130 @@ Namespace Revera
 				RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 			End If
 		End Sub
+	End Class
+	
+	<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ccCS1Applicants")>  _
+	Partial Public Class ccCS1Applicant
+		
+		Private _COMPANY As Short
+		
+		Private _SOSOURCE As Integer
+		
+		Private _UFTBL01 As Short
+		
+		Private _CODE As String
+		
+		Private _NAME As String
+		
+		Private _ISACTIVE As Short
+		
+		Private _ccCUser As String
+		
+		Private _AspNetUsersName As String
+		
+		Public Sub New()
+			MyBase.New
+		End Sub
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMPANY", DbType:="SmallInt NOT NULL")>  _
+		Public Property COMPANY() As Short
+			Get
+				Return Me._COMPANY
+			End Get
+			Set
+				If ((Me._COMPANY = value)  _
+							= false) Then
+					Me._COMPANY = value
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOSOURCE", DbType:="Int NOT NULL")>  _
+		Public Property SOSOURCE() As Integer
+			Get
+				Return Me._SOSOURCE
+			End Get
+			Set
+				If ((Me._SOSOURCE = value)  _
+							= false) Then
+					Me._SOSOURCE = value
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_UFTBL01", DbType:="SmallInt NOT NULL")>  _
+		Public Property UFTBL01() As Short
+			Get
+				Return Me._UFTBL01
+			End Get
+			Set
+				If ((Me._UFTBL01 = value)  _
+							= false) Then
+					Me._UFTBL01 = value
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CODE", DbType:="VarChar(30)")>  _
+		Public Property CODE() As String
+			Get
+				Return Me._CODE
+			End Get
+			Set
+				If (String.Equals(Me._CODE, value) = false) Then
+					Me._CODE = value
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NAME", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+		Public Property NAME() As String
+			Get
+				Return Me._NAME
+			End Get
+			Set
+				If (String.Equals(Me._NAME, value) = false) Then
+					Me._NAME = value
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ISACTIVE", DbType:="SmallInt NOT NULL")>  _
+		Public Property ISACTIVE() As Short
+			Get
+				Return Me._ISACTIVE
+			End Get
+			Set
+				If ((Me._ISACTIVE = value)  _
+							= false) Then
+					Me._ISACTIVE = value
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ccCUser", DbType:="VarChar(50)")>  _
+		Public Property ccCUser() As String
+			Get
+				Return Me._ccCUser
+			End Get
+			Set
+				If (String.Equals(Me._ccCUser, value) = false) Then
+					Me._ccCUser = value
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_AspNetUsersName", DbType:="NVarChar(128)")>  _
+		Public Property AspNetUsersName() As String
+			Get
+				Return Me._AspNetUsersName
+			End Get
+			Set
+				If (String.Equals(Me._AspNetUsersName, value) = false) Then
+					Me._AspNetUsersName = value
+				End If
+			End Set
+		End Property
 	End Class
 	
 	Partial Public Class GetWHouseBalanceResult
