@@ -101,8 +101,8 @@ Public Class GenMenu
             'frm.Tag = "Hglp"
             'frm.Text = "Αποθήκη - Εκτύπωση Ετικετών Barcode" '"Αποθήκη - Περιγραφή Ετικέτας"
             ''SettingForms(sender, e, frm, Me.ΑποθήκηToolStripMenuItem.Text & " - " & "Εκτύπωση Ετικετών Barcode", 0, True)
-            Dim frm As New GroupBalance
-            frm.Tag = "Πελατών"
+            'Dim frm As New GroupBalance
+            'frm.Tag = "Πελατών"
             'frm.ShowDialog()
 
             'AAGenLogin.ShowDialog()
@@ -504,41 +504,11 @@ Public Class GenMenu
             For Each mn As ToolStripItem In Me.MenuStrip.Items
                 mn.Visible = True
             Next
-        ElseIf {"g.igglesis"}.Contains(curUser) Then
-            Me.Text = "PFIC"
-            Me.ΈξοδαToolStripMenuItem.Visible = True
-        ElseIf {"i.pilarinos"}.Contains(curUser) Then
-            Me.Text = "PFIC"
-            Me.ΈξοδαToolStripMenuItem.Visible = True
-        ElseIf {"kbechrakis"}.Contains(curUser) Then
-            Me.Text = "PFIC"
-            Me.ShipmentsToolStripMenuItem.Visible = True
-            'Me.ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem.Visible = True
-            Me.ΑποθέματαToolStripMenuItem.Visible = True
-            'Me.ΤιμοκατάλογοιToolStripMenuItem.Visible = True
-            Me.ΥπόλοιπαToolStripMenuItem.Visible = True
-            SetDBs(dbs.PFIC)
-        ElseIf {"avichou", "panagiotis", "katerina", "gkonstantatos"}.Contains(curUser) Then
-            Me.Text = "LNK"
-            Me.ΈξοδαToolStripMenuItem.Visible = True
-        ElseIf {"akrokos", "thzachopoulos", "dkanellopoulos", "skamariaris"}.Contains(curUser) Then
-            Me.Text = "LNK"
-            Me.ΑποθέματαToolStripMenuItem.Visible = True
-        ElseIf {"controller"}.Contains(curUser) Then
-            Me.Text = "Hellagrolip"
-            Me.ΑποθέματαToolStripMenuItem.Visible = True
-            Me.ΥπόλοιπαToolStripMenuItem.Visible = True
+
         ElseIf {"ΣΥΝΤΗΡΗΣΗ"}.Contains(curUser) Then
             Me.Text = "Revera"
             Me.ΑποθήκηToolStripMenuItem.Visible = True
         Else
-            Me.ShipmentsToolStripMenuItem.Visible = True
-            Me.ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem.Visible = True
-            Me.ΑποθέματαToolStripMenuItem.Visible = True
-            Me.ΤιμοκατάλογοιToolStripMenuItem.Visible = True
-            If {"dmalandrakis", "iantypa", "kvasilaki", "afarasoglou", "mourailidou", "vantza", "pplumidi", "dgkolfis", "garavantinos", "transports"}.Contains(curUser) Then
-                Me.ΥπόλοιπαToolStripMenuItem.Visible = True
-            End If
         End If
 
 
@@ -711,31 +681,28 @@ Public Class GenMenu
         SetDBs(s.Tag)
     End Sub
 
-    Private Sub ImportNegativeEquitiesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportNegativeEquitiesToolStripMenuItem.Click
+    Private Sub ImportNegativeEquitiesToolStripMenuItem_Click(sender As Object, e As EventArgs)
         SettingForms(sender, e, New Import_Negative_Equitys, "Import_Negative_Equitys", 0, True)
     End Sub
 
-    Private Sub ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem.Click
+    Private Sub ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem_Click(sender As Object, e As EventArgs)
         'SettingForms(sender, e, New UnificationExcel, "Unification Excel", 0, True)
     End Sub
 
-    Private Sub ImportEAPToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportEAPToolStripMenuItem1.Click
+    Private Sub ImportEAPToolStripMenuItem_Click(sender As Object, e As EventArgs)
         'SettingForms(sender, e, New ImportEAP_TXT, "ImportEAP", 0, True)
     End Sub
 
-    Private Sub ShipmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShipmentsToolStripMenuItem.Click
-        SettingForms(sender, e, New ShipmentsBR, "Φορτώσεις", 0, True)
-    End Sub
 
-    Private Sub CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem.Click
+    Private Sub CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem_Click(sender As Object, e As EventArgs)
         'SettingForms(sender, e, New Pandektis, "Create ΠΑΝΔΕΚΤΗΣ", 0, True)
     End Sub
 
-    Private Sub CreateEAPToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateEAPToolStripMenuItem.Click
+    Private Sub CreateEAPToolStripMenuItem_Click(sender As Object, e As EventArgs)
         'SettingForms(sender, e, New CreateEAP, "Create EAP", 0, True)
     End Sub
 
-    Private Sub ImportN3869ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportN3869ToolStripMenuItem.Click
+    Private Sub ImportN3869ToolStripMenuItem_Click(sender As Object, e As EventArgs)
         'SettingForms(sender, e, New ImportN3869, "Import N3869", 0, True)
     End Sub
     Private Sub TestConnectionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TestConnectionToolStripMenuItem.Click
@@ -747,13 +714,6 @@ Public Class GenMenu
         End If
     End Sub
 
-    Private Sub ΑποθέματαToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ΑποθέματαToolStripMenuItem.Click
-        SettingForms(sender, e, New StoresBR, "Αποθέματα", 0, True)
-    End Sub
-
-    Private Sub ΥπόλοιπαΕιδώνΑναΑποθΧώροToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ΥπόλοιπαΕιδώνΑναΑποθΧώροToolStripMenuItem.Click
-        SettingForms(sender, e, New WhousesBR, "Υπόλοιπα ειδών ανα Αποθ. Χώρο", 0, True)
-    End Sub
     Private Sub ΑποθήκηToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ΥπόλοιπαΕιδώνToolStripMenuItem.Click, ΕκκρεμείςΠαραγγελίεςToolStripMenuItem.Click, ΑίτησηΠαραγγελίαςToolStripMenuItem.Click
         Dim s As ToolStripMenuItem = sender
         Dim frm As New WHouseBal
@@ -764,42 +724,10 @@ Public Class GenMenu
         frm.Text = s.Text
         SettingForms(sender, e, frm, Me.ΑποθήκηToolStripMenuItem.Text & " - " & s.Text, 0, True)
     End Sub
-    Private Sub ΜεταφορείςΔρομολόγιαToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ΜεταφορείςΔρομολόγιαToolStripMenuItem.Click
-        SettingForms(sender, e, New Routings, ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem.Text, 0, True)
-    End Sub
-    Private Sub ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem.Click
-        Dim s As ToolStripMenuItem = sender
-        Dim frm As New GroupBalance
-        frm.Tag = s.Text
-        SettingForms(sender, e, frm, Me.ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem.Text, 0, True)
-        'SettingForms(sender, e, New ManageCarrierPaypents, ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem.Text, 0, True)
-    End Sub
+
+
     Private Sub ImportExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportExcelToolStripMenuItem.Click
         SettingForms(sender, e, New ImportExcel, ImportExcel.Text, 0, True)
-    End Sub
-
-    Private Sub ΤιμοκατάλογοιToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ΤιμοκατάλογοιToolStripMenuItem.Click
-        SettingForms(sender, e, New PriceList, Me.ΤιμοκατάλογοιToolStripMenuItem.Text, 0, True)
-    End Sub
-
-    Private Sub ΥπόλοιπαToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ΥπόλοιπαΟμάδωνToolStripMenuItem.Click, ΠελατώνToolStripMenuItem.Click, ΠρομηθευτώνToolStripMenuItem.Click
-        Dim s As ToolStripMenuItem = sender
-        Dim frm As New GroupBalance
-        frm.Tag = s.Text
-        SettingForms(sender, e, frm, Me.ΥπόλοιπαToolStripMenuItem.Text & " - " & s.Text, 0, True)
-    End Sub
-
-    Private Sub AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem.Click
-        Dim s As ToolStripMenuItem = sender
-        Dim frm As New ChequeInSpecificDate
-        frm.Tag = s.Text
-        SettingForms(sender, e, frm, Me.AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem.Text, 0, True)
-    End Sub
-    Private Sub REVERA_CENTROFARO_ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles REVERAToolStripMenuItem.Click, CENTROFAROToolStripMenuItem.Click, SERTORIUSToolStripMenuItem.Click
-        Dim s As ToolStripMenuItem = sender
-        Dim frm As New ΕxpensesMtrl
-        frm.Tag = s.Text
-        SettingForms(sender, e, frm, Me.ΈξοδαToolStripMenuItem.Text & " - " & s.Text, 0, True)
     End Sub
 
     Private Sub ChangeSysDateToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ChangeSysDateToolStripMenuItem.Click
@@ -823,21 +751,6 @@ Public Class GenMenu
             Me.Close()
             Exit Sub
         End If
-    End Sub
-
-    Private Sub ΑντιστοιχίσειςToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ΑντιστοιχίσειςToolStripMenuItem.Click
-        Dim s As ToolStripMenuItem = sender
-        Dim frm As New OpenItemBR
-        frm.Tag = s.Text
-        SettingForms(sender, e, frm, Me.ΑντιστοιχίσειςToolStripMenuItem.Text & " - " & s.Text, 0, True)
-    End Sub
-
-    Private Sub GmS1LibToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GmS1LibToolStripMenuItem.Click
-        Dim s As ToolStripMenuItem = sender
-        Dim frm As New GmS1Lib.OpenItemBR
-        frm.Tag = "Αντιστοιχίσεις" 's.Text
-        'frm.Show()
-        SettingForms(sender, e, frm, Me.ΑντιστοιχίσειςToolStripMenuItem.Text & " - " & s.Text, 0, True)
     End Sub
 
     Private Sub ΔημιουργίαToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ΔημιουργίαToolStripMenuItem.Click, ΔιόρθωσηToolStripMenuItem.Click, ΔιαγραφήToolStripMenuItem.Click
@@ -870,4 +783,7 @@ Public Class GenMenu
         SettingForms(sender, e, frm, Me.ΑποθήκηToolStripMenuItem.Text & " - " & s.Text, 0, True)
     End Sub
 
+    Private Sub S1ApplicantsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles S1ApplicantsToolStripMenuItem.Click
+        SettingForms(sender, e, New S1Applicants, Me.S1ApplicantsToolStripMenuItem.Text, 0, True)
+    End Sub
 End Class

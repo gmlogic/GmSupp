@@ -666,13 +666,13 @@ Public Class WHouseBal
 
                 If Not Me.RadioBtnAll.Checked Then
                     If Me.RadioBtnToAproved.Checked Then
-                        POrdHead = POrdHead.Where(Function(f) System.Text.RegularExpressions.Regex.Matches(f.Highers, "STB").Count = 1 And Not f.Highers.Contains("OK")).ToList
+                        POrdHead = POrdHead.Where(Function(f) f.Highers IsNot Nothing AndAlso (System.Text.RegularExpressions.Regex.Matches(f.Highers, "STB").Count = 1 And Not f.Highers.Contains("OK"))).ToList
                     End If
                     If Me.RadioBtnPending.Checked Then
-                        POrdHead = POrdHead.Where(Function(f) f.Highers.Contains("STB") And f.Highers.Contains("OK")).ToList
+                        POrdHead = POrdHead.Where(Function(f) f.Highers IsNot Nothing AndAlso (f.Highers.Contains("STB") And f.Highers.Contains("OK"))).ToList
                     End If
                     If Me.RadioBtnApproved.Checked Then
-                        POrdHead = POrdHead.Where(Function(f) Not f.Highers.Contains("STB")).ToList
+                        POrdHead = POrdHead.Where(Function(f) f.Highers IsNot Nothing AndAlso Not f.Highers.Contains("STB")).ToList
                     End If
 
                 End If
@@ -1177,15 +1177,17 @@ Public Class WHouseBal
                         'If head.FINSTATES = 10 Then
                         '    row.DefaultCellStyle.BackColor = System.Drawing.Color.LimeGreen
                         'End If
+                        If head.Highers IsNot Nothing Then
+                            Dim higs = head.Highers.Split("|")
+                            row.DefaultCellStyle.BackColor = System.Drawing.Color.Empty
+                            If head.Highers.Contains("OK") And head.Highers.Contains("STB") Then
+                                row.DefaultCellStyle.BackColor = System.Drawing.Color.Yellow
+                            End If
+                            If head.Highers.Contains("OK") And Not head.Highers.Contains("STB") Then
+                                row.DefaultCellStyle.BackColor = System.Drawing.Color.LimeGreen
+                            End If
+                        End If
 
-                        Dim higs = head.Highers.Split("|")
-                        row.DefaultCellStyle.BackColor = System.Drawing.Color.Empty
-                        If head.Highers.Contains("OK") And head.Highers.Contains("STB") Then
-                            row.DefaultCellStyle.BackColor = System.Drawing.Color.Yellow
-                        End If
-                        If head.Highers.Contains("OK") And Not head.Highers.Contains("STB") Then
-                            row.DefaultCellStyle.BackColor = System.Drawing.Color.LimeGreen
-                        End If
                         'Dim res As String = Nothing
                         'Dim HighCount = 0
                         'For Each h In head.Highers.Split("|")
@@ -2904,6 +2906,9 @@ Public Class WHouseBal
                     End If
                     Me.MTRLINEsDataGridView.ReadOnly = True
                     VisibleHigher(False)
+                    If finHeader.ccCApplicant Is Nothing Then
+                        Exit Sub
+                    End If
                     If Not cuser.Name = finHeader.ccCApplicant Then ' Όχι ο αιτών.
                         Dim hs As String = ChkHigher(finHeader.Highers, aHighers.Replace("%", ""))
                         If hs IsNot Nothing And hs = "OK" Then

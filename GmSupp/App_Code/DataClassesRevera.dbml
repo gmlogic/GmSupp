@@ -639,23 +639,6 @@
       <Association Name="FINDOC_MTRDOC" Member="FINDOC1" ThisKey="FINDOC" OtherKey="FINDOC" Type="FINDOC" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.UFTBL01" Member="UFTBL01s">
-    <Type Name="UFTBL01">
-      <Column Name="COMPANY" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="SOSOURCE" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="UFTBL01" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="CODE" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="NAME" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="NUM01" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="ACNMSK" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
-      <Column Name="ISACTIVE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="ccCChief" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="cCCManager" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="cCCManager1" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="cCCManager2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="cCCRequestNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.UFTBL02" Member="UFTBL02s">
     <Type Name="UFTBL02">
       <Column Name="COMPANY" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -1143,6 +1126,19 @@
       <Column Name="ccCAMTRLINES" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="FINDOC_MTRLINE" Member="FINDOC1" ThisKey="FINDOC" OtherKey="FINDOC" Type="FINDOC" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="MTRL_MTRLINE" Member="MTRL1" ThisKey="MTRL" OtherKey="MTRL" Type="MTRL" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UFTBL01" Member="UFTBL01s">
+    <Type Name="UFTBL01">
+      <Column Name="COMPANY" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SOSOURCE" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UFTBL01" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CODE" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="NAME" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="NUM01" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="ACNMSK" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
+      <Column Name="ISACTIVE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ccCUser" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.GetWHouseBalance" Method="GetWHouseBalance">

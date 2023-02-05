@@ -115,12 +115,6 @@ Partial Public Class DataClassesReveraDataContext
     End Sub
     Partial Private Sub DeleteMTRDOC(instance As Revera.MTRDOC)
     End Sub
-    Partial Private Sub InsertUFTBL01(instance As Revera.UFTBL01)
-    End Sub
-    Partial Private Sub UpdateUFTBL01(instance As Revera.UFTBL01)
-    End Sub
-    Partial Private Sub DeleteUFTBL01(instance As Revera.UFTBL01)
-    End Sub
     Partial Private Sub InsertUFTBL02(instance As Revera.UFTBL02)
     End Sub
     Partial Private Sub UpdateUFTBL02(instance As Revera.UFTBL02)
@@ -138,6 +132,12 @@ Partial Public Class DataClassesReveraDataContext
     Partial Private Sub UpdateMTRLINE(instance As Revera.MTRLINE)
     End Sub
     Partial Private Sub DeleteMTRLINE(instance As Revera.MTRLINE)
+    End Sub
+    Partial Private Sub InsertUFTBL01(instance As Revera.UFTBL01)
+    End Sub
+    Partial Private Sub UpdateUFTBL01(instance As Revera.UFTBL01)
+    End Sub
+    Partial Private Sub DeleteUFTBL01(instance As Revera.UFTBL01)
     End Sub
   #End Region
 	
@@ -250,12 +250,6 @@ Partial Public Class DataClassesReveraDataContext
 		End Get
 	End Property
 	
-	Public ReadOnly Property UFTBL01s() As System.Data.Linq.Table(Of Revera.UFTBL01)
-		Get
-			Return Me.GetTable(Of Revera.UFTBL01)
-		End Get
-	End Property
-	
 	Public ReadOnly Property UFTBL02s() As System.Data.Linq.Table(Of Revera.UFTBL02)
 		Get
 			Return Me.GetTable(Of Revera.UFTBL02)
@@ -277,6 +271,12 @@ Partial Public Class DataClassesReveraDataContext
 	Public ReadOnly Property MTRLINEs() As System.Data.Linq.Table(Of Revera.MTRLINE)
 		Get
 			Return Me.GetTable(Of Revera.MTRLINE)
+		End Get
+	End Property
+	
+	Public ReadOnly Property UFTBL01s() As System.Data.Linq.Table(Of Revera.UFTBL01)
+		Get
+			Return Me.GetTable(Of Revera.UFTBL01)
 		End Get
 	End Property
 	
@@ -13891,336 +13891,6 @@ Namespace Revera
 		End Sub
 	End Class
 	
-	<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.UFTBL01")>  _
-	Partial Public Class UFTBL01
-		Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
-		
-		Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
-		
-		Private _COMPANY As Short
-		
-		Private _SOSOURCE As Integer
-		
-		Private _UFTBL01 As Short
-		
-		Private _CODE As String
-		
-		Private _NAME As String
-		
-		Private _NUM01 As Double
-		
-		Private _ACNMSK As String
-		
-		Private _ISACTIVE As Short
-		
-		Private _ccCChief As String
-		
-		Private _cCCManager As String
-		
-		Private _cCCManager1 As String
-		
-		Private _cCCManager2 As String
-		
-		Private _cCCRequestNo As System.Nullable(Of Integer)
-		
-    #Region "Extensibility Method Definitions"
-    Partial Private Sub OnLoaded()
-    End Sub
-    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
-    End Sub
-    Partial Private Sub OnCreated()
-    End Sub
-    Partial Private Sub OnCOMPANYChanging(value As Short)
-    End Sub
-    Partial Private Sub OnCOMPANYChanged()
-    End Sub
-    Partial Private Sub OnSOSOURCEChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnSOSOURCEChanged()
-    End Sub
-    Partial Private Sub OnUFTBL01Changing(value As Short)
-    End Sub
-    Partial Private Sub OnUFTBL01Changed()
-    End Sub
-    Partial Private Sub OnCODEChanging(value As String)
-    End Sub
-    Partial Private Sub OnCODEChanged()
-    End Sub
-    Partial Private Sub OnNAMEChanging(value As String)
-    End Sub
-    Partial Private Sub OnNAMEChanged()
-    End Sub
-    Partial Private Sub OnNUM01Changing(value As Double)
-    End Sub
-    Partial Private Sub OnNUM01Changed()
-    End Sub
-    Partial Private Sub OnACNMSKChanging(value As String)
-    End Sub
-    Partial Private Sub OnACNMSKChanged()
-    End Sub
-    Partial Private Sub OnISACTIVEChanging(value As Short)
-    End Sub
-    Partial Private Sub OnISACTIVEChanged()
-    End Sub
-    Partial Private Sub OnccCChiefChanging(value As String)
-    End Sub
-    Partial Private Sub OnccCChiefChanged()
-    End Sub
-    Partial Private Sub OncCCManagerChanging(value As String)
-    End Sub
-    Partial Private Sub OncCCManagerChanged()
-    End Sub
-    Partial Private Sub OncCCManager1Changing(value As String)
-    End Sub
-    Partial Private Sub OncCCManager1Changed()
-    End Sub
-    Partial Private Sub OncCCManager2Changing(value As String)
-    End Sub
-    Partial Private Sub OncCCManager2Changed()
-    End Sub
-    Partial Private Sub OncCCRequestNoChanging(value As System.Nullable(Of Integer))
-    End Sub
-    Partial Private Sub OncCCRequestNoChanged()
-    End Sub
-    #End Region
-		
-		Public Sub New()
-			MyBase.New
-			OnCreated
-		End Sub
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMPANY", DbType:="SmallInt NOT NULL", IsPrimaryKey:=true)>  _
-		Public Property COMPANY() As Short
-			Get
-				Return Me._COMPANY
-			End Get
-			Set
-				If ((Me._COMPANY = value)  _
-							= false) Then
-					Me.OnCOMPANYChanging(value)
-					Me.SendPropertyChanging
-					Me._COMPANY = value
-					Me.SendPropertyChanged("COMPANY")
-					Me.OnCOMPANYChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOSOURCE", DbType:="Int NOT NULL", IsPrimaryKey:=true)>  _
-		Public Property SOSOURCE() As Integer
-			Get
-				Return Me._SOSOURCE
-			End Get
-			Set
-				If ((Me._SOSOURCE = value)  _
-							= false) Then
-					Me.OnSOSOURCEChanging(value)
-					Me.SendPropertyChanging
-					Me._SOSOURCE = value
-					Me.SendPropertyChanged("SOSOURCE")
-					Me.OnSOSOURCEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_UFTBL01", DbType:="SmallInt NOT NULL", IsPrimaryKey:=true)>  _
-		Public Property UFTBL01() As Short
-			Get
-				Return Me._UFTBL01
-			End Get
-			Set
-				If ((Me._UFTBL01 = value)  _
-							= false) Then
-					Me.OnUFTBL01Changing(value)
-					Me.SendPropertyChanging
-					Me._UFTBL01 = value
-					Me.SendPropertyChanged("UFTBL01")
-					Me.OnUFTBL01Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CODE", DbType:="VarChar(10) NOT NULL", CanBeNull:=false)>  _
-		Public Property CODE() As String
-			Get
-				Return Me._CODE
-			End Get
-			Set
-				If (String.Equals(Me._CODE, value) = false) Then
-					Me.OnCODEChanging(value)
-					Me.SendPropertyChanging
-					Me._CODE = value
-					Me.SendPropertyChanged("CODE")
-					Me.OnCODEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NAME", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
-		Public Property NAME() As String
-			Get
-				Return Me._NAME
-			End Get
-			Set
-				If (String.Equals(Me._NAME, value) = false) Then
-					Me.OnNAMEChanging(value)
-					Me.SendPropertyChanging
-					Me._NAME = value
-					Me.SendPropertyChanged("NAME")
-					Me.OnNAMEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NUM01", DbType:="Float NOT NULL")>  _
-		Public Property NUM01() As Double
-			Get
-				Return Me._NUM01
-			End Get
-			Set
-				If ((Me._NUM01 = value)  _
-							= false) Then
-					Me.OnNUM01Changing(value)
-					Me.SendPropertyChanging
-					Me._NUM01 = value
-					Me.SendPropertyChanged("NUM01")
-					Me.OnNUM01Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMSK", DbType:="VarChar(25)")>  _
-		Public Property ACNMSK() As String
-			Get
-				Return Me._ACNMSK
-			End Get
-			Set
-				If (String.Equals(Me._ACNMSK, value) = false) Then
-					Me.OnACNMSKChanging(value)
-					Me.SendPropertyChanging
-					Me._ACNMSK = value
-					Me.SendPropertyChanged("ACNMSK")
-					Me.OnACNMSKChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ISACTIVE", DbType:="SmallInt NOT NULL")>  _
-		Public Property ISACTIVE() As Short
-			Get
-				Return Me._ISACTIVE
-			End Get
-			Set
-				If ((Me._ISACTIVE = value)  _
-							= false) Then
-					Me.OnISACTIVEChanging(value)
-					Me.SendPropertyChanging
-					Me._ISACTIVE = value
-					Me.SendPropertyChanged("ISACTIVE")
-					Me.OnISACTIVEChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ccCChief", DbType:="VarChar(50)")>  _
-		Public Property ccCChief() As String
-			Get
-				Return Me._ccCChief
-			End Get
-			Set
-				If (String.Equals(Me._ccCChief, value) = false) Then
-					Me.OnccCChiefChanging(value)
-					Me.SendPropertyChanging
-					Me._ccCChief = value
-					Me.SendPropertyChanged("ccCChief")
-					Me.OnccCChiefChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_cCCManager", DbType:="VarChar(50)")>  _
-		Public Property cCCManager() As String
-			Get
-				Return Me._cCCManager
-			End Get
-			Set
-				If (String.Equals(Me._cCCManager, value) = false) Then
-					Me.OncCCManagerChanging(value)
-					Me.SendPropertyChanging
-					Me._cCCManager = value
-					Me.SendPropertyChanged("cCCManager")
-					Me.OncCCManagerChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_cCCManager1", DbType:="VarChar(50)")>  _
-		Public Property cCCManager1() As String
-			Get
-				Return Me._cCCManager1
-			End Get
-			Set
-				If (String.Equals(Me._cCCManager1, value) = false) Then
-					Me.OncCCManager1Changing(value)
-					Me.SendPropertyChanging
-					Me._cCCManager1 = value
-					Me.SendPropertyChanged("cCCManager1")
-					Me.OncCCManager1Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_cCCManager2", DbType:="VarChar(50)")>  _
-		Public Property cCCManager2() As String
-			Get
-				Return Me._cCCManager2
-			End Get
-			Set
-				If (String.Equals(Me._cCCManager2, value) = false) Then
-					Me.OncCCManager2Changing(value)
-					Me.SendPropertyChanging
-					Me._cCCManager2 = value
-					Me.SendPropertyChanged("cCCManager2")
-					Me.OncCCManager2Changed
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_cCCRequestNo", DbType:="Int")>  _
-		Public Property cCCRequestNo() As System.Nullable(Of Integer)
-			Get
-				Return Me._cCCRequestNo
-			End Get
-			Set
-				If (Me._cCCRequestNo.Equals(value) = false) Then
-					Me.OncCCRequestNoChanging(value)
-					Me.SendPropertyChanging
-					Me._cCCRequestNo = value
-					Me.SendPropertyChanged("cCCRequestNo")
-					Me.OncCCRequestNoChanged
-				End If
-			End Set
-		End Property
-		
-		Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
-		
-		Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-		
-		Protected Overridable Sub SendPropertyChanging()
-			If ((Me.PropertyChangingEvent Is Nothing)  _
-						= false) Then
-				RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
-			End If
-		End Sub
-		
-		Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
-			If ((Me.PropertyChangedEvent Is Nothing)  _
-						= false) Then
-				RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-			End If
-		End Sub
-	End Class
-	
 	<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.UFTBL02")>  _
 	Partial Public Class UFTBL02
 		Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
@@ -23822,6 +23492,248 @@ Namespace Revera
 						Me._MTRL = CType(Nothing, Integer)
 					End If
 					Me.SendPropertyChanged("MTRL1")
+				End If
+			End Set
+		End Property
+		
+		Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+		
+		Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+		
+		Protected Overridable Sub SendPropertyChanging()
+			If ((Me.PropertyChangingEvent Is Nothing)  _
+						= false) Then
+				RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+			End If
+		End Sub
+		
+		Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+			If ((Me.PropertyChangedEvent Is Nothing)  _
+						= false) Then
+				RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+			End If
+		End Sub
+	End Class
+	
+	<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.UFTBL01")>  _
+	Partial Public Class UFTBL01
+		Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+		
+		Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+		
+		Private _COMPANY As Short
+		
+		Private _SOSOURCE As Integer
+		
+		Private _UFTBL01 As Short
+		
+		Private _CODE As String
+		
+		Private _NAME As String
+		
+		Private _NUM01 As Double
+		
+		Private _ACNMSK As String
+		
+		Private _ISACTIVE As Short
+		
+		Private _ccCUser As String
+		
+    #Region "Extensibility Method Definitions"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnCOMPANYChanging(value As Short)
+    End Sub
+    Partial Private Sub OnCOMPANYChanged()
+    End Sub
+    Partial Private Sub OnSOSOURCEChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnSOSOURCEChanged()
+    End Sub
+    Partial Private Sub OnUFTBL01Changing(value As Short)
+    End Sub
+    Partial Private Sub OnUFTBL01Changed()
+    End Sub
+    Partial Private Sub OnCODEChanging(value As String)
+    End Sub
+    Partial Private Sub OnCODEChanged()
+    End Sub
+    Partial Private Sub OnNAMEChanging(value As String)
+    End Sub
+    Partial Private Sub OnNAMEChanged()
+    End Sub
+    Partial Private Sub OnNUM01Changing(value As Double)
+    End Sub
+    Partial Private Sub OnNUM01Changed()
+    End Sub
+    Partial Private Sub OnACNMSKChanging(value As String)
+    End Sub
+    Partial Private Sub OnACNMSKChanged()
+    End Sub
+    Partial Private Sub OnISACTIVEChanging(value As Short)
+    End Sub
+    Partial Private Sub OnISACTIVEChanged()
+    End Sub
+    Partial Private Sub OnccCUserChanging(value As String)
+    End Sub
+    Partial Private Sub OnccCUserChanged()
+    End Sub
+    #End Region
+		
+		Public Sub New()
+			MyBase.New
+			OnCreated
+		End Sub
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMPANY", DbType:="SmallInt NOT NULL", IsPrimaryKey:=true)>  _
+		Public Property COMPANY() As Short
+			Get
+				Return Me._COMPANY
+			End Get
+			Set
+				If ((Me._COMPANY = value)  _
+							= false) Then
+					Me.OnCOMPANYChanging(value)
+					Me.SendPropertyChanging
+					Me._COMPANY = value
+					Me.SendPropertyChanged("COMPANY")
+					Me.OnCOMPANYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOSOURCE", DbType:="Int NOT NULL", IsPrimaryKey:=true)>  _
+		Public Property SOSOURCE() As Integer
+			Get
+				Return Me._SOSOURCE
+			End Get
+			Set
+				If ((Me._SOSOURCE = value)  _
+							= false) Then
+					Me.OnSOSOURCEChanging(value)
+					Me.SendPropertyChanging
+					Me._SOSOURCE = value
+					Me.SendPropertyChanged("SOSOURCE")
+					Me.OnSOSOURCEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_UFTBL01", DbType:="SmallInt NOT NULL", IsPrimaryKey:=true)>  _
+		Public Property UFTBL01() As Short
+			Get
+				Return Me._UFTBL01
+			End Get
+			Set
+				If ((Me._UFTBL01 = value)  _
+							= false) Then
+					Me.OnUFTBL01Changing(value)
+					Me.SendPropertyChanging
+					Me._UFTBL01 = value
+					Me.SendPropertyChanged("UFTBL01")
+					Me.OnUFTBL01Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CODE", DbType:="VarChar(30)")>  _
+		Public Property CODE() As String
+			Get
+				Return Me._CODE
+			End Get
+			Set
+				If (String.Equals(Me._CODE, value) = false) Then
+					Me.OnCODEChanging(value)
+					Me.SendPropertyChanging
+					Me._CODE = value
+					Me.SendPropertyChanged("CODE")
+					Me.OnCODEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NAME", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+		Public Property NAME() As String
+			Get
+				Return Me._NAME
+			End Get
+			Set
+				If (String.Equals(Me._NAME, value) = false) Then
+					Me.OnNAMEChanging(value)
+					Me.SendPropertyChanging
+					Me._NAME = value
+					Me.SendPropertyChanged("NAME")
+					Me.OnNAMEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NUM01", DbType:="Float NOT NULL")>  _
+		Public Property NUM01() As Double
+			Get
+				Return Me._NUM01
+			End Get
+			Set
+				If ((Me._NUM01 = value)  _
+							= false) Then
+					Me.OnNUM01Changing(value)
+					Me.SendPropertyChanging
+					Me._NUM01 = value
+					Me.SendPropertyChanged("NUM01")
+					Me.OnNUM01Changed
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ACNMSK", DbType:="VarChar(25)")>  _
+		Public Property ACNMSK() As String
+			Get
+				Return Me._ACNMSK
+			End Get
+			Set
+				If (String.Equals(Me._ACNMSK, value) = false) Then
+					Me.OnACNMSKChanging(value)
+					Me.SendPropertyChanging
+					Me._ACNMSK = value
+					Me.SendPropertyChanged("ACNMSK")
+					Me.OnACNMSKChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ISACTIVE", DbType:="SmallInt NOT NULL")>  _
+		Public Property ISACTIVE() As Short
+			Get
+				Return Me._ISACTIVE
+			End Get
+			Set
+				If ((Me._ISACTIVE = value)  _
+							= false) Then
+					Me.OnISACTIVEChanging(value)
+					Me.SendPropertyChanging
+					Me._ISACTIVE = value
+					Me.SendPropertyChanged("ISACTIVE")
+					Me.OnISACTIVEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ccCUser", DbType:="VarChar(50)")>  _
+		Public Property ccCUser() As String
+			Get
+				Return Me._ccCUser
+			End Get
+			Set
+				If (String.Equals(Me._ccCUser, value) = false) Then
+					Me.OnccCUserChanging(value)
+					Me.SendPropertyChanging
+					Me._ccCUser = value
+					Me.SendPropertyChanged("ccCUser")
+					Me.OnccCUserChanged
 				End If
 			End Set
 		End Property

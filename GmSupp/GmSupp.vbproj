@@ -217,36 +217,6 @@
     <Compile Include="App_Code\DataClassesRevera.vb">
       <DependentUpon>DataClassesRevera.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Hglp\ChequeInSpecificDate.Designer.vb">
-      <DependentUpon>ChequeInSpecificDate.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\ChequeInSpecificDate.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\GroupBalance.Designer.vb">
-      <DependentUpon>GroupBalance.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\GroupBalance.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\ModifyDocBR.designer.vb">
-      <DependentUpon>ModifyDocBR.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\ModifyDocBR.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\StoresBR.Designer.vb">
-      <DependentUpon>StoresBR.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\StoresBR.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\WhousesBR.Designer.vb">
-      <DependentUpon>WhousesBR.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\WhousesBR.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Infrastructure\GmIdentityDbContext.vb" />
     <Compile Include="Infrastructure\GmIdentityUser.vb" />
     <Compile Include="Infrastructure\GmUserManager.vb" />
@@ -376,54 +346,6 @@
     <Compile Include="Main\GenMenu.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Hglp\fPrintForm.designer.vb">
-      <DependentUpon>fPrintForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\fPrintForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\OpenItemBR.Designer.vb">
-      <DependentUpon>OpenItemBR.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\OpenItemBR.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\ImportExcel.Designer.vb">
-      <DependentUpon>ImportExcel.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\ImportExcel.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\ManageCarrierPaypents.Designer.vb">
-      <DependentUpon>ManageCarrierPaypents.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\ManageCarrierPaypents.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\Routings.Designer.vb">
-      <DependentUpon>Routings.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\Routings.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\RoutingsFM.Designer.vb">
-      <DependentUpon>RoutingsFM.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\RoutingsFM.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\ShipmentsBR.Designer.vb">
-      <DependentUpon>ShipmentsBR.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\ShipmentsBR.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Hglp\SoCarrierFM.Designer.vb">
-      <DependentUpon>SoCarrierFM.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\SoCarrierFM.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Main\LoginForm1.designer.vb">
       <DependentUpon>LoginForm1.vb</DependentUpon>
     </Compile>
@@ -448,18 +370,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Hglp\PriceList.Designer.vb">
-      <DependentUpon>PriceList.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Hglp\PriceList.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PFIC\ΕxpensesMtrl.Designer.vb">
-      <DependentUpon>ΕxpensesMtrl.vb</DependentUpon>
-    </Compile>
-    <Compile Include="PFIC\ΕxpensesMtrl.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="App_Code\CentroDataSet.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -477,6 +387,12 @@
     <Compile Include="Reports\ReportViewer.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Revera\S1Applicants.Designer.vb">
+      <DependentUpon>S1Applicants.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Revera\S1Applicants.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SDK_Functions.vb" />
     <Compile Include="Forms\SearchFR.designer.vb">
       <DependentUpon>SearchFR.vb</DependentUpon>
@@ -490,25 +406,14 @@
     <Compile Include="Forms\SearchNewFR.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Tools\ImportExcel.Designer.vb">
+      <DependentUpon>ImportExcel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\ImportExcel.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Hglp\ChequeInSpecificDate.resx">
-      <DependentUpon>ChequeInSpecificDate.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\GroupBalance.resx">
-      <DependentUpon>GroupBalance.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\ModifyDocBR.resx">
-      <DependentUpon>ModifyDocBR.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\StoresBR.resx">
-      <DependentUpon>StoresBR.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\WhousesBR.resx">
-      <DependentUpon>WhousesBR.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="LK\GenBarCode.resx">
       <DependentUpon>GenBarCode.vb</DependentUpon>
     </EmbeddedResource>
@@ -553,6 +458,12 @@
       <DependentUpon>ReportViewer.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Revera\S1Applicants.resx">
+      <DependentUpon>S1Applicants.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\ImportExcel.resx">
+      <DependentUpon>ImportExcel.vb</DependentUpon>
+    </EmbeddedResource>
     <None Include="App_Code\DataClassesRevera.dbml.layout">
       <DependentUpon>DataClassesRevera.dbml</DependentUpon>
     </None>
@@ -581,33 +492,6 @@
     <None Include="App_Code\DataClassesHglp.dbml.layout">
       <DependentUpon>DataClassesHglp.dbml</DependentUpon>
     </None>
-    <EmbeddedResource Include="Hglp\fPrintForm.resx">
-      <DependentUpon>fPrintForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\OpenItemBR.resx">
-      <DependentUpon>OpenItemBR.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\ImportExcel.resx">
-      <DependentUpon>ImportExcel.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\ManageCarrierPaypents.resx">
-      <DependentUpon>ManageCarrierPaypents.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\Routings.resx">
-      <DependentUpon>Routings.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\RoutingsFM.resx">
-      <DependentUpon>RoutingsFM.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\SoCarrierFM.resx">
-      <DependentUpon>SoCarrierFM.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\PriceList.resx">
-      <DependentUpon>PriceList.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PFIC\ΕxpensesMtrl.resx">
-      <DependentUpon>ΕxpensesMtrl.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SearchFR.resx">
       <DependentUpon>SearchFR.vb</DependentUpon>
     </EmbeddedResource>
@@ -622,9 +506,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main\GenMenu.resx">
       <DependentUpon>GenMenu.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hglp\ShipmentsBR.resx">
-      <DependentUpon>ShipmentsBR.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\LoginForm1.resx">
       <DependentUpon>LoginForm1.vb</DependentUpon>
@@ -699,51 +580,17 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x64\msvcr100.dll">
-      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x64\SqlServerSpatial110.dll">
-      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x86\msvcr100.dll">
-      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x86\SqlServerSpatial110.dll">
-      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="hellagrolip-sm.ico" />
     <None Include="Resources\Ok.jpg" />
     <None Include="Resources\Main.ico" />
-    <Content Include="SqlServerTypes\Loader.cs" />
-    <Content Include="SqlServerTypes\readme.htm" />
     <None Include="Resources\if_export_excel_64174.ico" />
     <None Include="Resources\EXCEL_257.ico" />
     <None Include="Resources\Printer Folder.png" />
     <None Include="Resources\Printer Folder1.png" />
-    <Content Include="S1Scripts\ccCDocsUpd.js" />
-    <Content Include="S1Scripts\ImportDocsLK_REV.js" />
-    <Content Include="S1Scripts\ImportDocsPFIC_REV.js" />
-    <Content Include="S1Scripts\ImportDocsLNK_REV.js" />
-    <Content Include="S1Scripts\ImportDocs.js" />
-    <Content Include="S1Scripts\Βασική προβολή πωλήσεων αποθηκών.js" />
-    <Content Include="S1Scripts\PFIC Βασική προβολή πωλήσεων.js" />
-    <Content Include="S1Scripts\Gm ΕΛΛΑΓΡΟΛΙΠ - Αναλώσεις%28Μεταβολές κωδικών%29.js" />
-    <Content Include="S1Scripts\Αγορές REV.js" />
-    <Content Include="S1Scripts\Βασική προβολή πωλήσεων.js" />
-    <Content Include="S1Scripts\ΕΛΛΑΓΡΟΛΙΠ Παραγωγή.js" />
-    <Content Include="S1Scripts\Βασική προβολή παραγωγής LNK.js" />
-    <Content Include="S1Scripts\Βασική προβολή πωλήσεων ΝΕΕΣ ΠΟΛΙΤΙΚΕΣ.js" />
-    <Content Include="S1Scripts\ΕΛΛΑΓΡΟΛΙΠ ΝΠ.js" />
-    <Content Include="S1Scripts\Τιμοκατάλογοι.js" />
-    <Content Include="SqlFiles\Get WHOUSE Bal1.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Hglp\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

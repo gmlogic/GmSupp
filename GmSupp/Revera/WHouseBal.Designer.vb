@@ -69,6 +69,9 @@ Partial Class WHouseBal
         Me.LnkLblSetUser = New System.Windows.Forms.LinkLabel()
         Me.ddlΗighers = New System.Windows.Forms.ComboBox()
         Me.txtBoxOrderNo = New System.Windows.Forms.TextBox()
+        Me.GmChkListBoxRestMode = New GmSupp.GmChkListBox()
+        Me.GmChkListBoxAplicant = New GmSupp.GmChkListBox()
+        Me.GmChkListBoxFprms = New GmSupp.GmChkListBox()
         Me.PanelChUsers = New System.Windows.Forms.Panel()
         Me.txtBoxFinCode = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -131,9 +134,6 @@ Partial Class WHouseBal
         Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ΕγκρίσειςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DetailsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.GmChkListBoxRestMode = New GmSupp.GmChkListBox()
-        Me.GmChkListBoxAplicant = New GmSupp.GmChkListBox()
-        Me.GmChkListBoxFprms = New GmSupp.GmChkListBox()
         Label2 = New System.Windows.Forms.Label()
         Label1 = New System.Windows.Forms.Label()
         Label8 = New System.Windows.Forms.Label()
@@ -612,6 +612,30 @@ Partial Class WHouseBal
         Me.txtBoxOrderNo.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtBoxOrderNo.Size = New System.Drawing.Size(300, 20)
         Me.txtBoxOrderNo.TabIndex = 265
+        '
+        'GmChkListBoxRestMode
+        '
+        Me.GmChkListBoxRestMode.GmCheck = False
+        Me.GmChkListBoxRestMode.Location = New System.Drawing.Point(198, 103)
+        Me.GmChkListBoxRestMode.Name = "GmChkListBoxRestMode"
+        Me.GmChkListBoxRestMode.Size = New System.Drawing.Size(300, 25)
+        Me.GmChkListBoxRestMode.TabIndex = 262
+        '
+        'GmChkListBoxAplicant
+        '
+        Me.GmChkListBoxAplicant.GmCheck = False
+        Me.GmChkListBoxAplicant.Location = New System.Drawing.Point(198, 74)
+        Me.GmChkListBoxAplicant.Name = "GmChkListBoxAplicant"
+        Me.GmChkListBoxAplicant.Size = New System.Drawing.Size(300, 25)
+        Me.GmChkListBoxAplicant.TabIndex = 262
+        '
+        'GmChkListBoxFprms
+        '
+        Me.GmChkListBoxFprms.GmCheck = False
+        Me.GmChkListBoxFprms.Location = New System.Drawing.Point(198, 28)
+        Me.GmChkListBoxFprms.Name = "GmChkListBoxFprms"
+        Me.GmChkListBoxFprms.Size = New System.Drawing.Size(300, 25)
+        Me.GmChkListBoxFprms.TabIndex = 263
         '
         'PanelChUsers
         '
@@ -1238,30 +1262,6 @@ Partial Class WHouseBal
         Me.ΕγκρίσειςToolStripMenuItem.Name = "ΕγκρίσειςToolStripMenuItem"
         Me.ΕγκρίσειςToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
         Me.ΕγκρίσειςToolStripMenuItem.Text = "Εγκρίσεις"
-        '
-        'GmChkListBoxRestMode
-        '
-        Me.GmChkListBoxRestMode.GmCheck = False
-        Me.GmChkListBoxRestMode.Location = New System.Drawing.Point(198, 103)
-        Me.GmChkListBoxRestMode.Name = "GmChkListBoxRestMode"
-        Me.GmChkListBoxRestMode.Size = New System.Drawing.Size(300, 25)
-        Me.GmChkListBoxRestMode.TabIndex = 262
-        '
-        'GmChkListBoxAplicant
-        '
-        Me.GmChkListBoxAplicant.GmCheck = False
-        Me.GmChkListBoxAplicant.Location = New System.Drawing.Point(198, 74)
-        Me.GmChkListBoxAplicant.Name = "GmChkListBoxAplicant"
-        Me.GmChkListBoxAplicant.Size = New System.Drawing.Size(300, 25)
-        Me.GmChkListBoxAplicant.TabIndex = 262
-        '
-        'GmChkListBoxFprms
-        '
-        Me.GmChkListBoxFprms.GmCheck = False
-        Me.GmChkListBoxFprms.Location = New System.Drawing.Point(198, 28)
-        Me.GmChkListBoxFprms.Name = "GmChkListBoxFprms"
-        Me.GmChkListBoxFprms.Size = New System.Drawing.Size(300, 25)
-        Me.GmChkListBoxFprms.TabIndex = 263
         '
         'WHouseBal
         '

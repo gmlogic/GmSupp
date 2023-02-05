@@ -27,11 +27,6 @@ Partial Class GenMenu
         Me.TlSSTLabelConnStr = New System.Windows.Forms.ToolStripStatusLabel()
         Me.TlSSTLabelVer = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MenuStrip = New System.Windows.Forms.MenuStrip()
-        Me.ShipmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΜεταφορείςΔρομολόγιαToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΑποθέματαToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ΑποθήκηToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ΥπόλοιπαΕιδώνToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ΕκκρεμείςΠαραγγελίεςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -41,19 +36,6 @@ Partial Class GenMenu
         Me.ΠεριγραφήΕτικέταςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BarCodeGeneratorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TestBarcodeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΤιμοκατάλογοιToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΈξοδαToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.REVERAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CENTROFAROToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SERTORIUSToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΥπόλοιπαΟμάδωνToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΥπόλοιπαToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΠελατώνToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΠρομηθευτώνToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΑντιστοιχίσειςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GmS1LibToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΥπόλοιπαΕιδώνΑναΑποθΧώροToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FileMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -93,27 +75,13 @@ Partial Class GenMenu
         Me.ΔημιουργίαToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ΔιόρθωσηToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ΔιαγραφήToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.S1ApplicantsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowsMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.CascadeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TileVerticalToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TileHorizontalToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CloseAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ArrangeIconsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.UtilitiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ImportNegativeEquitiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ImportEAPToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CreateEAPToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ImportN3869ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TaxCodeMortgagesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.IFDailyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PublicClassCheckForInputFilesJobToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SendIFJobToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TestDTSClientToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ALBΠΑΝΔΕΚΤΗΣToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LegalUsersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.RejectionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.IndexToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -150,7 +118,7 @@ Partial Class GenMenu
         'MenuStrip
         '
         Me.MenuStrip.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
-        Me.MenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShipmentsToolStripMenuItem, Me.ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem, Me.ΑποθέματαToolStripMenuItem, Me.ΑποθήκηToolStripMenuItem, Me.ΤιμοκατάλογοιToolStripMenuItem, Me.ΈξοδαToolStripMenuItem, Me.ΥπόλοιπαΟμάδωνToolStripMenuItem, Me.ΥπόλοιπαToolStripMenuItem, Me.FileMenu, Me.ViewMenu, Me.ToolsMenu, Me.UsersToolStripMenuItem, Me.WindowsMenu, Me.UtilitiesToolStripMenuItem, Me.HelpMenu})
+        Me.MenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ΑποθήκηToolStripMenuItem, Me.FileMenu, Me.ViewMenu, Me.ToolsMenu, Me.UsersToolStripMenuItem, Me.WindowsMenu, Me.HelpMenu})
         Me.MenuStrip.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip.MdiWindowListItem = Me.WindowsMenu
         Me.MenuStrip.Name = "MenuStrip"
@@ -158,37 +126,6 @@ Partial Class GenMenu
         Me.MenuStrip.TabIndex = 6
         Me.MenuStrip.Text = "MenuStrip"
         Me.MenuStrip.Visible = False
-        '
-        'ShipmentsToolStripMenuItem
-        '
-        Me.ShipmentsToolStripMenuItem.Name = "ShipmentsToolStripMenuItem"
-        Me.ShipmentsToolStripMenuItem.Size = New System.Drawing.Size(164, 20)
-        Me.ShipmentsToolStripMenuItem.Text = "Φορτώσεις Αποθηκών"
-        '
-        'ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem
-        '
-        Me.ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ΜεταφορείςΔρομολόγιαToolStripMenuItem, Me.ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem})
-        Me.ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem.Name = "ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem"
-        Me.ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem.Size = New System.Drawing.Size(269, 20)
-        Me.ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem.Text = "Μεταφορείς - Δρομολόγια - Πληρωμές"
-        '
-        'ΜεταφορείςΔρομολόγιαToolStripMenuItem
-        '
-        Me.ΜεταφορείςΔρομολόγιαToolStripMenuItem.Name = "ΜεταφορείςΔρομολόγιαToolStripMenuItem"
-        Me.ΜεταφορείςΔρομολόγιαToolStripMenuItem.Size = New System.Drawing.Size(309, 22)
-        Me.ΜεταφορείςΔρομολόγιαToolStripMenuItem.Text = "Μεταφορείς - Δρομολόγια"
-        '
-        'ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem
-        '
-        Me.ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem.Name = "ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem"
-        Me.ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem.Size = New System.Drawing.Size(309, 22)
-        Me.ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem.Text = "Διαχείρηση πληρωμών Μεταφορέων"
-        '
-        'ΑποθέματαToolStripMenuItem
-        '
-        Me.ΑποθέματαToolStripMenuItem.Name = "ΑποθέματαToolStripMenuItem"
-        Me.ΑποθέματαToolStripMenuItem.Size = New System.Drawing.Size(92, 20)
-        Me.ΑποθέματαToolStripMenuItem.Text = "Αποθέματα"
         '
         'ΑποθήκηToolStripMenuItem
         '
@@ -244,90 +181,6 @@ Partial Class GenMenu
         Me.TestBarcodeToolStripMenuItem.Name = "TestBarcodeToolStripMenuItem"
         Me.TestBarcodeToolStripMenuItem.Size = New System.Drawing.Size(287, 22)
         Me.TestBarcodeToolStripMenuItem.Text = "TestBarcode"
-        '
-        'ΤιμοκατάλογοιToolStripMenuItem
-        '
-        Me.ΤιμοκατάλογοιToolStripMenuItem.Name = "ΤιμοκατάλογοιToolStripMenuItem"
-        Me.ΤιμοκατάλογοιToolStripMenuItem.Size = New System.Drawing.Size(113, 20)
-        Me.ΤιμοκατάλογοιToolStripMenuItem.Text = "Τιμοκατάλογοι"
-        '
-        'ΈξοδαToolStripMenuItem
-        '
-        Me.ΈξοδαToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.REVERAToolStripMenuItem, Me.CENTROFAROToolStripMenuItem, Me.SERTORIUSToolStripMenuItem})
-        Me.ΈξοδαToolStripMenuItem.Name = "ΈξοδαToolStripMenuItem"
-        Me.ΈξοδαToolStripMenuItem.Size = New System.Drawing.Size(159, 20)
-        Me.ΈξοδαToolStripMenuItem.Text = "Έλεγχος Λογ.Εξόδων"
-        '
-        'REVERAToolStripMenuItem
-        '
-        Me.REVERAToolStripMenuItem.Name = "REVERAToolStripMenuItem"
-        Me.REVERAToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
-        Me.REVERAToolStripMenuItem.Text = "REVERA"
-        '
-        'CENTROFAROToolStripMenuItem
-        '
-        Me.CENTROFAROToolStripMenuItem.Name = "CENTROFAROToolStripMenuItem"
-        Me.CENTROFAROToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
-        Me.CENTROFAROToolStripMenuItem.Text = "CENTROFARO"
-        '
-        'SERTORIUSToolStripMenuItem
-        '
-        Me.SERTORIUSToolStripMenuItem.Name = "SERTORIUSToolStripMenuItem"
-        Me.SERTORIUSToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
-        Me.SERTORIUSToolStripMenuItem.Text = "SERTORIUS"
-        '
-        'ΥπόλοιπαΟμάδωνToolStripMenuItem
-        '
-        Me.ΥπόλοιπαΟμάδωνToolStripMenuItem.Name = "ΥπόλοιπαΟμάδωνToolStripMenuItem"
-        Me.ΥπόλοιπαΟμάδωνToolStripMenuItem.Size = New System.Drawing.Size(136, 20)
-        Me.ΥπόλοιπαΟμάδωνToolStripMenuItem.Text = "Υπόλοιπα Ομάδων"
-        '
-        'ΥπόλοιπαToolStripMenuItem
-        '
-        Me.ΥπόλοιπαToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ΠελατώνToolStripMenuItem, Me.ΠρομηθευτώνToolStripMenuItem, Me.ΑντιστοιχίσειςToolStripMenuItem, Me.GmS1LibToolStripMenuItem, Me.AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem, Me.ΥπόλοιπαΕιδώνΑναΑποθΧώροToolStripMenuItem})
-        Me.ΥπόλοιπαToolStripMenuItem.Name = "ΥπόλοιπαToolStripMenuItem"
-        Me.ΥπόλοιπαToolStripMenuItem.Size = New System.Drawing.Size(80, 20)
-        Me.ΥπόλοιπαToolStripMenuItem.Text = "Υπόλοιπα"
-        '
-        'ΠελατώνToolStripMenuItem
-        '
-        Me.ΠελατώνToolStripMenuItem.Name = "ΠελατώνToolStripMenuItem"
-        Me.ΠελατώνToolStripMenuItem.Size = New System.Drawing.Size(341, 22)
-        Me.ΠελατώνToolStripMenuItem.Tag = "13"
-        Me.ΠελατώνToolStripMenuItem.Text = "Πελατών"
-        '
-        'ΠρομηθευτώνToolStripMenuItem
-        '
-        Me.ΠρομηθευτώνToolStripMenuItem.Name = "ΠρομηθευτώνToolStripMenuItem"
-        Me.ΠρομηθευτώνToolStripMenuItem.Size = New System.Drawing.Size(341, 22)
-        Me.ΠρομηθευτώνToolStripMenuItem.Tag = "12"
-        Me.ΠρομηθευτώνToolStripMenuItem.Text = "Προμηθευτών"
-        '
-        'ΑντιστοιχίσειςToolStripMenuItem
-        '
-        Me.ΑντιστοιχίσειςToolStripMenuItem.Name = "ΑντιστοιχίσειςToolStripMenuItem"
-        Me.ΑντιστοιχίσειςToolStripMenuItem.Size = New System.Drawing.Size(341, 22)
-        Me.ΑντιστοιχίσειςToolStripMenuItem.Tag = "13"
-        Me.ΑντιστοιχίσειςToolStripMenuItem.Text = "Αντιστοιχίσεις"
-        '
-        'GmS1LibToolStripMenuItem
-        '
-        Me.GmS1LibToolStripMenuItem.Name = "GmS1LibToolStripMenuItem"
-        Me.GmS1LibToolStripMenuItem.Size = New System.Drawing.Size(341, 22)
-        Me.GmS1LibToolStripMenuItem.Tag = "13"
-        Me.GmS1LibToolStripMenuItem.Text = "GmS1Lib"
-        '
-        'AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem
-        '
-        Me.AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem.Name = "AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem"
-        Me.AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem.Size = New System.Drawing.Size(341, 22)
-        Me.AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem.Text = "Aξιογράφα σε συγκεκριμένη ημερομηνία"
-        '
-        'ΥπόλοιπαΕιδώνΑναΑποθΧώροToolStripMenuItem
-        '
-        Me.ΥπόλοιπαΕιδώνΑναΑποθΧώροToolStripMenuItem.Name = "ΥπόλοιπαΕιδώνΑναΑποθΧώροToolStripMenuItem"
-        Me.ΥπόλοιπαΕιδώνΑναΑποθΧώροToolStripMenuItem.Size = New System.Drawing.Size(341, 22)
-        Me.ΥπόλοιπαΕιδώνΑναΑποθΧώροToolStripMenuItem.Text = "Υπόλοιπα ειδών ανα Αποθ. Χώρο"
         '
         'FileMenu
         '
@@ -577,7 +430,7 @@ Partial Class GenMenu
         '
         'UsersToolStripMenuItem
         '
-        Me.UsersToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ΧρήστεςToolStripMenuItem})
+        Me.UsersToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ΧρήστεςToolStripMenuItem, Me.S1ApplicantsToolStripMenuItem})
         Me.UsersToolStripMenuItem.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
         Me.UsersToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.UsersToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Remove
@@ -589,7 +442,7 @@ Partial Class GenMenu
         '
         Me.ΧρήστεςToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ΔημιουργίαToolStripMenuItem, Me.ΔιόρθωσηToolStripMenuItem, Me.ΔιαγραφήToolStripMenuItem})
         Me.ΧρήστεςToolStripMenuItem.Name = "ΧρήστεςToolStripMenuItem"
-        Me.ΧρήστεςToolStripMenuItem.Size = New System.Drawing.Size(131, 22)
+        Me.ΧρήστεςToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ΧρήστεςToolStripMenuItem.Text = "Χρήστες"
         '
         'ΔημιουργίαToolStripMenuItem
@@ -612,6 +465,12 @@ Partial Class GenMenu
         Me.ΔιαγραφήToolStripMenuItem.Size = New System.Drawing.Size(148, 22)
         Me.ΔιαγραφήToolStripMenuItem.Tag = "Delete"
         Me.ΔιαγραφήToolStripMenuItem.Text = "Διαγραφή"
+        '
+        'S1ApplicantsToolStripMenuItem
+        '
+        Me.S1ApplicantsToolStripMenuItem.Name = "S1ApplicantsToolStripMenuItem"
+        Me.S1ApplicantsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.S1ApplicantsToolStripMenuItem.Text = "S1Applicants"
         '
         'WindowsMenu
         '
@@ -650,99 +509,6 @@ Partial Class GenMenu
         Me.ArrangeIconsToolStripMenuItem.Name = "ArrangeIconsToolStripMenuItem"
         Me.ArrangeIconsToolStripMenuItem.Size = New System.Drawing.Size(141, 22)
         Me.ArrangeIconsToolStripMenuItem.Text = "&Arrange Icons"
-        '
-        'UtilitiesToolStripMenuItem
-        '
-        Me.UtilitiesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImportNegativeEquitiesToolStripMenuItem, Me.ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem, Me.ImportEAPToolStripMenuItem1, Me.CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem, Me.CreateEAPToolStripMenuItem, Me.ImportN3869ToolStripMenuItem, Me.TaxCodeMortgagesToolStripMenuItem, Me.IFDailyToolStripMenuItem, Me.TestDTSClientToolStripMenuItem, Me.ALBΠΑΝΔΕΚΤΗΣToolStripMenuItem, Me.LegalUsersToolStripMenuItem, Me.RejectionsToolStripMenuItem})
-        Me.UtilitiesToolStripMenuItem.Name = "UtilitiesToolStripMenuItem"
-        Me.UtilitiesToolStripMenuItem.Size = New System.Drawing.Size(67, 20)
-        Me.UtilitiesToolStripMenuItem.Text = "Utilities"
-        Me.UtilitiesToolStripMenuItem.Visible = False
-        '
-        'ImportNegativeEquitiesToolStripMenuItem
-        '
-        Me.ImportNegativeEquitiesToolStripMenuItem.Name = "ImportNegativeEquitiesToolStripMenuItem"
-        Me.ImportNegativeEquitiesToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.ImportNegativeEquitiesToolStripMenuItem.Text = "Import  Negative Equities"
-        '
-        'ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem
-        '
-        Me.ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem.Name = "ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem"
-        Me.ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem.Text = "ΕΝΟΠΟΙΗΣΗ EXCEL"
-        '
-        'ImportEAPToolStripMenuItem1
-        '
-        Me.ImportEAPToolStripMenuItem1.Name = "ImportEAPToolStripMenuItem1"
-        Me.ImportEAPToolStripMenuItem1.Size = New System.Drawing.Size(239, 22)
-        Me.ImportEAPToolStripMenuItem1.Text = "Import Export EAP"
-        '
-        'CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem
-        '
-        Me.CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem.Name = "CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem"
-        Me.CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem.Text = "Create ΠΑΝΔΕΚΤΗΣ"
-        '
-        'CreateEAPToolStripMenuItem
-        '
-        Me.CreateEAPToolStripMenuItem.Name = "CreateEAPToolStripMenuItem"
-        Me.CreateEAPToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.CreateEAPToolStripMenuItem.Text = "Create EAP"
-        '
-        'ImportN3869ToolStripMenuItem
-        '
-        Me.ImportN3869ToolStripMenuItem.Name = "ImportN3869ToolStripMenuItem"
-        Me.ImportN3869ToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.ImportN3869ToolStripMenuItem.Text = "Import N3869"
-        '
-        'TaxCodeMortgagesToolStripMenuItem
-        '
-        Me.TaxCodeMortgagesToolStripMenuItem.Name = "TaxCodeMortgagesToolStripMenuItem"
-        Me.TaxCodeMortgagesToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.TaxCodeMortgagesToolStripMenuItem.Text = "TaxCode Mortgages"
-        '
-        'IFDailyToolStripMenuItem
-        '
-        Me.IFDailyToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PublicClassCheckForInputFilesJobToolStripMenuItem, Me.SendIFJobToolStripMenuItem})
-        Me.IFDailyToolStripMenuItem.Name = "IFDailyToolStripMenuItem"
-        Me.IFDailyToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.IFDailyToolStripMenuItem.Text = "IF_Daily"
-        '
-        'PublicClassCheckForInputFilesJobToolStripMenuItem
-        '
-        Me.PublicClassCheckForInputFilesJobToolStripMenuItem.Name = "PublicClassCheckForInputFilesJobToolStripMenuItem"
-        Me.PublicClassCheckForInputFilesJobToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
-        Me.PublicClassCheckForInputFilesJobToolStripMenuItem.Text = "CheckForInputFilesJob"
-        '
-        'SendIFJobToolStripMenuItem
-        '
-        Me.SendIFJobToolStripMenuItem.Name = "SendIFJobToolStripMenuItem"
-        Me.SendIFJobToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
-        Me.SendIFJobToolStripMenuItem.Text = "SendIFJob"
-        '
-        'TestDTSClientToolStripMenuItem
-        '
-        Me.TestDTSClientToolStripMenuItem.Name = "TestDTSClientToolStripMenuItem"
-        Me.TestDTSClientToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.TestDTSClientToolStripMenuItem.Text = "TestDTSClient"
-        '
-        'ALBΠΑΝΔΕΚΤΗΣToolStripMenuItem
-        '
-        Me.ALBΠΑΝΔΕΚΤΗΣToolStripMenuItem.Name = "ALBΠΑΝΔΕΚΤΗΣToolStripMenuItem"
-        Me.ALBΠΑΝΔΕΚΤΗΣToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.ALBΠΑΝΔΕΚΤΗΣToolStripMenuItem.Text = "ALB ΠΑΝΔΕΚΤΗΣ"
-        '
-        'LegalUsersToolStripMenuItem
-        '
-        Me.LegalUsersToolStripMenuItem.Name = "LegalUsersToolStripMenuItem"
-        Me.LegalUsersToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.LegalUsersToolStripMenuItem.Text = "Legal Users"
-        '
-        'RejectionsToolStripMenuItem
-        '
-        Me.RejectionsToolStripMenuItem.Name = "RejectionsToolStripMenuItem"
-        Me.RejectionsToolStripMenuItem.Size = New System.Drawing.Size(239, 22)
-        Me.RejectionsToolStripMenuItem.Text = "Rejections"
         '
         'HelpMenu
         '
@@ -845,11 +611,6 @@ Partial Class GenMenu
     Friend WithEvents SearchFilesToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SelectDBasesToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents TestToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents UtilitiesToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ImportNegativeEquitiesToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΕΝΟΠΟΙΗΣΗEXCELToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ImportEAPToolStripMenuItem1 As ToolStripMenuItem
-    Friend WithEvents CreateΠΑΝΔΕΚΤΗΣToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents HglpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents LNKToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents CentrToolStripMenuItem As ToolStripMenuItem
@@ -858,44 +619,15 @@ Partial Class GenMenu
     Friend WithEvents LNKToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents CentrToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents TlSSTLabelVer As ToolStripStatusLabel
-    Friend WithEvents ShipmentsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents CreateEAPToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ImportN3869ToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents TaxCodeMortgagesToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents IFDailyToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents TestDTSClientToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ALBΠΑΝΔΕΚΤΗΣToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents LegalUsersToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents RejectionsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents PublicClassCheckForInputFilesJobToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents SendIFJobToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents PFICToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents PFICToolStripMenuItem1 As ToolStripMenuItem
-    Friend WithEvents ΑποθέματαToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΜεταφορείςΔρομολόγιαΠληρωμέςToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents TestConnectionToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ImportExcelToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΜεταφορείςΔρομολόγιαToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΔιαχείρησηπληρωμώνΜεταφορέωνToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΈξοδαToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΤιμοκατάλογοιToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΥπόλοιπαToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents REVERAToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents CENTROFAROToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΠελατώνToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΠρομηθευτώνToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ChangeSysDateToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΑντιστοιχίσειςToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents GmS1LibToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents LKToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents LKToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents ΑποθήκηToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ΕκκρεμείςΠαραγγελίεςToolStripMenuItem As ToolStripMenuItem
-    Public WithEvents UsersToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΧρήστεςToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΔημιουργίαToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΔιόρθωσηToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΔιαγραφήToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ΑίτησηΠαραγγελίαςToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ΕκτύπωσηΕτικετώνBarcodeToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents BarCodeGeneratorToolStripMenuItem As ToolStripMenuItem
@@ -903,9 +635,11 @@ Partial Class GenMenu
     Friend WithEvents TestBarcodeToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ΠεριγραφήΕτικέταςToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
-    Friend WithEvents SERTORIUSToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents AξιογράφαΣεΣυγκεκριμένηΗμερομηνίαToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΥπόλοιπαΟμάδωνToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ΥπόλοιπαΕιδώνΑναΑποθΧώροToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents NVFToolStripMenuItem As ToolStripMenuItem
+    Public WithEvents UsersToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ΧρήστεςToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ΔημιουργίαToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ΔιόρθωσηToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ΔιαγραφήToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents S1ApplicantsToolStripMenuItem As ToolStripMenuItem
 End Class
