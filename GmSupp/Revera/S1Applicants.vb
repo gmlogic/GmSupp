@@ -42,21 +42,21 @@ Public Class S1Applicants
         StartDate = CDate("01/01/" & Year(CTODate))
         Dim conString As New SqlConnectionStringBuilder
         conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
-        If Me.Tag = "REVERA" Then
-            conString.DataSource = "192.168.12.201,55555"
-            conString.InitialCatalog = "Revera"
-            CompanyS = 4000
-        End If
-        If Me.Tag = "SERTORIUS" Then
-            conString.DataSource = "192.168.12.201,55555"
-            conString.InitialCatalog = "Revera"
-            CompanyS = 5000
-        End If
-        If Me.Tag = "CENTROFARO" Then
-            conString.DataSource = "192.168.12.201,55555"
-            conString.InitialCatalog = "Centro"
-            CompanyS = 3000
-        End If
+        'If Me.Tag = "REVERA" Then
+        '    conString.DataSource = "192.168.12.201,55555"
+        '    conString.InitialCatalog = "Revera"
+        '    CompanyS = 4000
+        'End If
+        'If Me.Tag = "SERTORIUS" Then
+        '    conString.DataSource = "192.168.12.201,55555"
+        '    conString.InitialCatalog = "Revera"
+        '    CompanyS = 5000
+        'End If
+        'If Me.Tag = "CENTROFARO" Then
+        '    conString.DataSource = "192.168.12.201,55555"
+        '    conString.InitialCatalog = "Centro"
+        '    CompanyS = 3000
+        'End If
 
         'conString.UserID = "sa"
         'conString.Password = "P@$$w0rd"
@@ -93,33 +93,33 @@ Public Class S1Applicants
         '4000    35465	00006	PFIC LTD.
         '4000    38236	00011	ΛΙΠΑΣΜΑΤΑ ΝΕΑΣ ΚΑΡΒΑΛΗΣ Α.Ε.
 
-        If {"g.igglesis", "i.pilarinos"}.Contains(CurUser) Then
-            CompanyT = 1002
-        End If
+        'If {"g.igglesis", "i.pilarinos"}.Contains(CurUser) Then
+        '    CompanyT = 1002
+        'End If
 
-        If CompName = "LK" Then
-            If {"panagiotis", "katerina", "gkonstantatos"}.Contains(CurUser) Then
-                CompanyT = 2001 '1001
-            End If
-        End If
-        If CompName = "NVF" Then
-            If {"avichou", "katerina"}.Contains(CurUser) Then
-                CompanyT = 2002 '1001
-            End If
-        End If
+        'If CompName = "LK" Then
+        '    If {"panagiotis", "katerina", "gkonstantatos"}.Contains(CurUser) Then
+        '        CompanyT = 2001 '1001
+        '    End If
+        'End If
+        'If CompName = "NVF" Then
+        '    If {"avichou", "katerina"}.Contains(CurUser) Then
+        '        CompanyT = 2002 '1001
+        '    End If
+        'End If
 
         If CurUser = "gmlogic" Then
-            conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
-            Select Case conString.InitialCatalog
-                Case "PFIC"
-                    CompanyT = 1002
-                Case "LNK"
-                    CompanyT = 1001
-                Case "LK"
-                    CompanyT = 2001 '1001
-                Case "NVF"
-                    CompanyT = 2002 '1001
-            End Select
+            'conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
+            'Select Case conString.InitialCatalog
+            '    Case "PFIC"
+            '        CompanyT = 1002
+            '    Case "LNK"
+            '        CompanyT = 1001
+            '    Case "LK"
+            '        CompanyT = 2001 '1001
+            '    Case "NVF"
+            '        CompanyT = 2002 '1001
+            'End Select
 
         End If
         Me.KeyPreview = True
@@ -177,7 +177,7 @@ Public Class S1Applicants
             'CheckZIP:
             'Dim q = From cd In db.cccMultiCompDatas Join m In db.MTRLs On cd.mtrl Equals m.MTRL
             '        Where m.COMPANY = CompanyS
-            '        Select cd.cccMultiCompData, cd.CompanyT, cd.mtrl, m.CODE, m.NAME, cd.CodeExp
+            '        Select cd.cccMultiCompData, cd.CompanyT, cd.mtrl, m.CODE, m.NAME, cd.ExpccCUser
 
             Dim q = db.ccCS1Applicants.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251)
 
@@ -185,14 +185,20 @@ Public Class S1Applicants
 
             Dim qwh = q.Where(Function(f) f.SOSOURCE = 1251) 'And f {1351, 1253}.Contains(f.SOSOURCE) And f.ISCANCEL = 0 And f.APPRV = 1)
 
-            'qwh = qwh.Where(Function(f) f.CompanyT = CompanyT)
+            If Me.chkBoxIsActive.Checked Then
+                qwh = qwh.Where(Function(f) f.ISACTIVE = 1)
+            End If
+
+            Dim ar = {"ΜΑΚΑΡΙΔΗΣ ΔΗΜΗΤΡΗΣ"} ', "Α. ΚΑΡΑΜΠΑΤΖΑΚΗ", "ΑΘΑΝΑΣΟΥΛΑΣ ΑΘΑΝΑΣΙΟΣ", "ΑΪΔΙΝΙΔΗΣ ΙΩΑΝΝΗΣ", "ΑΛΕΞΑΝΔΡΟΣ ΜΑΓΟΣ", "ΑΝΔΡΕΟΓΛΟΥ ΤΗΛΕΜΑΧΟΣ", "ΑΠΟΣΤΟΛΑΚΑΚΗ ΑΛΙΚΗ", "ΑΠΟΣΤΟΛΙΔΗΣ ΝΕΟΦΥΤΟΣ", "ΒΟΓΙΑΤΖΗΣ ΧΡΗΣΤΟΣ", "ΓΚΟΥΤΖΙΑΜΑΝΗΣ ΠΑΥΛΟΣ", "ΔΗΜΖΑΣ ΑΠΟΣΤΟΛΟΣ", "ΔΗΜΗΤΡΙΑΔΗΣ ΧΡΗΣΤΟΣ", "ΕΛΕΝΗ ΣΠΥΡΙΔΩΝ", "ΕΡΜΙΔΗΣ ΧΡΗΣΤΟΣ", "ΖΑΧΑΡΑΚΗΣ ΣΤΕΡΓΙΟΣ", "ΖΔΡΑΤΣΚΙΔΗΣ ΑΘΑΝΑΣΙΟΣ", "ΖΙΠΙΔΗΣ Δ.", "ΖΟΛΩΤΑΣ ΠΑΝΑΓΙΩΤΗΣ", "ΖΥΓΟΥΛΑΣ Α.", "ΗΛΙΑΔΗΣ ΓΙΩΡΓΟΣ", "ΙΟΡΔΑΝΟΓΛΟΥ ΣΑΒΒΑΣ", "ΚΑΖΟΓΛΟΥ Γ.", "ΚΑΡΑΚΑΣΙΔΗΣ ΑΝΑΣΤΑΣΙΟΣ", "ΚΑΡΑΚΕΙΣΟΓΛΟΥ ΒΑΣΙΛΗΣ", "ΚΑΡΕΛΗΣ ΓΙΩΡΓΟΣ", "ΚΟΛΕΒΕΝΤΗΣ ΔΙΑΜΑΝΤΗΣ", "ΚΟΥΛΟΥΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ", "ΚΟΥΤΛΑΣ ΓΙΑΝΝΗΣ", "ΚΟΥΤΣΑΚΗ ΕΛΕΝΗ", "ΚΩΣΤΙΚΙΑΔΗΣ ΚΥΡΙΑΚΟΣ", "ΛΑΖΑΡΙΔΗΣ ΣΤΑΥΡΟΣ", "ΛΕΥΘΕΡΙΩΤΗΣ Λ.", "ΜΑΤΑΚΑΣ ΚΥΡΙΑΚΟΣ", "ΜΠΕΛΙΤΣΟΣ ΙΩΑΝΝΗΣ", "ΡΕΜΠΑΣ ΔΗΜΗΤΡΗΣ", "ΡΙΖΟΠΟΥΛΟΣ ΝΙΚΟΣ", "ΣΟΥΛΗΣ ΛΑΜΠΡΟΣ", "ΦΟΥΣΙΑΣ ΧΡΗΣΤΟΣ", "ΧΑΪΤΑΣ ΚΟΣΜΑΣ", "ΧΑΤΖΗΣ ΣΠΥΡΟΣ", "ΧΡΥΣΟΧΟΪΔΗΣ ΔΗΜΗΤΡΗΣ"}
+            'qwh = qwh.Where(Function(f) ar.Contains(f.NAME))
+            qwh = qwh.OrderBy(Function(f) f.NAME)
 
             'If Not Me.TlSTxtMTRL.Text = "" Then
             '    qwh = qwh.Where(Function(f) f.CODE Like Me.TlSTxtMTRL.Text)
             'End If
 
-            'If Me.chkBoxCodeExp.Checked Then
-            '    qwh = qwh.Where(Function(f) f.CodeExp Is Nothing)
+            'If Me.chkBoxExpccCUser.Checked Then
+            '    qwh = qwh.Where(Function(f) f.ExpccCUser Is Nothing)
             'End If
 
 
@@ -311,11 +317,11 @@ Public Class S1Applicants
 #Region "96-MasterDataGridView"
     Private Sub MasterDataGridView_CurrentCellDirtyStateChanged(sender As Object, e As System.EventArgs) Handles MasterDataGridView.CurrentCellDirtyStateChanged
         Dim s As DataGridView = sender
-        If s.Columns(s.CurrentCell.ColumnIndex).Name = "Search_Code" Then
+        If s.Columns(s.CurrentCell.ColumnIndex).Name = "Search_User" Then
             Exit Sub
         End If
 
-        If s.Columns(s.CurrentCell.ColumnIndex).Name = "CodeExp" Then
+        If s.Columns(s.CurrentCell.ColumnIndex).Name = "ExpccCUser" Then
             Exit Sub
         End If
 
@@ -341,8 +347,8 @@ Public Class S1Applicants
             Me.MasterDataGridView.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
             'Me.MasterDataGridView.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect
 
-            myArrF = ("COMPANY,SOSOURCE,UFTBL01,CODE,NAME,ISACTIVE,ccCUser,AspNetUsersName").Split(",")
-            myArrN = ("COMPANY,SOSOURCE,UFTBL01,CODE,NAME,ISACTIVE,ccCUser,AspNetUsersName").Split(",")
+            myArrF = ("COMPANY,SOSOURCE,UFTBL01,CODE,NAME,ISACTIVE").Split(",")
+            myArrN = ("COMPANY,SOSOURCE,UFTBL01,CODE,NAME,ISACTIVE").Split(",")
 
             'Add Bound Columns
             Dim bad_item_columns() As Integer = {1, 2, 3, 4}
@@ -352,8 +358,6 @@ Public Class S1Applicants
                 Debug.Print(MasterDataGridView.Columns(i).DataPropertyName & vbTab & MasterDataGridView.Columns(i).Name)
             Next
 
-            Exit Sub
-
             'Dim SumShVALDataGridViewTextBoxColumn As New DataGridViewTextBoxColumn
             'SumShVALDataGridViewTextBoxColumn.DataPropertyName = "SumShVAL"
             'SumShVALDataGridViewTextBoxColumn.HeaderText = "SumShVAL"
@@ -362,59 +366,80 @@ Public Class S1Applicants
 
             Dim columnComboBox As New DataGridViewComboBoxColumn()
             'columnComboBox.DataPropertyName = "CCCPRIORITY"
-            Dim mtrs = Nothing
+            'Dim mtrs = Nothing
 
             'Dim emptyMTRL As Panel.MTRL() = Nothing
             'emptyMTRL = {New Panel.MTRL With {.CODE = "<Select a product>", .MTRL = 0}}
             'Dim mln As List(Of Panel.MTRL) = (From Empty In emptyMTRL).Union(
             '                                (From m1 In ml Order By m1.CODE)).ToList
 
-            Dim emptyMTRL = Nothing
-
-            If CompanyT = 1002 Then 'PFIC
-                emptyMTRL = {New PFIC.MTRL With {.CODE = "<Επιλέγξτε>", .MTRL = 0}}.ToList
-                Dim mm = dbPFIC.MTRLs.Where(Function(f) f.COMPANY = CompanyT).OrderBy(Function(f) f.CODE).Where(Function(f) f.SODTYPE = 53 And f.CODE.Substring(0, 1) = "6").ToList
-                mtrs = (From Empty In CType(emptyMTRL, List(Of PFIC.MTRL)).Union(mm)).ToList
-
+            Dim LUserManager As GmUserManager = GmUserManager.Create(New GmIdentityDbContext)
+            Dim uss = LUserManager.Users.Where(Function(f) Not f.UserName = "gmlogic").OrderBy(Function(f) f.UserName).ToList
+            If CurUserRole = "Admins" Then
+                uss = uss.Where(Function(f) f.S1User = False).OrderBy(Function(f) f.Name).ToList
+                Dim gg = uss.Select(Function(f) f.Roles).ToList
             End If
 
-            If {2001, 2002}.Contains(CompanyT) Then '1001 Then 'LNK
-                emptyMTRL = {New LNK.MTRL With {.CODE = "<Επιλέγξτε>", .MTRL = 0}}.ToList
-                'Dim mm = dbLNK.MTRLs.Where(Function(f) f.COMPANY = CompanyT).OrderBy(Function(f) f.CODE).Where(Function(f) f.SODTYPE = 53 And f.CODE.Substring(0, 1) = "6").ToList
-                Dim mm = (From m In dbLNK.MTRLs Join ex In dbLNK.MTREXTRAs On m.COMPANY Equals ex.COMPANY And m.MTRL Equals ex.MTRL
-                          Where ex.BOOL04 = 1
-                          Select m).ToList
-                mtrs = (From Empty In CType(emptyMTRL, List(Of LNK.MTRL)).Union(mm)).ToList
-            End If
+            Dim emptyUsers() As GmIdentityUser
+            emptyUsers = {New GmIdentityUser With {.Name = "<Επιλέγξτε>", .UserName = ""}}
+
+            uss = (emptyUsers.ToList.Union(uss.ToList)).ToList
+
+            'Me.ddlUsers.DataSource = uss 'ddlUsers.SelectedIndexChanged
+            'Me.ddlUsers.DisplayMember = "UserName" 'ddlUsers.SelectedIndexChanged
+            'Me.ddlUsers.ValueMember = "Id"
 
 
-            'Search_Code
+
+
+
+
+            'Dim emptyMTRL = Nothing
+
+            'If CompanyT = 1002 Then 'PFIC
+            '    emptyMTRL = {New Revera.MTRL With {.CODE = "<Επιλέγξτε>", .MTRL = 0}}.ToList
+            '    Dim mm = dbPFIC.MTRLs.Where(Function(f) f.COMPANY = CompanyT).OrderBy(Function(f) f.CODE).Where(Function(f) f.SODTYPE = 53 And f.CODE.Substring(0, 1) = "6").ToList
+            '    mtrs = (From Empty In CType(emptyMTRL, List(Of PFIC.MTRL)).Union(mm)).ToList
+
+            'End If
+
+            'If {2001, 2002}.Contains(CompanyT) Then '1001 Then 'LNK
+            '    emptyMTRL = {New LNK.MTRL With {.CODE = "<Επιλέγξτε>", .MTRL = 0}}.ToList
+            '    'Dim mm = dbLNK.MTRLs.Where(Function(f) f.COMPANY = CompanyT).OrderBy(Function(f) f.CODE).Where(Function(f) f.SODTYPE = 53 And f.CODE.Substring(0, 1) = "6").ToList
+            '    Dim mm = (From m In dbLNK.MTRLs Join ex In dbLNK.MTREXTRAs On m.COMPANY Equals ex.COMPANY And m.MTRL Equals ex.MTRL
+            '              Where ex.BOOL04 = 1
+            '              Select m).ToList
+            '    mtrs = (From Empty In CType(emptyMTRL, List(Of LNK.MTRL)).Union(mm)).ToList
+            'End If
+
+
+            'Search_User
             '
-            columnComboBox.DataSource = mtrs
-            columnComboBox.DisplayMember = "CODE"
-            columnComboBox.HeaderText = "Search_Code"
-            columnComboBox.Name = "Search_Code"
+            columnComboBox.DataSource = uss
+            columnComboBox.DisplayMember = "Name"
+            columnComboBox.HeaderText = "Search_User"
+            columnComboBox.Name = "Search_User"
             columnComboBox.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
             columnComboBox.SortMode = DataGridViewColumnSortMode.Automatic
-            columnComboBox.ValueMember = "mtrl"
+            columnComboBox.ValueMember = "UserName"
             columnComboBox.Width = 120
             columnComboBox.FlatStyle = FlatStyle.Flat
             MasterDataGridView.Columns.Add(columnComboBox)
 
 
             Dim columnTxtBox As New DataGridViewTextBoxColumn
-            'columnTxtBox.DataPropertyName = "CodeExp"
-            columnTxtBox.HeaderText = "Κωδ.Λογιστικής"
-            columnTxtBox.Name = "CodeExp"
+            'columnTxtBox.DataPropertyName = "ExpccCUser"
+            columnTxtBox.HeaderText = "ExpccCUser"
+            columnTxtBox.Name = "ExpccCUser"
             columnTxtBox.SortMode = DataGridViewColumnSortMode.Automatic
             Me.MasterDataGridView.Columns.Add(columnTxtBox)
 
-            If Not IsNothing(MasterDataGridView.Columns("Περιγραφή")) Then
-                MasterDataGridView.Columns("Περιγραφή").Width = 300
-            End If
+            'If Not IsNothing(MasterDataGridView.Columns("Περιγραφή")) Then
+            '    MasterDataGridView.Columns("Περιγραφή").Width = 300
+            'End If
 
-            If Not IsNothing(MasterDataGridView.Columns("Search_Code")) Then
-                MasterDataGridView.Columns("Search_Code").ReadOnly = False
+            If Not IsNothing(MasterDataGridView.Columns("Search_User")) Then
+                MasterDataGridView.Columns("Search_User").ReadOnly = False
                 'If CompanyT = 1002 Then 'PFIC
                 '    columnComboBox.ReadOnly = True
                 'End If
@@ -436,12 +461,15 @@ Public Class S1Applicants
                 Dim item = row.DataBoundItem
                 If Not IsNothing(item) Then
                     Try
-                        Dim dll As DataGridViewComboBoxCell = row.Cells("Search_Code")
-                        If Not IsNothing(item.CodeExp) Then
-                            dll.Value = item.CodeExp
+                        If item.NAME = "ΗΛΙΑΔΗΣ ΓΙΩΡΓΟΣ" Then
+                            item.NAME = "ΗΛΙΑΔΗΣ ΓΙΩΡΓΟΣ"
+                        End If
+                        Dim dll As DataGridViewComboBoxCell = row.Cells("Search_User")
+                        If Not IsNothing(item.AspNetUsersName) Then
+                            dll.Value = item.ccCUser
                         Else
-                            dll.Value = 0
-                            'Dim code As String = item.CodeExp
+                            dll.Value = ""
+                            'Dim code As String = item.ExpccCUser
                             'Dim m = Nothing
                             'If CompanyT = 1002 Then 'PFIC
                             '    m = dbPFIC.MTRLs.Where(Function(f) f.COMPANY = CompanyT And f.SODTYPE = 53 And f.CODE = code).FirstOrDefault
@@ -456,9 +484,9 @@ Public Class S1Applicants
                             'End If
                         End If
 
-                        Dim dlltxt As DataGridViewTextBoxCell = row.Cells("CodeExp")
-                        If Not IsNothing(item.CodeExp) Then
-                            dlltxt.Value = item.CodeExp
+                        Dim TxtCell As DataGridViewTextBoxCell = row.Cells("ExpccCUser")
+                        If Not IsNothing(item.AspNetUsersName) Then
+                            TxtCell.Value = item.ccCUser
                         End If
 
 
@@ -495,101 +523,42 @@ Public Class S1Applicants
     Private Sub MasterDataGridView_CellValidating(sender As Object, e As System.Windows.Forms.DataGridViewCellValidatingEventArgs) Handles MasterDataGridView.CellValidating
         Dim s As DataGridView = sender
         Try
-            If s.Columns(e.ColumnIndex).Name = "CodeExp" Then
+            If s.Columns(e.ColumnIndex).Name = "ExpccCUser" Then
+                Exit Sub
                 Dim cellc As DataGridViewCell = s.CurrentCell
-                Dim CodeExp As String = cellc.EditedFormattedValue
-                Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("Search_Code")
-                If celln.Value = 0 AndAlso CodeExp = String.Empty Then
+                Dim ExpccCUser As String = cellc.EditedFormattedValue
+                Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("Search_User")
+                If celln.Value = "" AndAlso ExpccCUser = String.Empty Then
                     Exit Sub
                 End If
-                If Not cellc.FormattedValue.ToString = CodeExp Then
-                    Dim ml = Nothing
-                    Select Case CompanyT'and mtrl extra
-                        Case 1002   'PFIC
-                            ml = dbPFIC.MTRLs.Where(Function(f) f.COMPANY = CompanyT).OrderBy(Function(f) f.CODE).Where(Function(f) f.SODTYPE = 53 And f.CODE = CodeExp).ToList
-                        Case 2001 'LK '1001  'LNK
-                            'ml = dbLNK.MTRLs.Where(Function(f) f.COMPANY = CompanyT).OrderBy(Function(f) f.CODE).Where(Function(f) f.SODTYPE = 53 And f.CODE = MTRL1_CODE).ToList
-                            ml = (From m In dbLNK.MTRLs Join ex In dbLNK.MTREXTRAs On m.COMPANY Equals ex.COMPANY And m.MTRL Equals ex.MTRL
-                                  Where m.SODTYPE = 53 And m.CODE = CodeExp And ex.BOOL04 = 1
-                                  Select m).ToList
-                    End Select
+                If Not cellc.FormattedValue.ToString = ExpccCUser Then
 
-                    s.Tag = ml
-
-                    If ml.Count = 0 Then
-                        Exit Sub
-                    End If
-                    If ml.Count = 1 Then
-
-                        Dim ccode As String = s.Rows(e.RowIndex).Cells("Κωδικός").Value
-                        Dim mm As Centro.MTRL = Nothing 'db.MTRLs.Where(Function(f) f.COMPANY = CompanyS And f.CODE = ccode).FirstOrDefault
-                        If Not IsNothing(mm) Then
-                            Dim mtrl As Integer = mm.MTRL ' db.MTRLs.Where(Function(f) f.CODE = ccode).FirstOrDefault.MTRL
-                            Dim companyT As Integer = s.Rows(e.RowIndex).Cells("Εταιρεία").Value
-                            Dim mtr = db.cccMultiCompDatas.Where(Function(f) f.CompanyT = companyT And f.mtrl = mtrl).FirstOrDefault
-                            If Not IsNothing(mtr) Then
-                                Dim mlf = Nothing
-                                Select Case companyT
-                                    Case 1002   'PFIC
-                                        mlf = CType(ml, List(Of PFIC.MTRL)).FirstOrDefault
-                                    Case 2001 'LK '1001  'LNK
-                                        mlf = CType(ml, List(Of LNK.MTRL)).FirstOrDefault
-                                End Select
-                                mtr.CodeExp = mlf.code
-
-                                mtr.UPDDATE = Now()
-                                Dim cuser = 99 's1Conn.ConnectionInfo.UserId
-                                mtr.UPDUSER = cuser
-
-                                If db.GetChangeSet.Updates.Count > 0 Then
-                                    Me.BindingNavigatorSaveItem.Enabled = True
-                                Else
-                                    Me.BindingNavigatorSaveItem.Enabled = False
-                                End If
-
-                                Dim dll As DataGridViewComboBoxCell = s.Rows(e.RowIndex).Cells("Search_Code")
-
-                                Dim dllidx As Integer = 0
-
-                                dllidx = dll.Items.IndexOf(mlf)
-
-                                If Not dllidx = -1 Then
-                                    dll.Value = mlf.mtrl
-                                Else
-                                    dll.Value = 0
-                                End If
-
-                            End If
-                        End If
-
-                    End If
                 End If
             End If
 
-            If s.Columns(e.ColumnIndex).Name = "Search_Code" Then
-                Dim cellc As DataGridViewCell = s.CurrentCell
-                Dim Search_Code As String = cellc.EditedFormattedValue
-                If Search_Code = "" Then
-                    Exit Sub
-                End If
-                If Not cellc.FormattedValue.ToString = Search_Code Then
-                    Dim cellCodeExp As DataGridViewCell = s.Rows(e.RowIndex).Cells("CodeExp")
-                    cellCodeExp.Value = Search_Code
+            If s.Columns(e.ColumnIndex).Name = "Search_User" Then
+                Dim cellc As DataGridViewComboBoxCell = s.CurrentCell
+                Dim Search_User As String = cellc.EditedFormattedValue
+
+                If Not cellc.FormattedValue.ToString = Search_User Then
+                    cellc.Value = cellc.Items.Cast(Of GmIdentityUser).Where(Function(f) f.Name = Search_User).FirstOrDefault.UserName
+                    Dim cellExpccCUser As DataGridViewCell = s.Rows(e.RowIndex).Cells("ExpccCUser")
+                    cellExpccCUser.Value = cellc.Value 'Search_User
 
                     Dim item = s.Rows(e.RowIndex).DataBoundItem
                     'Dim mtrl As Integer = item.mtrl
-                    Dim cccMultiCompData As Integer = item.cccMultiCompData
-                    Dim mtr = db.cccMultiCompDatas.Where(Function(f) f.cccMultiCompData = cccMultiCompData).FirstOrDefault
-                    If Not IsNothing(mtr) Then
-                        If Search_Code = "<Επιλέγξτε>" Then
-                            mtr.CodeExp = Nothing
+                    Dim cccMultiCompData As Integer = item.UFTBL01
+                    Dim UFTBL01 = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251 And f.UFTBL01 = cccMultiCompData).FirstOrDefault
+                    If Not IsNothing(UFTBL01) Then
+                        If Search_User = "<Επιλέγξτε>" Then
+                            UFTBL01.ccCUser = Nothing
                         Else
-                            mtr.CodeExp = Search_Code
+                            UFTBL01.ccCUser = cellExpccCUser.Value
                         End If
 
-                        mtr.UPDDATE = Now()
-                        Dim cuser = 99 's1Conn.ConnectionInfo.UserId
-                        mtr.UPDUSER = cuser
+                        'mtr.UPDDATE = Now()
+                        'Dim cuser = 99 's1Conn.ConnectionInfo.UserId
+                        'mtr.UPDUSER = cuser
 
                         If db.GetChangeSet.Updates.Count > 0 Then
                             Me.BindingNavigatorSaveItem.Enabled = True
@@ -607,11 +576,12 @@ Public Class S1Applicants
     End Sub
     Private Sub MasterDataGridView_CellValidated(sender As Object, e As DataGridViewCellEventArgs) Handles MasterDataGridView.CellValidated
         Dim s As DataGridView = sender
-        If s.Columns(e.ColumnIndex).Name = "CodeExp" Then
+        If s.Columns(e.ColumnIndex).Name = "ExpccCUser" Then
+            Exit Sub
             Dim cellc As DataGridViewCell = s.CurrentCell
-            Dim CodeExp As String = cellc.EditedFormattedValue
-            Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("Search_Code")
-            If celln.Value = 0 AndAlso CodeExp = String.Empty Then
+            Dim ExpccCUser As String = cellc.EditedFormattedValue
+            Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("Search_User")
+            If celln.Value = "0" AndAlso ExpccCUser = String.Empty Then
                 Exit Sub
             End If
 
@@ -641,7 +611,7 @@ Public Class S1Applicants
 
     End Sub
     Private Sub DataGridView1_DataError(ByVal sender As Object, ByVal e As DataGridViewDataErrorEventArgs) Handles MasterDataGridView.DataError
-        If sender.Columns(e.ColumnIndex).Name = "Search_Code" Then
+        If sender.Columns(e.ColumnIndex).Name = "Search_User" Then
             Exit Sub
         End If
         If sender.Columns(e.ColumnIndex).Name = "Κωδ.Λογιστικής" Then

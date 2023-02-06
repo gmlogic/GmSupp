@@ -28,8 +28,8 @@ Public Class WHouseBal
     Private Trdrs As List(Of Revera.TRDR)
     Private cccTrdDeps As List(Of cccTrdDep)
     Private Suppliers As List(Of Revera.TRDR)
-    Private ccCChief As List(Of UFTBL01)
-    Private ccCManager As List(Of UFTBL01)
+    'Private ccCChief As List(Of UFTBL01)
+    'Private ccCManager As List(Of UFTBL01)
     Private wfm As New WHouseBalFR
     Private CRole As String
     'Private Αpprovs As String
@@ -289,7 +289,7 @@ Public Class WHouseBal
         Dim emptycCCManager() As Revera.UFTBL01
         emptycCCManager = {New Revera.UFTBL01 With {.NAME = "<Επιλέγξτε>", .UFTBL01 = 0}}
 
-        ccCManager = emptycCCManager.ToList
+        'ccCManager = emptycCCManager.ToList
 
         'Me.ApplicantNAMEComboBox.DataSource = q1.ToList
 
@@ -2491,6 +2491,17 @@ Public Class WHouseBal
                     MsgBox("Υποχρεωτική επιλογή <Έγκριση ανωτέρου>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
                     Exit Sub
                 End If
+
+                Dim cuser As GmIdentityUser = GmUserManager.ChkUser(CurUser.Replace("gmlogic", "gm"))
+                If cuser Is Nothing Then
+                    MsgBox("Error User: " & CurUser, MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                    Exit Sub
+                End If
+                Dim ccCUser = db.ccCS1Applicants.Where(Function(f) f.AspNetUsersName = cuser.Name).FirstOrDefault
+                If ccCUser Is Nothing Then
+                    MsgBox("Προσοχή !!! Δεν υπάρχει στο Softone o αιτών: " & cuser.Name, MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                    Exit Sub
+                End If
                 'do save
 
                 fin.TRNDATE = wfm.DateTimePicker1.Value.ToShortDateString
@@ -2502,7 +2513,7 @@ Public Class WHouseBal
                 fin.SOCASH = 3101
                 fin.PAYMENT = 1011
                 'fin.INT01 = wfm.txtBoxRequestNo.Text
-                fin.UFTBL01 = wfm.ddlApplicant.SelectedValue
+                fin.UFTBL01 = ccCUser.UFTBL01 'wfm.ddlApplicant.SelectedValue
                 fin.UFTBL02 = wfm.ddlFromcccTrdDep.SelectedValue 'Από Τμήμα
                 fin.REMARKS = wfm.txtBoxREMARKS.Text
                 fin.VARCHAR01 = wfm.txtBoxVARCHAR01.Text 'Εσωτ.Παρατηρήσεις
@@ -2515,7 +2526,7 @@ Public Class WHouseBal
                 '17  Αρχική έγκριση
                 '18  Αίτηση πρός έγκριση ανωτέρου
                 fin.FINSTATES = 16 'Αίτηση πρός έγκριση
-                Dim cuser As GmIdentityUser = GmUserManager.ChkUser(CurUser.Replace("gmlogic", "gm"))
+
                 If Not IsNothing(cuser) Then
                     fin.ccCApplicant = cuser.Name
                 End If

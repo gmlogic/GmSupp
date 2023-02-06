@@ -47,7 +47,7 @@ Partial Class S1Applicants
         Me.TlSTxtMTRL = New System.Windows.Forms.ToolStripTextBox()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
         Me.TlSBtnMTRL = New System.Windows.Forms.ToolStripButton()
-        Me.chkBoxCodeExp = New System.Windows.Forms.CheckBox()
+        Me.chkBoxIsActive = New System.Windows.Forms.CheckBox()
         Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
         Me.MasterDataGridView = New System.Windows.Forms.DataGridView()
         Me.BindingNavigatorMaster = New System.Windows.Forms.BindingNavigator(Me.components)
@@ -190,7 +190,7 @@ Partial Class S1Applicants
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
         Me.SplitContainer1.Panel1.Controls.Add(Me.ToolStrip2)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.chkBoxCodeExp)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.chkBoxIsActive)
         Me.SplitContainer1.Panel1.Controls.Add(Me.cmdSelect)
         '
         'SplitContainer1.Panel2
@@ -248,20 +248,20 @@ Partial Class S1Applicants
         Me.TlSBtnMTRL.Text = "&Open"
         Me.TlSBtnMTRL.ToolTipText = "Κωδικοί  Κίνησης"
         '
-        'chkBoxCodeExp
+        'chkBoxIsActive
         '
-        Me.chkBoxCodeExp.AutoSize = True
-        Me.chkBoxCodeExp.Checked = True
-        Me.chkBoxCodeExp.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkBoxCodeExp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
-        Me.chkBoxCodeExp.ForeColor = System.Drawing.Color.Blue
-        Me.chkBoxCodeExp.Location = New System.Drawing.Point(36, 77)
-        Me.chkBoxCodeExp.Name = "chkBoxCodeExp"
-        Me.chkBoxCodeExp.Size = New System.Drawing.Size(158, 17)
-        Me.chkBoxCodeExp.TabIndex = 242
-        Me.chkBoxCodeExp.TabStop = False
-        Me.chkBoxCodeExp.Text = "Χωρίς Λογ. λογιστικής"
-        Me.chkBoxCodeExp.UseVisualStyleBackColor = True
+        Me.chkBoxIsActive.AutoSize = True
+        Me.chkBoxIsActive.Checked = True
+        Me.chkBoxIsActive.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkBoxIsActive.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
+        Me.chkBoxIsActive.ForeColor = System.Drawing.Color.Blue
+        Me.chkBoxIsActive.Location = New System.Drawing.Point(36, 77)
+        Me.chkBoxIsActive.Name = "chkBoxIsActive"
+        Me.chkBoxIsActive.Size = New System.Drawing.Size(76, 17)
+        Me.chkBoxIsActive.TabIndex = 242
+        Me.chkBoxIsActive.TabStop = False
+        Me.chkBoxIsActive.Text = "Is Active"
+        Me.chkBoxIsActive.UseVisualStyleBackColor = True
         '
         'SplitContainer3
         '
@@ -436,13 +436,13 @@ Partial Class S1Applicants
         Me.DataGridViewSearch.Size = New System.Drawing.Size(1284, 45)
         Me.DataGridViewSearch.TabIndex = 6
         '
-        'ΕxpensesMtrl
+        'S1Applicants
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1284, 749)
         Me.Controls.Add(Me.SplitContainer1)
-        Me.Name = "ΕxpensesMtrl"
+        Me.Name = "S1Applicants"
         Me.Text = "ΕxpensesMtrl"
         CType(Me.MasterBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DetailsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
@@ -507,7 +507,7 @@ Partial Class S1Applicants
     Friend WithEvents toolStripSeparator As ToolStripSeparator
     Friend WithEvents BindingNavigatorSaveItem As ToolStripButton
     Friend WithEvents DataGridViewSearch As DataGridView
-    Friend WithEvents chkBoxCodeExp As CheckBox
+    Friend WithEvents chkBoxIsActive As CheckBox
     Friend WithEvents ToolStrip2 As ToolStrip
     Friend WithEvents ToolStripComboBox2 As ToolStripComboBox
     Friend WithEvents ToolStripSeparator8 As ToolStripSeparator
