@@ -368,7 +368,12 @@ Public Class Utility
         'Property soAudit As Integer
     End Class
 
-
+    Public Shared Function GetNoColumnDataGridView(CurDataGridView As DataGridView, CDataPropertyName As String) As DataGridViewColumn
+        Dim col As DataGridViewColumn = Nothing
+        col = CurDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = CDataPropertyName).FirstOrDefault
+        Return col
+        'Throw New NotImplementedException()
+    End Function
 #Region "Revera"
 
     ''' <summary>

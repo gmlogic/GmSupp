@@ -36,6 +36,7 @@ Public Class S1Applicants
 #End Region
 #Region "03-Load Form"
     Private Sub MyBase_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+        'TODO: This line of code loads data into the 'CentroDataSet.cccMultiCompData' table. You can move, or remove it, as needed.
         'DateTimePicker1.Value = CDate("01/" & CTODate.Month & "/" & Year(CTODate))
         'DateTimePicker2.Value = New Date(CTODate.Year, CTODate.Month, CTODate.Day, 23, 59, 59) 'CDate("01/01/" & Year(CTODate))
 
@@ -315,13 +316,24 @@ Public Class S1Applicants
     End Function
 #End Region
 #Region "96-MasterDataGridView"
+    Dim editableFields_MasterDataGridView() As String = {"Search_User", "ExpccCUser", "NAME", "ISACTIVE"}
+
     Private Sub MasterDataGridView_CurrentCellDirtyStateChanged(sender As Object, e As System.EventArgs) Handles MasterDataGridView.CurrentCellDirtyStateChanged
         Dim s As DataGridView = sender
+        'If editableFields_MasterDataGridView.Contains(s.Columns(s.CurrentCell.ColumnIndex).DataPropertyName) Then
+        '    Exit Sub
+        'End If
+
         If s.Columns(s.CurrentCell.ColumnIndex).Name = "Search_User" Then
             Exit Sub
         End If
 
         If s.Columns(s.CurrentCell.ColumnIndex).Name = "ExpccCUser" Then
+            Exit Sub
+        End If
+
+
+        If s.Columns(s.CurrentCell.ColumnIndex).Name = "ISACTIVE" Then
             Exit Sub
         End If
 
@@ -347,16 +359,15 @@ Public Class S1Applicants
             Me.MasterDataGridView.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
             'Me.MasterDataGridView.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect
 
-            myArrF = ("COMPANY,SOSOURCE,UFTBL01,CODE,NAME,ISACTIVE").Split(",")
-            myArrN = ("COMPANY,SOSOURCE,UFTBL01,CODE,NAME,ISACTIVE").Split(",")
+            myArrF = ("COMPANY,SOSOURCE,UFTBL01,CODE,NAME").Split(",")
+            myArrN = ("COMPANY,SOSOURCE,UFTBL01,CODE,NAME").Split(",")
 
             'Add Bound Columns
             Dim bad_item_columns() As Integer = {1, 2, 3, 4}
             RemoveGridColumnsByCollection(MasterDataGridView, bad_item_columns, myArrF, myArrN, False) 'CheckBoxDetail.Checked)
             'AddOutOfOfficeColumn(Me.MasterDataGridView)
-            For i As Integer = 0 To MasterDataGridView.Columns.Count - 1
-                Debug.Print(MasterDataGridView.Columns(i).DataPropertyName & vbTab & MasterDataGridView.Columns(i).Name)
-            Next
+
+
 
             'Dim SumShVALDataGridViewTextBoxColumn As New DataGridViewTextBoxColumn
             'SumShVALDataGridViewTextBoxColumn.DataPropertyName = "SumShVAL"
@@ -413,6 +424,24 @@ Public Class S1Applicants
             'End If
 
 
+            'Friend WithEvents Column1 As DataGridViewCheckBoxColumn
+            'Me.Column1.DataPropertyName = "cccMultiCompData"
+            'Me.Column1.HeaderText = "Column1"
+            'Me.Column1.Name = "Column1"
+            'Me.Column1.ReadOnly = True
+            Dim ColumnCheckBox As New DataGridViewCheckBoxColumn()
+            With ColumnCheckBox
+                .DataPropertyName = "ISACTIVE"
+                .HeaderText = "ISACTIVE" 'ColumnName.OutOfOffice.ToString()
+                .Name = "ISACTIVE" 'ColumnName.OutOfOffice.ToString()
+                .AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells
+                .FlatStyle = FlatStyle.Standard
+                .CellTemplate = New DataGridViewCheckBoxCell()
+                .CellTemplate.Style.BackColor = Drawing.Color.Beige
+            End With
+            'Me.MasterDataGridView.Columns.Insert(0, column)
+            Me.MasterDataGridView.Columns.Add(ColumnCheckBox)
+
             'Search_User
             '
             columnComboBox.DataSource = uss
@@ -434,16 +463,32 @@ Public Class S1Applicants
             columnTxtBox.SortMode = DataGridViewColumnSortMode.Automatic
             Me.MasterDataGridView.Columns.Add(columnTxtBox)
 
+            For i As Integer = 0 To MasterDataGridView.Columns.Count - 1
+                Debug.Print(MasterDataGridView.Columns(i).DataPropertyName & vbTab & MasterDataGridView.Columns(i).Name)
+                'MasterDataGridView.Columns(i).ReadOnly = True
+            Next
+
+
+
+            For Each edf In editableFields_MasterDataGridView
+                Dim Col As DataGridViewColumn = Utility.GetNoColumnDataGridView(Me.MasterDataGridView, edf)
+                If Not IsNothing(Col) Then
+                    Col.ReadOnly = False
+                End If
+            Next
+
+            For Each edf In editableFields_MasterDataGridView
+                If Not IsNothing(MasterDataGridView.Columns(edf)) Then
+                    MasterDataGridView.Columns(edf).ReadOnly = False
+                End If
+            Next
+
+
             'If Not IsNothing(MasterDataGridView.Columns("Περιγραφή")) Then
             '    MasterDataGridView.Columns("Περιγραφή").Width = 300
             'End If
 
-            If Not IsNothing(MasterDataGridView.Columns("Search_User")) Then
-                MasterDataGridView.Columns("Search_User").ReadOnly = False
-                'If CompanyT = 1002 Then 'PFIC
-                '    columnComboBox.ReadOnly = True
-                'End If
-            End If
+
 
             'Fill Unbound Collumns
             For Each row As DataGridViewRow In MasterDataGridView.Rows
@@ -523,6 +568,53 @@ Public Class S1Applicants
     Private Sub MasterDataGridView_CellValidating(sender As Object, e As System.Windows.Forms.DataGridViewCellValidatingEventArgs) Handles MasterDataGridView.CellValidating
         Dim s As DataGridView = sender
         Try
+            If s.Columns(e.ColumnIndex).Name = "NAME" Then
+                Dim cellc As DataGridViewCell = s.CurrentCell
+                Dim ExpccCUser As String = cellc.EditedFormattedValue
+                If Not cellc.FormattedValue.ToString = ExpccCUser Then
+                    Dim item = s.Rows(e.RowIndex).DataBoundItem
+                    'Dim mtrl As Integer = item.mtrl
+                    Dim id As Integer = item.UFTBL01
+                    Dim UFTBL01 = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251 And f.UFTBL01 = id).FirstOrDefault
+                    If Not IsNothing(UFTBL01) Then
+                        UFTBL01.NAME = ExpccCUser
+                        If db.GetChangeSet.Updates.Count > 0 Then
+                            Me.BindingNavigatorSaveItem.Enabled = True
+                        Else
+                            Me.BindingNavigatorSaveItem.Enabled = False
+                        End If
+                    End If
+                End If
+            End If
+
+            If s.Columns(e.ColumnIndex).Name = "ISACTIVE" Then
+                Dim cellc As DataGridViewCell = s.CurrentCell
+                Dim ExpccCUser As String = cellc.EditedFormattedValue
+                If Not cellc.FormattedValue.ToString = ExpccCUser Then
+                    Dim item = s.Rows(e.RowIndex).DataBoundItem
+                    'Dim mtrl As Integer = item.mtrl
+                    Dim id As Integer = item.UFTBL01
+                    Dim UFTBL01 = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251 And f.UFTBL01 = id).FirstOrDefault
+                    If Not IsNothing(UFTBL01) Then
+                        Dim celln As DataGridViewCheckBoxCell = s.Rows(e.RowIndex).Cells("ISACTIVE")
+
+                        If ExpccCUser Then
+                            UFTBL01.ISACTIVE = 1
+                            celln.Value = 1
+                        Else
+                            UFTBL01.ISACTIVE = 0
+                            celln.Value = 0
+                        End If
+
+                        If db.GetChangeSet.Updates.Count > 0 Then
+                            Me.BindingNavigatorSaveItem.Enabled = True
+                        Else
+                            Me.BindingNavigatorSaveItem.Enabled = False
+                        End If
+                    End If
+                End If
+            End If
+
             If s.Columns(e.ColumnIndex).Name = "ExpccCUser" Then
                 Exit Sub
                 Dim cellc As DataGridViewCell = s.CurrentCell
@@ -545,7 +637,7 @@ Public Class S1Applicants
                     Dim cellExpccCUser As DataGridViewCell = s.Rows(e.RowIndex).Cells("ExpccCUser")
                     cellExpccCUser.Value = cellc.Value 'Search_User
 
-                    Dim item = s.Rows(e.RowIndex).DataBoundItem
+                    Dim item As Revera.ccCS1Applicant = s.Rows(e.RowIndex).DataBoundItem
                     'Dim mtrl As Integer = item.mtrl
                     Dim cccMultiCompData As Integer = item.UFTBL01
                     Dim UFTBL01 = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251 And f.UFTBL01 = cccMultiCompData).FirstOrDefault
@@ -554,6 +646,9 @@ Public Class S1Applicants
                             UFTBL01.ccCUser = Nothing
                         Else
                             UFTBL01.ccCUser = cellExpccCUser.Value
+                            UFTBL01.NAME = Search_User
+                            Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("NAME")
+                            celln.Value = Search_User
                         End If
 
                         'mtr.UPDDATE = Now()
@@ -611,16 +706,15 @@ Public Class S1Applicants
 
     End Sub
     Private Sub DataGridView1_DataError(ByVal sender As Object, ByVal e As DataGridViewDataErrorEventArgs) Handles MasterDataGridView.DataError
+        Dim s As DataGridView = sender
+        'If editableFields_MasterDataGridView.Contains(s.Columns(s.CurrentCell.ColumnIndex).DataPropertyName) Then
+        '    Exit Sub
+        'End If
         If sender.Columns(e.ColumnIndex).Name = "Search_User" Then
             Exit Sub
         End If
-        If sender.Columns(e.ColumnIndex).Name = "Κωδ.Λογιστικής" Then
-            Exit Sub
-        End If
-        If sender.Columns(e.ColumnIndex).Name = "PRIORITY" Then
-            Exit Sub
-        End If
-        If sender.Columns(e.ColumnIndex).Name = "ccCLocked" Then
+
+        If sender.Columns(e.ColumnIndex).Name = "ISACTIVE" Then
             Exit Sub
         End If
 

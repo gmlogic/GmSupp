@@ -1248,7 +1248,7 @@ Public Class WHouseBal
                 MTRLINEsDataGridView.Columns(i).ReadOnly = True
             Next
             For Each edf In editableFields_MTRLINEsDataGridView()
-                Dim Col As DataGridViewColumn = GetNoColumnDataGridView(Me.MTRLINEsDataGridView, edf)
+                Dim Col As DataGridViewColumn = Utility.GetNoColumnDataGridView(Me.MTRLINEsDataGridView, edf)
                 If Not IsNothing(Col) Then
                     Col.ReadOnly = False
                 End If
@@ -1307,12 +1307,6 @@ Public Class WHouseBal
         End Try
     End Sub
 
-    Private Function GetNoColumnDataGridView(CurDataGridView As DataGridView, CDataPropertyName As String) As DataGridViewColumn
-        Dim col As DataGridViewColumn = Nothing
-        col = CurDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = CDataPropertyName).FirstOrDefault
-        Return col
-        'Throw New NotImplementedException()
-    End Function
     Private Sub TlSBtnCheck_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TlSBtnUnCheck.Click, TlSBtnCheck.Click
         Dim s As ToolStripButton = sender
         Dim check As Boolean = False
@@ -2921,7 +2915,7 @@ Public Class WHouseBal
                         Exit Sub
                     End If
                     If Not cuser.Name = finHeader.ccCApplicant Then ' Όχι ο αιτών.
-                        Dim hs As String = ChkHigher(finHeader.Highers, aHighers.Replace("%", ""))
+                        Dim hs As String = ChkHigher(finHeader.Highers, If(aHighers, "%").Replace("%", ""))
                         If hs IsNot Nothing And hs = "OK" Then
                             'Dim res
                             Dim HighCount = 0
