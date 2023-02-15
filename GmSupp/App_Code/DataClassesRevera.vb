@@ -66,7 +66,7 @@ Namespace Revera
 
         Public Property INSUSERNAME As String
 
-        Public Property ccCApplicant As String
+        'Public Property ccCApplicant As String
 
         ''' <summary>
         ''' A.VARCHAR02 as Highers

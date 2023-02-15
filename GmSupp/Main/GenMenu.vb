@@ -491,7 +491,7 @@ Public Class GenMenu
         End If
         If CompName.Replace("SERTORIUS", "REVERA") = "REVERA" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(curUserRole)) Then
             Me.ΑποθήκηToolStripMenuItem.Visible = True
-            Me.UsersToolStripMenuItem.Visible = True
+            Me.UsersToolStripMenuItem.Visible = False
             Me.ΕκτύπωσηΕτικετώνBarcodeToolStripMenuItem.Visible = True
             Me.BarCodeGeneratorToolStripMenuItem.Visible = False
             Me.ΔημιουργίαToolStripMenuItem.Visible = False

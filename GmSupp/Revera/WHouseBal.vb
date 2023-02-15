@@ -1053,10 +1053,15 @@ Public Class WHouseBal
 
                 'myArrF = ("NO_,CODE,NAME,QTY1,QTY1CANC,QTY1OPEN").Split(",")
                 'myArrN = ("A/A,Κωδικός,Περιγραφή,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1").Split(",")
-
-                myArrF = ("NO_,FINDOC,TRNDATE,FINCODE,ccCApplicant,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo,ApplicantNAME,Highers,FINSTATES,FINSTATESNAME").Split(",")
-                myArrN = ("A/A,Αρ.Αίτησης,Ημερ/νία,Παραστατικό,Αιτών,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ,Αιτών,Εγκρίνοντες,Κατάσταση,Περιγραφή").Split(",")
-
+                If CurUserRole = "Admins" Then
+                    'myArrF = ("NO_,FINDOC,TRNDATE,FINCODE,ApplicantNAME,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo,Highers,FINSTATES,FINSTATESNAME").Split(",")
+                    'myArrN = ("A/A,Αρ.Αίτησης,Ημερ/νία,Παραστατικό,Αιτών,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ,Εγκρίνοντες,Κατάσταση,Περιγραφή").Split(",")
+                    myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
+                    myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Κατάσταση,FinDoc,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ").Split(",")
+                Else
+                    myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,FINDOC").Split(",")
+                    myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Περιγραφή,FinDoc").Split(",")
+                End If
             End If
             'If Me.Text = "Αποθήκη - Αιτήσεις σε Εκρεμότητα" Then
             '    'myArrF = ("NO_,TRNDATE,FINCODE,uf1Name,mtName,muName,MTRPLACE,OrderNo,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN").Split(",")
@@ -1234,8 +1239,13 @@ Public Class WHouseBal
                 myArrN = ("Κωδικός,Αιτ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις,FinDoc").Split(",")
             End If
             If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
-                myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,COMMENTS1,ApplicationLog,FINDOC,MTRLINES,ccCAFINDOC,ccCAMTRLINES").Split(",")
-                myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις,Ιστορικό Αίτησης,FinDoc,MtrLines,ccCAFINDOC,ccCAMTRLINE").Split(",")
+                If CurUserRole = "Admins" Then
+                    myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,COMMENTS1,ApplicationLog,FINDOC,MTRLINES,ccCAFINDOC,ccCAMTRLINES").Split(",")
+                    myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις,Ιστορικό Αίτησης,FinDoc,MtrLines,ccCAFINDOC,ccCAMTRLINE").Split(",")
+                Else
+                    myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,COMMENTS1,ApplicationLog").Split(",")
+                    myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις,Ιστορικό Αίτησης").Split(",")
+                End If
             End If
 
             'Add Bound Columns
@@ -2338,9 +2348,9 @@ Public Class WHouseBal
             Dim ReportDataSource1 As New Microsoft.Reporting.WinForms.ReportDataSource
             ReportDataSource1.Name = "DSccCVMtrLine" ' "DataSet1" ' 'TimPrint"
 
-            Dim SelFincode As String = Me.MasterDataGridView.Rows(Me.MasterDataGridView.SelectedCells(0).RowIndex).Cells("Παραστατικό").Value '"ΑIT0000006"
+            Dim SelFinDoc As Integer = Me.MasterDataGridView.Rows(Me.MasterDataGridView.SelectedCells(0).RowIndex).Cells("FinDoc").Value '"ΑIT0000006"
             'ReportDataSource1.Value = CType(Me.MasterBindingSource.DataSource, SortableBindingList(Of Revera.ccCVMtrLine)).Where(Function(f) f.FINCODE = SelFincode) 'gmVMNewDataTable 'ConvertSta5Rpt(MtrLineNew, Me.boxOption_Anektelestes.Text) 'gmVMNewDataTable.DefaultView 'dt.DefaultView 'bind 'TimPrintBindingSource 'bind 'dt.DataSet 'TimPrintTableAdapter.Fill(GenDataSet.TimPrint, 0, 0, 0, 0, 0) 'Me.DataTable1BindingSource
-            ReportDataSource1.Value = db.ccCVMtrLines.Where(Function(f) f.FINCODE = SelFincode).ToList
+            ReportDataSource1.Value = db.ccCVMtrLines.Where(Function(f) f.FINDOC = SelFinDoc).ToList
             'Dim rp As Microsoft.Reporting.WinForms.LocalReport = WRptView.ReportViewer1.LocalReport
 
             'Dim inf As Microsoft.Reporting.WinForms.ReportParameterInfoCollection = rp.GetParameters
@@ -2521,9 +2531,9 @@ Public Class WHouseBal
                 '18  Αίτηση πρός έγκριση ανωτέρου
                 fin.FINSTATES = 16 'Αίτηση πρός έγκριση
 
-                If Not IsNothing(cuser) Then
-                    fin.ccCApplicant = cuser.Name
-                End If
+                'If Not IsNothing(cuser) Then
+                '    fin.ccCApplicant = cuser.Name
+                'End If
 
                 Dim mc As New Revera.MTRDOC
                 mc.COMPANY = fin.COMPANY
@@ -2911,10 +2921,10 @@ Public Class WHouseBal
                     End If
                     Me.MTRLINEsDataGridView.ReadOnly = True
                     VisibleHigher(False)
-                    If finHeader.ccCApplicant Is Nothing Then
+                    If finHeader.ApplicantNAME Is Nothing Then
                         Exit Sub
                     End If
-                    If Not cuser.Name = finHeader.ccCApplicant Then ' Όχι ο αιτών.
+                    If Not cuser.Name = finHeader.ApplicantNAME Then ' Όχι ο αιτών.
                         Dim hs As String = ChkHigher(finHeader.Highers, If(aHighers, "%").Replace("%", ""))
                         If hs IsNot Nothing And hs = "OK" Then
                             'Dim res
@@ -2979,14 +2989,31 @@ Public Class WHouseBal
 
     Private Function GetApplicantLogs(res As List(Of GetPendingOrdersDetailsResult)) As List(Of GetPendingOrdersDetailsResult)
         For Each re In res
-            Dim msns = db.MTRLINEs.Where(Function(f) f.FINDOCS = re.FINDOC And f.MTRLINESS = re.MTRLINES)
-            If msns IsNot Nothing Then
-                dim ApplicationLog=""
+            'Α) Αίτηση προσφοράς
+            'Β) Παραγγελία 
+            'Γ) Παραλαβή υλικού
+            '2000    ΑΠΡΦ	Αίτηση Προσφοράς	2000
+            '2021    ΠΑΡ	Παραγγελία Σε Προμηθευτή Παράδοση Καβάλα	2021
+            '2022    ΠΑΡ ΕΔΡΑ	Παραγγελία Σε Προμηθευτή Παράδοση Έδρα	2021
+            '2023    ΠΑΡ ΑΤΛ	Παραγγελία Σε Προμηθευτή Παράδοση Έδρα	2021
+            '2041    ΔΠ	Δελτίο Αποστολής Προμηθευτή	2041
+            '2045    ΔΠΠ	Δελτίο Ποσοτικής Παραλαβής	2045
+            Dim msns = db.MTRLINEs.Where(Function(f) f.FINDOC1.COMPANY = Company And f.FINDOC1.SOSOURCE = 1251 And {2000, 2021, 2022, 2023, 2041, 2045}.Contains(f.FINDOC1.SERIES) And f.ccCAFINDOC = re.FINDOC And f.ccCAMTRLINES = re.MTRLINES)
+            If msns.Count > 0 Then
+                Dim APRF As String = ""
+                Dim PAR As String = ""
+                Dim DP As String = ""
                 For Each msn In msns
-                    Dim f1 = db.FINDOCs.Where(Function(f) f.FINDOC = msn.FINDOC).FirstOrDefault
-                    re.ApplicationLog = "[" & f1.FINCODE & "" & "," & f1.TRDRRATE & "," & f1.FINDOC & "," & msn.MTRLINES & "]"
+                    Select Case msn.FINDOC1.SERIES
+                        Case 2000
+                            APRF = "[" & msn.FINDOC1.FINCODE & "" & "," & msn.FINDOC1.TRNDATE & "]"
+                        Case 2021, 2022, 2023
+                            PAR = "[" & msn.FINDOC1.FINCODE & "" & "," & msn.FINDOC1.TRNDATE & "]"
+                        Case 2041, 2045
+                            DP = "[" & msn.FINDOC1.FINCODE & "" & "," & msn.FINDOC1.TRNDATE & "]"
+                    End Select
                 Next
-
+                re.ApplicationLog = "[" & APRF & "," & PAR & "," & DP & "]"
             End If
         Next
 
