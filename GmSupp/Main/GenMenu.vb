@@ -130,7 +130,7 @@ Public Class GenMenu
 
             If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
                 If loginf.ddlXCOs.SelectedIndex = -1 Then
-                    loginf.ddlXCOs.SelectedIndex = 26 '"SERTORIUS"
+                    loginf.ddlXCOs.SelectedIndex = 27 '"SERTORIUS"
                 End If
             End If
 

@@ -21,6 +21,7 @@ Public Class S1Applicants
     Dim conn As String
     Dim CompanyT As Integer = 0
     Dim CompanyS As Integer = 0
+    Dim LUserManager As GmUserManager = GmUserManager.Create(New GmIdentityDbContext)
 
 #End Region
 #Region "02-Declare Propertys"
@@ -43,71 +44,24 @@ Public Class S1Applicants
         StartDate = CDate("01/01/" & Year(CTODate))
         Dim conString As New SqlConnectionStringBuilder
         conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
-        'If Me.Tag = "REVERA" Then
-        '    conString.DataSource = "192.168.12.201,55555"
-        '    conString.InitialCatalog = "Revera"
-        '    CompanyS = 4000
-        'End If
-        'If Me.Tag = "SERTORIUS" Then
-        '    conString.DataSource = "192.168.12.201,55555"
-        '    conString.InitialCatalog = "Revera"
-        '    CompanyS = 5000
-        'End If
-        'If Me.Tag = "CENTROFARO" Then
-        '    conString.DataSource = "192.168.12.201,55555"
-        '    conString.InitialCatalog = "Centro"
-        '    CompanyS = 3000
-        'End If
 
-        'conString.UserID = "sa"
-        'conString.Password = "P@$$w0rd"
         conn = conString.ConnectionString
         GenMenu.TlSSTLabelConnStr.Text = "Data Source=" & conString.DataSource & ";Initial Catalog=" & conString.InitialCatalog & ";User ID=" & conString.UserID
 
-        'Dim db = New DataClassesCentrofaroDataContext(conn)
-        'Dim q = (From so In db.SOCARRIERs Select so.NAME, so.SOCARRIER).ToList
-        'Dim q = db.SOCARRIERs.ToList
-        'q = q.Where(Function(f) f.ISACTIVE > 0).ToList
-        'q = q.OrderBy(Function(f) f.NAME).ToList
-        'Dim emptySOCARRIER As SOCARRIER()
-        'emptySOCARRIER = {New SOCARRIER With {.NAME = "<Επιλέγξτε>", .SOCARRIER = 0}}
+        uss = LUserManager.Users.Where(Function(f) Not f.UserName = "gmlogic").OrderBy(Function(f) f.UserName).ToList
+        If CurUserRole = "Admins" Then
+            uss = uss.Where(Function(f) f.S1User = False).OrderBy(Function(f) f.UserName).ToList
+            Dim gg = uss.Select(Function(f) f.Roles).ToList
+        End If
 
-        'Dim q1 = emptySOCARRIER.ToList.Union(q.ToList)
+        Dim emptyUsers() As GmIdentityUser
+        emptyUsers = {New GmIdentityUser With {.UserName = "<Επιλέγξτε>"}}
 
+        uss = (emptyUsers.ToList.Union(uss.ToList)).ToList
 
-
-        'Dim bci = db.ccCTrdBCities.ToList
-        'bci = bci.Where(Function(f) {26, 149, 574, 578, 586}.Contains(f.ccCTrdBCity) And f.ISACTIVE > 0).ToList
-
-        'Dim emptyccCTrdBCity As ccCTrdBCity()
-        'emptyccCTrdBCity = {New ccCTrdBCity With {.CITY = "<Επιλέγξτε>", .ccCTrdBCity = 0}}
-
-        'Dim q2 = emptyccCTrdBCity.ToList.Union(bci.ToList)
-
-        'CENTROFARO
-        'Company TRDR	CODE	NAME
-        '3000    12118	00006	PFIC LTD.
-        '3000    25353	00011	ΛΙΠΑΣΜΑΤΑ ΝΕΑΣ ΚΑΡΒΑΛΗΣ Α.Ε.
-
-        'REVERA
-        'Company TRDR	CODE	NAME
-        '4000    35465	00006	PFIC LTD.
-        '4000    38236	00011	ΛΙΠΑΣΜΑΤΑ ΝΕΑΣ ΚΑΡΒΑΛΗΣ Α.Ε.
-
-        'If {"g.igglesis", "i.pilarinos"}.Contains(CurUser) Then
-        '    CompanyT = 1002
-        'End If
-
-        'If CompName = "LK" Then
-        '    If {"panagiotis", "katerina", "gkonstantatos"}.Contains(CurUser) Then
-        '        CompanyT = 2001 '1001
-        '    End If
-        'End If
-        'If CompName = "NVF" Then
-        '    If {"avichou", "katerina"}.Contains(CurUser) Then
-        '        CompanyT = 2002 '1001
-        '    End If
-        'End If
+        Me.ddlUsers.DataSource = uss 'ddlUsers.SelectedIndexChanged
+        Me.ddlUsers.DisplayMember = "UserName" 'ddlUsers.SelectedIndexChanged
+        Me.ddlUsers.ValueMember = "Id"
 
         If CurUser = "gmlogic" Then
             'conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
@@ -317,6 +271,7 @@ Public Class S1Applicants
 #End Region
 #Region "96-MasterDataGridView"
     Dim editableFields_MasterDataGridView() As String = {"Search_User", "ExpccCUser", "NAME", "ISACTIVE"}
+    Private uss As List(Of GmIdentityUser)
 
     Private Sub MasterDataGridView_CurrentCellDirtyStateChanged(sender As Object, e As System.EventArgs) Handles MasterDataGridView.CurrentCellDirtyStateChanged
         Dim s As DataGridView = sender
@@ -384,17 +339,7 @@ Public Class S1Applicants
             'Dim mln As List(Of Panel.MTRL) = (From Empty In emptyMTRL).Union(
             '                                (From m1 In ml Order By m1.CODE)).ToList
 
-            Dim LUserManager As GmUserManager = GmUserManager.Create(New GmIdentityDbContext)
-            Dim uss = LUserManager.Users.Where(Function(f) Not f.UserName = "gmlogic").OrderBy(Function(f) f.UserName).ToList
-            If CurUserRole = "Admins" Then
-                uss = uss.Where(Function(f) f.S1User = False).OrderBy(Function(f) f.Name).ToList
-                Dim gg = uss.Select(Function(f) f.Roles).ToList
-            End If
 
-            Dim emptyUsers() As GmIdentityUser
-            emptyUsers = {New GmIdentityUser With {.Name = "<Επιλέγξτε>", .UserName = ""}}
-
-            uss = (emptyUsers.ToList.Union(uss.ToList)).ToList
 
             'Me.ddlUsers.DataSource = uss 'ddlUsers.SelectedIndexChanged
             'Me.ddlUsers.DisplayMember = "UserName" 'ddlUsers.SelectedIndexChanged
@@ -850,7 +795,43 @@ Public Class S1Applicants
             MsgBox(ex.Message)
         End Try
     End Sub
+    Private Sub BtnAddtoSoftone_Click(sender As Object, e As EventArgs) Handles BtnAddtoSoftone.Click
+        If Me.ddlUsers.SelectedItem IsNot Nothing Then
+            Me.UsernameTextBox.Text = Me.ddlUsers.SelectedItem.Name
+        Else
+            Me.UsernameTextBox.Text = Me.ddlUsers.Text
+        End If
+        If Me.UsernameTextBox.Text = "<Επιλέγξτε>" Then
+            Exit Sub
+        End If
 
+        Dim UFTBL01s = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251)
+        If UFTBL01s.Count > 0 Then
+            Dim UFTBL01 = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251 And f.NAME = Me.UsernameTextBox.Text).FirstOrDefault
+            If UFTBL01 Is Nothing Then
+                Dim id As Short = UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251).Max(Function(f) f.UFTBL01)
+                UFTBL01 = New Revera.UFTBL01
+                UFTBL01.UFTBL01 = id + 1
+                UFTBL01.CODE = UFTBL01.UFTBL01
+                UFTBL01.COMPANY = Company
+                UFTBL01.SOSOURCE = 1251
+                UFTBL01.NAME = Me.UsernameTextBox.Text
+                UFTBL01.ccCUser = Me.ddlUsers.SelectedItem.UserName
+                UFTBL01.ISACTIVE = 1
+                db.UFTBL01s.InsertOnSubmit(UFTBL01)
+            Else
+                MsgBox("Προσοχή !!!.Υπάρχει ο αιτών στο Softone", MsgBoxStyle.Exclamation, "Προσοχή !!!")
+                Exit Sub
+            End If
+        Else
+            MsgBox("Προσοχή !!!.UFTBL01s.Count = 0", MsgBoxStyle.Exclamation, "Προσοχή !!!")
+            Exit Sub
+        End If
+
+        If Me.DataSafe() Then
+            Me.cmdSelect.PerformClick()
+        End If
+    End Sub
 
 #End Region
 #Region "99-Start-GetData"
@@ -927,6 +908,16 @@ Public Class S1Applicants
         Next
         Return dt
     End Function
+
+    Private Sub ddlUsers_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlUsers.SelectedIndexChanged
+        If Me.ddlUsers.SelectedItem IsNot Nothing Then
+            Me.UsernameTextBox.Text = Me.ddlUsers.SelectedItem.Name
+        Else
+            Me.UsernameTextBox.Text = Me.ddlUsers.Text
+        End If
+    End Sub
+
+
 #End Region
 
 End Class
