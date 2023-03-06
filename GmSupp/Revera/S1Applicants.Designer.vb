@@ -96,7 +96,7 @@ Partial Class S1Applicants
         Me.cmdSelect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.cmdSelect.Image = CType(resources.GetObject("cmdSelect.Image"), System.Drawing.Image)
         Me.cmdSelect.ImageAlign = System.Drawing.ContentAlignment.BottomRight
-        Me.cmdSelect.Location = New System.Drawing.Point(460, 15)
+        Me.cmdSelect.Location = New System.Drawing.Point(143, 12)
         Me.cmdSelect.Name = "cmdSelect"
         Me.cmdSelect.Size = New System.Drawing.Size(38, 38)
         Me.cmdSelect.TabIndex = 232
@@ -450,7 +450,7 @@ Partial Class S1Applicants
         'ddlUsers
         '
         Me.ddlUsers.FormattingEnabled = True
-        Me.ddlUsers.Location = New System.Drawing.Point(269, 80)
+        Me.ddlUsers.Location = New System.Drawing.Point(326, 12)
         Me.ddlUsers.Name = "ddlUsers"
         Me.ddlUsers.Size = New System.Drawing.Size(343, 21)
         Me.ddlUsers.TabIndex = 245
@@ -461,19 +461,19 @@ Partial Class S1Applicants
         Me.lblUserName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.lblUserName.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblUserName.ForeColor = System.Drawing.Color.Blue
-        Me.lblUserName.Location = New System.Drawing.Point(153, 77)
+        Me.lblUserName.Location = New System.Drawing.Point(210, 9)
         Me.lblUserName.Name = "lblUserName"
         Me.lblUserName.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblUserName.Size = New System.Drawing.Size(110, 23)
         Me.lblUserName.TabIndex = 244
-        Me.lblUserName.Text = "&Όνομα:"
+        Me.lblUserName.Text = "&User:"
         '
         'BtnAddtoSoftone
         '
         Me.BtnAddtoSoftone.BackColor = System.Drawing.SystemColors.Control
         Me.BtnAddtoSoftone.Cursor = System.Windows.Forms.Cursors.Default
         Me.BtnAddtoSoftone.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnAddtoSoftone.Location = New System.Drawing.Point(618, 80)
+        Me.BtnAddtoSoftone.Location = New System.Drawing.Point(675, 12)
         Me.BtnAddtoSoftone.Name = "BtnAddtoSoftone"
         Me.BtnAddtoSoftone.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.BtnAddtoSoftone.Size = New System.Drawing.Size(88, 26)
@@ -483,7 +483,7 @@ Partial Class S1Applicants
         '
         'UsernameTextBox
         '
-        Me.UsernameTextBox.Location = New System.Drawing.Point(269, 103)
+        Me.UsernameTextBox.Location = New System.Drawing.Point(326, 35)
         Me.UsernameTextBox.Name = "UsernameTextBox"
         Me.UsernameTextBox.ReadOnly = True
         Me.UsernameTextBox.Size = New System.Drawing.Size(343, 20)
@@ -495,7 +495,7 @@ Partial Class S1Applicants
         Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Label1.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label1.ForeColor = System.Drawing.Color.Blue
-        Me.Label1.Location = New System.Drawing.Point(153, 100)
+        Me.Label1.Location = New System.Drawing.Point(210, 32)
         Me.Label1.Name = "Label1"
         Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label1.Size = New System.Drawing.Size(110, 23)

@@ -122,6 +122,13 @@ Namespace Revera
         Public Property CDIMNUSE1 As String
         Public Property CDIMNUSE2 As String
         Public Property CDIMNUSE3 As String
+
+        ''' <summary>
+        ''' RUNSQL('SELECT REMARKS FROM MTRL WHERE MTRL= ' + ITELINES.MTRL )
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property REMARKS As String
+
         Public Property SOANAL As String
         Public Property DISC1VAL As System.Nullable(Of Double)
         Public Property DISC2VAL As System.Nullable(Of Double)

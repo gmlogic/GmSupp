@@ -282,6 +282,7 @@ Public Class WHouseBal
             Next
         Next
 
+        Me.ddlΗighers.DropDownStyle = ComboBoxStyle.DropDownList
         Me.ddlΗighers.DisplayMember = "Key"
         Me.ddlΗighers.ValueMember = "Value"
         Me.ddlΗighers.DataSource = Highers.ToList
@@ -328,13 +329,16 @@ Public Class WHouseBal
         wfm.DateTimePicker1.Enabled = False
         wfm.DateTimePicker1.Value = CTODate
         wfm.DateTimePicker2.Value = CTODate
+        wfm.ddlTrdr.DropDownStyle = ComboBoxStyle.DropDownList
         wfm.ddlTrdr.DataSource = Trdrs
         wfm.cccTrdDeps = cccTrdDeps
         wfm.ddlApplicant.DataSource = Applicants
         'wfm.ddlSuppliers.DataSource = Suppliers
+        wfm.ddlFromcccTrdDep.DropDownStyle = ComboBoxStyle.DropDownList
         wfm.ddlFromcccTrdDep.DataSource = FromDep
 
         Highers = GetHighers(CurUser)
+        wfm.ddlΗighers.DropDownStyle = ComboBoxStyle.DropDownList
         wfm.ddlΗighers.DisplayMember = "Key"
         wfm.ddlΗighers.ValueMember = "Value"
         wfm.ddlΗighers.DataSource = Highers.ToList
@@ -460,6 +464,7 @@ Public Class WHouseBal
                     det.MTRL = v.MTRL
                     det.CODE = v.CODE
                     det.NAME = v.NAME
+                    det.REMARKS = v.REMARKS
                     'det.WHOUSE = 1000 '?
                     det.MTRUNIT = v.MTRUNIT1 '?
                     det.VAT = v.VAT ' 0 'Not Null
@@ -1026,7 +1031,7 @@ Public Class WHouseBal
 
             If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
                 myArrF = ("CODE,NAME,MTRUNITC,MTRPLACE,IMPEXPQTY1,SUMORDERED,SUMRESERVED,MTRLBAL,REMAINLIMMIN,REMAINLIMMAX,REORDERLEVEL,REMARKS").Split(",")
-                myArrN = ("Κωδικός,Περιγραφή,Μ.Μ,Συνήθης θέση αποθ.,Υπολ.Πραγμ.,Αναμενόμενα,Δεσμευμένα,ΥΠΟΛΟΙΠΟ(υ+α-δ),Ελάχιστο όριο,Μέγιστο όριο,Όριο ανα παραγγελία,Παρατηρήσεις").Split(",")
+                myArrN = ("Κωδικός,Περιγραφή,Μ.Μ,Συνήθης θέση αποθ.,Υπολ.Πραγμ.,Αναμενόμενα,Δεσμευμένα,ΥΠΟΛΟΙΠΟ(υ+α-δ),Ελάχιστο όριο,Μέγιστο όριο,Όριο ανα παραγγελία,Παρατηρήσεις Είδους").Split(",")
             End If
 
             'If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
@@ -1235,16 +1240,16 @@ Public Class WHouseBal
 
             'ΚΩΔΙΚΟΣ SFT 1		ΠΟΣΟΤΗΤΑ	MM	ΠΕΡΙΓΡΑΦΗ 			
             If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
-                myArrF = ("CODE,NUM03,MTRUNITC,NAME,COMMENTS1,FINDOC").Split(",")
-                myArrN = ("Κωδικός,Αιτ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις,FinDoc").Split(",")
+                myArrF = ("CODE,NUM03,MTRUNITC,NAME,REMARKS,COMMENTS1,FINDOC").Split(",")
+                myArrN = ("Κωδικός,Αιτ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις Είδους,Παρατηρήσεις,FinDoc").Split(",")
             End If
             If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
                 If CurUserRole = "Admins" Then
-                    myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,COMMENTS1,ApplicationLog,FINDOC,MTRLINES,ccCAFINDOC,ccCAMTRLINES").Split(",")
-                    myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις,Ιστορικό Αίτησης,FinDoc,MtrLines,ccCAFINDOC,ccCAMTRLINE").Split(",")
+                    myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,REMARKS,COMMENTS1,ApplicationLog,FINDOC,MTRLINES,ccCAFINDOC,ccCAMTRLINES").Split(",")
+                    myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις Είδους,Παρατηρήσεις,Ιστορικό Αίτησης,FinDoc,MtrLines,ccCAFINDOC,ccCAMTRLINE").Split(",")
                 Else
-                    myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,COMMENTS1,ApplicationLog").Split(",")
-                    myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις,Ιστορικό Αίτησης").Split(",")
+                    myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,REMARKS,COMMENTS1,ApplicationLog").Split(",")
+                    myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις Είδους,Παρατηρήσεις,Ιστορικό Αίτησης").Split(",")
                 End If
             End If
 
@@ -1268,6 +1273,10 @@ Public Class WHouseBal
             If Not IsNothing(MTRLINEsDataGridView.Columns("Παρατηρήσεις")) Then
                 'MTRLINEsDataGridView.Columns("Παρατηρήσεις").Width = 460
                 MTRLINEsDataGridView.Columns("Παρατηρήσεις").DefaultCellStyle.WrapMode = DataGridViewTriState.True
+            End If
+            If Not IsNothing(MTRLINEsDataGridView.Columns("Παρατηρήσεις Είδους")) Then
+                'MTRLINEsDataGridView.Columns("Παρατηρήσεις").Width = 460
+                MTRLINEsDataGridView.Columns("Παρατηρήσεις Είδους").DefaultCellStyle.WrapMode = DataGridViewTriState.True
             End If
             For Each Col In MTRLINEsDataGridView.Columns
                 Try

@@ -475,8 +475,8 @@ Partial Class WHouseBalFR
         '
         'ddlΗighers
         '
-        Me.ddlΗighers.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
         Me.ddlΗighers.DisplayMember = "ccCChief"
+        Me.ddlΗighers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ddlΗighers.FormattingEnabled = True
         Me.ddlΗighers.Location = New System.Drawing.Point(453, 153)
         Me.ddlΗighers.Name = "ddlΗighers"

@@ -96,6 +96,7 @@ Public Class WHouseBalFR
         Dim s As ComboBox = sender
         If Not s.SelectedValue = 0 Then
             Dim trdr As Integer? = s.SelectedValue
+            Me.ddlcccTrdDep.DropDownStyle = ComboBoxStyle.DropDownList
             Me.ddlcccTrdDep.DataSource = cccTrdDeps.Where(Function(f) f.cccTrdDep = 0 Or If(f.trdr, 0) = trdr).Distinct(Function(f) f.Code).ToList
         End If
     End Sub
