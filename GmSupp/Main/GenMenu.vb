@@ -218,65 +218,66 @@ Public Class GenMenu
 
         'Me.Cursor = Cursors.WaitCursor
         s1Conn = Nothing
-        Company = 1000 'Hglp
+        Company = 5000 'SERTORIUS
         Dim Branch = 1000 'Hglp
 
         Try
-            If {"avichou", "panagiotis", "katerina", "akrokos", "thzachopoulos", "dkanellopoulos", "skamariaris", "gkonstantatos"}.Contains(CurUser) Then
-                'S1Path = "C:\Softone\"
-                'If {"akrokos", "thzachopoulos", "dkanellopoulos"}.Contains(curUser) Then
-                '    S1Path = "C:\Soft1_LNK\"
-                'End If
-                'xco = "LK.XCO"
-                If CompName = "LK" Then
-                    Company = 1001
-                    Branch = 1000
-                End If
-                If CompName = "NVF" Then
-                    Company = 2002
-                    Branch = 1000
-                End If
-                'XCOFile = S1Path & "LK.XCO"
+            'If {"avichou", "panagiotis", "katerina", "akrokos", "thzachopoulos", "dkanellopoulos", "skamariaris", "gkonstantatos"}.Contains(CurUser) Then
+            '    'S1Path = "C:\Softone\"
+            '    'If {"akrokos", "thzachopoulos", "dkanellopoulos"}.Contains(curUser) Then
+            '    '    S1Path = "C:\Soft1_LNK\"
+            '    'End If
+            '    'xco = "LK.XCO"
+            '    If CompName = "LK" Then
+            '        Company = 1001
+            '        Branch = 1000
+            '    End If
+            '    If CompName = "NVF" Then
+            '        Company = 2002
+            '        Branch = 1000
+            '    End If
+            '    'XCOFile = S1Path & "LK.XCO"
 
-            End If
+            'End If
 
-            'kbechrakis pass 1588
-            If {"g.igglesis", "kbechrakis", "i.pilarinos"}.Contains(CurUser) Then
-                'S1Path = "C:\Softone\"
-                'xco = "PFIC.XCO"
-                CompName = "PFIC"
-                'XCOFile = S1Path & "PFIC.XCO"
-                Company = 1002
-                Branch = 2000
-            End If
+            ''kbechrakis pass 1588
+            'If {"g.igglesis", "kbechrakis", "i.pilarinos"}.Contains(CurUser) Then
+            '    'S1Path = "C:\Softone\"
+            '    'xco = "PFIC.XCO"
+            '    CompName = "PFIC"
+            '    'XCOFile = S1Path & "PFIC.XCO"
+            '    Company = 1002
+            '    Branch = 2000
+            'End If
 
-            Dim XCOFile = S1Path & CompName.Replace("SERTORIUS", "REVERA").Replace("ReveraLite".ToUpper, "REVERA").Replace("HglpLite".ToUpper, "HGLP").ToUpper & ".xco"
-            If IO.File.Exists(XCOFile) Then
+            'Dim XCOFile = S1Path & CompName.Replace("SERTORIUS", "REVERA").Replace("ReveraLite".ToUpper, "REVERA").Replace("HglpLite".ToUpper, "HGLP").ToUpper & ".xco"
+            'If IO.File.Exists(XCOFile) Then
 
-                Dim q = From line In IO.File.ReadAllLines(XCOFile, System.Text.Encoding.GetEncoding("windows-1253"))
-                For Each ss As String In q
-                    If ss.Contains("SERVER") Then
-                        SERVER = ss.Split("=")(1)
-                    End If
-                    If ss.Contains("DATABASE") Then
-                        DATABASE = ss.Split("=")(1)
-                    End If
-                    'If ss.Contains("COMPANY") Then
-                    '    Company = ss.Split("=")(1)
-                    'End If
-                Next
-            Else
-                'MsgBox("Προσοχή !!!. Λάθος " & XCOFile & " . Η εφαρμογή διακόπτεται", MsgBoxStyle.Critical, "Critical")
-                'Return False
-            End If
-            If CompName.ToUpper = "REVERA" Then
-                Company = 4000
-            End If
+            '    Dim q = From line In IO.File.ReadAllLines(XCOFile, System.Text.Encoding.GetEncoding("windows-1253"))
+            '    For Each ss As String In q
+            '        If ss.Contains("SERVER") Then
+            '            SERVER = ss.Split("=")(1)
+            '        End If
+            '        If ss.Contains("DATABASE") Then
+            '            DATABASE = ss.Split("=")(1)
+            '        End If
+            '        'If ss.Contains("COMPANY") Then
+            '        '    Company = ss.Split("=")(1)
+            '        'End If
+            '    Next
+            'Else
+            '    'MsgBox("Προσοχή !!!. Λάθος " & XCOFile & " . Η εφαρμογή διακόπτεται", MsgBoxStyle.Critical, "Critical")
+            '    'Return False
+            'End If
+            'If CompName.ToUpper = "REVERA" Then
+            '    Company = 4000
+            'End If
             If CompName.ToUpper = "SERTORIUS" Then
                 Company = 5000
             End If
 
             'If {"REVERA", "SERTORIUS"}.Contains(CompName.ToUpper) Then
+            Login = False
             Dim us = CheckUsers(Company, CurUser, Pass)
             If Not IsNothing(us) Then
                 'For first time us.S1User = True
@@ -294,57 +295,57 @@ Public Class GenMenu
                 'Check if S1User
                 'SetDBs(dbs.REVERA)
                 SetDBs(CType(System.Enum.Parse(GetType(dbs), CompName.ToUpper.Replace("SERTORIUS", "REVERA").Replace("ReveraLite".ToUpper, "REVERA").Replace("HglpLite".ToUpper, "HGLP").ToUpper), dbs))
-                Dim uS1 As Revera.USER = Nothing
-                Using db1 As New DataClassesReveraDataContext(My.Settings.GenConnectionString)
-                    uS1 = db1.USERs.Where(Function(f) f.CODE = CurUser).FirstOrDefault
-                    If IsNothing(uS1) Then 'For first time only
-                        Dim UserManager = GmUserManager.Create(New GmIdentityDbContext)
-                        Dim usU = UserManager.FindByName(CurUser)
-                        usU.S1User = False
-                        usU.Users = 0
-                        UserManager.Update(usU)
-                        Return True
-                    Else
-                        If Not IsNothing(uS1.DEFCOMPANY) Then
-                            Company = uS1.DEFCOMPANY
-                        End If
-                        If Not IsNothing(uS1.DEFBRANCH) Then
-                            Branch = uS1.DEFBRANCH
-                        End If
-                        If us.Users = 0 Then 'For first time
-                            Dim UserManager = GmUserManager.Create(New GmIdentityDbContext)
-                            Dim usU = UserManager.FindByName(CurUser)
-                            'usU.S1User = True
-                            usU.Users = uS1.USERS
-                            UserManager.Update(usU)
-                        End If
-                    End If
-                End Using
+                '    Dim uS1 As Revera.USER = Nothing
+                '    Using db1 As New DataClassesReveraDataContext(My.Settings.GenConnectionString)
+                '        uS1 = db1.USERs.Where(Function(f) f.CODE = CurUser).FirstOrDefault
+                '        If IsNothing(uS1) Then 'For first time only
+                '            Dim UserManager = GmUserManager.Create(New GmIdentityDbContext)
+                '            Dim usU = UserManager.FindByName(CurUser)
+                '            usU.S1User = False
+                '            usU.Users = 0
+                '            UserManager.Update(usU)
+                '            Return True
+                '        Else
+                '            If Not IsNothing(uS1.DEFCOMPANY) Then
+                '                Company = uS1.DEFCOMPANY
+                '            End If
+                '            If Not IsNothing(uS1.DEFBRANCH) Then
+                '                Branch = uS1.DEFBRANCH
+                '            End If
+                '            If us.Users = 0 Then 'For first time
+                '                Dim UserManager = GmUserManager.Create(New GmIdentityDbContext)
+                '                Dim usU = UserManager.FindByName(CurUser)
+                '                'usU.S1User = True
+                '                usU.Users = uS1.USERS
+                '                UserManager.Update(usU)
+                '            End If
+                '        End If
+                '    End Using
             End If
 
+            ''End If
+
+            'Dim DTLogin = CTODate ' DateTime.Now
+
+
+            'If Not IO.File.Exists(S1Path & "XDll.dll") Then
+            '    Return Login
             'End If
+            'XSupport.InitInterop(0, S1Path & "XDll.dll")
 
-            Dim DTLogin = CTODate ' DateTime.Now
+            ''Dim fS1HiddenForm As New Form 'Needed for Opening Form from SoftOne
+            'XSupport.InitInterop(fS1HiddenForm.Handle)
 
+            's1Conn = XSupport.Login(XCOFile, CurUser, Pass,
+            '                           Company.ToString, Branch.ToString, DTLogin)
 
-            If Not IO.File.Exists(S1Path & "XDll.dll") Then
-                Return Login
-            End If
-            XSupport.InitInterop(0, S1Path & "XDll.dll")
-
-            'Dim fS1HiddenForm As New Form 'Needed for Opening Form from SoftOne
-            XSupport.InitInterop(fS1HiddenForm.Handle)
-
-            s1Conn = XSupport.Login(XCOFile, CurUser, Pass,
-                                       Company.ToString, Branch.ToString, DTLogin)
-
-            If s1Conn.ConnectionInfo IsNot Nothing Then
-                Login = True
-                UserId = s1Conn.ConnectionInfo.UserId
-            Else
-                Me.Text = strAppName
-                MsgBox("Connection Error! s1Conn.ConnectionInfo Is Nothing", MsgBoxStyle.Critical, strAppName)
-            End If
+            'If s1Conn.ConnectionInfo IsNot Nothing Then
+            '    Login = True
+            '    UserId = s1Conn.ConnectionInfo.UserId
+            'Else
+            '    Me.Text = strAppName
+            '    MsgBox("Connection Error! s1Conn.ConnectionInfo Is Nothing", MsgBoxStyle.Critical, strAppName)
+            'End If
         Catch ex As Exception
             Me.Text = strAppName
             'MsgBox("Connection Error:" & vbCrLf & S1Path & vbCrLf & curUser & vbCrLf & ex.ToString, MsgBoxStyle.Critical, strAppName)
