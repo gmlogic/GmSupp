@@ -408,6 +408,15 @@ Public Class S1Applicants
             columnTxtBox.SortMode = DataGridViewColumnSortMode.Automatic
             Me.MasterDataGridView.Columns.Add(columnTxtBox)
 
+
+            columnTxtBox = New DataGridViewTextBoxColumn
+            'columnTxtBox.DataPropertyName = "ExpccCUser"
+            columnTxtBox.HeaderText = "ChkUser"
+            columnTxtBox.Name = "ChkUser"
+            columnTxtBox.SortMode = DataGridViewColumnSortMode.Automatic
+            Me.MasterDataGridView.Columns.Add(columnTxtBox)
+
+
             For i As Integer = 0 To MasterDataGridView.Columns.Count - 1
                 Debug.Print(MasterDataGridView.Columns(i).DataPropertyName & vbTab & MasterDataGridView.Columns(i).Name)
                 'MasterDataGridView.Columns(i).ReadOnly = True
@@ -448,7 +457,7 @@ Public Class S1Applicants
                 '    dll.Value = MTRL
                 'End If
 
-                Dim item = row.DataBoundItem
+                Dim item As Revera.ccCS1Applicant = row.DataBoundItem
                 If Not IsNothing(item) Then
                     Try
                         If item.NAME = "ΗΛΙΑΔΗΣ ΓΙΩΡΓΟΣ" Then
@@ -479,6 +488,10 @@ Public Class S1Applicants
                             TxtCell.Value = item.ccCUser
                         End If
 
+                        TxtCell = row.Cells("ChkUser")
+                        If item.NAME = item.AspNetUsersName Then
+                            TxtCell.Value = "Ok"
+                        End If
 
                     Catch ex As Exception
 
@@ -921,7 +934,3 @@ Public Class S1Applicants
 #End Region
 
 End Class
-
-
-
-
