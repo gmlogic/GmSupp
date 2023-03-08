@@ -2594,9 +2594,9 @@ Public Class WHouseBal
                 Dim mls = CType(Me.VscsBindingSource.DataSource, SortableBindingList(Of Revera.GetPendingOrdersDetailsResult))
                 For Each v In mls
 
-                    v.UFTBL02 = 106 ' wfm.ddlTrdr.SelectedValue '= 106 'ΣΥΝΤ.ΟΡΓΑΝΑ
-                    v.cccTrdDep = wfm.ddlcccTrdDep.SelectedValue '= 55 'ΤΜ.ΤΕΧΝΟΛ.ΕΛΕΓΧΟΥ
-                    v.cccTrdr = wfm.ddlTrdr.SelectedValue '= 35465 'PFIC LTD.
+                    'v.UFTBL02 = CShort(wfm.ddlFromcccTrdDep.SelectedValue) 'Τμήμα κόστους = 106 'ΣΥΝΤ.ΟΡΓΑΝΑ
+                    v.cccTrdDep = CInt(wfm.ddlcccTrdDep.SelectedValue) 'Κωδικός Τμήματος DBTableName : cccTrdDep = 55 'ΤΜ.ΤΕΧΝΟΛ.ΕΛΕΓΧΟΥ
+                    v.cccTrdr = CInt(wfm.ddlTrdr.SelectedValue) 'Κωδικός πελάτη cccTrdr = 35465 'PFIC LTD.
                     v.WHOUSE = mc.WHOUSE
                     v.QTY1 = v.NUM03 'Αιτ.Ποσ
                     fin = MTRLINE_AddingNew(v, fin)
