@@ -1061,11 +1061,11 @@ Public Class WHouseBal
                 If CurUserRole = "Admins" Then
                     'myArrF = ("NO_,FINDOC,TRNDATE,FINCODE,ApplicantNAME,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo,Highers,FINSTATES,FINSTATESNAME").Split(",")
                     'myArrN = ("A/A,Αρ.Αίτησης,Ημερ/νία,Παραστατικό,Αιτών,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ,Εγκρίνοντες,Κατάσταση,Περιγραφή").Split(",")
-                    myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
-                    myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Κατάσταση,FinDoc,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ").Split(",")
+                    myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,AssignmentUser,FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
+                    myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Κατάσταση,Ανάθεση,FinDoc,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ").Split(",")
                 Else
-                    myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,FINDOC").Split(",")
-                    myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Περιγραφή,FinDoc").Split(",")
+                    myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,AssignmentUser").Split(",")
+                    myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Περιγραφή,Ανάθεση").Split(",")
                 End If
             End If
             'If Me.Text = "Αποθήκη - Αιτήσεις σε Εκρεμότητα" Then
@@ -2376,7 +2376,7 @@ Public Class WHouseBal
             Dim FPACount As Integer = 3
             Dim ar(FPACount - 1) As String
             ar = {"23", "13", "6.5"}
-            paramList.Add(New Microsoft.Reporting.WinForms.ReportParameter("Company", "REVERA HOLDINGS LTD ATHENS"))
+            paramList.Add(New Microsoft.Reporting.WinForms.ReportParameter("Company", "SERTORIUS LTD"))
             'paramList.Add(New ReportParameter("VisibleDetail", Not Me.CheckBoxSummary.Checked))
             'paramList.Add(New ReportParameter("DFrom", Me.DateTimePicker1.Value, True)) 'CDate(Format(DateTimePicker1.Value, "MM/dd/yyyy")), True))
             'paramList.Add(New ReportParameter("DTo", Me.DateTimePicker2.Value, True))

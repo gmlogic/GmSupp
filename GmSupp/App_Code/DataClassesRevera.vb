@@ -66,6 +66,12 @@ Namespace Revera
 
         Public Property INSUSERNAME As String
 
+        ''' <summary>
+        ''' select us.NAME from users us where us.USERS = A.ccCRUser
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property AssignmentUser As String
+
         'Public Property ccCApplicant As String
 
         ''' <summary>
@@ -161,6 +167,7 @@ Namespace Revera
         '''' <returns></returns>
         'Public Property RequestNo As System.Nullable(Of Integer)
         Public Property INSUSERNAME As String
+
         Public Property FPRMSNAME As String
         Public Property TRDRCODE As String
         Public Property TRDRNAME As String
