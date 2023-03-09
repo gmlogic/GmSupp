@@ -1025,65 +1025,15 @@ Public Class WHouseBal
             'Me.MasterDataGridView.AutoResizeColumns()
             'Me.MasterDataGridView.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
             'Me.MasterDataGridView.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect
-
-            '            Company SODTYPE	MTRL	COMPANY	BMTRL	FISCPRD	QTY1	SODTYPE	BMTRL	NUM02	CODE	NAME	CODE1	CODE2	MTRTYPE	MTRTYPE1	MTRUNIT1	MTRPLACE	REMAINLIMMIN	REMAINLIMMAX	REORDERLEVEL	REMARKS	IMPEXPQTY1	SUMORDERED	SUMRESERVED
-            '4000    51	206001	4000	206001	2020	0	NULL	NULL	0	1A2PP0320100	GLOBE VALVE,DN 100,PN 16	NULL	NULL	0	0	101	61 A 3	0	0	0	GLOBE VALVE,DN 100,PN 16 FACE TO FACE : DIN 3202, F1 FLANGED : PN 16 DIN 2501 FACING TYPE C DIN 2526 MATERIAL: BODY : 1.0460/1.0619 TRIM:13% CR	0	0	0
-
             If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
                 myArrF = ("CODE,NAME,MTRUNITC,MTRPLACE,IMPEXPQTY1,SUMORDERED,SUMRESERVED,MTRLBAL,REMAINLIMMIN,REMAINLIMMAX,REORDERLEVEL,REMARKS").Split(",")
                 myArrN = ("Κωδικός,Περιγραφή,Μ.Μ,Συνήθης θέση αποθ.,Υπολ.Πραγμ.,Αναμενόμενα,Δεσμευμένα,ΥΠΟΛΟΙΠΟ(υ+α-δ),Ελάχιστο όριο,Μέγιστο όριο,Όριο ανα παραγγελία,Παρατηρήσεις Είδους").Split(",")
             End If
 
-            'If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
             If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
-                '            NO_ Company	FINDOC	COMPANY	MTRLINES	SODTYPE	MTRL	SOSOURCE	SOREDIR	SOSOURCE	SOREDIR	TRNDATE	SERIES	FPRMS	FINCODE	SODTYPE	TRDR	CODE	NAME	CMPMODE	ISPRINT	APPRV	OrderNo	Applicant	INSUSER
-                '1   4000	82006	4000	1	51	207120	1251	0	1251	0	2020-04-01 00:00:00.000	2021	2021	ΠΑΡ0001593	12	35896	000478	ΧΑΤΖΟΠΟΥΛΟΣ ΚΥΡΙΑΚΟΣ Α.Ε.	18	1	1	175	87	1600
-
-                '            NO_ FINDOC	TRDR	CODE	NAME	MTRL	SHIPDATE	DELIVDATE	COMMENTS	COMMENTS1	QTY1	QTY1CANC	LINEVAL	RESTMODE	QTY1OPEN	LINEVALOPEN	CDIM1	CDIM2	CDIM3	CDIMNUSE1	CDIMNUSE2	CDIMNUSE3	SOANAL	DISC1VAL	DISC2VAL	DISC3VAL	PRICE
-                '1   82006	35896	0000432	ΡΟΥΛΜΑΝ 33013	209327	NULL	2020-04-13 00:00:00.000	ΓΙΑ ΤΗΝ ΕΠΙΣΚΕΥΗ: J-1524 Α/Β ή J-1534 A/B  ΠΗΝΙΟ ΚΙΝΗΣΗΣ J-1502 A/B	ΡΟΥΛΜΑΝ 33013	4	0	67, 44	11	4	67, 44	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	16, 86
-
-
-                '            Αρχ.Εκκρεμών        Εκκρεμή
-                'A/ A Ημερ/νία	Παραστατικό	Αρ.Αίτησης	Χρήστης εισαγωγής	Τύπος	Κωδικός	Επωνυμία	Ποσ.1	Ακυρ.ποσ.	Ποσ.1
-                '1   01/04/2020	ΠΑΡ0001593	175	ΟΙΚΟΝΟΜΟΥ Π	Παραγγελία Σε Προμηθευτή	000478	ΧΑΤΖΟΠΟΥΛΟΣ ΚΥΡΙΑΚΟΣ Α.Ε.	14,00		14,00
-                '		Είδους      Αρχική						
-                '    A/ A Κωδικός	Περιγραφή	Ποσ.1	Ακυρ.ποσ.	Εκκρεμή_Ποσ.1				
-                '	1   0000432	ΡΟΥΛΜΑΝ 33013	4,00		4,00				
-
-                'myArrF = ("NO_,TRNDATE,FINCODE,OrderNo,INSUSER,FPRMS,CODE,NAME,QTY1,QTY1CANC,QTY1OPEN").Split(",")
-                'myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αρ.Αίτησης,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Ποσ.1,Ακυρ.ποσ.,Εκκρεμή_Ποσ.1").Split(",")
-
-                'myArrF = ("NO_,TRNDATE,FINCODE,OrderNo,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME").Split(",")
-                'myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αρ.Αίτησης,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία").Split(",")
-
-                'myArrF = ("NO_,CODE,NAME,QTY1,QTY1CANC,QTY1OPEN").Split(",")
-                'myArrN = ("A/A,Κωδικός,Περιγραφή,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1").Split(",")
-                If CurUserRole = "Admins" Then
-                    'myArrF = ("NO_,FINDOC,TRNDATE,FINCODE,ApplicantNAME,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo,Highers,FINSTATES,FINSTATESNAME").Split(",")
-                    'myArrN = ("A/A,Αρ.Αίτησης,Ημερ/νία,Παραστατικό,Αιτών,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ,Εγκρίνοντες,Κατάσταση,Περιγραφή").Split(",")
-                    myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,AssignmentUser,FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
-                    myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Κατάσταση,Ανάθεση,FinDoc,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ").Split(",")
-                Else
-                    myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,AssignmentUser").Split(",")
-                    myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Περιγραφή,Ανάθεση").Split(",")
-                End If
+                myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,AssignmentUser,FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
+                myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Κατάσταση,Ανάθεση,FinDoc,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ").Split(",")
             End If
-            'If Me.Text = "Αποθήκη - Αιτήσεις σε Εκρεμότητα" Then
-            '    'myArrF = ("NO_,TRNDATE,FINCODE,uf1Name,mtName,muName,MTRPLACE,OrderNo,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN").Split(",")
-            '    'myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Περιγραφή,Μ.Μ,Συνήθης θέση αποθ.,Αρ.Αίτησης,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1").Split(",")
-            '    myArrF = ("NO_,TRNDATE,FINDOC,UFTBL01,uf1Name,uf2Name,tdName,cTDpName,CODE,mtName,muName,QTY1,IMPEXPQTY1,SUMORDERED,SUMRESERVED,MTRLBAL,REMAINLIMMIN,REMAINLIMMAX,REORDERLEVEL,REMARKS,mtRemarks,VARCHAR02,FINCODE").Split(",")
-            '    myArrN = ("A/A,Ημερ/νία,Αρ.Αίτησης,ΑιτώνΚωδ,Αιτών,Από Τμήμα,Για Πελάτη,Για Τμήμα Πελάτη,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Υπολ.Πραγμ.,Αναμενόμενα,Δεσμευμένα,ΥΠΟΛΟΙΠΟ(υ+α-δ),Ελάχιστο όριο,Μέγιστο όριο,Όριο ανα παραγγελία,Παρατηρήσεις,Παρατηρήσεις,Εγκρίσεις,Παραστατικό").Split(",")
-            'End If
-
-            'If Me.Text = "Αποθήκη - Εκτύπωση Ετικετών Barcode" Then
-            '    myArrF = ("CODE,NAME,LBName,Pack,Weight,PrdDate,PackingDate,Shift,Shift").Split(",")
-            '    myArrN = ("Κωδικός,Περιγραφή,Ονομασία Λιπάσματος,Τύπος Συσκευασίας,Βάρος σάκου,Ημ/νία Παραγωγής,Ημ/νία Συσκευασίας,Βάρδια,Μηχανή ενσάκισης").Split(",")
-            'End If
-
-            'If Me.Text = "Αποθήκη - Περιγραφή Ετικέτας" Then
-            '    myArrF = ("CODE,NAME,LBName,Pack,Weight").Split(",")
-            '    myArrN = ("Κωδικός,Περιγραφή,Ονομασία Λιπάσματος,Τύπος Συσκευασίας,Βάρος σάκου").Split(",")
-            'End If
 
             'Add Bound Columns
             Dim bad_item_columns() As Integer = {1, 2, 3, 4}
@@ -1115,6 +1065,15 @@ Public Class WHouseBal
             Next
 
             Me.MasterDataGridView.AutoResizeColumns()
+            Dim HideCols = ("FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
+            If Not CurUserRole = "Admins" Then
+                For Each hc In HideCols
+                    Dim col = MasterDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = hc).FirstOrDefault
+                    If col IsNot Nothing Then
+                        col.Visible = False
+                    End If
+                Next
+            End If
 
 
             If Not IsNothing(MasterDataGridView.Columns("Παρατηρήσεις")) Then
@@ -1244,13 +1203,8 @@ Public Class WHouseBal
                 myArrN = ("Κωδικός,Αιτ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις Είδους,Παρατηρήσεις,FinDoc").Split(",")
             End If
             If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
-                If CurUserRole = "Admins" Then
-                    myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,REMARKS,COMMENTS1,ApplicationLog,FINDOC,MTRLINES,ccCAFINDOC,ccCAMTRLINES").Split(",")
-                    myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις Είδους,Παρατηρήσεις,Ιστορικό Αίτησης,FinDoc,MtrLines,ccCAFINDOC,ccCAMTRLINE").Split(",")
-                Else
-                    myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,REMARKS,COMMENTS1,ApplicationLog").Split(",")
-                    myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις Είδους,Παρατηρήσεις,Ιστορικό Αίτησης").Split(",")
-                End If
+                myArrF = ("CODE,NUM03,QTY1,MTRUNITC,NAME,REMARKS,COMMENTS1,ApplicationLog,FINDOC,MTRLINES,ccCAFINDOC,ccCAMTRLINES").Split(",")
+                myArrN = ("Κωδικός,Αιτ.Ποσ,Εγκρ.Ποσ,Μ.Μ,Περιγραφή,Παρατηρήσεις Είδους,Παρατηρήσεις,Ιστορικό Αίτησης,FinDoc,MtrLines,ccCAFINDOC,ccCAMTRLINE").Split(",")
             End If
 
             'Add Bound Columns
@@ -1268,6 +1222,17 @@ Public Class WHouseBal
                     Col.ReadOnly = False
                 End If
             Next
+
+
+            Dim HideCols = ("FINDOC,MTRLINES,ccCAFINDOC,ccCAMTRLINES").Split(",")
+            If Not CurUserRole = "Admins" Then
+                For Each hc In HideCols
+                    Dim col = MTRLINEsDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = hc).FirstOrDefault
+                    If col IsNot Nothing Then
+                        col.Visible = False
+                    End If
+                Next
+            End If
 
 
             If Not IsNothing(MTRLINEsDataGridView.Columns("Παρατηρήσεις")) Then
