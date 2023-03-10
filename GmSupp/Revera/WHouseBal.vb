@@ -1066,7 +1066,7 @@ Public Class WHouseBal
 
             Me.MasterDataGridView.AutoResizeColumns()
             Dim HideCols = ("FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
-            If Not CurUserRole = "Admins" Then
+            If Not CurUserRole = "Admins" And Not Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
                 For Each hc In HideCols
                     Dim col = MasterDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = hc).FirstOrDefault
                     If col IsNot Nothing Then
