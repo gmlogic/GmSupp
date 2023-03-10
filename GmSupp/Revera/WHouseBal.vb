@@ -2489,7 +2489,7 @@ Public Class WHouseBal
                 'fin.TRDBRANCH = db.trd.
                 'fin.SALESMAN = 1006
                 fin.SOCASH = 3101
-                fin.PAYMENT = 1011
+                'fin.PAYMENT = 1011
                 'fin.INT01 = wfm.txtBoxRequestNo.Text
                 fin.UFTBL01 = ccCUser.UFTBL01 'wfm.ddlApplicant.SelectedValue
                 fin.UFTBL02 = wfm.ddlFromcccTrdDep.SelectedValue 'Από Τμήμα
