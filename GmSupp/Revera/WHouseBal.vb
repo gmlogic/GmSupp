@@ -2484,6 +2484,7 @@ Public Class WHouseBal
 
                 fin.TRNDATE = wfm.DateTimePicker1.Value.ToShortDateString
                 fin = Findoc_AddingNew(fin, 1251, 1000)
+                fin.BRANCH = 2000 'Αποθήκη Ν.Καρβάλης
                 fin.TRDR = 39611 'Προμηθευτής Αίτησης' wfm.ddlSuppliers.SelectedValue
                 'fin.TRDR = wfm.ddlSuppliers.SelectedValue
                 'fin.TRDBRANCH = db.trd.
@@ -2511,11 +2512,11 @@ Public Class WHouseBal
 
                 Dim mc As New Revera.MTRDOC
                 mc.COMPANY = fin.COMPANY
-                mc.WHOUSE = 1000 '!!!!!!!!!!!!!!!!!!!!!!Πρεπει να γινει ανα υποκατάστημα
-                mc.SHIPPINGADDR = "ΘΕΣΗ ΣΚΛΗΡΗ"
-                mc.SHPZIP = "19018"
-                mc.SHPDISTRICT = "ΜΑΓΟΥΛΑ"
-                mc.SHPCITY = "ΜΑΓΟΥΛΑ ΑΤΤΙΚΗΣ"
+                mc.WHOUSE = 2000 'ΑΠΟΘΗΚΗ Ν.ΚΑΡΒΑΛΗΣ
+                'mc.SHIPPINGADDR = "ΘΕΣΗ ΣΚΛΗΡΗ"
+                'mc.SHPZIP = "19018"
+                'mc.SHPDISTRICT = "ΜΑΓΟΥΛΑ"
+                'mc.SHPCITY = "ΜΑΓΟΥΛΑ ΑΤΤΙΚΗΣ"
                 '            QTY 5
                 'QTY1    5
                 'QTY2    5
@@ -3198,7 +3199,7 @@ Public Class WHouseBal
             'NFINDOC.TFPRMS = 100
             Dim fmt As String = NFINDOC.FINCODE
             NFINDOC.FINCODE = NFINDOC.SERIESNUM.ToString(fmt)
-            NFINDOC.BRANCH = 1000 '1
+            'NFINDOC.BRANCH = 1000 '1
             NFINDOC.SODTYPE = 12 '11
             'NFINDOC.TRDR'?
             'NFINDOC.TRDBRANCH'?
