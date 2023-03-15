@@ -1031,8 +1031,8 @@ Public Class WHouseBal
             End If
 
             If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
-                myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,AssignmentUser,FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
-                myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Κατάσταση,Ανάθεση,FinDoc,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ").Split(",")
+                myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,AssignmentUser,MobilePhone,FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
+                myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Κατάσταση,Ανάθεση,Εσωτ.Τηλ,FinDoc,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ").Split(",")
             End If
 
             'Add Bound Columns

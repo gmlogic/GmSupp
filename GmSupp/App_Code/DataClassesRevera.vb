@@ -72,6 +72,12 @@ Namespace Revera
         ''' <returns></returns>
         Public Property AssignmentUser As String
 
+        ''' <summary>
+        ''' select us.MOBILEPHONE from users us where us.USERS = A.ccCRUser
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property MobilePhone As String
+
         'Public Property ccCApplicant As String
 
         ''' <summary>
