@@ -67,16 +67,10 @@ Namespace Revera
         Public Property INSUSERNAME As String
 
         ''' <summary>
-        ''' select us.NAME from users us where us.USERS = A.ccCRUser
+        ''' select TRIM(us.NAME) + ' (' + TRIM(us.MOBILEPHONE) + ')' from users us where us.USERS = A.ccCRUser
         ''' </summary>
         ''' <returns></returns>
         Public Property AssignmentUser As String
-
-        ''' <summary>
-        ''' select us.MOBILEPHONE from users us where us.USERS = A.ccCRUser
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property MobilePhone As String
 
         'Public Property ccCApplicant As String
 

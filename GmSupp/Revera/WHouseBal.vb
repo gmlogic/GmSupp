@@ -482,6 +482,13 @@ Public Class WHouseBal
             If Me.MTRLINEsDataGridView.ColumnCount = 0 Then
                 Me.MTRLINEsDataGridView.DataSource = Me.VscsBindingSource
                 MTRLINEsDataGridView_Styling()
+                Me.MTRLINEsDataGridView.Columns.Cast(Of DataGridViewColumn).
+                    Where(Function(f) editableFields_MTRLINEsDataGridView.Contains(f.DataPropertyName)).
+                    ForEach(Sub(f As DataGridViewColumn)
+                                f.DefaultCellStyle.BackColor = System.Drawing.Color.White
+                                f.ReadOnly = False
+                                Debug.Print(f.DataPropertyName & "-" & f.ReadOnly)
+                            End Sub)
             End If
 
             For Each row As DataGridViewRow In chkLists
@@ -1031,8 +1038,8 @@ Public Class WHouseBal
             End If
 
             If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
-                myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,AssignmentUser,MobilePhone,FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
-                myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Κατάσταση,Ανάθεση,Εσωτ.Τηλ,FinDoc,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ").Split(",")
+                myArrF = ("NO_,TRNDATE,FINCODE,ApplicantNAME,Highers,FINSTATESNAME,AssignmentUser,FINDOC,INSUSERNAME,FPRMSNAME,TRDRCODE,TRDRNAME,CODE,NAME,MTRUNITC,QTY1,QTY1CANC,QTY1OPEN,OrderNo").Split(",")
+                myArrN = ("A/A,Ημερ/νία,Παραστατικό,Αιτών,Εγκρίνοντες,Κατάσταση,Ανάθεση (Τηλ),FinDoc,Χρήστης εισαγωγής,Τύπος,Κωδικός,Επωνυμία,Κωδικός,Περιγραφή,Μ.Μ,Ποσ.1,Ακυρ.Ποσ.,Εκκρεμή.Ποσ.1,Παλ.Αριθ").Split(",")
             End If
 
             'Add Bound Columns
@@ -1044,6 +1051,12 @@ Public Class WHouseBal
                     ff.Visible = False
                 End If
             Next
+            'Me.MasterDataGridView.ReadOnly = True
+            Me.MasterDataGridView.Columns.Cast(Of DataGridViewColumn).ForEach(Sub(f As DataGridViewColumn)
+                                                                                  'f.DefaultCellStyle.BackColor = System.Drawing.Color.LightYellow
+                                                                                  f.ReadOnly = True
+                                                                                  Debug.Print(f.DataPropertyName & vbTab & f.Name & vbTab & f.ReadOnly)
+                                                                              End Sub)
             If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
 
                 For Each ff In Me.BindingNavigatorMaster.Items
@@ -1211,17 +1224,22 @@ Public Class WHouseBal
             Dim bad_item_columns() As Integer = {1, 2, 3, 4}
             RemoveGridColumnsByCollection(MTRLINEsDataGridView, bad_item_columns, myArrF, myArrN, False) 'CheckBoxDetail.Checked)
 
+            'For i As Integer = 0 To MTRLINEsDataGridView.Columns.Count - 1
+            '    Debug.Print(MTRLINEsDataGridView.Columns(i).DataPropertyName & vbTab & MTRLINEsDataGridView.Columns(i).Name)
+            '    'MTRLINEsDataGridView.Columns(i).ReadOnly = True
+            'Next
+            'For Each edf In editableFields_MTRLINEsDataGridView()
+            '    Dim Col As DataGridViewColumn = Utility.GetNoColumnDataGridView(Me.MTRLINEsDataGridView, edf)
+            '    If Not IsNothing(Col) Then
+            '        Col.ReadOnly = False
+            '    End If
+            'Next
 
-            For i As Integer = 0 To MTRLINEsDataGridView.Columns.Count - 1
-                Debug.Print(MTRLINEsDataGridView.Columns(i).DataPropertyName & vbTab & MTRLINEsDataGridView.Columns(i).Name)
-                MTRLINEsDataGridView.Columns(i).ReadOnly = True
-            Next
-            For Each edf In editableFields_MTRLINEsDataGridView()
-                Dim Col As DataGridViewColumn = Utility.GetNoColumnDataGridView(Me.MTRLINEsDataGridView, edf)
-                If Not IsNothing(Col) Then
-                    Col.ReadOnly = False
-                End If
-            Next
+            Me.MTRLINEsDataGridView.Columns.Cast(Of DataGridViewColumn).ForEach(Sub(f As DataGridViewColumn)
+                                                                                    f.DefaultCellStyle.BackColor = System.Drawing.Color.LightYellow
+                                                                                    f.ReadOnly = True
+                                                                                    Debug.Print(f.DataPropertyName & vbTab & f.Name & vbTab & f.ReadOnly)
+                                                                                End Sub)
 
 
             Dim HideCols = ("FINDOC,MTRLINES,ccCAFINDOC,ccCAMTRLINES").Split(",")
@@ -2890,11 +2908,17 @@ Public Class WHouseBal
                         Me.TlSBtnCheckDetails.Visible = True
                         Me.ToolStripSeparator8.Visible = True
                         Me.TlSBtnUnCheckDetails.Visible = True
-                        Me.MTRLINEsDataGridView.ReadOnly = False
+                        Me.MTRLINEsDataGridView.Columns.Cast(Of DataGridViewColumn).
+                            Where(Function(f) editableFields_MTRLINEsDataGridView.Contains(f.DataPropertyName)).
+                            ForEach(Sub(f As DataGridViewColumn)
+                                        f.DefaultCellStyle.BackColor = System.Drawing.Color.White
+                                        f.ReadOnly = False
+                                        Debug.Print(f.DataPropertyName & "-" & f.ReadOnly)
+                                    End Sub)
                         Me.TlSBtnHigherEnd.Visible = True
                         Exit Sub
                     End If
-                    Me.MTRLINEsDataGridView.ReadOnly = True
+                    'Me.MTRLINEsDataGridView.ReadOnly = True
                     VisibleHigher(False)
                     If finHeader.ApplicantNAME Is Nothing Then
                         Exit Sub
@@ -2918,7 +2942,16 @@ Public Class WHouseBal
                         End If
                         Me.BindingNavigatorNewDoc.Items.Cast(Of ToolStripItem).Where(Function(f) f.Tag = 1).ForEach(Sub(f As ToolStripItem) f.Visible = True)
                         Me.TlSBtnHigherEnd.Visible = False
-                        Me.MTRLINEsDataGridView.ReadOnly = False
+                        'Me.MTRLINEsDataGridView.ReadOnly = False
+
+                        Me.MTRLINEsDataGridView.Columns.Cast(Of DataGridViewColumn).
+                            Where(Function(f) editableFields_MTRLINEsDataGridView.Contains(f.DataPropertyName)).
+                            ForEach(Sub(f As DataGridViewColumn)
+                                        f.DefaultCellStyle.BackColor = System.Drawing.Color.White
+                                        f.ReadOnly = False
+                                        Debug.Print(f.DataPropertyName & "-" & f.ReadOnly)
+                                    End Sub)
+
                         'Dim higs = finHeader.Highers.Split("|")
                         'Dim lkv = New List(Of KeyValuePair(Of String, String))
                         'For Each h In higs
