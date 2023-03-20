@@ -1268,7 +1268,7 @@ Public Class WHouseBal
                         With Col
                             If t.IsGenericType AndAlso t.GetGenericTypeDefinition = GetType(Nullable(Of )) Then
                                 If Not t.FullName.IndexOf("System.Double") = -1 Or Not t.FullName.IndexOf("System.Decimal") = -1 Or Not t.FullName.IndexOf("System.Money") = -1 Then
-                                    .DefaultCellStyle.Format = "N2"
+                                    .DefaultCellStyle.Format = "N3"
                                     If {"Qty1", "SumQty1"}.Contains(Col.DataPropertyName) Then
                                         .DefaultCellStyle.Format = "N3"
                                     End If
@@ -1282,7 +1282,7 @@ Public Class WHouseBal
                             End If
                             If t.Name = "Double" Or t.Name = "Decimal" Or t.Name = "Money" _
                                  Then
-                                .DefaultCellStyle.Format = "N2"
+                                .DefaultCellStyle.Format = "N3"
                                 If {"Qty1", "SumQty1"}.Contains(Col.DataPropertyName) Then
                                     .DefaultCellStyle.Format = "N3"
                                 End If
