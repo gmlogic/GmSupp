@@ -83,8 +83,8 @@
             Me.dgv.AutoGenerateColumns = True
             Me.dgv.AutoResizeColumns()
 
-            myArrF = ("Key,Value").Split(", ")
-            myArrN = ("Key,Value").Split(", ")
+            myArrF = ("Key,Value").Split(",")
+            myArrN = ("Key,Value").Split(",")
 
 
             'Add Bound Columns

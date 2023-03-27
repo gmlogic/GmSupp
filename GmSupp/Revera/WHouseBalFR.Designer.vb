@@ -34,6 +34,7 @@ Partial Class WHouseBalFR
         Dim Label12 As System.Windows.Forms.Label
         Dim Label4 As System.Windows.Forms.Label
         Dim Label6 As System.Windows.Forms.Label
+        Dim Label15 As System.Windows.Forms.Label
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.ddlFromcccTrdDep = New System.Windows.Forms.ComboBox()
@@ -41,6 +42,7 @@ Partial Class WHouseBalFR
         Me.ddlcccTrdDep = New System.Windows.Forms.ComboBox()
         Me.ddlTrdr = New System.Windows.Forms.ComboBox()
         Me.txtBoxRequestNo = New System.Windows.Forms.TextBox()
+        Me.GmChkListBoxRecipients = New GmSupp.GmChkListBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ddlcCCManager1 = New System.Windows.Forms.ComboBox()
         Me.txtBoxFrom = New System.Windows.Forms.TextBox()
@@ -67,6 +69,7 @@ Partial Class WHouseBalFR
         Label12 = New System.Windows.Forms.Label()
         Label4 = New System.Windows.Forms.Label()
         Label6 = New System.Windows.Forms.Label()
+        Label15 = New System.Windows.Forms.Label()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -227,6 +230,18 @@ Partial Class WHouseBalFR
         Label6.Text = "Διευθυντής  Εργοστασίου :"
         Label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
+        'Label15
+        '
+        Label15.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
+        Label15.ForeColor = System.Drawing.Color.Blue
+        Label15.Location = New System.Drawing.Point(288, 186)
+        Label15.Name = "Label15"
+        Label15.Size = New System.Drawing.Size(160, 20)
+        Label15.TabIndex = 288
+        Label15.Text = "Κοινοποίηση Αίτησης σε :"
+        Label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'SplitContainer1
         '
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
@@ -240,6 +255,8 @@ Partial Class WHouseBalFR
         '
         'SplitContainer1.Panel2
         '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.GmChkListBoxRecipients)
+        Me.SplitContainer1.Panel2.Controls.Add(Label15)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Panel1)
         Me.SplitContainer1.Panel2.Controls.Add(Me.txtBoxREMARKS)
         Me.SplitContainer1.Panel2.Controls.Add(Me.txtBoxVARCHAR01)
@@ -338,6 +355,14 @@ Partial Class WHouseBalFR
         Me.txtBoxRequestNo.Size = New System.Drawing.Size(186, 20)
         Me.txtBoxRequestNo.TabIndex = 276
         '
+        'GmChkListBoxRecipients
+        '
+        Me.GmChkListBoxRecipients.GmCheck = False
+        Me.GmChkListBoxRecipients.Location = New System.Drawing.Point(453, 186)
+        Me.GmChkListBoxRecipients.Name = "GmChkListBoxRecipients"
+        Me.GmChkListBoxRecipients.Size = New System.Drawing.Size(300, 25)
+        Me.GmChkListBoxRecipients.TabIndex = 289
+        '
         'Panel1
         '
         Me.Panel1.Controls.Add(Label9)
@@ -350,7 +375,7 @@ Partial Class WHouseBalFR
         Me.Panel1.Controls.Add(Me.Label14)
         Me.Panel1.Controls.Add(Label11)
         Me.Panel1.Controls.Add(Me.ddlcCCManager)
-        Me.Panel1.Location = New System.Drawing.Point(73, 195)
+        Me.Panel1.Location = New System.Drawing.Point(62, 297)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(611, 104)
         Me.Panel1.TabIndex = 287
@@ -526,4 +551,5 @@ Partial Class WHouseBalFR
     Friend WithEvents Label14 As Label
     Friend WithEvents txtBoxEmailBody As TextBox
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents GmChkListBoxRecipients As GmChkListBox
 End Class

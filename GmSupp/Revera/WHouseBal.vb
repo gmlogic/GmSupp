@@ -133,7 +133,7 @@ Public Class WHouseBal
 
 
         Me.GmChkListBoxFprms.TlStxtBox.Text = 1000
-        SetGmChkListBox()
+
 
         Me.Panel1.Visible = False
         Me.SplitContainer2.SplitterDistance = Me.SplitContainer2.Width
@@ -152,6 +152,7 @@ Public Class WHouseBal
         End If
 
         If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
+            SetGmChkListBox()
             Me.TlsBtnClear.Visible = False
             Me.toolStripSeparator.Visible = False
             'Me.SplitContainer2.Panel2.Visible = False
@@ -270,6 +271,7 @@ Public Class WHouseBal
         'Me.TlsddlΗighers.ComboBox.DataSource = Highers.ToList
 
         Dim Highers As New Dictionary(Of String, String)
+        Dim Recipients As New Dictionary(Of String, String)
         Highers.Add("<Επιλέγξτε>", 0)
         Dim usss = GmUserManager.Create(New GmIdentityDbContext).Users '.Where(Function(f)  f..OrderBy(Function(f) f.Name).ToList
         For Each u In usss.OrderBy(Function(f) f.Name).ToList
@@ -279,6 +281,9 @@ Public Class WHouseBal
             Dim rol = UserManager.GetRoles(u.Id).ToList '.Where(Function(f) {"2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(f))
             For Each f1 In rol.Where(Function(f) {"2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(f))
                 Highers.Add(u.Name, u.Id)
+                If {"4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(f1) Then
+                    Recipients.Add(u.Name, u.Id)
+                End If
             Next
         Next
 
@@ -342,6 +347,11 @@ Public Class WHouseBal
         wfm.ddlΗighers.DisplayMember = "Key"
         wfm.ddlΗighers.ValueMember = "Value"
         wfm.ddlΗighers.DataSource = Highers.ToList
+
+
+        wfm.GmChkListBoxRecipients.dgv.DataSource = Recipients.ToList
+        wfm.GmChkListBoxRecipients.dgv_Styling()
+        wfm.GmChkListBoxRecipients.TlStxtBox.ReadOnly = True
 
         'wfm.ddlcCCManager.DataSource = ccCManager
         wfm.txtBoxVARCHAR01.Text = ""
@@ -2516,6 +2526,7 @@ Public Class WHouseBal
                 fin.VARCHAR01 = wfm.txtBoxVARCHAR01.Text 'Εσωτ.Παρατηρήσεις
                 fin.VARCHAR02 = wfm.ddlΗighers.Text.Trim & ":STB" '& "|" & wfm.ddlcCCManager.Text 'ccCChief-cCCManager1,2,3
                 'fin.VARCHAR02 = fin.VARCHAR02.Replace("<Επιλέγξτε>", "")
+                fin.ccCRecipients = wfm.GmChkListBoxRecipients.TlStxtBox.Text
                 fin.DATE01 = wfm.DateTimePicker2.Value
 
                 '10  Εγκεκριμένη
