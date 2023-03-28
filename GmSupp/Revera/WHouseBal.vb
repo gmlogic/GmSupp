@@ -281,9 +281,9 @@ Public Class WHouseBal
             Dim rol = UserManager.GetRoles(u.Id).ToList '.Where(Function(f) {"2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(f))
             For Each f1 In rol.Where(Function(f) {"2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(f))
                 Highers.Add(u.Name, u.Id)
-                If {"4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(f1) Then
-                    Recipients.Add(u.Name, u.Id)
-                End If
+                'If {"4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(f1) Then
+                Recipients.Add(u.Name, u.Id)
+                'End If
             Next
         Next
 
@@ -322,6 +322,11 @@ Public Class WHouseBal
         'Me.GmChkListBoxRestMode.Height = 33
         Me.GmChkListBoxRestMode.dgv.DataSource = Result.ToList
         Me.GmChkListBoxRestMode.dgv_Styling()
+        'Dim col = Me.GmChkListBoxRestMode.dgv.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = "Value").FirstOrDefault
+        'If col IsNot Nothing Then
+        '    Me.GmChkListBoxRestMode.dgv.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = "Value").FirstOrDefault.Visible = False
+        'End If
+
         'Me.GmChkListBoxRestMode.BringToFront()
 
         'If Not Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
@@ -2912,6 +2917,7 @@ Public Class WHouseBal
 
 
                     Me.txtBoxΗigher.Text = finHeader.Highers
+                    Me.txtBoxccCRecipients.Text = finHeader.ccCRecipients
                     Dim cuser As GmIdentityUser = GmUserManager.ChkUser(CurUser.Replace("gmlogic", "gm"))
                     Me.BindingNavigatorNewDoc.Items.Cast(Of ToolStripItem).Where(Function(f) f.Tag = 1).ForEach(Sub(f As ToolStripItem) f.Visible = False)
                     Me.TlSBtnHigherEnd.Visible = False

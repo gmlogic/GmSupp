@@ -92,6 +92,12 @@ Namespace Revera
         ''' <returns></returns>
         Public Property FINSTATESNAME As String
 
+        ''' <summary>
+        ''' A.ccCRecipients
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property ccCRecipients As String
+
     End Class
     Partial Public Class GetPendingOrdersDetailsResult
 

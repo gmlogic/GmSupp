@@ -134,6 +134,8 @@ Partial Class WHouseBal
         Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ΕγκρίσειςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DetailsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.txtBoxccCRecipients = New System.Windows.Forms.TextBox()
         Label2 = New System.Windows.Forms.Label()
         Label1 = New System.Windows.Forms.Label()
         Label8 = New System.Windows.Forms.Label()
@@ -275,7 +277,7 @@ Partial Class WHouseBal
         '
         Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 504)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 499)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(1284, 22)
         Me.StatusStrip1.TabIndex = 4
@@ -334,7 +336,7 @@ Partial Class WHouseBal
         Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer3)
         Me.SplitContainer1.Panel2.Controls.Add(Me.StatusStrip1)
         Me.SplitContainer1.Size = New System.Drawing.Size(1284, 749)
-        Me.SplitContainer1.SplitterDistance = 219
+        Me.SplitContainer1.SplitterDistance = 224
         Me.SplitContainer1.TabIndex = 10
         '
         'GroupBoxStatus
@@ -639,7 +641,9 @@ Partial Class WHouseBal
         '
         'PanelChUsers
         '
+        Me.PanelChUsers.Controls.Add(Me.Label9)
         Me.PanelChUsers.Controls.Add(Label10)
+        Me.PanelChUsers.Controls.Add(Me.txtBoxccCRecipients)
         Me.PanelChUsers.Controls.Add(Me.txtBoxFinCode)
         Me.PanelChUsers.Controls.Add(Me.Label3)
         Me.PanelChUsers.Controls.Add(Me.lblUsers)
@@ -647,7 +651,7 @@ Partial Class WHouseBal
         Me.PanelChUsers.Controls.Add(Me.ddlUsers)
         Me.PanelChUsers.Location = New System.Drawing.Point(9, 141)
         Me.PanelChUsers.Name = "PanelChUsers"
-        Me.PanelChUsers.Size = New System.Drawing.Size(1050, 77)
+        Me.PanelChUsers.Size = New System.Drawing.Size(1050, 118)
         Me.PanelChUsers.TabIndex = 290
         '
         'txtBoxFinCode
@@ -723,8 +727,8 @@ Partial Class WHouseBal
         'SplitContainer3.Panel2
         '
         Me.SplitContainer3.Panel2.Controls.Add(Me.DataGridViewSearch)
-        Me.SplitContainer3.Size = New System.Drawing.Size(1284, 504)
-        Me.SplitContainer3.SplitterDistance = 468
+        Me.SplitContainer3.Size = New System.Drawing.Size(1284, 499)
+        Me.SplitContainer3.SplitterDistance = 463
         Me.SplitContainer3.TabIndex = 9
         '
         'SplitContainer2
@@ -742,7 +746,7 @@ Partial Class WHouseBal
         '
         Me.SplitContainer2.Panel2.Controls.Add(Me.MTRLINEsDataGridView)
         Me.SplitContainer2.Panel2.Controls.Add(Me.BindingNavigatorNewDoc)
-        Me.SplitContainer2.Size = New System.Drawing.Size(1284, 468)
+        Me.SplitContainer2.Size = New System.Drawing.Size(1284, 463)
         Me.SplitContainer2.SplitterDistance = 582
         Me.SplitContainer2.TabIndex = 6
         '
@@ -778,7 +782,7 @@ Partial Class WHouseBal
         DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.MasterDataGridView.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
-        Me.MasterDataGridView.Size = New System.Drawing.Size(582, 441)
+        Me.MasterDataGridView.Size = New System.Drawing.Size(582, 436)
         Me.MasterDataGridView.TabIndex = 4
         '
         'BindingNavigatorMaster
@@ -994,7 +998,7 @@ Partial Class WHouseBal
         DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.MTRLINEsDataGridView.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
-        Me.MTRLINEsDataGridView.Size = New System.Drawing.Size(698, 439)
+        Me.MTRLINEsDataGridView.Size = New System.Drawing.Size(698, 434)
         Me.MTRLINEsDataGridView.TabIndex = 3
         '
         'BindingNavigatorNewDoc
@@ -1265,6 +1269,29 @@ Partial Class WHouseBal
         Me.ΕγκρίσειςToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
         Me.ΕγκρίσειςToolStripMenuItem.Text = "Εγκρίσεις"
         '
+        'Label9
+        '
+        Me.Label9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
+        Me.Label9.ForeColor = System.Drawing.Color.Blue
+        Me.Label9.Location = New System.Drawing.Point(3, 82)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(112, 23)
+        Me.Label9.TabIndex = 298
+        Me.Label9.Text = "Κοινοποιήσεις:" & Global.Microsoft.VisualBasic.ChrW(9)
+        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtBoxccCRecipients
+        '
+        Me.txtBoxccCRecipients.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
+        Me.txtBoxccCRecipients.Location = New System.Drawing.Point(121, 73)
+        Me.txtBoxccCRecipients.Multiline = True
+        Me.txtBoxccCRecipients.Name = "txtBoxccCRecipients"
+        Me.txtBoxccCRecipients.ReadOnly = True
+        Me.txtBoxccCRecipients.ScrollBars = System.Windows.Forms.ScrollBars.Both
+        Me.txtBoxccCRecipients.Size = New System.Drawing.Size(349, 45)
+        Me.txtBoxccCRecipients.TabIndex = 297
+        '
         'WHouseBal
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1411,4 +1438,6 @@ Partial Class WHouseBal
     Public WithEvents RadioBtnAll As RadioButton
     Public WithEvents RadioBtnToAproved As RadioButton
     Public WithEvents txtBoxFinCode As TextBox
+    Friend WithEvents Label9 As Label
+    Friend WithEvents txtBoxccCRecipients As TextBox
 End Class

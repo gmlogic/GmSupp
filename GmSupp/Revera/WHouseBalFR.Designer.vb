@@ -516,7 +516,7 @@ Partial Class WHouseBalFR
         Me.ClientSize = New System.Drawing.Size(1028, 404)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Name = "WHouseBalFR"
-        Me.Text = "WHouseBalFR"
+        Me.Text = "Αίτηση"
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         Me.SplitContainer1.Panel2.PerformLayout()
