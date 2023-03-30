@@ -701,19 +701,24 @@ Public Class WHouseBal
                     If Me.RadioBtnApproved.Checked Then
                         POrdHead = POrdHead.Where(Function(f) f.Highers IsNot Nothing AndAlso Not f.Highers.Contains("STB")).ToList
                     End If
-
+                    If Me.RadioBtnReceived.Checked Then
+                        POrdHead = POrdHead.Where(Function(f) f.MtCount = f.DACount).ToList
+                    End If
+                    If Me.RadioBtnccCRecipients.Checked Then
+                        POrdHead = POrdHead.Where(Function(f) f.ccCRecipients IsNot Nothing AndAlso f.ccCRecipients.Contains(CUserName)).ToList
+                    End If
                 End If
-                'Dim POrds As New List(Of Revera.GetPendingOrdersDetailsResult)
-                'POrds = (From hd In POrdHead Join dt In POrdDet On hd.NO_ Equals dt.NO_
-                '         Select New Revera.GetPendingOrdersDetailsResult With {.NO_ = hd.NO_,
-                '            .TRNDATE = hd.TRNDATE, .FINCODE = hd.FINCODE, .ApplicantNAME = hd.ApplicantNAME,
-                '            .INSUSERNAME = hd.INSUSERNAME, .FPRMSNAME = hd.FPRMSNAME, .TRDRCODE = hd.CODE,
-                '            .TRDRNAME = hd.NAME,
-                '            .CODE = dt.CODE, .NAME = dt.NAME, .cccTrdr = dt.cccTrdr, .cccTrdDep = dt.cccTrdDep, .UFTBL02 = dt.UFTBL02,
-                '            .QTY1 = dt.QTY1, .QTY1CANC = dt.QTY1CANC, .QTY1OPEN = dt.QTY1OPEN}
-                '            ).ToList
+                    'Dim POrds As New List(Of Revera.GetPendingOrdersDetailsResult)
+                    'POrds = (From hd In POrdHead Join dt In POrdDet On hd.NO_ Equals dt.NO_
+                    '         Select New Revera.GetPendingOrdersDetailsResult With {.NO_ = hd.NO_,
+                    '            .TRNDATE = hd.TRNDATE, .FINCODE = hd.FINCODE, .ApplicantNAME = hd.ApplicantNAME,
+                    '            .INSUSERNAME = hd.INSUSERNAME, .FPRMSNAME = hd.FPRMSNAME, .TRDRCODE = hd.CODE,
+                    '            .TRDRNAME = hd.NAME,
+                    '            .CODE = dt.CODE, .NAME = dt.NAME, .cccTrdr = dt.cccTrdr, .cccTrdDep = dt.cccTrdDep, .UFTBL02 = dt.UFTBL02,
+                    '            .QTY1 = dt.QTY1, .QTY1CANC = dt.QTY1CANC, .QTY1OPEN = dt.QTY1OPEN}
+                    '            ).ToList
 
-                Me.MasterBindingSource.DataSource = POrdHead ' New SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)(POrds)
+                    Me.MasterBindingSource.DataSource = POrdHead ' New SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)(POrds)
                 If Me.MasterBindingSource.Current IsNot Nothing Then
                     Me.VscsBindingSource.DataSource = POrdDet
 
@@ -1184,6 +1189,14 @@ Public Class WHouseBal
                                 row.DefaultCellStyle.BackColor = System.Drawing.Color.LimeGreen
                             End If
                         End If
+                        If head.MtCount = head.DACount Then
+                            row.DefaultCellStyle.BackColor = System.Drawing.Color.LightBlue
+                        End If
+
+                        If head.ccCRecipients IsNot Nothing AndAlso head.ccCRecipients.Contains(CUserName) Then
+                            row.DefaultCellStyle.BackColor = System.Drawing.Color.PeachPuff
+                        End If
+
 
                         'Dim res As String = Nothing
                         'Dim HighCount = 0
@@ -2503,14 +2516,14 @@ Public Class WHouseBal
                     Exit Sub
                 End If
 
-                Dim cuser As GmIdentityUser = GmUserManager.ChkUser(CurUser.Replace("gmlogic", "gm"))
-                If cuser Is Nothing Then
-                    MsgBox("Error User: " & CurUser, MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
-                    Exit Sub
-                End If
-                Dim ccCUser = db.ccCS1Applicants.Where(Function(f) f.AspNetUsersName = cuser.Name).FirstOrDefault
+                'Dim cuser As GmIdentityUser = GmUserManager.ChkUser(CurUser.Replace("gmlogic", "gm"))
+                'If cuser Is Nothing Then
+                '    MsgBox("Error User: " & CurUser, MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                '    Exit Sub
+                'End If
+                Dim ccCUser = db.ccCS1Applicants.Where(Function(f) f.AspNetUsersName = CUserName).FirstOrDefault
                 If ccCUser Is Nothing Then
-                    MsgBox("Προσοχή !!! Δεν υπάρχει στο Softone o αιτών: " & cuser.Name, MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                    MsgBox("Προσοχή !!! Δεν υπάρχει στο Softone o αιτών: " & CUserName, MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
                     Exit Sub
                 End If
                 'do save
@@ -2918,10 +2931,13 @@ Public Class WHouseBal
 
                     Me.txtBoxΗigher.Text = finHeader.Highers
                     Me.txtBoxccCRecipients.Text = finHeader.ccCRecipients
-                    Dim cuser As GmIdentityUser = GmUserManager.ChkUser(CurUser.Replace("gmlogic", "gm"))
+                    Dim ccCRecipient As Boolean
+                    If finHeader.ccCRecipients IsNot Nothing AndAlso finHeader.ccCRecipients.Contains(CUserName) Then
+                        ccCRecipient = True
+                    End If
                     Me.BindingNavigatorNewDoc.Items.Cast(Of ToolStripItem).Where(Function(f) f.Tag = 1).ForEach(Sub(f As ToolStripItem) f.Visible = False)
                     Me.TlSBtnHigherEnd.Visible = False
-                    If CRole = "5.Διευθυντής Εργοστασίου" Then
+                    If Not ccCRecipient And CRole = "5.Διευθυντής Εργοστασίου" Then
                         Me.TlSBtnCheckDetails.Visible = True
                         Me.ToolStripSeparator8.Visible = True
                         Me.TlSBtnUnCheckDetails.Visible = True
@@ -2940,7 +2956,7 @@ Public Class WHouseBal
                     If finHeader.ApplicantNAME Is Nothing Then
                         Exit Sub
                     End If
-                    If Not cuser.Name = finHeader.ApplicantNAME Then ' Όχι ο αιτών.
+                    If Not ccCRecipient And Not CUserName = finHeader.ApplicantNAME Then ' Όχι ο αιτών.
                         Dim hs As String = ChkHigher(finHeader.Highers, If(aHighers, "%").Replace("%", ""))
                         If hs IsNot Nothing And hs = "OK" Then
                             'Dim res
@@ -3401,7 +3417,7 @@ Public Class WHouseBal
             'ch.keskesiadis
             CUserName = cuser.Name
             'CurUser = cuser.UserName
-            Me.GmChkListBoxAplicant.TlStxtBox.Text = cuser.Name
+            Me.GmChkListBoxAplicant.TlStxtBox.Text = CUserName
             'Me.ddlΗighers.Text = "<Επιλέγξτε>"
             Dim roles = UserManager.GetRoles(cuser.Id)
             Dim inRole = roles.Where(Function(f) {"2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(f)).FirstOrDefault

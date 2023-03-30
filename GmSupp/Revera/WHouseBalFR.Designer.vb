@@ -42,7 +42,6 @@ Partial Class WHouseBalFR
         Me.ddlcccTrdDep = New System.Windows.Forms.ComboBox()
         Me.ddlTrdr = New System.Windows.Forms.ComboBox()
         Me.txtBoxRequestNo = New System.Windows.Forms.TextBox()
-        Me.GmChkListBoxRecipients = New GmSupp.GmChkListBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ddlcCCManager1 = New System.Windows.Forms.ComboBox()
         Me.txtBoxFrom = New System.Windows.Forms.TextBox()
@@ -57,6 +56,7 @@ Partial Class WHouseBalFR
         Me.Cancel = New System.Windows.Forms.Button()
         Me.OK = New System.Windows.Forms.Button()
         Me.ddlΗighers = New System.Windows.Forms.ComboBox()
+        Me.GmChkListBoxRecipients = New GmSupp.GmChkListBox()
         Label1 = New System.Windows.Forms.Label()
         Label2 = New System.Windows.Forms.Label()
         Label3 = New System.Windows.Forms.Label()
@@ -355,14 +355,6 @@ Partial Class WHouseBalFR
         Me.txtBoxRequestNo.Size = New System.Drawing.Size(186, 20)
         Me.txtBoxRequestNo.TabIndex = 276
         '
-        'GmChkListBoxRecipients
-        '
-        Me.GmChkListBoxRecipients.GmCheck = False
-        Me.GmChkListBoxRecipients.Location = New System.Drawing.Point(453, 186)
-        Me.GmChkListBoxRecipients.Name = "GmChkListBoxRecipients"
-        Me.GmChkListBoxRecipients.Size = New System.Drawing.Size(300, 25)
-        Me.GmChkListBoxRecipients.TabIndex = 289
-        '
         'Panel1
         '
         Me.Panel1.Controls.Add(Label9)
@@ -508,6 +500,14 @@ Partial Class WHouseBalFR
         Me.ddlΗighers.Size = New System.Drawing.Size(249, 21)
         Me.ddlΗighers.TabIndex = 271
         Me.ddlΗighers.ValueMember = "UFTBL01"
+        '
+        'GmChkListBoxRecipients
+        '
+        Me.GmChkListBoxRecipients.GmCheck = False
+        Me.GmChkListBoxRecipients.Location = New System.Drawing.Point(453, 186)
+        Me.GmChkListBoxRecipients.Name = "GmChkListBoxRecipients"
+        Me.GmChkListBoxRecipients.Size = New System.Drawing.Size(300, 25)
+        Me.GmChkListBoxRecipients.TabIndex = 289
         '
         'WHouseBalFR
         '

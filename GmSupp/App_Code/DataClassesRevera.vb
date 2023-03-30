@@ -98,6 +98,25 @@ Namespace Revera
         ''' <returns></returns>
         Public Property ccCRecipients As String
 
+        ''' <summary>
+        '''  (SELECT COUNT(0) AS Expr1
+		'''					FROM FINDOC As B INNER JOIN
+		'''						MTRLINES AS bmt ON B.FINDOC = bmt.FINDOC RIGHT OUTER JOIN
+		'''						MTRLINES AS amt ON amt.FINDOC = bmt.ccCAFINDOC And amt.MTRLINES = bmt.ccCAMTRLINES
+		'''					WHERE (B.SERIES IN (2041, 2045)) And (amt.FINDOC = A.FINDOC)) AS DACount
+        ''' </summary>
+        ''' <returns>COUNT(0)</returns>
+        Public Property DACount As Integer
+
+        ''' <summary>
+        ''' (SELECT COUNT(0) AS Expr1
+		'''					FROM MTRLINES As MT
+		'''					WHERE (MT.FINDOC = A.FINDOC)) AS MtCount
+        ''' </summary>
+        ''' <returns>COUNT(0)</returns>
+        Public Property MtCount As Integer
+
+
     End Class
     Partial Public Class GetPendingOrdersDetailsResult
 
