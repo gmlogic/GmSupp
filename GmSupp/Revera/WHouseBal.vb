@@ -57,27 +57,27 @@ Public Class WHouseBal
         StartDate = CDate("01/01/" & Year(CTODate))
         Dim conString As New SqlConnectionStringBuilder
         conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
-        If Me.Tag = "REVERA" Then
-            conString.DataSource = "192.168.12.201,55555"
-            conString.InitialCatalog = "Revera"
-            CompanyS = 4000
-        End If
-        If Me.Tag = "SERTORIUS" Then
-            conString.DataSource = "192.168.12.201,55555"
-            conString.InitialCatalog = "Revera"
-            CompanyS = 5000
-        End If
-        'If Me.Tag = "CENTROFARO" Then
+        'If Me.Tag = "REVERA" Then
         '    conString.DataSource = "192.168.12.201,55555"
-        '    conString.InitialCatalog = "Centro"
-        '    CompanyS = 3000
+        '    conString.InitialCatalog = "Revera"
+        '    CompanyS = 4000
         'End If
+        'If Me.Tag = "SERTORIUS" Then
+        conString.DataSource = "192.168.12.201,55555"
+        conString.InitialCatalog = "Revera"
+        CompanyS = 5000
+        'End If
+        ''If Me.Tag = "CENTROFARO" Then
+        ''    conString.DataSource = "192.168.12.201,55555"
+        ''    conString.InitialCatalog = "Centro"
+        ''    CompanyS = 3000
+        ''End If
 
-        If Me.Tag = "Hglp" Then
-            conString.DataSource = "192.168.12.201,55555"
-            conString.InitialCatalog = "Hglp"
-            CompanyS = 1000
-        End If
+        'If Me.Tag = "Hglp" Then
+        '    conString.DataSource = "192.168.12.201,55555"
+        '    conString.InitialCatalog = "Hglp"
+        '    CompanyS = 1000
+        'End If
 
         If CurUser = "gmlogic" Then
             conString.DataSource = "192.168.12.201,55555"
@@ -356,6 +356,7 @@ Public Class WHouseBal
 
         wfm.GmChkListBoxRecipients.dgv.DataSource = Recipients.ToList
         wfm.GmChkListBoxRecipients.dgv_Styling()
+        wfm.GmChkListBoxRecipients.TlStxtBox.Text = Nothing
         wfm.GmChkListBoxRecipients.TlStxtBox.ReadOnly = True
 
         'wfm.ddlcCCManager.DataSource = ccCManager
@@ -708,17 +709,17 @@ Public Class WHouseBal
                         POrdHead = POrdHead.Where(Function(f) f.ccCRecipients IsNot Nothing AndAlso f.ccCRecipients.Contains(CUserName)).ToList
                     End If
                 End If
-                    'Dim POrds As New List(Of Revera.GetPendingOrdersDetailsResult)
-                    'POrds = (From hd In POrdHead Join dt In POrdDet On hd.NO_ Equals dt.NO_
-                    '         Select New Revera.GetPendingOrdersDetailsResult With {.NO_ = hd.NO_,
-                    '            .TRNDATE = hd.TRNDATE, .FINCODE = hd.FINCODE, .ApplicantNAME = hd.ApplicantNAME,
-                    '            .INSUSERNAME = hd.INSUSERNAME, .FPRMSNAME = hd.FPRMSNAME, .TRDRCODE = hd.CODE,
-                    '            .TRDRNAME = hd.NAME,
-                    '            .CODE = dt.CODE, .NAME = dt.NAME, .cccTrdr = dt.cccTrdr, .cccTrdDep = dt.cccTrdDep, .UFTBL02 = dt.UFTBL02,
-                    '            .QTY1 = dt.QTY1, .QTY1CANC = dt.QTY1CANC, .QTY1OPEN = dt.QTY1OPEN}
-                    '            ).ToList
+                'Dim POrds As New List(Of Revera.GetPendingOrdersDetailsResult)
+                'POrds = (From hd In POrdHead Join dt In POrdDet On hd.NO_ Equals dt.NO_
+                '         Select New Revera.GetPendingOrdersDetailsResult With {.NO_ = hd.NO_,
+                '            .TRNDATE = hd.TRNDATE, .FINCODE = hd.FINCODE, .ApplicantNAME = hd.ApplicantNAME,
+                '            .INSUSERNAME = hd.INSUSERNAME, .FPRMSNAME = hd.FPRMSNAME, .TRDRCODE = hd.CODE,
+                '            .TRDRNAME = hd.NAME,
+                '            .CODE = dt.CODE, .NAME = dt.NAME, .cccTrdr = dt.cccTrdr, .cccTrdDep = dt.cccTrdDep, .UFTBL02 = dt.UFTBL02,
+                '            .QTY1 = dt.QTY1, .QTY1CANC = dt.QTY1CANC, .QTY1OPEN = dt.QTY1OPEN}
+                '            ).ToList
 
-                    Me.MasterBindingSource.DataSource = POrdHead ' New SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)(POrds)
+                Me.MasterBindingSource.DataSource = POrdHead ' New SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)(POrds)
                 If Me.MasterBindingSource.Current IsNot Nothing Then
                     Me.VscsBindingSource.DataSource = POrdDet
 
@@ -2712,11 +2713,13 @@ Public Class WHouseBal
                 'SendEmail(wfm)
                 If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
                     fin = db.FINDOCs.Where(Function(f) f.FINDOC = fin.FINDOC).FirstOrDefault
-                    For Each mt In fin.MTRLINEs
-                        mt.ccCAFINDOC = mt.FINDOC
-                        mt.ccCAMTRLINES = mt.MTRLINES
-                    Next
-                    SaveData()
+                    If fin IsNot Nothing Then
+                        For Each mt In fin.MTRLINEs
+                            mt.ccCAFINDOC = mt.FINDOC
+                            mt.ccCAMTRLINES = mt.MTRLINES
+                        Next
+                        SaveData()
+                    End If
                     Me.TlsBtnClear.PerformClick()
                 End If
                 SetGmChkListBox() 'Clear Me.VscsBindingSource.DataSource 
