@@ -1429,6 +1429,8 @@ Public Class WHouseBal
         '17  Αρχική έγκριση
         '18  Αίτηση πρός έγκριση ανωτέρου
         fin1.FINSTATES = 10 'Εγκεκριμένη
+        fin1.APPRVDATE = Now()
+        fin1.APPRV = 1
         DataSafe()
         'VisibleHigher(False)
         'End If
@@ -3283,9 +3285,9 @@ Public Class WHouseBal
             NFINDOC.ISCANCEL = 0
             NFINDOC.ISPRINT = 0
             NFINDOC.ISREADONLY = 0
-            NFINDOC.APPRVDATE = NFINDOC.TRNDATE '?
-            NFINDOC.APPRVUSER = 99 '?
-            NFINDOC.APPRV = 1
+            'NFINDOC.APPRVDATE = NFINDOC.TRNDATE '?
+            'NFINDOC.APPRVUSER = 99 '?
+            NFINDOC.APPRV = 0
             NFINDOC.FULLYTRANSF = 0
             NFINDOC.LTYPE1 = 1
             NFINDOC.LTYPE2 = 0
