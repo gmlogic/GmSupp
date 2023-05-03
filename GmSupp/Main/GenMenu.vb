@@ -113,8 +113,8 @@ Public Class GenMenu
             loginf.Text = "Εισαγωγή στοιχείων"
             'ch.keskesiadis radrad
             If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
-                loginf.UsernameTextBox.Text = "d.makaridis" ' "th.naris" '"ch.keskesiadis" ' "a.giannikos" ' "m.siopis" '
-                loginf.PasswordTextBox.Text = "Ma@Di55489" '"Na@Th3131" '"radrad" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
+                loginf.UsernameTextBox.Text = "ch.keskesiadis" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
+                loginf.PasswordTextBox.Text = "radrad" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
                 'loginf.UsernameTextBox.Text = "gmlogic" '"d.makaridis" '
                 'loginf.PasswordTextBox.Text = "1mgergm++" '"Ma@Di55489" '
                 'If loginf.UsernameTextBox.Text = "ch.keskesiadis" Then
@@ -488,6 +488,7 @@ Public Class GenMenu
             Me.ΑποθήκηToolStripMenuItem.Visible = True
             Me.UsersToolStripMenuItem.Visible = True
             Me.S1ApplicantsToolStripMenuItem.Visible = True
+            Me.TransportToolStripMenuItem.Visible = True
             Exit Sub
         End If
         If CompName.Replace("SERTORIUS", "REVERA") = "REVERA" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(curUserRole)) Then
@@ -498,6 +499,7 @@ Public Class GenMenu
             Me.ΔημιουργίαToolStripMenuItem.Visible = False
             Me.ΔιαγραφήToolStripMenuItem.Visible = False
             Me.S1ApplicantsToolStripMenuItem.Visible = False
+            Me.TransportToolStripMenuItem.Visible = False
             SetDBs(dbs.REVERA)
             Exit Sub
         End If
@@ -788,5 +790,9 @@ Public Class GenMenu
 
     Private Sub S1ApplicantsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles S1ApplicantsToolStripMenuItem.Click
         SettingForms(sender, e, New S1Applicants, Me.S1ApplicantsToolStripMenuItem.Text, 0, True)
+    End Sub
+
+    Private Sub TransportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TransportToolStripMenuItem.Click
+        SettingForms(sender, e, New Transport, Me.TransportToolStripMenuItem.Text, 0, True)
     End Sub
 End Class

@@ -89,6 +89,7 @@ Partial Class GenMenu
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.TestConnectionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TransportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
         Me.SuspendLayout()
@@ -430,7 +431,7 @@ Partial Class GenMenu
         '
         'UsersToolStripMenuItem
         '
-        Me.UsersToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ΧρήστεςToolStripMenuItem, Me.S1ApplicantsToolStripMenuItem})
+        Me.UsersToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ΧρήστεςToolStripMenuItem, Me.S1ApplicantsToolStripMenuItem, Me.TransportToolStripMenuItem})
         Me.UsersToolStripMenuItem.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
         Me.UsersToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.UsersToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Remove
@@ -558,6 +559,12 @@ Partial Class GenMenu
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(156, 22)
         Me.AboutToolStripMenuItem.Text = "&About ..."
         '
+        'TransportToolStripMenuItem
+        '
+        Me.TransportToolStripMenuItem.Name = "TransportToolStripMenuItem"
+        Me.TransportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.TransportToolStripMenuItem.Text = "Transport"
+        '
         'GenMenu
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -642,4 +649,5 @@ Partial Class GenMenu
     Friend WithEvents ΔιόρθωσηToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ΔιαγραφήToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents S1ApplicantsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TransportToolStripMenuItem As ToolStripMenuItem
 End Class

@@ -139,6 +139,12 @@ Partial Public Class DataClassesReveraDataContext
     End Sub
     Partial Private Sub DeleteFINDOC(instance As Revera.FINDOC)
     End Sub
+    Partial Private Sub InsertccCTransport(instance As Revera.ccCTransport)
+    End Sub
+    Partial Private Sub UpdateccCTransport(instance As Revera.ccCTransport)
+    End Sub
+    Partial Private Sub DeleteccCTransport(instance As Revera.ccCTransport)
+    End Sub
   #End Region
 	
 	Public Sub New()
@@ -283,6 +289,12 @@ Partial Public Class DataClassesReveraDataContext
 	Public ReadOnly Property FINDOCs() As System.Data.Linq.Table(Of Revera.FINDOC)
 		Get
 			Return Me.GetTable(Of Revera.FINDOC)
+		End Get
+	End Property
+	
+	Public ReadOnly Property ccCTransports() As System.Data.Linq.Table(Of Revera.ccCTransport)
+		Get
+			Return Me.GetTable(Of Revera.ccCTransport)
 		End Get
 	End Property
 	
@@ -23906,6 +23918,601 @@ Namespace Revera
 		Private Sub detach_FINDOCs2(ByVal entity As FINDOC)
 			Me.SendPropertyChanging
 			entity.FINDOC2 = Nothing
+		End Sub
+	End Class
+	
+	<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ccCTransport")>  _
+	Partial Public Class ccCTransport
+		Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+		
+		Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+		
+		Private _ccCTransport As Integer
+		
+		Private _COMPANY As Short
+		
+		Private _FINDOC As Integer
+		
+		Private _DeliveryDate As Date
+		
+		Private _FINCODE As String
+		
+		Private _MTRLINES As Integer
+		
+		Private _Fertiliser As String
+		
+		Private _Quantity As Double
+		
+		Private _TruckTrailerPlate As String
+		
+		Private _Consignee As String
+		
+		Private _StatisticsAgencyNo As String
+		
+		Private _Destination As String
+		
+		Private _Driver As String
+		
+		Private _TruckType As String
+		
+		Private _TransportCompany As String
+		
+		Private _TruckArrival As System.Nullable(Of Boolean)
+		
+		Private _TruckArrivalTime As System.Nullable(Of Date)
+		
+		Private _EnterforLoad As System.Nullable(Of Boolean)
+		
+		Private _EnterforLoadTime As System.Nullable(Of Date)
+		
+		Private _LeaveFactory As System.Nullable(Of Boolean)
+		
+		Private _LeaveFactoryTime As System.Nullable(Of Date)
+		
+		Private _createdOn As System.Nullable(Of Date)
+		
+		Private _createdBy As String
+		
+		Private _modifiedOn As System.Nullable(Of Date)
+		
+		Private _modifiedBy As String
+		
+    #Region "Extensibility Method Definitions"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnccCTransportChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnccCTransportChanged()
+    End Sub
+    Partial Private Sub OnCOMPANYChanging(value As Short)
+    End Sub
+    Partial Private Sub OnCOMPANYChanged()
+    End Sub
+    Partial Private Sub OnFINDOCChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnFINDOCChanged()
+    End Sub
+    Partial Private Sub OnDeliveryDateChanging(value As Date)
+    End Sub
+    Partial Private Sub OnDeliveryDateChanged()
+    End Sub
+    Partial Private Sub OnFINCODEChanging(value As String)
+    End Sub
+    Partial Private Sub OnFINCODEChanged()
+    End Sub
+    Partial Private Sub OnMTRLINESChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnMTRLINESChanged()
+    End Sub
+    Partial Private Sub OnFertiliserChanging(value As String)
+    End Sub
+    Partial Private Sub OnFertiliserChanged()
+    End Sub
+    Partial Private Sub OnQuantityChanging(value As Double)
+    End Sub
+    Partial Private Sub OnQuantityChanged()
+    End Sub
+    Partial Private Sub OnTruckTrailerPlateChanging(value As String)
+    End Sub
+    Partial Private Sub OnTruckTrailerPlateChanged()
+    End Sub
+    Partial Private Sub OnConsigneeChanging(value As String)
+    End Sub
+    Partial Private Sub OnConsigneeChanged()
+    End Sub
+    Partial Private Sub OnStatisticsAgencyNoChanging(value As String)
+    End Sub
+    Partial Private Sub OnStatisticsAgencyNoChanged()
+    End Sub
+    Partial Private Sub OnDestinationChanging(value As String)
+    End Sub
+    Partial Private Sub OnDestinationChanged()
+    End Sub
+    Partial Private Sub OnDriverChanging(value As String)
+    End Sub
+    Partial Private Sub OnDriverChanged()
+    End Sub
+    Partial Private Sub OnTruckTypeChanging(value As String)
+    End Sub
+    Partial Private Sub OnTruckTypeChanged()
+    End Sub
+    Partial Private Sub OnTransportCompanyChanging(value As String)
+    End Sub
+    Partial Private Sub OnTransportCompanyChanged()
+    End Sub
+    Partial Private Sub OnTruckArrivalChanging(value As System.Nullable(Of Boolean))
+    End Sub
+    Partial Private Sub OnTruckArrivalChanged()
+    End Sub
+    Partial Private Sub OnTruckArrivalTimeChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnTruckArrivalTimeChanged()
+    End Sub
+    Partial Private Sub OnEnterforLoadChanging(value As System.Nullable(Of Boolean))
+    End Sub
+    Partial Private Sub OnEnterforLoadChanged()
+    End Sub
+    Partial Private Sub OnEnterforLoadTimeChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnEnterforLoadTimeChanged()
+    End Sub
+    Partial Private Sub OnLeaveFactoryChanging(value As System.Nullable(Of Boolean))
+    End Sub
+    Partial Private Sub OnLeaveFactoryChanged()
+    End Sub
+    Partial Private Sub OnLeaveFactoryTimeChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnLeaveFactoryTimeChanged()
+    End Sub
+    Partial Private Sub OncreatedOnChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OncreatedOnChanged()
+    End Sub
+    Partial Private Sub OncreatedByChanging(value As String)
+    End Sub
+    Partial Private Sub OncreatedByChanged()
+    End Sub
+    Partial Private Sub OnmodifiedOnChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnmodifiedOnChanged()
+    End Sub
+    Partial Private Sub OnmodifiedByChanging(value As String)
+    End Sub
+    Partial Private Sub OnmodifiedByChanged()
+    End Sub
+    #End Region
+		
+		Public Sub New()
+			MyBase.New
+			OnCreated
+		End Sub
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ccCTransport", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+		Public Property ccCTransport() As Integer
+			Get
+				Return Me._ccCTransport
+			End Get
+			Set
+				If ((Me._ccCTransport = value)  _
+							= false) Then
+					Me.OnccCTransportChanging(value)
+					Me.SendPropertyChanging
+					Me._ccCTransport = value
+					Me.SendPropertyChanged("ccCTransport")
+					Me.OnccCTransportChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMPANY", DbType:="SmallInt NOT NULL")>  _
+		Public Property COMPANY() As Short
+			Get
+				Return Me._COMPANY
+			End Get
+			Set
+				If ((Me._COMPANY = value)  _
+							= false) Then
+					Me.OnCOMPANYChanging(value)
+					Me.SendPropertyChanging
+					Me._COMPANY = value
+					Me.SendPropertyChanged("COMPANY")
+					Me.OnCOMPANYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINDOC", DbType:="Int NOT NULL")>  _
+		Public Property FINDOC() As Integer
+			Get
+				Return Me._FINDOC
+			End Get
+			Set
+				If ((Me._FINDOC = value)  _
+							= false) Then
+					Me.OnFINDOCChanging(value)
+					Me.SendPropertyChanging
+					Me._FINDOC = value
+					Me.SendPropertyChanged("FINDOC")
+					Me.OnFINDOCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_DeliveryDate", DbType:="DateTime NOT NULL")>  _
+		Public Property DeliveryDate() As Date
+			Get
+				Return Me._DeliveryDate
+			End Get
+			Set
+				If ((Me._DeliveryDate = value)  _
+							= false) Then
+					Me.OnDeliveryDateChanging(value)
+					Me.SendPropertyChanging
+					Me._DeliveryDate = value
+					Me.SendPropertyChanged("DeliveryDate")
+					Me.OnDeliveryDateChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINCODE", DbType:="NVarChar(50) NOT NULL", CanBeNull:=false)>  _
+		Public Property FINCODE() As String
+			Get
+				Return Me._FINCODE
+			End Get
+			Set
+				If (String.Equals(Me._FINCODE, value) = false) Then
+					Me.OnFINCODEChanging(value)
+					Me.SendPropertyChanging
+					Me._FINCODE = value
+					Me.SendPropertyChanged("FINCODE")
+					Me.OnFINCODEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_MTRLINES", DbType:="Int NOT NULL")>  _
+		Public Property MTRLINES() As Integer
+			Get
+				Return Me._MTRLINES
+			End Get
+			Set
+				If ((Me._MTRLINES = value)  _
+							= false) Then
+					Me.OnMTRLINESChanging(value)
+					Me.SendPropertyChanging
+					Me._MTRLINES = value
+					Me.SendPropertyChanged("MTRLINES")
+					Me.OnMTRLINESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_Fertiliser", DbType:="NVarChar(128) NOT NULL", CanBeNull:=false)>  _
+		Public Property Fertiliser() As String
+			Get
+				Return Me._Fertiliser
+			End Get
+			Set
+				If (String.Equals(Me._Fertiliser, value) = false) Then
+					Me.OnFertiliserChanging(value)
+					Me.SendPropertyChanging
+					Me._Fertiliser = value
+					Me.SendPropertyChanged("Fertiliser")
+					Me.OnFertiliserChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_Quantity", DbType:="Float NOT NULL")>  _
+		Public Property Quantity() As Double
+			Get
+				Return Me._Quantity
+			End Get
+			Set
+				If ((Me._Quantity = value)  _
+							= false) Then
+					Me.OnQuantityChanging(value)
+					Me.SendPropertyChanging
+					Me._Quantity = value
+					Me.SendPropertyChanged("Quantity")
+					Me.OnQuantityChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TruckTrailerPlate", DbType:="NVarChar(50) NOT NULL", CanBeNull:=false)>  _
+		Public Property TruckTrailerPlate() As String
+			Get
+				Return Me._TruckTrailerPlate
+			End Get
+			Set
+				If (String.Equals(Me._TruckTrailerPlate, value) = false) Then
+					Me.OnTruckTrailerPlateChanging(value)
+					Me.SendPropertyChanging
+					Me._TruckTrailerPlate = value
+					Me.SendPropertyChanged("TruckTrailerPlate")
+					Me.OnTruckTrailerPlateChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_Consignee", DbType:="NVarChar(100) NOT NULL", CanBeNull:=false)>  _
+		Public Property Consignee() As String
+			Get
+				Return Me._Consignee
+			End Get
+			Set
+				If (String.Equals(Me._Consignee, value) = false) Then
+					Me.OnConsigneeChanging(value)
+					Me.SendPropertyChanging
+					Me._Consignee = value
+					Me.SendPropertyChanged("Consignee")
+					Me.OnConsigneeChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_StatisticsAgencyNo", DbType:="NVarChar(50) NOT NULL", CanBeNull:=false)>  _
+		Public Property StatisticsAgencyNo() As String
+			Get
+				Return Me._StatisticsAgencyNo
+			End Get
+			Set
+				If (String.Equals(Me._StatisticsAgencyNo, value) = false) Then
+					Me.OnStatisticsAgencyNoChanging(value)
+					Me.SendPropertyChanging
+					Me._StatisticsAgencyNo = value
+					Me.SendPropertyChanged("StatisticsAgencyNo")
+					Me.OnStatisticsAgencyNoChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_Destination", DbType:="NVarChar(50) NOT NULL", CanBeNull:=false)>  _
+		Public Property Destination() As String
+			Get
+				Return Me._Destination
+			End Get
+			Set
+				If (String.Equals(Me._Destination, value) = false) Then
+					Me.OnDestinationChanging(value)
+					Me.SendPropertyChanging
+					Me._Destination = value
+					Me.SendPropertyChanged("Destination")
+					Me.OnDestinationChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_Driver", DbType:="NVarChar(50) NOT NULL", CanBeNull:=false)>  _
+		Public Property Driver() As String
+			Get
+				Return Me._Driver
+			End Get
+			Set
+				If (String.Equals(Me._Driver, value) = false) Then
+					Me.OnDriverChanging(value)
+					Me.SendPropertyChanging
+					Me._Driver = value
+					Me.SendPropertyChanged("Driver")
+					Me.OnDriverChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TruckType", DbType:="NVarChar(90) NOT NULL", CanBeNull:=false)>  _
+		Public Property TruckType() As String
+			Get
+				Return Me._TruckType
+			End Get
+			Set
+				If (String.Equals(Me._TruckType, value) = false) Then
+					Me.OnTruckTypeChanging(value)
+					Me.SendPropertyChanging
+					Me._TruckType = value
+					Me.SendPropertyChanged("TruckType")
+					Me.OnTruckTypeChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TransportCompany", DbType:="NVarChar(128) NOT NULL", CanBeNull:=false)>  _
+		Public Property TransportCompany() As String
+			Get
+				Return Me._TransportCompany
+			End Get
+			Set
+				If (String.Equals(Me._TransportCompany, value) = false) Then
+					Me.OnTransportCompanyChanging(value)
+					Me.SendPropertyChanging
+					Me._TransportCompany = value
+					Me.SendPropertyChanged("TransportCompany")
+					Me.OnTransportCompanyChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TruckArrival", DbType:="Bit")>  _
+		Public Property TruckArrival() As System.Nullable(Of Boolean)
+			Get
+				Return Me._TruckArrival
+			End Get
+			Set
+				If (Me._TruckArrival.Equals(value) = false) Then
+					Me.OnTruckArrivalChanging(value)
+					Me.SendPropertyChanging
+					Me._TruckArrival = value
+					Me.SendPropertyChanged("TruckArrival")
+					Me.OnTruckArrivalChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TruckArrivalTime", DbType:="DateTime")>  _
+		Public Property TruckArrivalTime() As System.Nullable(Of Date)
+			Get
+				Return Me._TruckArrivalTime
+			End Get
+			Set
+				If (Me._TruckArrivalTime.Equals(value) = false) Then
+					Me.OnTruckArrivalTimeChanging(value)
+					Me.SendPropertyChanging
+					Me._TruckArrivalTime = value
+					Me.SendPropertyChanged("TruckArrivalTime")
+					Me.OnTruckArrivalTimeChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_EnterforLoad", DbType:="Bit")>  _
+		Public Property EnterforLoad() As System.Nullable(Of Boolean)
+			Get
+				Return Me._EnterforLoad
+			End Get
+			Set
+				If (Me._EnterforLoad.Equals(value) = false) Then
+					Me.OnEnterforLoadChanging(value)
+					Me.SendPropertyChanging
+					Me._EnterforLoad = value
+					Me.SendPropertyChanged("EnterforLoad")
+					Me.OnEnterforLoadChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_EnterforLoadTime", DbType:="DateTime")>  _
+		Public Property EnterforLoadTime() As System.Nullable(Of Date)
+			Get
+				Return Me._EnterforLoadTime
+			End Get
+			Set
+				If (Me._EnterforLoadTime.Equals(value) = false) Then
+					Me.OnEnterforLoadTimeChanging(value)
+					Me.SendPropertyChanging
+					Me._EnterforLoadTime = value
+					Me.SendPropertyChanged("EnterforLoadTime")
+					Me.OnEnterforLoadTimeChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LeaveFactory", DbType:="Bit")>  _
+		Public Property LeaveFactory() As System.Nullable(Of Boolean)
+			Get
+				Return Me._LeaveFactory
+			End Get
+			Set
+				If (Me._LeaveFactory.Equals(value) = false) Then
+					Me.OnLeaveFactoryChanging(value)
+					Me.SendPropertyChanging
+					Me._LeaveFactory = value
+					Me.SendPropertyChanged("LeaveFactory")
+					Me.OnLeaveFactoryChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_LeaveFactoryTime", DbType:="DateTime")>  _
+		Public Property LeaveFactoryTime() As System.Nullable(Of Date)
+			Get
+				Return Me._LeaveFactoryTime
+			End Get
+			Set
+				If (Me._LeaveFactoryTime.Equals(value) = false) Then
+					Me.OnLeaveFactoryTimeChanging(value)
+					Me.SendPropertyChanging
+					Me._LeaveFactoryTime = value
+					Me.SendPropertyChanged("LeaveFactoryTime")
+					Me.OnLeaveFactoryTimeChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_createdOn", DbType:="DateTime")>  _
+		Public Property createdOn() As System.Nullable(Of Date)
+			Get
+				Return Me._createdOn
+			End Get
+			Set
+				If (Me._createdOn.Equals(value) = false) Then
+					Me.OncreatedOnChanging(value)
+					Me.SendPropertyChanging
+					Me._createdOn = value
+					Me.SendPropertyChanged("createdOn")
+					Me.OncreatedOnChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_createdBy", DbType:="NVarChar(50)")>  _
+		Public Property createdBy() As String
+			Get
+				Return Me._createdBy
+			End Get
+			Set
+				If (String.Equals(Me._createdBy, value) = false) Then
+					Me.OncreatedByChanging(value)
+					Me.SendPropertyChanging
+					Me._createdBy = value
+					Me.SendPropertyChanged("createdBy")
+					Me.OncreatedByChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_modifiedOn", DbType:="DateTime")>  _
+		Public Property modifiedOn() As System.Nullable(Of Date)
+			Get
+				Return Me._modifiedOn
+			End Get
+			Set
+				If (Me._modifiedOn.Equals(value) = false) Then
+					Me.OnmodifiedOnChanging(value)
+					Me.SendPropertyChanging
+					Me._modifiedOn = value
+					Me.SendPropertyChanged("modifiedOn")
+					Me.OnmodifiedOnChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_modifiedBy", DbType:="NVarChar(50)")>  _
+		Public Property modifiedBy() As String
+			Get
+				Return Me._modifiedBy
+			End Get
+			Set
+				If (String.Equals(Me._modifiedBy, value) = false) Then
+					Me.OnmodifiedByChanging(value)
+					Me.SendPropertyChanging
+					Me._modifiedBy = value
+					Me.SendPropertyChanged("modifiedBy")
+					Me.OnmodifiedByChanged
+				End If
+			End Set
+		End Property
+		
+		Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+		
+		Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+		
+		Protected Overridable Sub SendPropertyChanging()
+			If ((Me.PropertyChangingEvent Is Nothing)  _
+						= false) Then
+				RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+			End If
+		End Sub
+		
+		Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+			If ((Me.PropertyChangedEvent Is Nothing)  _
+						= false) Then
+				RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+			End If
 		End Sub
 	End Class
 	

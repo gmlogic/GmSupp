@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class S1Applicants
+Partial Class Transport
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -41,17 +41,6 @@ Partial Class S1Applicants
         Me.SelectLoanCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.UsernameTextBox = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.BtnAddtoSoftone = New System.Windows.Forms.Button()
-        Me.ddlUsers = New System.Windows.Forms.ComboBox()
-        Me.lblUserName = New System.Windows.Forms.Label()
-        Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripComboBox2 = New System.Windows.Forms.ToolStripComboBox()
-        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TlSTxtMTRL = New System.Windows.Forms.ToolStripTextBox()
-        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TlSBtnMTRL = New System.Windows.Forms.ToolStripButton()
         Me.chkBoxIsActive = New System.Windows.Forms.CheckBox()
         Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
         Me.MasterDataGridView = New System.Windows.Forms.DataGridView()
@@ -71,6 +60,17 @@ Partial Class S1Applicants
         Me.toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.BindingNavigatorSaveItem = New System.Windows.Forms.ToolStripButton()
         Me.DataGridViewSearch = New System.Windows.Forms.DataGridView()
+        Me.ToolStripComboBox2 = New System.Windows.Forms.ToolStripComboBox()
+        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TlSTxtMTRL = New System.Windows.Forms.ToolStripTextBox()
+        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TlSBtnMTRL = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
+        Me.ddlUsers = New System.Windows.Forms.ComboBox()
+        Me.lblUserName = New System.Windows.Forms.Label()
+        Me.BtnAddtoSoftone = New System.Windows.Forms.Button()
+        Me.UsernameTextBox = New System.Windows.Forms.TextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         CType(Me.MasterBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DetailsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.LoanCategoriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -80,7 +80,6 @@ Partial Class S1Applicants
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
-        Me.ToolStrip2.SuspendLayout()
         CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer3.Panel1.SuspendLayout()
         Me.SplitContainer3.Panel2.SuspendLayout()
@@ -89,6 +88,7 @@ Partial Class S1Applicants
         CType(Me.BindingNavigatorMaster, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigatorMaster.SuspendLayout()
         CType(Me.DataGridViewSearch, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ToolStrip2.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmdSelect
@@ -211,108 +211,6 @@ Partial Class S1Applicants
         Me.SplitContainer1.Size = New System.Drawing.Size(1284, 749)
         Me.SplitContainer1.SplitterDistance = 129
         Me.SplitContainer1.TabIndex = 10
-        '
-        'UsernameTextBox
-        '
-        Me.UsernameTextBox.Location = New System.Drawing.Point(326, 35)
-        Me.UsernameTextBox.Name = "UsernameTextBox"
-        Me.UsernameTextBox.ReadOnly = True
-        Me.UsernameTextBox.Size = New System.Drawing.Size(343, 20)
-        Me.UsernameTextBox.TabIndex = 247
-        '
-        'Label1
-        '
-        Me.Label1.BackColor = System.Drawing.SystemColors.Control
-        Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Label1.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label1.ForeColor = System.Drawing.Color.Blue
-        Me.Label1.Location = New System.Drawing.Point(210, 32)
-        Me.Label1.Name = "Label1"
-        Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label1.Size = New System.Drawing.Size(110, 23)
-        Me.Label1.TabIndex = 248
-        Me.Label1.Text = "&Όνομα:"
-        '
-        'BtnAddtoSoftone
-        '
-        Me.BtnAddtoSoftone.BackColor = System.Drawing.SystemColors.Control
-        Me.BtnAddtoSoftone.Cursor = System.Windows.Forms.Cursors.Default
-        Me.BtnAddtoSoftone.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnAddtoSoftone.Location = New System.Drawing.Point(675, 12)
-        Me.BtnAddtoSoftone.Name = "BtnAddtoSoftone"
-        Me.BtnAddtoSoftone.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.BtnAddtoSoftone.Size = New System.Drawing.Size(88, 26)
-        Me.BtnAddtoSoftone.TabIndex = 246
-        Me.BtnAddtoSoftone.Text = "AddtoSoftone"
-        Me.BtnAddtoSoftone.UseVisualStyleBackColor = False
-        '
-        'ddlUsers
-        '
-        Me.ddlUsers.FormattingEnabled = True
-        Me.ddlUsers.Location = New System.Drawing.Point(326, 12)
-        Me.ddlUsers.Name = "ddlUsers"
-        Me.ddlUsers.Size = New System.Drawing.Size(343, 21)
-        Me.ddlUsers.TabIndex = 245
-        '
-        'lblUserName
-        '
-        Me.lblUserName.BackColor = System.Drawing.SystemColors.Control
-        Me.lblUserName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblUserName.Cursor = System.Windows.Forms.Cursors.Default
-        Me.lblUserName.ForeColor = System.Drawing.Color.Blue
-        Me.lblUserName.Location = New System.Drawing.Point(210, 9)
-        Me.lblUserName.Name = "lblUserName"
-        Me.lblUserName.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblUserName.Size = New System.Drawing.Size(110, 23)
-        Me.lblUserName.TabIndex = 244
-        Me.lblUserName.Text = "&User:"
-        '
-        'ToolStrip2
-        '
-        Me.ToolStrip2.Dock = System.Windows.Forms.DockStyle.None
-        Me.ToolStrip2.ImageScalingSize = New System.Drawing.Size(18, 18)
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripComboBox2, Me.ToolStripSeparator8, Me.TlSTxtMTRL, Me.ToolStripSeparator9, Me.TlSBtnMTRL})
-        Me.ToolStrip2.Location = New System.Drawing.Point(36, 28)
-        Me.ToolStrip2.Name = "ToolStrip2"
-        Me.ToolStrip2.Size = New System.Drawing.Size(272, 25)
-        Me.ToolStrip2.TabIndex = 243
-        Me.ToolStrip2.Visible = False
-        '
-        'ToolStripComboBox2
-        '
-        Me.ToolStripComboBox2.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.ToolStripComboBox2.ForeColor = System.Drawing.Color.Red
-        Me.ToolStripComboBox2.Items.AddRange(New Object() {"Κωδικός  Είδους:", "Βοηθητ.Κλειδί:"})
-        Me.ToolStripComboBox2.Name = "ToolStripComboBox2"
-        Me.ToolStripComboBox2.Size = New System.Drawing.Size(121, 25)
-        Me.ToolStripComboBox2.Text = "Κωδικός  Είδους:"
-        '
-        'ToolStripSeparator8
-        '
-        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(6, 25)
-        '
-        'TlSTxtMTRL
-        '
-        Me.TlSTxtMTRL.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.TlSTxtMTRL.Name = "TlSTxtMTRL"
-        Me.TlSTxtMTRL.Size = New System.Drawing.Size(100, 25)
-        '
-        'ToolStripSeparator9
-        '
-        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
-        Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 25)
-        '
-        'TlSBtnMTRL
-        '
-        Me.TlSBtnMTRL.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TlSBtnMTRL.Image = CType(resources.GetObject("TlSBtnMTRL.Image"), System.Drawing.Image)
-        Me.TlSBtnMTRL.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TlSBtnMTRL.Name = "TlSBtnMTRL"
-        Me.TlSBtnMTRL.Size = New System.Drawing.Size(23, 22)
-        Me.TlSBtnMTRL.Tag = ""
-        Me.TlSBtnMTRL.Text = "&Open"
-        Me.TlSBtnMTRL.ToolTipText = "Κωδικοί  Κίνησης"
         '
         'chkBoxIsActive
         '
@@ -502,6 +400,108 @@ Partial Class S1Applicants
         Me.DataGridViewSearch.Size = New System.Drawing.Size(1284, 45)
         Me.DataGridViewSearch.TabIndex = 6
         '
+        'ToolStripComboBox2
+        '
+        Me.ToolStripComboBox2.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.ToolStripComboBox2.ForeColor = System.Drawing.Color.Red
+        Me.ToolStripComboBox2.Items.AddRange(New Object() {"Κωδικός  Είδους:", "Βοηθητ.Κλειδί:"})
+        Me.ToolStripComboBox2.Name = "ToolStripComboBox2"
+        Me.ToolStripComboBox2.Size = New System.Drawing.Size(121, 25)
+        Me.ToolStripComboBox2.Text = "Κωδικός  Είδους:"
+        '
+        'ToolStripSeparator8
+        '
+        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(6, 25)
+        '
+        'TlSTxtMTRL
+        '
+        Me.TlSTxtMTRL.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.TlSTxtMTRL.Name = "TlSTxtMTRL"
+        Me.TlSTxtMTRL.Size = New System.Drawing.Size(100, 25)
+        '
+        'ToolStripSeparator9
+        '
+        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 25)
+        '
+        'TlSBtnMTRL
+        '
+        Me.TlSBtnMTRL.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TlSBtnMTRL.Image = CType(resources.GetObject("TlSBtnMTRL.Image"), System.Drawing.Image)
+        Me.TlSBtnMTRL.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TlSBtnMTRL.Name = "TlSBtnMTRL"
+        Me.TlSBtnMTRL.Size = New System.Drawing.Size(23, 22)
+        Me.TlSBtnMTRL.Tag = ""
+        Me.TlSBtnMTRL.Text = "&Open"
+        Me.TlSBtnMTRL.ToolTipText = "Κωδικοί  Κίνησης"
+        '
+        'ToolStrip2
+        '
+        Me.ToolStrip2.Dock = System.Windows.Forms.DockStyle.None
+        Me.ToolStrip2.ImageScalingSize = New System.Drawing.Size(18, 18)
+        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripComboBox2, Me.ToolStripSeparator8, Me.TlSTxtMTRL, Me.ToolStripSeparator9, Me.TlSBtnMTRL})
+        Me.ToolStrip2.Location = New System.Drawing.Point(36, 28)
+        Me.ToolStrip2.Name = "ToolStrip2"
+        Me.ToolStrip2.Size = New System.Drawing.Size(272, 25)
+        Me.ToolStrip2.TabIndex = 243
+        Me.ToolStrip2.Visible = False
+        '
+        'ddlUsers
+        '
+        Me.ddlUsers.FormattingEnabled = True
+        Me.ddlUsers.Location = New System.Drawing.Point(326, 12)
+        Me.ddlUsers.Name = "ddlUsers"
+        Me.ddlUsers.Size = New System.Drawing.Size(343, 21)
+        Me.ddlUsers.TabIndex = 245
+        '
+        'lblUserName
+        '
+        Me.lblUserName.BackColor = System.Drawing.SystemColors.Control
+        Me.lblUserName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblUserName.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblUserName.ForeColor = System.Drawing.Color.Blue
+        Me.lblUserName.Location = New System.Drawing.Point(210, 9)
+        Me.lblUserName.Name = "lblUserName"
+        Me.lblUserName.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblUserName.Size = New System.Drawing.Size(110, 23)
+        Me.lblUserName.TabIndex = 244
+        Me.lblUserName.Text = "&User:"
+        '
+        'BtnAddtoSoftone
+        '
+        Me.BtnAddtoSoftone.BackColor = System.Drawing.SystemColors.Control
+        Me.BtnAddtoSoftone.Cursor = System.Windows.Forms.Cursors.Default
+        Me.BtnAddtoSoftone.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.BtnAddtoSoftone.Location = New System.Drawing.Point(675, 12)
+        Me.BtnAddtoSoftone.Name = "BtnAddtoSoftone"
+        Me.BtnAddtoSoftone.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BtnAddtoSoftone.Size = New System.Drawing.Size(88, 26)
+        Me.BtnAddtoSoftone.TabIndex = 246
+        Me.BtnAddtoSoftone.Text = "AddtoSoftone"
+        Me.BtnAddtoSoftone.UseVisualStyleBackColor = False
+        '
+        'UsernameTextBox
+        '
+        Me.UsernameTextBox.Location = New System.Drawing.Point(326, 35)
+        Me.UsernameTextBox.Name = "UsernameTextBox"
+        Me.UsernameTextBox.ReadOnly = True
+        Me.UsernameTextBox.Size = New System.Drawing.Size(343, 20)
+        Me.UsernameTextBox.TabIndex = 247
+        '
+        'Label1
+        '
+        Me.Label1.BackColor = System.Drawing.SystemColors.Control
+        Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Label1.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label1.ForeColor = System.Drawing.Color.Blue
+        Me.Label1.Location = New System.Drawing.Point(210, 32)
+        Me.Label1.Name = "Label1"
+        Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label1.Size = New System.Drawing.Size(110, 23)
+        Me.Label1.TabIndex = 248
+        Me.Label1.Text = "&Όνομα:"
+        '
         'S1Applicants
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -522,8 +522,6 @@ Partial Class S1Applicants
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
-        Me.ToolStrip2.ResumeLayout(False)
-        Me.ToolStrip2.PerformLayout()
         Me.SplitContainer3.Panel1.ResumeLayout(False)
         Me.SplitContainer3.Panel1.PerformLayout()
         Me.SplitContainer3.Panel2.ResumeLayout(False)
@@ -534,6 +532,8 @@ Partial Class S1Applicants
         Me.BindingNavigatorMaster.ResumeLayout(False)
         Me.BindingNavigatorMaster.PerformLayout()
         CType(Me.DataGridViewSearch, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ToolStrip2.ResumeLayout(False)
+        Me.ToolStrip2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

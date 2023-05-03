@@ -29,7 +29,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>27</ApplicationRevision>
+    <ApplicationRevision>28</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -241,6 +241,12 @@
       <DependentUpon>202109140854292_UpdateUser.vb</DependentUpon>
     </Compile>
     <Compile Include="Migrations\202109140854292_UpdateUser.vb" />
+    <Compile Include="Revera\Transport.Designer.vb">
+      <DependentUpon>Transport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Revera\Transport.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Revera\WHouseBalFROld.Designer.vb">
       <DependentUpon>WHouseBalFROld.vb</DependentUpon>
     </Compile>
@@ -425,6 +431,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202109140854292_UpdateUser.resx">
       <DependentUpon>202109140854292_UpdateUser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Revera\Transport.resx">
+      <DependentUpon>Transport.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Revera\WHouseBalFROld.resx">
       <DependentUpon>WHouseBalFROld.vb</DependentUpon>

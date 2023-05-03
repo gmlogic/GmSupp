@@ -1154,6 +1154,35 @@
       <Association Name="TRDR_FINDOC" Member="TRDR1" ThisKey="TRDR" OtherKey="TRDR" Type="TRDR" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.ccCTransport" Member="ccCTransports">
+    <Type Name="ccCTransport">
+      <Column Name="ccCTransport" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="COMPANY" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="FINDOC" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FINCODE" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MTRLINES" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Fertiliser" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="TruckTrailerPlate" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Consignee" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="StatisticsAgencyNo" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Destination" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Driver" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TruckType" Type="System.String" DbType="NVarChar(90) NOT NULL" CanBeNull="false" />
+      <Column Name="TransportCompany" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="TruckArrival" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="TruckArrivalTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EnterforLoad" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="EnterforLoadTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LeaveFactory" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="LeaveFactoryTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="createdOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="createdBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="modifiedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="modifiedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.GetWHouseBalance" Method="GetWHouseBalance">
     <Parameter Name="COMPANY" Parameter="cOMPANY" Type="System.Int16" DbType="SmallInt" />
     <Parameter Name="SODTYPE" Parameter="sODTYPE" Type="System.Int16" DbType="SmallInt" />
