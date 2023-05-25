@@ -48,20 +48,7 @@ Public Class Transport
         conn = conString.ConnectionString
         GenMenu.TlSSTLabelConnStr.Text = "Data Source=" & conString.DataSource & ";Initial Catalog=" & conString.InitialCatalog & ";User ID=" & conString.UserID
 
-        uss = LUserManager.Users.Where(Function(f) Not f.UserName = "gmlogic").OrderBy(Function(f) f.UserName).ToList
-        If CurUserRole = "Admins" Then
-            uss = uss.Where(Function(f) f.S1User = False).OrderBy(Function(f) f.UserName).ToList
-            Dim gg = uss.Select(Function(f) f.Roles).ToList
-        End If
 
-        Dim emptyUsers() As GmIdentityUser
-        emptyUsers = {New GmIdentityUser With {.UserName = "<Επιλέγξτε>"}}
-
-        uss = (emptyUsers.ToList.Union(uss.ToList)).ToList
-
-        Me.ddlUsers.DataSource = uss 'ddlUsers.SelectedIndexChanged
-        Me.ddlUsers.DisplayMember = "UserName" 'ddlUsers.SelectedIndexChanged
-        Me.ddlUsers.ValueMember = "Id"
 
         If CurUser = "gmlogic" Then
             'conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
@@ -78,6 +65,8 @@ Public Class Transport
 
         End If
         Me.KeyPreview = True
+
+        Me.chkBoxIsActive.Checked = False
     End Sub
     Private Sub MyBase_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode = Keys.F3 Then
@@ -138,10 +127,11 @@ Public Class Transport
 
 
 
-            Dim qwh = q '.Where(Function(f) f.SOSOURCE = 1251) 'And f {1351, 1253}.Contains(f.SOSOURCE) And f.ISCANCEL = 0 And f.APPRV = 1)
+            Dim qwh As IQueryable(Of Revera.ccCTransport) = q '.Where(Function(f) f.SOSOURCE = 1251) 'And f {1351, 1253}.Contains(f.SOSOURCE) And f.ISCANCEL = 0 And f.APPRV = 1)
 
-            If Me.chkBoxIsActive.Checked Then
-                'qwh = qwh.Where(Function(f) f.ISACTIVE = 1)
+            If Not Me.chkBoxIsActive.Checked Then
+                'WHERE      NOT ((isnull(TruckArrival,0) = 1) AND (isnull(EnterforLoad,0) = 1) AND  (isnull(LeaveFactory,0) = 1))
+                qwh = qwh.Where(Function(f) Not (If(f.TruckArrival, False) = True And If(f.EnterforLoad, False) = True And If(f.LeaveFactory, False) = True))
             End If
 
             Dim ar = {"ΜΑΚΑΡΙΔΗΣ ΔΗΜΗΤΡΗΣ"} ', "Α. ΚΑΡΑΜΠΑΤΖΑΚΗ", "ΑΘΑΝΑΣΟΥΛΑΣ ΑΘΑΝΑΣΙΟΣ", "ΑΪΔΙΝΙΔΗΣ ΙΩΑΝΝΗΣ", "ΑΛΕΞΑΝΔΡΟΣ ΜΑΓΟΣ", "ΑΝΔΡΕΟΓΛΟΥ ΤΗΛΕΜΑΧΟΣ", "ΑΠΟΣΤΟΛΑΚΑΚΗ ΑΛΙΚΗ", "ΑΠΟΣΤΟΛΙΔΗΣ ΝΕΟΦΥΤΟΣ", "ΒΟΓΙΑΤΖΗΣ ΧΡΗΣΤΟΣ", "ΓΚΟΥΤΖΙΑΜΑΝΗΣ ΠΑΥΛΟΣ", "ΔΗΜΖΑΣ ΑΠΟΣΤΟΛΟΣ", "ΔΗΜΗΤΡΙΑΔΗΣ ΧΡΗΣΤΟΣ", "ΕΛΕΝΗ ΣΠΥΡΙΔΩΝ", "ΕΡΜΙΔΗΣ ΧΡΗΣΤΟΣ", "ΖΑΧΑΡΑΚΗΣ ΣΤΕΡΓΙΟΣ", "ΖΔΡΑΤΣΚΙΔΗΣ ΑΘΑΝΑΣΙΟΣ", "ΖΙΠΙΔΗΣ Δ.", "ΖΟΛΩΤΑΣ ΠΑΝΑΓΙΩΤΗΣ", "ΖΥΓΟΥΛΑΣ Α.", "ΗΛΙΑΔΗΣ ΓΙΩΡΓΟΣ", "ΙΟΡΔΑΝΟΓΛΟΥ ΣΑΒΒΑΣ", "ΚΑΖΟΓΛΟΥ Γ.", "ΚΑΡΑΚΑΣΙΔΗΣ ΑΝΑΣΤΑΣΙΟΣ", "ΚΑΡΑΚΕΙΣΟΓΛΟΥ ΒΑΣΙΛΗΣ", "ΚΑΡΕΛΗΣ ΓΙΩΡΓΟΣ", "ΚΟΛΕΒΕΝΤΗΣ ΔΙΑΜΑΝΤΗΣ", "ΚΟΥΛΟΥΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ", "ΚΟΥΤΛΑΣ ΓΙΑΝΝΗΣ", "ΚΟΥΤΣΑΚΗ ΕΛΕΝΗ", "ΚΩΣΤΙΚΙΑΔΗΣ ΚΥΡΙΑΚΟΣ", "ΛΑΖΑΡΙΔΗΣ ΣΤΑΥΡΟΣ", "ΛΕΥΘΕΡΙΩΤΗΣ Λ.", "ΜΑΤΑΚΑΣ ΚΥΡΙΑΚΟΣ", "ΜΠΕΛΙΤΣΟΣ ΙΩΑΝΝΗΣ", "ΡΕΜΠΑΣ ΔΗΜΗΤΡΗΣ", "ΡΙΖΟΠΟΥΛΟΣ ΝΙΚΟΣ", "ΣΟΥΛΗΣ ΛΑΜΠΡΟΣ", "ΦΟΥΣΙΑΣ ΧΡΗΣΤΟΣ", "ΧΑΪΤΑΣ ΚΟΣΜΑΣ", "ΧΑΤΖΗΣ ΣΠΥΡΟΣ", "ΧΡΥΣΟΧΟΪΔΗΣ ΔΗΜΗΤΡΗΣ"}
@@ -221,7 +211,7 @@ Public Class Transport
                 '  that both commands can commit or roll back as a single unit of work. 
                 Using scope As New TransactionScope()
                     'LogSQL = sSQL
-                    db.Log = Nothing ' Console.Out
+                    db.Log = Console.Out
                     db.SubmitChanges()
 
                     ' The Complete method commits the transaction. If an exception has been thrown, 
@@ -270,27 +260,27 @@ Public Class Transport
     End Function
 #End Region
 #Region "96-MasterDataGridView"
-    Dim editableFields_MasterDataGridView() As String = {"Search_User", "ExpccCUser", "NAME", "ISACTIVE"}
+    Dim editableFields_MasterDataGridView() As String = {"TruckArrival", "EnterforLoad", "LeaveFactory"}
     Private uss As List(Of GmIdentityUser)
 
     Private Sub MasterDataGridView_CurrentCellDirtyStateChanged(sender As Object, e As System.EventArgs) Handles MasterDataGridView.CurrentCellDirtyStateChanged
         Dim s As DataGridView = sender
-        'If editableFields_MasterDataGridView.Contains(s.Columns(s.CurrentCell.ColumnIndex).DataPropertyName) Then
+        If editableFields_MasterDataGridView.Contains(s.Columns(s.CurrentCell.ColumnIndex).DataPropertyName) Then
+            Exit Sub
+        End If
+
+        'If s.Columns(s.CurrentCell.ColumnIndex).Name = "Search_User" Then
         '    Exit Sub
         'End If
 
-        If s.Columns(s.CurrentCell.ColumnIndex).Name = "Search_User" Then
-            Exit Sub
-        End If
-
-        If s.Columns(s.CurrentCell.ColumnIndex).Name = "ExpccCUser" Then
-            Exit Sub
-        End If
+        'If s.Columns(s.CurrentCell.ColumnIndex).Name = "ExpccCUser" Then
+        '    Exit Sub
+        'End If
 
 
-        If s.Columns(s.CurrentCell.ColumnIndex).Name = "ISACTIVE" Then
-            Exit Sub
-        End If
+        'If s.Columns(s.CurrentCell.ColumnIndex).Name = "ISACTIVE" Then
+        '    Exit Sub
+        'End If
 
         If MasterDataGridView.IsCurrentCellDirty Then
             MasterDataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit)
@@ -300,7 +290,61 @@ Public Class Transport
         'Cmd_Edit()
     End Sub
     Private Sub DataGridViewMaster_CellClick(sender As Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles MasterDataGridView.CellClick
+        Dim s As DataGridView = sender
+        'Check to ensure that the row CheckBox is clicked.
+        Dim colName = s.Columns(e.ColumnIndex).Name
+        Debug.Print(colName)
+        If e.RowIndex >= 0 AndAlso {"TruckArrival", "EnterforLoad", "LeaveFactory"}.Contains(s.Columns(e.ColumnIndex).Name) Then
 
+            ''Reference the GridView Row.
+            'Dim cell As DataGridViewCell = s.Rows(e.RowIndex).Cells(e.ColumnIndex)
+            'Dim cellD As DataGridViewCell = s.Rows(e.RowIndex).Cells(e.ColumnIndex + 1)
+            'If cell.Value Is Nothing Then
+            '    cell.Value = False
+            'End If
+            ''Me.chkBoxIsActive.Checked = Not cell.Value
+            'cellD.Value = Nothing
+            'cellD.Style.BackColor = System.Drawing.Color.Empty
+            'If Not cell.Value Then
+            '    cellD.Value = Now
+            '    Select Case s.Columns(e.ColumnIndex).Name
+            '        Case "TruckArrival"
+            '            cellD.Style.BackColor = System.Drawing.Color.LightBlue
+            '        Case "EnterforLoad"
+            '            cellD.Style.Back   Color = System.Drawing.Color.Orange
+            '        Case "LeaveFactory"
+            '            cellD.Style.BackColor = System.Drawing.Color.LightGreen
+            '    End Select
+            'End If
+            'Me.txtBoxNotes.Text = String.Format("Row: {0} Col: {1} ColName: {2} CellValue: {3}", e.RowIndex, e.ColumnIndex, s.Columns(e.ColumnIndex).Name, cell.Value)
+            ''cell.Selected = True
+            SendKeys.Send(vbTab)
+            'Me.txtBoxNotes.Text &= vbCrLf & String.Format("Row: {0} Col: {1} ColName: {2} CellValue: {3}", e.RowIndex, e.ColumnIndex, s.Columns(e.ColumnIndex).Name, cell.Value)
+            ''cell.Value = cell.EditedFormattedValue
+            'Me.chkBoxIsActive.Checked = cell.EditedFormattedValue 'Not cell.Value
+            'Exit Sub
+            'If cell.Value IsNot Nothing AndAlso cell.EditedFormattedValue Then
+            '    cell.Value = Not cell.EditedFormattedValue
+            'Else
+            '    cell.Value = False
+            'End If
+            's.Rows(e.RowIndex).Cells(e.ColumnIndex + 1).Value = Nothing
+            'If Not cell.Value Then
+            '    s.Rows(e.RowIndex).Cells(e.ColumnIndex + 1).Value = Now
+            'End If
+
+            ''Set the CheckBox selection.
+            'cell.Cells(colName).Value = Convert.ToBoolean(cell.Cells(colName).EditedFormattedValue)
+            'cell = MasterDataGridView.Rows(e.RowIndex + 1)
+            'cell.Cells(colName).Value = Nothing
+            'If Not cell.Cells(colName).Value Then
+            '    cell.Cells(colName).Value = Now
+            'End If
+            'If CheckBox is checked, display Message Box.
+            'If Not Convert.ToBoolean(row.Cells(colName).Value) Then
+            'MessageBox.Show(("Selected ID: " & row.Cells(3).Value) & " check:" & Not Convert.ToBoolean(row.Cells(colName).Value))
+            'End If
+        End If
         'Dim drv As SOCARRIER = Me.MasterBindingSource.Current
         'Me.DetailsBindingSource.Clear()
 
@@ -317,18 +361,48 @@ Public Class Transport
             myArrF = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrival,TruckArrivalTime,EnterforLoad,EnterforLoadTime,LeaveFactory,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy").Split(",")
             myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrival,TruckArrivalTime,EnterforLoad,EnterforLoadTime,LeaveFactory,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy").Split(",")
 
+
+            myArrF = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy").Split(",")
+            myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy").Split(",")
+
+
             'Add Bound Columns
             Dim bad_item_columns() As Integer = {1, 2, 3, 4}
             RemoveGridColumnsByCollection(MasterDataGridView, bad_item_columns, myArrF, myArrN, False) 'CheckBoxDetail.Checked)
             'AddOutOfOfficeColumn(Me.MasterDataGridView)
 
 
+            'Dim ColumnCheckBox As New DataGridViewCheckBoxColumn()
+            'With ColumnCheckBox
+            '    .DataPropertyName = "ISACTIVE"
+            '    .HeaderText = "ISACTIVE" 'ColumnName.OutOfOffice.ToString()
+            '    .Name = "ISACTIVE" 'ColumnName.OutOfOffice.ToString()
+            '    .AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells
+            '    .FlatStyle = FlatStyle.Standard
+            '    .CellTemplate = New DataGridViewCheckBoxCell()
+            '    .CellTemplate.Style.BackColor = Drawing.Color.Beige
+            'End With
+            ''Me.MasterDataGridView.Columns.Insert(0, column)
+            'Me.MasterDataGridView.Columns.Add(ColumnCheckBox)
 
-            'Dim SumShVALDataGridViewTextBoxColumn As New DataGridViewTextBoxColumn
-            'SumShVALDataGridViewTextBoxColumn.DataPropertyName = "SumShVAL"
-            'SumShVALDataGridViewTextBoxColumn.HeaderText = "SumShVAL"
-            'SumShVALDataGridViewTextBoxColumn.Name = "SumShVAL"
-            'MasterDataGridView.Columns.Add(SumShVALDataGridViewTextBoxColumn)
+
+            Dim HideCols = ("TruckArrival,EnterforLoad,LeaveFactory").Split(",")
+            Dim i = 7
+            For Each hc In HideCols
+                Dim col As New DataGridViewCheckBoxColumn '= Me.MasterDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = hc).FirstOrDefault
+                With col
+                    .DataPropertyName = hc
+                    .HeaderText = hc 'ColumnName.OutOfOffice.ToString()
+                    .Name = hc 'ColumnName.OutOfOffice.ToString()
+                    .AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells
+                    .FlatStyle = FlatStyle.Standard
+                    .CellTemplate = New DataGridViewCheckBoxCell()
+                    .CellTemplate.Style.BackColor = Drawing.Color.Beige
+                End With
+                i += 2
+                Me.MasterDataGridView.Columns.Insert(i, col)
+            Next
+
 
             Dim columnComboBox As New DataGridViewComboBoxColumn()
             'columnComboBox.DataPropertyName = "CCCPRIORITY"
@@ -339,108 +413,6 @@ Public Class Transport
             'Dim mln As List(Of Panel.MTRL) = (From Empty In emptyMTRL).Union(
             '                                (From m1 In ml Order By m1.CODE)).ToList
 
-
-
-            'Me.ddlUsers.DataSource = uss 'ddlUsers.SelectedIndexChanged
-            'Me.ddlUsers.DisplayMember = "UserName" 'ddlUsers.SelectedIndexChanged
-            'Me.ddlUsers.ValueMember = "Id"
-
-
-
-
-
-
-            'Dim emptyMTRL = Nothing
-
-            'If CompanyT = 1002 Then 'PFIC
-            '    emptyMTRL = {New Revera.MTRL With {.CODE = "<Επιλέγξτε>", .MTRL = 0}}.ToList
-            '    Dim mm = dbPFIC.MTRLs.Where(Function(f) f.COMPANY = CompanyT).OrderBy(Function(f) f.CODE).Where(Function(f) f.SODTYPE = 53 And f.CODE.Substring(0, 1) = "6").ToList
-            '    mtrs = (From Empty In CType(emptyMTRL, List(Of PFIC.MTRL)).Union(mm)).ToList
-
-            'End If
-
-            'If {2001, 2002}.Contains(CompanyT) Then '1001 Then 'LNK
-            '    emptyMTRL = {New LNK.MTRL With {.CODE = "<Επιλέγξτε>", .MTRL = 0}}.ToList
-            '    'Dim mm = dbLNK.MTRLs.Where(Function(f) f.COMPANY = CompanyT).OrderBy(Function(f) f.CODE).Where(Function(f) f.SODTYPE = 53 And f.CODE.Substring(0, 1) = "6").ToList
-            '    Dim mm = (From m In dbLNK.MTRLs Join ex In dbLNK.MTREXTRAs On m.COMPANY Equals ex.COMPANY And m.MTRL Equals ex.MTRL
-            '              Where ex.BOOL04 = 1
-            '              Select m).ToList
-            '    mtrs = (From Empty In CType(emptyMTRL, List(Of LNK.MTRL)).Union(mm)).ToList
-            'End If
-
-
-            'Friend WithEvents Column1 As DataGridViewCheckBoxColumn
-            'Me.Column1.DataPropertyName = "cccMultiCompData"
-            'Me.Column1.HeaderText = "Column1"
-            'Me.Column1.Name = "Column1"
-            'Me.Column1.ReadOnly = True
-            Dim ColumnCheckBox As New DataGridViewCheckBoxColumn()
-            With ColumnCheckBox
-                .DataPropertyName = "ISACTIVE"
-                .HeaderText = "ISACTIVE" 'ColumnName.OutOfOffice.ToString()
-                .Name = "ISACTIVE" 'ColumnName.OutOfOffice.ToString()
-                .AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells
-                .FlatStyle = FlatStyle.Standard
-                .CellTemplate = New DataGridViewCheckBoxCell()
-                .CellTemplate.Style.BackColor = Drawing.Color.Beige
-            End With
-            'Me.MasterDataGridView.Columns.Insert(0, column)
-            'Me.MasterDataGridView.Columns.Add(ColumnCheckBox)
-
-            'Search_User
-            '
-            columnComboBox.DataSource = uss
-            columnComboBox.DisplayMember = "Name"
-            columnComboBox.HeaderText = "Search_User"
-            columnComboBox.Name = "Search_User"
-            columnComboBox.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-            columnComboBox.SortMode = DataGridViewColumnSortMode.Automatic
-            columnComboBox.ValueMember = "UserName"
-            columnComboBox.Width = 120
-            columnComboBox.FlatStyle = FlatStyle.Flat
-            'MasterDataGridView.Columns.Add(columnComboBox)
-
-
-            Dim columnTxtBox As New DataGridViewTextBoxColumn
-            'columnTxtBox.DataPropertyName = "ExpccCUser"
-            columnTxtBox.HeaderText = "ExpccCUser"
-            columnTxtBox.Name = "ExpccCUser"
-            columnTxtBox.SortMode = DataGridViewColumnSortMode.Automatic
-            'Me.MasterDataGridView.Columns.Add(columnTxtBox)
-
-
-            columnTxtBox = New DataGridViewTextBoxColumn
-            'columnTxtBox.DataPropertyName = "ExpccCUser"
-            columnTxtBox.HeaderText = "ChkUser"
-            columnTxtBox.Name = "ChkUser"
-            columnTxtBox.SortMode = DataGridViewColumnSortMode.Automatic
-            'Me.MasterDataGridView.Columns.Add(columnTxtBox)
-
-
-            For i As Integer = 0 To MasterDataGridView.Columns.Count - 1
-                Debug.Print(MasterDataGridView.Columns(i).DataPropertyName & vbTab & MasterDataGridView.Columns(i).Name)
-                'MasterDataGridView.Columns(i).ReadOnly = True
-            Next
-
-
-
-            For Each edf In editableFields_MasterDataGridView
-                Dim Col As DataGridViewColumn = Utility.GetNoColumnDataGridView(Me.MasterDataGridView, edf)
-                If Not IsNothing(Col) Then
-                    Col.ReadOnly = False
-                End If
-            Next
-
-            For Each edf In editableFields_MasterDataGridView
-                If Not IsNothing(MasterDataGridView.Columns(edf)) Then
-                    MasterDataGridView.Columns(edf).ReadOnly = False
-                End If
-            Next
-
-
-            'If Not IsNothing(MasterDataGridView.Columns("Περιγραφή")) Then
-            '    MasterDataGridView.Columns("Περιγραφή").Width = 300
-            'End If
 
 
 
@@ -457,45 +429,26 @@ Public Class Transport
                 '    dll.Value = MTRL
                 'End If
 
-                'Dim item As Revera.ccCS1Applicant = row.DataBoundItem
+                'Dim item As Revera.ccCTransport = row.DataBoundItem
                 'If Not IsNothing(item) Then
-                '    Try
-                '        If item.NAME = "ΗΛΙΑΔΗΣ ΓΙΩΡΓΟΣ" Then
-                '            item.NAME = "ΗΛΙΑΔΗΣ ΓΙΩΡΓΟΣ"
-                '        End If
-                '        Dim dll As DataGridViewComboBoxCell = row.Cells("Search_User")
-                '        If Not IsNothing(item.AspNetUsersName) Then
-                '            dll.Value = item.ccCUser
-                '        Else
-                '            dll.Value = ""
-                '            'Dim code As String = item.ExpccCUser
-                '            'Dim m = Nothing
-                '            'If CompanyT = 1002 Then 'PFIC
-                '            '    m = dbPFIC.MTRLs.Where(Function(f) f.COMPANY = CompanyT And f.SODTYPE = 53 And f.CODE = code).FirstOrDefault
-                '            'End If
+                Try
+                        For Each colName In {"TruckArrival", "EnterforLoad", "LeaveFactory"}
+                            If Not row.Cells(colName).Value Then
+                                Continue For
+                            End If
+                            Select Case colName
+                                Case "TruckArrival"
+                                    row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.LightBlue
+                                Case "EnterforLoad"
+                                    row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.Orange
+                                Case "LeaveFactory"
+                                    row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.LightGreen
+                            End Select
+                        Next
 
-                '            'If CompanyT = 1001 Then 'LNK
-                '            '    m = dbLNK.MTRLs.Where(Function(f) f.COMPANY = CompanyT And f.SODTYPE = 53 And f.CODE = code).FirstOrDefault
-                '            'End If
-                '            'If Not IsNothing(m) Then
-                '            '    'dll.Items.Add(m)
-                '            '    'dll.Value = m.MTRL
-                '            'End If
-                '        End If
+                    Catch ex As Exception
 
-                '        Dim TxtCell As DataGridViewTextBoxCell = row.Cells("ExpccCUser")
-                '        If Not IsNothing(item.AspNetUsersName) Then
-                '            TxtCell.Value = item.ccCUser
-                '        End If
-
-                '        TxtCell = row.Cells("ChkUser")
-                '        If item.NAME = item.AspNetUsersName Then
-                '            TxtCell.Value = "Ok"
-                '        End If
-
-                '    Catch ex As Exception
-
-                '    End Try
+                    End Try
                 'End If
 
             Next
@@ -545,10 +498,28 @@ Public Class Transport
                 End If
             End If
 
-            If s.Columns(e.ColumnIndex).Name = "ISACTIVE" Then
-                Dim cellc As DataGridViewCell = s.CurrentCell
-                Dim ExpccCUser As String = cellc.EditedFormattedValue
-                If Not cellc.FormattedValue.ToString = ExpccCUser Then
+            Me.txtBoxNotes.Text = ""
+            If {"TruckArrival", "EnterforLoad", "LeaveFactory"}.Contains(s.Columns(e.ColumnIndex).Name) Then
+                Dim cellc As DataGridViewCheckBoxCell = s.CurrentCell
+                Dim celle = cellc.EditedFormattedValue
+
+                Me.txtBoxNotes.Text = String.Format("Row: {0} Col: {1} ColName: {2} CellValue: {3} CellValueN: {4}", e.RowIndex, e.ColumnIndex, s.Columns(e.ColumnIndex).Name, cellc.FormattedValue, celle)
+                'cell.Selected = True
+
+                If Not cellc.FormattedValue = celle Then
+                    Me.txtBoxNotes.Text &= vbCrLf & String.Format("Row: {0} Col: {1} ColName: {2} CellValue: {3} CellValueN: {4}", e.RowIndex, e.ColumnIndex, s.Columns(e.ColumnIndex).Name, cellc.FormattedValue, celle)
+                    'If celle Then
+                    '    s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Value = Now
+                    'Else
+                    '    s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Value = Nothing
+                    'End If
+
+                    Exit Sub
+                    's.Rows(e.RowIndex).Cells(e.ColumnIndex + 1).Value = Nothing
+                    'If ExpccCUser Then
+                    '    s.Rows(e.RowIndex).Cells(e.ColumnIndex + 1).Value = Now
+                    'End If
+                    Exit Sub
                     Dim item = s.Rows(e.RowIndex).DataBoundItem
                     'Dim mtrl As Integer = item.mtrl
                     Dim id As Integer = item.UFTBL01
@@ -556,13 +527,13 @@ Public Class Transport
                     If Not IsNothing(UFTBL01) Then
                         Dim celln As DataGridViewCheckBoxCell = s.Rows(e.RowIndex).Cells("ISACTIVE")
 
-                        If ExpccCUser Then
-                            UFTBL01.ISACTIVE = 1
-                            celln.Value = 1
-                        Else
-                            UFTBL01.ISACTIVE = 0
-                            celln.Value = 0
-                        End If
+                        'If celln Then
+                        '    UFTBL01.ISACTIVE = 1
+                        '    celln.Value = 1
+                        'Else
+                        '    UFTBL01.ISACTIVE = 0
+                        '    celln.Value = 0
+                        'End If
 
                         If db.GetChangeSet.Updates.Count > 0 Then
                             Me.BindingNavigatorSaveItem.Enabled = True
@@ -572,6 +543,24 @@ Public Class Transport
                     End If
                 End If
             End If
+
+            If {"TruckArrivalTime", "EnterforLoadTime", "LeaveFactoryTime"}.Contains(s.Columns(e.ColumnIndex).Name) Then
+                Dim cellc As DataGridViewCell = s.CurrentCell
+                Dim ExpccCUser As String = cellc.EditedFormattedValue
+                'If s.Rows(e.RowIndex).Cells(e.ColumnIndex - 1).Value Then
+                '    cellc.Value = Now
+                'Else
+                '    cellc.Value = Nothing
+                'End If
+                'If Not cellc.FormattedValue.ToString = ExpccCUser Then
+                '    'Exit Sub
+                '    's.Rows(e.RowIndex).Cells(e.ColumnIndex + 1).Value = Nothing
+                '    If ExpccCUser Then
+                '        'cellc.Value = Now
+                '    End If
+                'End If
+            End If
+
 
             If s.Columns(e.ColumnIndex).Name = "ExpccCUser" Then
                 Exit Sub
@@ -629,52 +618,71 @@ Public Class Transport
     End Sub
     Private Sub MasterDataGridView_CellValidated(sender As Object, e As DataGridViewCellEventArgs) Handles MasterDataGridView.CellValidated
         Dim s As DataGridView = sender
-        If s.Columns(e.ColumnIndex).Name = "ExpccCUser" Then
+        'If s.Columns(e.ColumnIndex).Name = "ExpccCUser" Then
+        If {"TruckArrival", "EnterforLoad", "LeaveFactory"}.Contains(s.Columns(e.ColumnIndex).Name) Then
+            Dim cellc As DataGridViewCheckBoxCell = s.CurrentCell
+
+            If cellc.Value Then
+                s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Value = Now
+                Select Case s.Columns(e.ColumnIndex).Name
+                    Case "TruckArrival"
+                        s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Style.BackColor = System.Drawing.Color.LightBlue
+                    Case "EnterforLoad"
+                        s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Style.BackColor = System.Drawing.Color.Orange
+                    Case "LeaveFactory"
+                        s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Style.BackColor = System.Drawing.Color.LightGreen
+                End Select
+            Else
+                s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Value = Nothing
+                s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Style.BackColor = Nothing
+            End If
+
+
             Exit Sub
-            Dim cellc As DataGridViewCell = s.CurrentCell
+
             Dim ExpccCUser As String = cellc.EditedFormattedValue
-            Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("Search_User")
-            If celln.Value = "0" AndAlso ExpccCUser = String.Empty Then
-                Exit Sub
-            End If
-
-            Dim ml = s.Tag 'Nothing
-
-            If Not IsNothing(ml) AndAlso ml.Count = 0 Then
-                MsgBox("Λάθος Κωδικός", MsgBoxStyle.Critical, "Error")
-                Dim item = s.Rows(cellc.RowIndex).DataBoundItem
-                Dim chItem = db.GetChangeSet.Updates.Where(Function(f) f.cccMultiCompData = item.cccMultiCompData).FirstOrDefault
-                If Not IsNothing(chItem) Then
-                    db.Refresh(RefreshMode.OverwriteCurrentValues, chItem)
+                Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("Search_User")
+                If celln.Value = "0" AndAlso ExpccCUser = String.Empty Then
+                    Exit Sub
                 End If
 
-                cellc.Value = Nothing
-                celln.Value = 0
+                Dim ml = s.Tag 'Nothing
 
-                If db.GetChangeSet.Updates.Count > 0 Then
-                    Me.BindingNavigatorSaveItem.Enabled = True
-                Else
-                    Me.BindingNavigatorSaveItem.Enabled = False
+                If Not IsNothing(ml) AndAlso ml.Count = 0 Then
+                    MsgBox("Λάθος Κωδικός", MsgBoxStyle.Critical, "Error")
+                    Dim item = s.Rows(cellc.RowIndex).DataBoundItem
+                    Dim chItem = db.GetChangeSet.Updates.Where(Function(f) f.cccMultiCompData = item.cccMultiCompData).FirstOrDefault
+                    If Not IsNothing(chItem) Then
+                        db.Refresh(RefreshMode.OverwriteCurrentValues, chItem)
+                    End If
+
+                    cellc.Value = Nothing
+                    celln.Value = 0
+
+                    If db.GetChangeSet.Updates.Count > 0 Then
+                        Me.BindingNavigatorSaveItem.Enabled = True
+                    Else
+                        Me.BindingNavigatorSaveItem.Enabled = False
+                    End If
+
                 End If
-
             End If
-        End If
 
-        s.Tag = Nothing
+            s.Tag = Nothing
 
     End Sub
     Private Sub DataGridView1_DataError(ByVal sender As Object, ByVal e As DataGridViewDataErrorEventArgs) Handles MasterDataGridView.DataError
         Dim s As DataGridView = sender
-        'If editableFields_MasterDataGridView.Contains(s.Columns(s.CurrentCell.ColumnIndex).DataPropertyName) Then
+        If editableFields_MasterDataGridView.Contains(s.Columns(s.CurrentCell.ColumnIndex).DataPropertyName) Then
+            Exit Sub
+        End If
+        'If sender.Columns(e.ColumnIndex).Name = "Search_User" Then
         '    Exit Sub
         'End If
-        If sender.Columns(e.ColumnIndex).Name = "Search_User" Then
-            Exit Sub
-        End If
 
-        If sender.Columns(e.ColumnIndex).Name = "ISACTIVE" Then
-            Exit Sub
-        End If
+        'If sender.Columns(e.ColumnIndex).Name = "ISACTIVE" Then
+        '    Exit Sub
+        'End If
 
         MessageBox.Show("DataGridView1_DataError - Error happened " _
             & e.Context.ToString() & vbCrLf & "Row,Col:" & e.RowIndex & "," & sender.Columns(e.ColumnIndex).Name)
@@ -808,43 +816,7 @@ Public Class Transport
             MsgBox(ex.Message)
         End Try
     End Sub
-    Private Sub BtnAddtoSoftone_Click(sender As Object, e As EventArgs) Handles BtnAddtoSoftone.Click
-        If Me.ddlUsers.SelectedItem IsNot Nothing Then
-            Me.UsernameTextBox.Text = Me.ddlUsers.SelectedItem.Name
-        Else
-            Me.UsernameTextBox.Text = Me.ddlUsers.Text
-        End If
-        If Me.UsernameTextBox.Text = "<Επιλέγξτε>" Then
-            Exit Sub
-        End If
 
-        Dim UFTBL01s = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251)
-        If UFTBL01s.Count > 0 Then
-            Dim UFTBL01 = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251 And f.NAME = Me.UsernameTextBox.Text).FirstOrDefault
-            If UFTBL01 Is Nothing Then
-                Dim id As Short = UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251).Max(Function(f) f.UFTBL01)
-                UFTBL01 = New Revera.UFTBL01
-                UFTBL01.UFTBL01 = id + 1
-                UFTBL01.CODE = UFTBL01.UFTBL01
-                UFTBL01.COMPANY = Company
-                UFTBL01.SOSOURCE = 1251
-                UFTBL01.NAME = Me.UsernameTextBox.Text
-                UFTBL01.ccCUser = Me.ddlUsers.SelectedItem.UserName
-                UFTBL01.ISACTIVE = 1
-                db.UFTBL01s.InsertOnSubmit(UFTBL01)
-            Else
-                MsgBox("Προσοχή !!!.Υπάρχει ο αιτών στο Softone", MsgBoxStyle.Exclamation, "Προσοχή !!!")
-                Exit Sub
-            End If
-        Else
-            MsgBox("Προσοχή !!!.UFTBL01s.Count = 0", MsgBoxStyle.Exclamation, "Προσοχή !!!")
-            Exit Sub
-        End If
-
-        If Me.DataSafe() Then
-            Me.cmdSelect.PerformClick()
-        End If
-    End Sub
 
 #End Region
 #Region "99-Start-GetData"
@@ -894,6 +866,8 @@ Public Class Transport
             Dim nu ' As CCCCheckZip = MasterBindingSource.Current
             'nu.modifiedOn = Now()
             Me.BindingNavigatorSaveItem.Enabled = True
+            'DataSafe()
+            'SaveData()
         End If
         If e.ListChangedType = ListChangedType.ItemAdded Then
             Me.BindingNavigatorSaveItem.Enabled = True
@@ -922,13 +896,6 @@ Public Class Transport
         Return dt
     End Function
 
-    Private Sub ddlUsers_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlUsers.SelectedIndexChanged
-        If Me.ddlUsers.SelectedItem IsNot Nothing Then
-            Me.UsernameTextBox.Text = Me.ddlUsers.SelectedItem.Name
-        Else
-            Me.UsernameTextBox.Text = Me.ddlUsers.Text
-        End If
-    End Sub
 
 
 #End Region

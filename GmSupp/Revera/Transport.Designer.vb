@@ -23,7 +23,7 @@ Partial Class Transport
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(S1Applicants))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Transport))
         Me.cmdSelect = New System.Windows.Forms.Button()
         Me.MasterBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.DetailsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
@@ -41,6 +41,12 @@ Partial Class Transport
         Me.SelectLoanCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.ToolStrip6 = New System.Windows.Forms.ToolStrip()
+        Me.TlSComboBoxDate = New System.Windows.Forms.ToolStripComboBox()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.Label_99 = New System.Windows.Forms.Label()
+        Me.DateTimePicker2 = New System.Windows.Forms.DateTimePicker()
+        Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
         Me.chkBoxIsActive = New System.Windows.Forms.CheckBox()
         Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
         Me.MasterDataGridView = New System.Windows.Forms.DataGridView()
@@ -60,17 +66,7 @@ Partial Class Transport
         Me.toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.BindingNavigatorSaveItem = New System.Windows.Forms.ToolStripButton()
         Me.DataGridViewSearch = New System.Windows.Forms.DataGridView()
-        Me.ToolStripComboBox2 = New System.Windows.Forms.ToolStripComboBox()
-        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TlSTxtMTRL = New System.Windows.Forms.ToolStripTextBox()
-        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TlSBtnMTRL = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
-        Me.ddlUsers = New System.Windows.Forms.ComboBox()
-        Me.lblUserName = New System.Windows.Forms.Label()
-        Me.BtnAddtoSoftone = New System.Windows.Forms.Button()
-        Me.UsernameTextBox = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.txtBoxNotes = New System.Windows.Forms.TextBox()
         CType(Me.MasterBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DetailsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.LoanCategoriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -80,6 +76,7 @@ Partial Class Transport
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        Me.ToolStrip6.SuspendLayout()
         CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer3.Panel1.SuspendLayout()
         Me.SplitContainer3.Panel2.SuspendLayout()
@@ -88,7 +85,6 @@ Partial Class Transport
         CType(Me.BindingNavigatorMaster, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigatorMaster.SuspendLayout()
         CType(Me.DataGridViewSearch, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ToolStrip2.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmdSelect
@@ -96,7 +92,7 @@ Partial Class Transport
         Me.cmdSelect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.cmdSelect.Image = CType(resources.GetObject("cmdSelect.Image"), System.Drawing.Image)
         Me.cmdSelect.ImageAlign = System.Drawing.ContentAlignment.BottomRight
-        Me.cmdSelect.Location = New System.Drawing.Point(143, 12)
+        Me.cmdSelect.Location = New System.Drawing.Point(400, 9)
         Me.cmdSelect.Name = "cmdSelect"
         Me.cmdSelect.Size = New System.Drawing.Size(38, 38)
         Me.cmdSelect.TabIndex = 232
@@ -194,12 +190,12 @@ Partial Class Transport
         'SplitContainer1.Panel1
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
-        Me.SplitContainer1.Panel1.Controls.Add(Me.UsernameTextBox)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.Label1)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.BtnAddtoSoftone)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.ddlUsers)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.lblUserName)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.ToolStrip2)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtBoxNotes)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.ToolStrip6)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.LinkLabel1)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label_99)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.DateTimePicker2)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.DateTimePicker1)
         Me.SplitContainer1.Panel1.Controls.Add(Me.chkBoxIsActive)
         Me.SplitContainer1.Panel1.Controls.Add(Me.cmdSelect)
         '
@@ -211,6 +207,68 @@ Partial Class Transport
         Me.SplitContainer1.Size = New System.Drawing.Size(1284, 749)
         Me.SplitContainer1.SplitterDistance = 129
         Me.SplitContainer1.TabIndex = 10
+        '
+        'ToolStrip6
+        '
+        Me.ToolStrip6.Dock = System.Windows.Forms.DockStyle.None
+        Me.ToolStrip6.ImageScalingSize = New System.Drawing.Size(20, 20)
+        Me.ToolStrip6.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TlSComboBoxDate})
+        Me.ToolStrip6.Location = New System.Drawing.Point(9, 9)
+        Me.ToolStrip6.Name = "ToolStrip6"
+        Me.ToolStrip6.Size = New System.Drawing.Size(135, 25)
+        Me.ToolStrip6.TabIndex = 253
+        '
+        'TlSComboBoxDate
+        '
+        Me.TlSComboBoxDate.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.TlSComboBoxDate.ForeColor = System.Drawing.Color.Red
+        Me.TlSComboBoxDate.Items.AddRange(New Object() {"Ημ/νία:", "Ανά Περίοδο:"})
+        Me.TlSComboBoxDate.Name = "TlSComboBoxDate"
+        Me.TlSComboBoxDate.Size = New System.Drawing.Size(121, 25)
+        Me.TlSComboBoxDate.Text = "Ημ/νία:"
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.LinkLabel1.Location = New System.Drawing.Point(147, 5)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(104, 17)
+        Me.LinkLabel1.TabIndex = 249
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Από"
+        Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label_99
+        '
+        Me.Label_99.BackColor = System.Drawing.SystemColors.Control
+        Me.Label_99.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Label_99.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
+        Me.Label_99.ForeColor = System.Drawing.Color.Blue
+        Me.Label_99.Location = New System.Drawing.Point(260, 5)
+        Me.Label_99.Name = "Label_99"
+        Me.Label_99.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label_99.Size = New System.Drawing.Size(104, 17)
+        Me.Label_99.TabIndex = 250
+        Me.Label_99.Text = "Έως"
+        Me.Label_99.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'DateTimePicker2
+        '
+        Me.DateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DateTimePicker2.Location = New System.Drawing.Point(260, 21)
+        Me.DateTimePicker2.Name = "DateTimePicker2"
+        Me.DateTimePicker2.Size = New System.Drawing.Size(104, 20)
+        Me.DateTimePicker2.TabIndex = 252
+        Me.DateTimePicker2.Value = New Date(2014, 3, 23, 21, 26, 41, 0)
+        '
+        'DateTimePicker1
+        '
+        Me.DateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DateTimePicker1.Location = New System.Drawing.Point(148, 21)
+        Me.DateTimePicker1.Name = "DateTimePicker1"
+        Me.DateTimePicker1.Size = New System.Drawing.Size(104, 20)
+        Me.DateTimePicker1.TabIndex = 251
+        Me.DateTimePicker1.Value = New Date(2006, 10, 31, 0, 0, 0, 0)
         '
         'chkBoxIsActive
         '
@@ -400,116 +458,22 @@ Partial Class Transport
         Me.DataGridViewSearch.Size = New System.Drawing.Size(1284, 45)
         Me.DataGridViewSearch.TabIndex = 6
         '
-        'ToolStripComboBox2
+        'txtBoxNotes
         '
-        Me.ToolStripComboBox2.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.ToolStripComboBox2.ForeColor = System.Drawing.Color.Red
-        Me.ToolStripComboBox2.Items.AddRange(New Object() {"Κωδικός  Είδους:", "Βοηθητ.Κλειδί:"})
-        Me.ToolStripComboBox2.Name = "ToolStripComboBox2"
-        Me.ToolStripComboBox2.Size = New System.Drawing.Size(121, 25)
-        Me.ToolStripComboBox2.Text = "Κωδικός  Είδους:"
+        Me.txtBoxNotes.Location = New System.Drawing.Point(503, 34)
+        Me.txtBoxNotes.Multiline = True
+        Me.txtBoxNotes.Name = "txtBoxNotes"
+        Me.txtBoxNotes.Size = New System.Drawing.Size(353, 63)
+        Me.txtBoxNotes.TabIndex = 254
         '
-        'ToolStripSeparator8
-        '
-        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(6, 25)
-        '
-        'TlSTxtMTRL
-        '
-        Me.TlSTxtMTRL.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.TlSTxtMTRL.Name = "TlSTxtMTRL"
-        Me.TlSTxtMTRL.Size = New System.Drawing.Size(100, 25)
-        '
-        'ToolStripSeparator9
-        '
-        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
-        Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 25)
-        '
-        'TlSBtnMTRL
-        '
-        Me.TlSBtnMTRL.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TlSBtnMTRL.Image = CType(resources.GetObject("TlSBtnMTRL.Image"), System.Drawing.Image)
-        Me.TlSBtnMTRL.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TlSBtnMTRL.Name = "TlSBtnMTRL"
-        Me.TlSBtnMTRL.Size = New System.Drawing.Size(23, 22)
-        Me.TlSBtnMTRL.Tag = ""
-        Me.TlSBtnMTRL.Text = "&Open"
-        Me.TlSBtnMTRL.ToolTipText = "Κωδικοί  Κίνησης"
-        '
-        'ToolStrip2
-        '
-        Me.ToolStrip2.Dock = System.Windows.Forms.DockStyle.None
-        Me.ToolStrip2.ImageScalingSize = New System.Drawing.Size(18, 18)
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripComboBox2, Me.ToolStripSeparator8, Me.TlSTxtMTRL, Me.ToolStripSeparator9, Me.TlSBtnMTRL})
-        Me.ToolStrip2.Location = New System.Drawing.Point(36, 28)
-        Me.ToolStrip2.Name = "ToolStrip2"
-        Me.ToolStrip2.Size = New System.Drawing.Size(272, 25)
-        Me.ToolStrip2.TabIndex = 243
-        Me.ToolStrip2.Visible = False
-        '
-        'ddlUsers
-        '
-        Me.ddlUsers.FormattingEnabled = True
-        Me.ddlUsers.Location = New System.Drawing.Point(326, 12)
-        Me.ddlUsers.Name = "ddlUsers"
-        Me.ddlUsers.Size = New System.Drawing.Size(343, 21)
-        Me.ddlUsers.TabIndex = 245
-        '
-        'lblUserName
-        '
-        Me.lblUserName.BackColor = System.Drawing.SystemColors.Control
-        Me.lblUserName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblUserName.Cursor = System.Windows.Forms.Cursors.Default
-        Me.lblUserName.ForeColor = System.Drawing.Color.Blue
-        Me.lblUserName.Location = New System.Drawing.Point(210, 9)
-        Me.lblUserName.Name = "lblUserName"
-        Me.lblUserName.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblUserName.Size = New System.Drawing.Size(110, 23)
-        Me.lblUserName.TabIndex = 244
-        Me.lblUserName.Text = "&User:"
-        '
-        'BtnAddtoSoftone
-        '
-        Me.BtnAddtoSoftone.BackColor = System.Drawing.SystemColors.Control
-        Me.BtnAddtoSoftone.Cursor = System.Windows.Forms.Cursors.Default
-        Me.BtnAddtoSoftone.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnAddtoSoftone.Location = New System.Drawing.Point(675, 12)
-        Me.BtnAddtoSoftone.Name = "BtnAddtoSoftone"
-        Me.BtnAddtoSoftone.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.BtnAddtoSoftone.Size = New System.Drawing.Size(88, 26)
-        Me.BtnAddtoSoftone.TabIndex = 246
-        Me.BtnAddtoSoftone.Text = "AddtoSoftone"
-        Me.BtnAddtoSoftone.UseVisualStyleBackColor = False
-        '
-        'UsernameTextBox
-        '
-        Me.UsernameTextBox.Location = New System.Drawing.Point(326, 35)
-        Me.UsernameTextBox.Name = "UsernameTextBox"
-        Me.UsernameTextBox.ReadOnly = True
-        Me.UsernameTextBox.Size = New System.Drawing.Size(343, 20)
-        Me.UsernameTextBox.TabIndex = 247
-        '
-        'Label1
-        '
-        Me.Label1.BackColor = System.Drawing.SystemColors.Control
-        Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Label1.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label1.ForeColor = System.Drawing.Color.Blue
-        Me.Label1.Location = New System.Drawing.Point(210, 32)
-        Me.Label1.Name = "Label1"
-        Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label1.Size = New System.Drawing.Size(110, 23)
-        Me.Label1.TabIndex = 248
-        Me.Label1.Text = "&Όνομα:"
-        '
-        'S1Applicants
+        'Transport
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1284, 749)
         Me.Controls.Add(Me.SplitContainer1)
-        Me.Name = "S1Applicants"
-        Me.Text = "ΕxpensesMtrl"
+        Me.Name = "Transport"
+        Me.Text = "Transport"
         CType(Me.MasterBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DetailsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.LoanCategoriesBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
@@ -522,6 +486,8 @@ Partial Class Transport
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        Me.ToolStrip6.ResumeLayout(False)
+        Me.ToolStrip6.PerformLayout()
         Me.SplitContainer3.Panel1.ResumeLayout(False)
         Me.SplitContainer3.Panel1.PerformLayout()
         Me.SplitContainer3.Panel2.ResumeLayout(False)
@@ -532,8 +498,6 @@ Partial Class Transport
         Me.BindingNavigatorMaster.ResumeLayout(False)
         Me.BindingNavigatorMaster.PerformLayout()
         CType(Me.DataGridViewSearch, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ToolStrip2.ResumeLayout(False)
-        Me.ToolStrip2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -574,15 +538,11 @@ Partial Class Transport
     Friend WithEvents BindingNavigatorSaveItem As ToolStripButton
     Friend WithEvents DataGridViewSearch As DataGridView
     Friend WithEvents chkBoxIsActive As CheckBox
-    Friend WithEvents ToolStrip2 As ToolStrip
-    Friend WithEvents ToolStripComboBox2 As ToolStripComboBox
-    Friend WithEvents ToolStripSeparator8 As ToolStripSeparator
-    Friend WithEvents TlSTxtMTRL As ToolStripTextBox
-    Friend WithEvents ToolStripSeparator9 As ToolStripSeparator
-    Friend WithEvents TlSBtnMTRL As ToolStripButton
-    Friend WithEvents ddlUsers As ComboBox
-    Public WithEvents lblUserName As Label
-    Public WithEvents BtnAddtoSoftone As Button
-    Friend WithEvents UsernameTextBox As TextBox
-    Public WithEvents Label1 As Label
+    Friend WithEvents ToolStrip6 As ToolStrip
+    Friend WithEvents TlSComboBoxDate As ToolStripComboBox
+    Friend WithEvents LinkLabel1 As LinkLabel
+    Public WithEvents Label_99 As Label
+    Friend WithEvents DateTimePicker2 As DateTimePicker
+    Friend WithEvents DateTimePicker1 As DateTimePicker
+    Friend WithEvents txtBoxNotes As TextBox
 End Class
