@@ -177,13 +177,11 @@ Public Class Transport
         If db.GetChangeSet.Inserts.Count = 0 And db.GetChangeSet.Updates.Count = 0 And db.GetChangeSet.Deletes.Count = 0 Then Exit Function
 
         ' Ask the user if we should save the changes.
-        Select Case MsgBox("Να αποθηκευθούν οι αλλαγές;", MsgBoxStyle.YesNoCancel + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, "") 'MeLabel)
-            Case MsgBoxResult.No
-                ' The data is not safe.
+        Select Case MsgBox("Να αποθηκευθούν οι αλλαγές;", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, "") 'MeLabel)
             Case MsgBoxResult.Yes
                 ' Save the changes.
                 DataSafe = SaveData()
-            Case MsgBoxResult.Cancel
+            Case MsgBoxResult.No
                 ' The user wants to cancel this operation.
                 ' Do not let the program discard the data.
                 If Not (db.GetChangeSet.Inserts.Count = 0 And db.GetChangeSet.Updates.Count = 0 And db.GetChangeSet.Deletes.Count = 0) Then
@@ -362,8 +360,8 @@ Public Class Transport
             myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrival,TruckArrivalTime,EnterforLoad,EnterforLoadTime,LeaveFactory,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy").Split(",")
 
 
-            myArrF = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy").Split(",")
-            myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy").Split(",")
+            myArrF = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
+            myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
 
 
             'Add Bound Columns
@@ -432,23 +430,24 @@ Public Class Transport
                 'Dim item As Revera.ccCTransport = row.DataBoundItem
                 'If Not IsNothing(item) Then
                 Try
-                        For Each colName In {"TruckArrival", "EnterforLoad", "LeaveFactory"}
-                            If Not row.Cells(colName).Value Then
-                                Continue For
-                            End If
-                            Select Case colName
-                                Case "TruckArrival"
-                                    row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.LightBlue
-                                Case "EnterforLoad"
-                                    row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.Orange
-                                Case "LeaveFactory"
-                                    row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.LightGreen
-                            End Select
-                        Next
+                    For Each colName In {"TruckArrival", "EnterforLoad", "LeaveFactory"}
+                        If Not row.Cells(colName).Value Then
+                            Continue For
+                        End If
+                        Select Case colName
+                            Case "TruckArrival"
+                                row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.LightBlue
+                            Case "EnterforLoad"
+                                row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.Orange
+                            Case "LeaveFactory"
+                                row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.LightGreen
+                        End Select
+                        'row.Cells(colName).ReadOnly = True
+                    Next
 
-                    Catch ex As Exception
+                Catch ex As Exception
 
-                    End Try
+                End Try
                 'End If
 
             Next
@@ -479,25 +478,6 @@ Public Class Transport
     Private Sub MasterDataGridView_CellValidating(sender As Object, e As System.Windows.Forms.DataGridViewCellValidatingEventArgs) Handles MasterDataGridView.CellValidating
         Dim s As DataGridView = sender
         Try
-            If s.Columns(e.ColumnIndex).Name = "NAME" Then
-                Dim cellc As DataGridViewCell = s.CurrentCell
-                Dim ExpccCUser As String = cellc.EditedFormattedValue
-                If Not cellc.FormattedValue.ToString = ExpccCUser Then
-                    Dim item = s.Rows(e.RowIndex).DataBoundItem
-                    'Dim mtrl As Integer = item.mtrl
-                    Dim id As Integer = item.UFTBL01
-                    Dim UFTBL01 = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251 And f.UFTBL01 = id).FirstOrDefault
-                    If Not IsNothing(UFTBL01) Then
-                        UFTBL01.NAME = ExpccCUser
-                        If db.GetChangeSet.Updates.Count > 0 Then
-                            Me.BindingNavigatorSaveItem.Enabled = True
-                        Else
-                            Me.BindingNavigatorSaveItem.Enabled = False
-                        End If
-                    End If
-                End If
-            End If
-
             Me.txtBoxNotes.Text = ""
             If {"TruckArrival", "EnterforLoad", "LeaveFactory"}.Contains(s.Columns(e.ColumnIndex).Name) Then
                 Dim cellc As DataGridViewCheckBoxCell = s.CurrentCell
@@ -508,35 +488,61 @@ Public Class Transport
 
                 If Not cellc.FormattedValue = celle Then
                     Me.txtBoxNotes.Text &= vbCrLf & String.Format("Row: {0} Col: {1} ColName: {2} CellValue: {3} CellValueN: {4}", e.RowIndex, e.ColumnIndex, s.Columns(e.ColumnIndex).Name, cellc.FormattedValue, celle)
-                    'If celle Then
-                    '    s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Value = Now
-                    'Else
-                    '    s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Value = Nothing
-                    'End If
+                    Dim item As Revera.ccCTransport = s.Rows(e.RowIndex).DataBoundItem
 
-                    Exit Sub
-                    's.Rows(e.RowIndex).Cells(e.ColumnIndex + 1).Value = Nothing
-                    'If ExpccCUser Then
-                    '    s.Rows(e.RowIndex).Cells(e.ColumnIndex + 1).Value = Now
-                    'End If
-                    Exit Sub
-                    Dim item = s.Rows(e.RowIndex).DataBoundItem
+                    If s.Columns(e.ColumnIndex).Name = "LeaveFactory" Then
+                        If (item.TruckArrival Is Nothing OrElse Not item.TruckArrival) Or (item.EnterforLoad Is Nothing OrElse Not item.EnterforLoad) Then
+                            MsgBox("Προσοχή !!! Λάθος καταχώρηση.", MsgBoxStyle.Critical, "MasterDataGridView_CellValidating")
+                            cellc.EditingCellFormattedValue = False
+                            Exit Sub
+                        End If
+                    End If
+                    If s.Columns(e.ColumnIndex).Name = "EnterforLoad" Then
+                        If (item.TruckArrival Is Nothing OrElse Not item.TruckArrival) Then
+                            MsgBox("Προσοχή !!! Λάθος καταχώρηση.", MsgBoxStyle.Critical, "MasterDataGridView_CellValidating")
+                            cellc.EditingCellFormattedValue = False
+                            Exit Sub
+                        End If
+                    End If
+
                     'Dim mtrl As Integer = item.mtrl
-                    Dim id As Integer = item.UFTBL01
-                    Dim UFTBL01 = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251 And f.UFTBL01 = id).FirstOrDefault
-                    If Not IsNothing(UFTBL01) Then
-                        Dim celln As DataGridViewCheckBoxCell = s.Rows(e.RowIndex).Cells("ISACTIVE")
-
-                        'If celln Then
-                        '    UFTBL01.ISACTIVE = 1
-                        '    celln.Value = 1
-                        'Else
-                        '    UFTBL01.ISACTIVE = 0
-                        '    celln.Value = 0
-                        'End If
+                    Dim id As Integer = item.ccCTransport
+                    Dim ct = db.ccCTransports.Where(Function(f) f.COMPANY = item.COMPANY And f.ccCTransport = id).FirstOrDefault
+                    If Not IsNothing(ct) Then
+                        If celle Then
+                            ct.GetType().GetProperty(s.Columns(e.ColumnIndex).Name).SetValue(ct, celle, Nothing)
+                            ct.GetType().GetProperty(s.Columns(e.ColumnIndex).Name & "Time").SetValue(ct, Now, Nothing)
+                        Else
+                            ct.GetType().GetProperty(s.Columns(e.ColumnIndex).Name).SetValue(ct, Nothing, Nothing)
+                            ct.GetType().GetProperty(s.Columns(e.ColumnIndex).Name & "Time").SetValue(ct, Nothing, Nothing)
+                        End If
 
                         If db.GetChangeSet.Updates.Count > 0 Then
-                            Me.BindingNavigatorSaveItem.Enabled = True
+                            'Me.BindingNavigatorSaveItem.Enabled = True
+                            If DataSafe() Then
+                                If celle Then
+                                    Select Case s.Columns(e.ColumnIndex).Name
+                                        Case "TruckArrival"
+                                            s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name).Style.BackColor = System.Drawing.Color.LightBlue
+                                            s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Style.BackColor = System.Drawing.Color.LightBlue
+                                            s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name).ReadOnly = True
+                                        Case "EnterforLoad"
+                                            s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name).Style.BackColor = System.Drawing.Color.Orange
+                                            s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Style.BackColor = System.Drawing.Color.Orange
+                                        Case "LeaveFactory"
+                                            s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name).Style.BackColor = System.Drawing.Color.LightGreen
+                                            s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Style.BackColor = System.Drawing.Color.LightGreen
+                                    End Select
+                                    'If s.Rows(e.RowIndex).Cells("TruckArrival").Value And s.Rows(e.RowIndex).Cells("EnterforLoad").Value And s.Rows(e.RowIndex).Cells("LeaveFactory").Value Then
+                                    '    s.Rows.Remove(s.Rows(e.RowIndex))
+                                    'End If
+                                Else
+                                    s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name).Style.BackColor = Nothing
+                                    s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Style.BackColor = Nothing
+                                End If
+                            End If
+                            'Cmd_Select()
+                            'Me.BindingNavigatorSaveItem.PerformClick()
                         Else
                             Me.BindingNavigatorSaveItem.Enabled = False
                         End If
@@ -544,73 +550,7 @@ Public Class Transport
                 End If
             End If
 
-            If {"TruckArrivalTime", "EnterforLoadTime", "LeaveFactoryTime"}.Contains(s.Columns(e.ColumnIndex).Name) Then
-                Dim cellc As DataGridViewCell = s.CurrentCell
-                Dim ExpccCUser As String = cellc.EditedFormattedValue
-                'If s.Rows(e.RowIndex).Cells(e.ColumnIndex - 1).Value Then
-                '    cellc.Value = Now
-                'Else
-                '    cellc.Value = Nothing
-                'End If
-                'If Not cellc.FormattedValue.ToString = ExpccCUser Then
-                '    'Exit Sub
-                '    's.Rows(e.RowIndex).Cells(e.ColumnIndex + 1).Value = Nothing
-                '    If ExpccCUser Then
-                '        'cellc.Value = Now
-                '    End If
-                'End If
-            End If
 
-
-            If s.Columns(e.ColumnIndex).Name = "ExpccCUser" Then
-                Exit Sub
-                Dim cellc As DataGridViewCell = s.CurrentCell
-                Dim ExpccCUser As String = cellc.EditedFormattedValue
-                Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("Search_User")
-                If celln.Value = "" AndAlso ExpccCUser = String.Empty Then
-                    Exit Sub
-                End If
-                If Not cellc.FormattedValue.ToString = ExpccCUser Then
-
-                End If
-            End If
-
-            If s.Columns(e.ColumnIndex).Name = "Search_User" Then
-                Dim cellc As DataGridViewComboBoxCell = s.CurrentCell
-                Dim Search_User As String = cellc.EditedFormattedValue
-
-                If Not cellc.FormattedValue.ToString = Search_User Then
-                    cellc.Value = cellc.Items.Cast(Of GmIdentityUser).Where(Function(f) f.Name = Search_User).FirstOrDefault.UserName
-                    Dim cellExpccCUser As DataGridViewCell = s.Rows(e.RowIndex).Cells("ExpccCUser")
-                    cellExpccCUser.Value = cellc.Value 'Search_User
-
-                    Dim item As Revera.ccCS1Applicant = s.Rows(e.RowIndex).DataBoundItem
-                    'Dim mtrl As Integer = item.mtrl
-                    Dim cccMultiCompData As Integer = item.UFTBL01
-                    Dim UFTBL01 = db.UFTBL01s.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251 And f.UFTBL01 = cccMultiCompData).FirstOrDefault
-                    If Not IsNothing(UFTBL01) Then
-                        If Search_User = "<Επιλέγξτε>" Then
-                            UFTBL01.ccCUser = Nothing
-                        Else
-                            UFTBL01.ccCUser = cellExpccCUser.Value
-                            UFTBL01.NAME = Search_User
-                            Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("NAME")
-                            celln.Value = Search_User
-                        End If
-
-                        'mtr.UPDDATE = Now()
-                        'Dim cuser = 99 's1Conn.ConnectionInfo.UserId
-                        'mtr.UPDUSER = cuser
-
-                        If db.GetChangeSet.Updates.Count > 0 Then
-                            Me.BindingNavigatorSaveItem.Enabled = True
-                        Else
-                            Me.BindingNavigatorSaveItem.Enabled = False
-                        End If
-
-                    End If
-                End If
-            End If
 
         Catch ex As Exception
 
@@ -621,7 +561,8 @@ Public Class Transport
         'If s.Columns(e.ColumnIndex).Name = "ExpccCUser" Then
         If {"TruckArrival", "EnterforLoad", "LeaveFactory"}.Contains(s.Columns(e.ColumnIndex).Name) Then
             Dim cellc As DataGridViewCheckBoxCell = s.CurrentCell
-
+            'Cmd_Select()
+            Exit Sub
             If cellc.Value Then
                 s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Value = Now
                 Select Case s.Columns(e.ColumnIndex).Name
@@ -641,34 +582,34 @@ Public Class Transport
             Exit Sub
 
             Dim ExpccCUser As String = cellc.EditedFormattedValue
-                Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("Search_User")
-                If celln.Value = "0" AndAlso ExpccCUser = String.Empty Then
-                    Exit Sub
-                End If
-
-                Dim ml = s.Tag 'Nothing
-
-                If Not IsNothing(ml) AndAlso ml.Count = 0 Then
-                    MsgBox("Λάθος Κωδικός", MsgBoxStyle.Critical, "Error")
-                    Dim item = s.Rows(cellc.RowIndex).DataBoundItem
-                    Dim chItem = db.GetChangeSet.Updates.Where(Function(f) f.cccMultiCompData = item.cccMultiCompData).FirstOrDefault
-                    If Not IsNothing(chItem) Then
-                        db.Refresh(RefreshMode.OverwriteCurrentValues, chItem)
-                    End If
-
-                    cellc.Value = Nothing
-                    celln.Value = 0
-
-                    If db.GetChangeSet.Updates.Count > 0 Then
-                        Me.BindingNavigatorSaveItem.Enabled = True
-                    Else
-                        Me.BindingNavigatorSaveItem.Enabled = False
-                    End If
-
-                End If
+            Dim celln As DataGridViewCell = s.Rows(e.RowIndex).Cells("Search_User")
+            If celln.Value = "0" AndAlso ExpccCUser = String.Empty Then
+                Exit Sub
             End If
 
-            s.Tag = Nothing
+            Dim ml = s.Tag 'Nothing
+
+            If Not IsNothing(ml) AndAlso ml.Count = 0 Then
+                MsgBox("Λάθος Κωδικός", MsgBoxStyle.Critical, "Error")
+                Dim item = s.Rows(cellc.RowIndex).DataBoundItem
+                Dim chItem = db.GetChangeSet.Updates.Where(Function(f) f.cccMultiCompData = item.cccMultiCompData).FirstOrDefault
+                If Not IsNothing(chItem) Then
+                    db.Refresh(RefreshMode.OverwriteCurrentValues, chItem)
+                End If
+
+                cellc.Value = Nothing
+                celln.Value = 0
+
+                If db.GetChangeSet.Updates.Count > 0 Then
+                    Me.BindingNavigatorSaveItem.Enabled = True
+                Else
+                    Me.BindingNavigatorSaveItem.Enabled = False
+                End If
+
+            End If
+        End If
+
+        s.Tag = Nothing
 
     End Sub
     Private Sub DataGridView1_DataError(ByVal sender As Object, ByVal e As DataGridViewDataErrorEventArgs) Handles MasterDataGridView.DataError
@@ -857,7 +798,7 @@ Public Class Transport
 
     Private Sub BindingNavigatorSaveItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorSaveItem.Click
         If Me.DataSafe() Then
-            Me.cmdSelect.PerformClick()
+            'Me.cmdSelect.PerformClick()
         End If
     End Sub
 
