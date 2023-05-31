@@ -503,6 +503,11 @@ Public Class Transport
                             cellc.EditingCellFormattedValue = False
                             Exit Sub
                         End If
+                        If (item.LeaveFactory IsNot Nothing AndAlso item.LeaveFactory) Then
+                            MsgBox("Προσοχή !!! Λάθος καταχώρηση.", MsgBoxStyle.Critical, "MasterDataGridView_CellValidating")
+                            cellc.EditingCellFormattedValue = True
+                            Exit Sub
+                        End If
                     End If
 
                     'Dim mtrl As Integer = item.mtrl
@@ -532,6 +537,7 @@ Public Class Transport
                                         Case "LeaveFactory"
                                             s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name).Style.BackColor = System.Drawing.Color.LightGreen
                                             s.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name & "Time").Style.BackColor = System.Drawing.Color.LightGreen
+                                            's.Rows(e.RowIndex).Cells(s.Columns(e.ColumnIndex).Name).ReadOnly = True
                                     End Select
                                     'If s.Rows(e.RowIndex).Cells("TruckArrival").Value And s.Rows(e.RowIndex).Cells("EnterforLoad").Value And s.Rows(e.RowIndex).Cells("LeaveFactory").Value Then
                                     '    s.Rows.Remove(s.Rows(e.RowIndex))
