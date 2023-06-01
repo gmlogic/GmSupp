@@ -258,7 +258,7 @@ Public Class Transport
     End Function
 #End Region
 #Region "96-MasterDataGridView"
-    Dim editableFields_MasterDataGridView() As String = {"TruckArrival", "EnterforLoad", "LeaveFactory"}
+    Dim editableFields_MasterDataGridView() As String = {"PickDoc", "TruckArrival", "EnterforLoad", "LeaveFactory", "Comments"}
     Private uss As List(Of GmIdentityUser)
 
     Private Sub MasterDataGridView_CurrentCellDirtyStateChanged(sender As Object, e As System.EventArgs) Handles MasterDataGridView.CurrentCellDirtyStateChanged
@@ -360,8 +360,8 @@ Public Class Transport
             myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrival,TruckArrivalTime,EnterforLoad,EnterforLoadTime,LeaveFactory,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy").Split(",")
 
 
-            myArrF = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
-            myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
+            myArrF = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,PickDoc,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,Comments,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
+            myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,PickDoc,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,Comments,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
 
 
             'Add Bound Columns
@@ -385,7 +385,7 @@ Public Class Transport
 
 
             Dim HideCols = ("TruckArrival,EnterforLoad,LeaveFactory").Split(",")
-            Dim i = 7
+            Dim i = 8
             For Each hc In HideCols
                 Dim col As New DataGridViewCheckBoxColumn '= Me.MasterDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = hc).FirstOrDefault
                 With col
@@ -416,33 +416,39 @@ Public Class Transport
 
             'Fill Unbound Collumns
             For Each row As DataGridViewRow In MasterDataGridView.Rows
-                'Dim dll As DataGridViewComboBoxCell = row.Cells("Κωδ.Λογιστικής")
-
-                'Dim MTRL As Integer = row.Cells("MTRL").Value
-
-                'Dim m As PFIC.MTRL = db1.MTRLs.Where(Function(f) f.SODTYPE = 53 And f.CODE = "").FirstOrDefault
-
-                'If Not IsNothing(m) Then
-                '    dll.Items.Add(m)
-                '    dll.Value = MTRL
-                'End If
 
                 'Dim item As Revera.ccCTransport = row.DataBoundItem
                 'If Not IsNothing(item) Then
                 Try
-                    For Each colName In {"TruckArrival", "EnterforLoad", "LeaveFactory"}
-                        If Not row.Cells(colName).Value Then
-                            Continue For
+                    For Each coln As DataGridViewColumn In Me.MasterDataGridView.Columns
+                        Dim colName = coln.DataPropertyName
+
+                        If {"TruckArrival", "EnterforLoad", "LeaveFactory"}.Contains(colName) Then
+                            If row.Cells(colName).Value Then
+                                Select Case colName
+                                    Case "TruckArrival"
+                                        row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.LightBlue
+                                    Case "EnterforLoad"
+                                        row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.Orange
+                                    Case "LeaveFactory"
+                                        row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.LightGreen
+                                End Select
+                            End If
                         End If
-                        Select Case colName
-                            Case "TruckArrival"
-                                row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.LightBlue
-                            Case "EnterforLoad"
-                                row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.Orange
-                            Case "LeaveFactory"
-                                row.Cells(colName & "Time").Style.BackColor = System.Drawing.Color.LightGreen
-                        End Select
-                        'row.Cells(colName).ReadOnly = True
+
+                        If Not CurUserRole = "Admins" Then
+                            row.Cells(colName).ReadOnly = True
+                            Select Case CurUserRole
+                                Case "Logistics"
+                                    row.Cells("PickDoc").ReadOnly = False
+                                Case "Pili"
+                                    For Each cn In {"TruckArrival", "EnterforLoad", "LeaveFactory"}
+                                        row.Cells(cn).ReadOnly = False
+                                        row.Cells(cn & "Time").ReadOnly = False
+                                    Next
+                                    row.Cells("Comments").ReadOnly = False
+                            End Select
+                        End If
                     Next
 
                 Catch ex As Exception

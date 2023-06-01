@@ -488,18 +488,19 @@ Public Class GenMenu
             Me.ΑποθήκηToolStripMenuItem.Visible = True
             Me.UsersToolStripMenuItem.Visible = True
             Me.S1ApplicantsToolStripMenuItem.Visible = True
-            Me.TransportToolStripMenuItem.Visible = True
+            Me.TransportsToolStripMenuItem.Visible = True
             Exit Sub
         End If
-        If CompName.Replace("SERTORIUS", "REVERA") = "REVERA" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου"}.Contains(curUserRole)) Then
+        If CompName.Replace("SERTORIUS", "REVERA") = "REVERA" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole)) Then
             Me.ΑποθήκηToolStripMenuItem.Visible = True
+            Me.TransportsToolStripMenuItem.Visible = True
             Me.UsersToolStripMenuItem.Visible = False
             Me.ΕκτύπωσηΕτικετώνBarcodeToolStripMenuItem.Visible = True
             Me.BarCodeGeneratorToolStripMenuItem.Visible = False
             Me.ΔημιουργίαToolStripMenuItem.Visible = False
             Me.ΔιαγραφήToolStripMenuItem.Visible = False
             Me.S1ApplicantsToolStripMenuItem.Visible = False
-            Me.TransportToolStripMenuItem.Visible = False
+            Me.TransportsToolStripMenuItem.Visible = False
             SetDBs(dbs.REVERA)
             Exit Sub
         End If
@@ -792,7 +793,9 @@ Public Class GenMenu
         SettingForms(sender, e, New S1Applicants, Me.S1ApplicantsToolStripMenuItem.Text, 0, True)
     End Sub
 
-    Private Sub TransportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TransportToolStripMenuItem.Click
-        SettingForms(sender, e, New Transport, Me.TransportToolStripMenuItem.Text, 0, True)
+    Private Sub TransportsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TransportsToolStripMenuItem.Click
+        SettingForms(sender, e, New Transport, Me.TransportsToolStripMenuItem.Text, 0, True)
     End Sub
+
+
 End Class

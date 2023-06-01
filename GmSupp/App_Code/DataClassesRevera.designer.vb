@@ -23959,6 +23959,8 @@ Namespace Revera
 		
 		Private _TruckArrival As System.Nullable(Of Boolean)
 		
+		Private _PickDoc As String
+		
 		Private _TruckArrivalTime As System.Nullable(Of Date)
 		
 		Private _EnterforLoad As System.Nullable(Of Boolean)
@@ -23968,6 +23970,8 @@ Namespace Revera
 		Private _LeaveFactory As System.Nullable(Of Boolean)
 		
 		Private _LeaveFactoryTime As System.Nullable(Of Date)
+		
+		Private _Comments As String
 		
 		Private _createdOn As System.Nullable(Of Date)
 		
@@ -24048,6 +24052,10 @@ Namespace Revera
     End Sub
     Partial Private Sub OnTruckArrivalChanged()
     End Sub
+    Partial Private Sub OnPickDocChanging(value As String)
+    End Sub
+    Partial Private Sub OnPickDocChanged()
+    End Sub
     Partial Private Sub OnTruckArrivalTimeChanging(value As System.Nullable(Of Date))
     End Sub
     Partial Private Sub OnTruckArrivalTimeChanged()
@@ -24067,6 +24075,10 @@ Namespace Revera
     Partial Private Sub OnLeaveFactoryTimeChanging(value As System.Nullable(Of Date))
     End Sub
     Partial Private Sub OnLeaveFactoryTimeChanged()
+    End Sub
+    Partial Private Sub OnCommentsChanging(value As String)
+    End Sub
+    Partial Private Sub OnCommentsChanged()
     End Sub
     Partial Private Sub OncreatedOnChanging(value As System.Nullable(Of Date))
     End Sub
@@ -24159,7 +24171,7 @@ Namespace Revera
 			End Set
 		End Property
 		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINCODE", DbType:="NVarChar(50) NOT NULL", CanBeNull:=false)>  _
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINCODE", DbType:="NVarChar(30) NOT NULL", CanBeNull:=false)>  _
 		Public Property FINCODE() As String
 			Get
 				Return Me._FINCODE
@@ -24353,6 +24365,22 @@ Namespace Revera
 			End Set
 		End Property
 		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PickDoc", DbType:="NVarChar(50)")>  _
+		Public Property PickDoc() As String
+			Get
+				Return Me._PickDoc
+			End Get
+			Set
+				If (String.Equals(Me._PickDoc, value) = false) Then
+					Me.OnPickDocChanging(value)
+					Me.SendPropertyChanging
+					Me._PickDoc = value
+					Me.SendPropertyChanged("PickDoc")
+					Me.OnPickDocChanged
+				End If
+			End Set
+		End Property
+		
 		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TruckArrivalTime", DbType:="DateTime")>  _
 		Public Property TruckArrivalTime() As System.Nullable(Of Date)
 			Get
@@ -24429,6 +24457,22 @@ Namespace Revera
 					Me._LeaveFactoryTime = value
 					Me.SendPropertyChanged("LeaveFactoryTime")
 					Me.OnLeaveFactoryTimeChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_Comments", DbType:="NVarChar(50)")>  _
+		Public Property Comments() As String
+			Get
+				Return Me._Comments
+			End Get
+			Set
+				If (String.Equals(Me._Comments, value) = false) Then
+					Me.OnCommentsChanging(value)
+					Me.SendPropertyChanging
+					Me._Comments = value
+					Me.SendPropertyChanged("Comments")
+					Me.OnCommentsChanged
 				End If
 			End Set
 		End Property
