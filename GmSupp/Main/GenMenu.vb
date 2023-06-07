@@ -113,8 +113,8 @@ Public Class GenMenu
             loginf.Text = "Εισαγωγή στοιχείων"
             'ch.keskesiadis radrad
             If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
-                loginf.UsernameTextBox.Text = "ch.keskesiadis" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
-                loginf.PasswordTextBox.Text = "radrad" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
+                loginf.UsernameTextBox.Text = "t.andreoglou" '"ch.keskesiadis" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
+                loginf.PasswordTextBox.Text = "An@Ti6912" '"radrad" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
                 'loginf.UsernameTextBox.Text = "gmlogic" '"d.makaridis" '
                 'loginf.PasswordTextBox.Text = "1mgergm++" '"Ma@Di55489" '
                 'If loginf.UsernameTextBox.Text = "ch.keskesiadis" Then
@@ -448,6 +448,7 @@ Public Class GenMenu
                 '    End If
                 'End If
                 CurUserRole = UserManager.GetRoles(us.Id).FirstOrDefault
+                Dim gg = UserManager.GetRoles(us.Id).ToList
             End If
 
 
@@ -493,14 +494,17 @@ Public Class GenMenu
         End If
         If CompName.Replace("SERTORIUS", "REVERA") = "REVERA" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole)) Then
             Me.ΑποθήκηToolStripMenuItem.Visible = True
-            Me.TransportsToolStripMenuItem.Visible = True
+            Me.TransportsToolStripMenuItem.Visible = False
+            If {"Logistics", "Managers", "Pili"}.Contains(curUserRole) Then
+                Me.TransportsToolStripMenuItem.Visible = True
+            End If
+
             Me.UsersToolStripMenuItem.Visible = False
             Me.ΕκτύπωσηΕτικετώνBarcodeToolStripMenuItem.Visible = True
             Me.BarCodeGeneratorToolStripMenuItem.Visible = False
             Me.ΔημιουργίαToolStripMenuItem.Visible = False
             Me.ΔιαγραφήToolStripMenuItem.Visible = False
             Me.S1ApplicantsToolStripMenuItem.Visible = False
-            Me.TransportsToolStripMenuItem.Visible = False
             SetDBs(dbs.REVERA)
             Exit Sub
         End If
