@@ -494,22 +494,25 @@ Public Class GenMenu
         End If
         If CompName.Replace("SERTORIUS", "REVERA") = "REVERA" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole)) Then
             Me.ΑποθήκηToolStripMenuItem.Visible = True
+            If {"Managers"}.Contains(curUserRole) Then
+                Me.ΑποθήκηToolStripMenuItem.Visible = False
+            End If
             Me.TransportsToolStripMenuItem.Visible = False
-            If {"Logistics", "Managers", "Pili"}.Contains(curUserRole) Then
-                Me.TransportsToolStripMenuItem.Visible = True
+                If {"Logistics", "Managers", "Pili"}.Contains(curUserRole) Then
+                    Me.TransportsToolStripMenuItem.Visible = True
+                End If
+
+                Me.UsersToolStripMenuItem.Visible = False
+                Me.ΕκτύπωσηΕτικετώνBarcodeToolStripMenuItem.Visible = True
+                Me.BarCodeGeneratorToolStripMenuItem.Visible = False
+                Me.ΔημιουργίαToolStripMenuItem.Visible = False
+                Me.ΔιαγραφήToolStripMenuItem.Visible = False
+                Me.S1ApplicantsToolStripMenuItem.Visible = False
+                SetDBs(dbs.REVERA)
+                Exit Sub
             End If
 
-            Me.UsersToolStripMenuItem.Visible = False
-            Me.ΕκτύπωσηΕτικετώνBarcodeToolStripMenuItem.Visible = True
-            Me.BarCodeGeneratorToolStripMenuItem.Visible = False
-            Me.ΔημιουργίαToolStripMenuItem.Visible = False
-            Me.ΔιαγραφήToolStripMenuItem.Visible = False
-            Me.S1ApplicantsToolStripMenuItem.Visible = False
-            SetDBs(dbs.REVERA)
-            Exit Sub
-        End If
-
-        If curUser = "gmlogic" Then
+            If curUser = "gmlogic" Then
             'SetDBs(dbs.Test_Hglp)
             For Each mn As ToolStripItem In Me.MenuStrip.Items
                 mn.Visible = True
