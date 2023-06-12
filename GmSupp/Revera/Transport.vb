@@ -384,9 +384,9 @@ Public Class Transport
             'Me.MasterDataGridView.Columns.Add(ColumnCheckBox)
 
 
-            Dim HideCols = ("TruckArrival,EnterforLoad,LeaveFactory").Split(",")
+            Dim SetCols = ("TruckArrival,EnterforLoad,LeaveFactory").Split(",")
             Dim i = 8
-            For Each hc In HideCols
+            For Each hc In SetCols
                 Dim col As New DataGridViewCheckBoxColumn '= Me.MasterDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = hc).FirstOrDefault
                 With col
                     .DataPropertyName = hc
@@ -410,6 +410,17 @@ Public Class Transport
             'emptyMTRL = {New Panel.MTRL With {.CODE = "<Select a product>", .MTRL = 0}}
             'Dim mln As List(Of Panel.MTRL) = (From Empty In emptyMTRL).Union(
             '                                (From m1 In ml Order By m1.CODE)).ToList
+
+
+            Dim HideCols = ("createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
+            If Not CurUserRole = "Admins" Then
+                For Each hc In HideCols
+                    Dim col = MasterDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = hc).FirstOrDefault
+                    If col IsNot Nothing Then
+                        col.Visible = False
+                    End If
+                Next
+            End If
 
 
 

@@ -498,21 +498,21 @@ Public Class GenMenu
                 Me.ΑποθήκηToolStripMenuItem.Visible = False
             End If
             Me.TransportsToolStripMenuItem.Visible = False
-                If {"Logistics", "Managers", "Pili"}.Contains(curUserRole) Then
-                    Me.TransportsToolStripMenuItem.Visible = True
-                End If
-
-                Me.UsersToolStripMenuItem.Visible = False
-                Me.ΕκτύπωσηΕτικετώνBarcodeToolStripMenuItem.Visible = True
-                Me.BarCodeGeneratorToolStripMenuItem.Visible = False
-                Me.ΔημιουργίαToolStripMenuItem.Visible = False
-                Me.ΔιαγραφήToolStripMenuItem.Visible = False
-                Me.S1ApplicantsToolStripMenuItem.Visible = False
-                SetDBs(dbs.REVERA)
-                Exit Sub
+            If {"Logistics", "Managers", "Pili"}.Contains(curUserRole) Then
+                Me.TransportsToolStripMenuItem.Visible = True
             End If
 
-            If curUser = "gmlogic" Then
+            Me.UsersToolStripMenuItem.Visible = False
+            Me.ΕκτύπωσηΕτικετώνBarcodeToolStripMenuItem.Visible = True
+            Me.BarCodeGeneratorToolStripMenuItem.Visible = False
+            Me.ΔημιουργίαToolStripMenuItem.Visible = False
+            Me.ΔιαγραφήToolStripMenuItem.Visible = False
+            Me.S1ApplicantsToolStripMenuItem.Visible = False
+            SetDBs(dbs.REVERA)
+            Exit Sub
+        End If
+
+        If curUser = "gmlogic" Then
             'SetDBs(dbs.Test_Hglp)
             For Each mn As ToolStripItem In Me.MenuStrip.Items
                 mn.Visible = True
