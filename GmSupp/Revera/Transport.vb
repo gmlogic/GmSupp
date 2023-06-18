@@ -356,10 +356,6 @@ Public Class Transport
             Me.MasterDataGridView.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
             'Me.MasterDataGridView.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect
 
-            myArrF = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrival,TruckArrivalTime,EnterforLoad,EnterforLoadTime,LeaveFactory,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy").Split(",")
-            myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,TruckTrailerPlate,TruckArrival,TruckArrivalTime,EnterforLoad,EnterforLoadTime,LeaveFactory,LeaveFactoryTime,createdOn,createdBy,modifiedOn,modifiedBy").Split(",")
-
-
             myArrF = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,PickDoc,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,Comments,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
             myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,PickDoc,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,Comments,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
 

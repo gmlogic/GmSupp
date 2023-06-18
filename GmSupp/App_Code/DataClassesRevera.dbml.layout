@@ -164,7 +164,7 @@
         <classShapeMoniker Id="e5aa21f2-8cf1-439e-a44f-7c402d6847d6" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.59375 : 1.075); (8.59375 : 2.27812375); (8.30208333333333 : 2.27812375 : JumpStart); (8.13541666666667 : 2.27812375 : JumpEnd); (8 : 2.27812375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(8.59375 : 1.075); (8.59375 : 2.27812375); (8 : 2.27812375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataClassesReveraDataContext/FINDOC/FINDOC_MTRDOC" />
       <nodes>
         <classShapeMoniker Id="49fa19cd-3eee-4865-9dca-fecf15f0bdd4" />
@@ -213,10 +213,10 @@
         <classShapeMoniker Id="49fa19cd-3eee-4865-9dca-fecf15f0bdd4" />
       </nodes>
     </associationConnector>
-    <classShape Id="440fbc87-2f51-49e0-9a00-5babf41f87f0" absoluteBounds="1, 5.875, 2, 6.0015283203125">
+    <classShape Id="e136d388-06f9-4ccc-aa36-3257613f6005" absoluteBounds="0.875, 6.125, 2, 5.8092268880208326">
       <DataClassMoniker Name="/DataClassesReveraDataContext/ccCTransport" />
       <nestedChildShapes>
-        <elementListCompartment Id="8c1fe602-c511-46d6-82f4-d33b756d1074" absoluteBounds="1.0150000000000001, 6.335, 1.9700000000000002, 5.4415283203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="2b01c886-4a6d-4ff3-a331-cdbd42d3b65e" absoluteBounds="0.89000000000000012, 6.585, 1.9700000000000002, 5.249226888020833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

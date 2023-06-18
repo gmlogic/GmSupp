@@ -23955,8 +23955,6 @@ Namespace Revera
 		
 		Private _TruckType As String
 		
-		Private _TransportCompany As String
-		
 		Private _TruckArrival As System.Nullable(Of Boolean)
 		
 		Private _PickDoc As String
@@ -24043,10 +24041,6 @@ Namespace Revera
     Partial Private Sub OnTruckTypeChanging(value As String)
     End Sub
     Partial Private Sub OnTruckTypeChanged()
-    End Sub
-    Partial Private Sub OnTransportCompanyChanging(value As String)
-    End Sub
-    Partial Private Sub OnTransportCompanyChanged()
     End Sub
     Partial Private Sub OnTruckArrivalChanging(value As System.Nullable(Of Boolean))
     End Sub
@@ -24301,7 +24295,7 @@ Namespace Revera
 			End Set
 		End Property
 		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_Driver", DbType:="NVarChar(50) NOT NULL", CanBeNull:=false)>  _
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_Driver", DbType:="NVarChar(50)")>  _
 		Public Property Driver() As String
 			Get
 				Return Me._Driver
@@ -24329,22 +24323,6 @@ Namespace Revera
 					Me._TruckType = value
 					Me.SendPropertyChanged("TruckType")
 					Me.OnTruckTypeChanged
-				End If
-			End Set
-		End Property
-		
-		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TransportCompany", DbType:="NVarChar(128) NOT NULL", CanBeNull:=false)>  _
-		Public Property TransportCompany() As String
-			Get
-				Return Me._TransportCompany
-			End Get
-			Set
-				If (String.Equals(Me._TransportCompany, value) = false) Then
-					Me.OnTransportCompanyChanging(value)
-					Me.SendPropertyChanging
-					Me._TransportCompany = value
-					Me.SendPropertyChanged("TransportCompany")
-					Me.OnTransportCompanyChanged
 				End If
 			End Set
 		End Property
