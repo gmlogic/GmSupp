@@ -37,9 +37,9 @@ Public Class Transport
 #End Region
 #Region "03-Load Form"
     Private Sub MyBase_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
-        'TODO: This line of code loads data into the 'CentroDataSet.cccMultiCompData' table. You can move, or remove it, as needed.
-        'DateTimePicker1.Value = CDate("01/" & CTODate.Month & "/" & Year(CTODate))
-        'DateTimePicker2.Value = New Date(CTODate.Year, CTODate.Month, CTODate.Day, 23, 59, 59) 'CDate("01/01/" & Year(CTODate))
+        DateTimePicker1.Value = CDate("01/" & CTODate.Month & "/" & Year(CTODate))
+        DateTimePicker1.Value = CDate("01/01/" & Year(CTODate))
+        DateTimePicker2.Value = New Date(CTODate.Year, CTODate.Month, CTODate.Day, 23, 59, 59)
 
         StartDate = CDate("01/01/" & Year(CTODate))
         Dim conString As New SqlConnectionStringBuilder
@@ -48,8 +48,39 @@ Public Class Transport
         conn = conString.ConnectionString
         GenMenu.TlSSTLabelConnStr.Text = "Data Source=" & conString.DataSource & ";Initial Catalog=" & conString.InitialCatalog & ";User ID=" & conString.UserID
 
+        Me.ddlXCOs.Items.Clear()
 
+        'Test XCOs
+        Dim XCOs As List(Of String)
+        XCOs = System.IO.Directory.GetFiles(S1Path, "*.xco").ToList
+        If XCOs.Count = 0 Then
+            MsgBox("Προσοχή !!!. Δεν υπάρχουν τα ανάλογα XCO", MsgBoxStyle.Critical, "Critical")
+            Me.Close()
+            Exit Sub
+        End If
+        Dim items As New List(Of String)
+        For Each xco In XCOs
+            items.Add(xco.Replace(S1Path, "").Replace(".xco".ToUpper, "").ToUpper)
+        Next
+        'loginf.CompName = items
 
+        'items = items.Where(Function(f) {"REVERA", "SERTORIUS"}.Contains(f)).ToList
+        For Each xco In items
+            Me.ddlXCOs.Items.Add(IO.Path.GetFileNameWithoutExtension(xco))
+        Next
+        If items.Where(Function(f) f = "REVERA").Count = 1 Then
+            Me.ddlXCOs.Items.Add("SERTORIUS")
+        End If
+        If items.Count > 1 Then
+            Me.ddlXCOs.Text = "Επιλέγξτε"
+            Me.ddlXCOs.Items.Insert(0, "Επιλέγξτε")
+        Else
+            Me.ddlXCOs.SelectedIndex = 0
+        End If
+
+        Me.ddlPicks.Enabled = False
+        Me.OK.Enabled = False
+        CurUserRole = "Logistics"
         If CurUser = "gmlogic" Then
             'conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
             'Select Case conString.InitialCatalog
@@ -116,38 +147,15 @@ Public Class Transport
             Me.Cursor = Cursors.NoMove2D
             LoadData()
             db.Log = Console.Out
-            'Μεταφορείς:
-            'Δρομολόγια:
-            'CheckZIP:
-            'Dim q = From cd In db.cccMultiCompDatas Join m In db.MTRLs On cd.mtrl Equals m.MTRL
-            '        Where m.COMPANY = CompanyS
-            '        Select cd.cccMultiCompData, cd.CompanyT, cd.mtrl, m.CODE, m.NAME, cd.ExpccCUser
+            Dim q = db.ccCTransports
 
-            Dim q = db.ccCTransports '.Where(Function(f) f.COMPANY = Company)
+            Dim qwh As IQueryable(Of Revera.ccCTransport) = q
 
-
-
-            Dim qwh As IQueryable(Of Revera.ccCTransport) = q '.Where(Function(f) f.SOSOURCE = 1251) 'And f {1351, 1253}.Contains(f.SOSOURCE) And f.ISCANCEL = 0 And f.APPRV = 1)
+            qwh = qwh.Where(Function(f) f.DeliveryDate >= DateTimePicker1.Value.Date And f.DeliveryDate <= DateTimePicker2.Value)
 
             If Not Me.chkBoxIsActive.Checked Then
-                'WHERE      NOT ((isnull(TruckArrival,0) = 1) AND (isnull(EnterforLoad,0) = 1) AND  (isnull(LeaveFactory,0) = 1))
                 qwh = qwh.Where(Function(f) Not (If(f.TruckArrival, False) = True And If(f.EnterforLoad, False) = True And If(f.LeaveFactory, False) = True))
             End If
-
-            Dim ar = {"ΜΑΚΑΡΙΔΗΣ ΔΗΜΗΤΡΗΣ"} ', "Α. ΚΑΡΑΜΠΑΤΖΑΚΗ", "ΑΘΑΝΑΣΟΥΛΑΣ ΑΘΑΝΑΣΙΟΣ", "ΑΪΔΙΝΙΔΗΣ ΙΩΑΝΝΗΣ", "ΑΛΕΞΑΝΔΡΟΣ ΜΑΓΟΣ", "ΑΝΔΡΕΟΓΛΟΥ ΤΗΛΕΜΑΧΟΣ", "ΑΠΟΣΤΟΛΑΚΑΚΗ ΑΛΙΚΗ", "ΑΠΟΣΤΟΛΙΔΗΣ ΝΕΟΦΥΤΟΣ", "ΒΟΓΙΑΤΖΗΣ ΧΡΗΣΤΟΣ", "ΓΚΟΥΤΖΙΑΜΑΝΗΣ ΠΑΥΛΟΣ", "ΔΗΜΖΑΣ ΑΠΟΣΤΟΛΟΣ", "ΔΗΜΗΤΡΙΑΔΗΣ ΧΡΗΣΤΟΣ", "ΕΛΕΝΗ ΣΠΥΡΙΔΩΝ", "ΕΡΜΙΔΗΣ ΧΡΗΣΤΟΣ", "ΖΑΧΑΡΑΚΗΣ ΣΤΕΡΓΙΟΣ", "ΖΔΡΑΤΣΚΙΔΗΣ ΑΘΑΝΑΣΙΟΣ", "ΖΙΠΙΔΗΣ Δ.", "ΖΟΛΩΤΑΣ ΠΑΝΑΓΙΩΤΗΣ", "ΖΥΓΟΥΛΑΣ Α.", "ΗΛΙΑΔΗΣ ΓΙΩΡΓΟΣ", "ΙΟΡΔΑΝΟΓΛΟΥ ΣΑΒΒΑΣ", "ΚΑΖΟΓΛΟΥ Γ.", "ΚΑΡΑΚΑΣΙΔΗΣ ΑΝΑΣΤΑΣΙΟΣ", "ΚΑΡΑΚΕΙΣΟΓΛΟΥ ΒΑΣΙΛΗΣ", "ΚΑΡΕΛΗΣ ΓΙΩΡΓΟΣ", "ΚΟΛΕΒΕΝΤΗΣ ΔΙΑΜΑΝΤΗΣ", "ΚΟΥΛΟΥΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ", "ΚΟΥΤΛΑΣ ΓΙΑΝΝΗΣ", "ΚΟΥΤΣΑΚΗ ΕΛΕΝΗ", "ΚΩΣΤΙΚΙΑΔΗΣ ΚΥΡΙΑΚΟΣ", "ΛΑΖΑΡΙΔΗΣ ΣΤΑΥΡΟΣ", "ΛΕΥΘΕΡΙΩΤΗΣ Λ.", "ΜΑΤΑΚΑΣ ΚΥΡΙΑΚΟΣ", "ΜΠΕΛΙΤΣΟΣ ΙΩΑΝΝΗΣ", "ΡΕΜΠΑΣ ΔΗΜΗΤΡΗΣ", "ΡΙΖΟΠΟΥΛΟΣ ΝΙΚΟΣ", "ΣΟΥΛΗΣ ΛΑΜΠΡΟΣ", "ΦΟΥΣΙΑΣ ΧΡΗΣΤΟΣ", "ΧΑΪΤΑΣ ΚΟΣΜΑΣ", "ΧΑΤΖΗΣ ΣΠΥΡΟΣ", "ΧΡΥΣΟΧΟΪΔΗΣ ΔΗΜΗΤΡΗΣ"}
-            'qwh = qwh.Where(Function(f) ar.Contains(f.NAME))
-            'qwh = qwh.OrderBy(Function(f) f.NAME)
-
-            'If Not Me.TlSTxtMTRL.Text = "" Then
-            '    qwh = qwh.Where(Function(f) f.CODE Like Me.TlSTxtMTRL.Text)
-            'End If
-
-            'If Me.chkBoxExpccCUser.Checked Then
-            '    qwh = qwh.Where(Function(f) f.ExpccCUser Is Nothing)
-            'End If
-
-
-
 
             Me.MasterBindingSource.DataSource = qwh
             Me.MasterDataGridView.DataSource = Me.MasterBindingSource
@@ -258,7 +266,7 @@ Public Class Transport
     End Function
 #End Region
 #Region "96-MasterDataGridView"
-    Dim editableFields_MasterDataGridView() As String = {"PickDoc", "TruckArrival", "EnterforLoad", "LeaveFactory", "Comments"}
+    Dim editableFields_MasterDataGridView() As String = {"TruckArrival", "EnterforLoad", "LeaveFactory", "Comments"}
     Private uss As List(Of GmIdentityUser)
 
     Private Sub MasterDataGridView_CurrentCellDirtyStateChanged(sender As Object, e As System.EventArgs) Handles MasterDataGridView.CurrentCellDirtyStateChanged
@@ -290,6 +298,9 @@ Public Class Transport
     Private Sub DataGridViewMaster_CellClick(sender As Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles MasterDataGridView.CellClick
         Dim s As DataGridView = sender
         'Check to ensure that the row CheckBox is clicked.
+        If e.ColumnIndex = -1 Then
+            Exit Sub
+        End If
         Dim colName = s.Columns(e.ColumnIndex).Name
         Debug.Print(colName)
         If e.RowIndex >= 0 AndAlso {"TruckArrival", "EnterforLoad", "LeaveFactory"}.Contains(s.Columns(e.ColumnIndex).Name) Then
@@ -356,8 +367,8 @@ Public Class Transport
             Me.MasterDataGridView.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
             'Me.MasterDataGridView.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect
 
-            myArrF = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,PickDoc,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,Comments,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
-            myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,PickDoc,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,Comments,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
+            myArrF = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,PickDoc,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,Comments,findoc,ToCompany,ToFinDoc,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
+            myArrN = ("DeliveryDate,Consignee,StatisticsAgencyNo,Destination,Driver,Fertiliser,Quantity,TruckType,PickDoc,TruckTrailerPlate,TruckArrivalTime,EnterforLoadTime,LeaveFactoryTime,Comments,findoc,ToCompany,ToFinDoc,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
 
 
             'Add Bound Columns
@@ -408,7 +419,7 @@ Public Class Transport
             '                                (From m1 In ml Order By m1.CODE)).ToList
 
 
-            Dim HideCols = ("createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
+            Dim HideCols = ("findoc,ToCompany,ToFinDoc,createdOn,createdBy,modifiedOn,modifiedBy,ccCTransport").Split(",")
             If Not CurUserRole = "Admins" Then
                 For Each hc In HideCols
                     Dim col = MasterDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = hc).FirstOrDefault
@@ -446,8 +457,8 @@ Public Class Transport
                         If Not CurUserRole = "Admins" Then
                             row.Cells(colName).ReadOnly = True
                             Select Case CurUserRole
-                                Case "Logistics"
-                                    row.Cells("PickDoc").ReadOnly = False
+                                'Case "Logistics"
+                                '    row.Cells("PickDoc").ReadOnly = False
                                 Case "Pili"
                                     For Each cn In {"TruckArrival", "EnterforLoad", "LeaveFactory"}
                                         row.Cells(cn).ReadOnly = False
@@ -776,8 +787,103 @@ Public Class Transport
             MsgBox(ex.Message)
         End Try
     End Sub
+    Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        If DateTimePicker1.Value = "01/01/" & Year(CTODate) Then
+            DateTimePicker1.Value = CTODate
+        Else
+            DateTimePicker1.Value = "01/01/" & Year(CTODate)
+        End If
+    End Sub
+    Dim CompId = 0
+    Private Sub ddlXCOs_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlXCOs.SelectedIndexChanged
+        Dim s As ComboBox = sender
+        If Not s.SelectedItem = "Επιλέγξτε" Then
+            'Dim trdr As Integer? = s.SelectedValue
+            'Me.ddlPicks.DropDownStyle = ComboBoxStyle.DropDownList
+
+            Dim emptyFinDoc() As Revera.FINDOC
+            emptyFinDoc = {New Revera.FINDOC With {.FINCODE = "<Επιλέγξτε>", .FINDOC = 0}}
+
+            Dim ConStr = ""
+            Select Case s.SelectedItem
+                Case "SERTORIUS"
+                    ConStr = My.Settings.ReveraConnectionString.ToString
+                    CompId = 5000
+                Case "REVERA"
+                    ConStr = My.Settings.ReveraConnectionString.ToString
+                    CompId = 4000
+                Case "HGLP"
+                    ConStr = My.Settings.HglpConnectionString.ToString
+                    CompId = 1000
+                Case "LK"
+                    ConStr = My.Settings.LKConnectionString.ToString
+                    CompId = 2001
+                Case Else
+                    MsgBox("Λάθος!!! Εταιρεία", MsgBoxStyle.Critical, "OK_Click")
+                    Exit Sub
+            End Select
+
+            Dim fis As New List(Of Revera.FINDOC)
+            Using dbn As New DataClassesReveraDataContext
+                dbn.Connection.ConnectionString = ConStr
+                DFrom = Me.DateTimePicker1.Value.Year & "/" & Me.DateTimePicker1.Value.Month & "/" & Me.DateTimePicker1.Value.Day
+                Dto = Me.DateTimePicker1.Value.Year & "/" & Me.DateTimePicker1.Value.Month & "/" & Me.DateTimePicker1.Value.Day
+                Dim sql = "Select A.FINDOC, A.FINCODE from FINDOC as A where (A.COMPANY = " & CompId & ") AND (A.SOSOURCE = 1351) AND (A.SOREDIR = 0) AND (A.TRNDATE >= " &
+                    String.Format("'{0:yyyyMMdd}'", Me.DateTimePicker1.Value) & ") AND (A.TRNDATE <= " &
+                    String.Format("'{0:yyyyMMdd}'", Me.DateTimePicker2.Value) & ") AND (A.SERIES = 1000) AND (A.SODTYPE = 13) AND (A.FULLYTRANSF IN (0, 2))"
+                'AND (A.TRNDATE >= ""20230101"") AND (A.TRNDATE < ""20230801"")
+                Dim catList = dbn.ExecuteQuery(Of Revera.FINDOC)(sql).ToList
+
+                'fis = (emptyFinDoc.ToList.Union(dbn.FINDOCs.Where(Function(f) (f.COMPANY = CompId) And (f.SOSOURCE = 1351) And (f.SOREDIR = 0) And (f.SERIES = 1000) And (f.SODTYPE = 13) And {0, 2}.Contains(f.FULLYTRANSF)).ToList).ToList)
+                fis = (emptyFinDoc.ToList.Union(catList.ToList).ToList)
+            End Using
+
+            'And (f.TRNDATE >= "20230701") And (f.TRNDATE < "20230801")
+            Me.ddlPicks.DisplayMember = "FINCODE"
+            Me.ddlPicks.ValueMember = "FINDOC"
+            Me.ddlPicks.DataSource = fis
+            Me.ddlPicks.Enabled = True
+            Me.OK.Enabled = True
+        Else
+            Me.ddlPicks.Enabled = False
+            Me.OK.Enabled = False
+        End If
+    End Sub
+    Private Sub OK_Click(sender As Object, e As EventArgs) Handles OK.Click
+        If Me.ddlXCOs.SelectedItem = "Επιλέγξτε" Or Me.ddlPicks.SelectedValue = 0 Or Me.MasterDataGridView.SelectedRows.Count = 0 Then
+            MsgBox("Λάθος!!! Επιλέξτε PICK ή Γραμμές για ενημέρωση με PICK", MsgBoxStyle.Critical, "OK_Click")
+            Exit Sub
+        End If
+        If Me.MasterDataGridView.SelectedRows.Count > 0 Then
+            Dim DrSel As DataGridViewSelectedRowCollection = Me.MasterDataGridView.SelectedRows
+            For Each ds As DataGridViewRow In DrSel
+                Try
 
 
+                    'ds.Cells("ToCompany").Value = CompId
+                    ds.Cells("ToFinDoc").Value = Me.ddlPicks.SelectedValue
+                    ds.Cells("PickDoc").Value = Me.ddlPicks.Text
+                Catch ex As Exception
+
+                End Try
+
+                'as Revera.ccCTransport
+                'If Not ds.Cells("Check").Value = check Then
+                '    ds.Cells("Check").Value = check
+                'End If
+            Next
+            'For i As Integer = 0 To DrSel.Count - 1
+            '    m_DataSet.Tables(MasterTableName).DefaultView(DrSel(i).Index).Item("Check") = True
+            'Next
+        Else
+            'For Each ds As DataGridViewRow In Me.MasterDataGridView.Rows
+            '    ds.Cells("Check").Value = check
+            'Next
+            'For i As Integer = 0 To m_DataSet.Tables(MasterTableName).DefaultView.Count - 1
+            '    m_DataSet.Tables(MasterTableName).DefaultView(i).Item("Check") = True
+            'Next
+        End If
+    End Sub
 #End Region
 #Region "99-Start-GetData"
     Public Sub New()
@@ -855,6 +961,7 @@ Public Class Transport
         Next
         Return dt
     End Function
+
 
 
 

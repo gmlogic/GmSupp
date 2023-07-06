@@ -23957,6 +23957,10 @@ Namespace Revera
 		
 		Private _TruckArrival As System.Nullable(Of Boolean)
 		
+		Private _ToCompany As System.Nullable(Of Short)
+		
+		Private _ToFinDoc As System.Nullable(Of Integer)
+		
 		Private _PickDoc As String
 		
 		Private _TruckArrivalTime As System.Nullable(Of Date)
@@ -24045,6 +24049,14 @@ Namespace Revera
     Partial Private Sub OnTruckArrivalChanging(value As System.Nullable(Of Boolean))
     End Sub
     Partial Private Sub OnTruckArrivalChanged()
+    End Sub
+    Partial Private Sub OnToCompanyChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnToCompanyChanged()
+    End Sub
+    Partial Private Sub OnToFinDocChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnToFinDocChanged()
     End Sub
     Partial Private Sub OnPickDocChanging(value As String)
     End Sub
@@ -24339,6 +24351,38 @@ Namespace Revera
 					Me._TruckArrival = value
 					Me.SendPropertyChanged("TruckArrival")
 					Me.OnTruckArrivalChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ToCompany", DbType:="SmallInt")>  _
+		Public Property ToCompany() As System.Nullable(Of Short)
+			Get
+				Return Me._ToCompany
+			End Get
+			Set
+				If (Me._ToCompany.Equals(value) = false) Then
+					Me.OnToCompanyChanging(value)
+					Me.SendPropertyChanging
+					Me._ToCompany = value
+					Me.SendPropertyChanged("ToCompany")
+					Me.OnToCompanyChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ToFinDoc", DbType:="Int")>  _
+		Public Property ToFinDoc() As System.Nullable(Of Integer)
+			Get
+				Return Me._ToFinDoc
+			End Get
+			Set
+				If (Me._ToFinDoc.Equals(value) = false) Then
+					Me.OnToFinDocChanging(value)
+					Me.SendPropertyChanging
+					Me._ToFinDoc = value
+					Me.SendPropertyChanged("ToFinDoc")
+					Me.OnToFinDocChanged
 				End If
 			End Set
 		End Property

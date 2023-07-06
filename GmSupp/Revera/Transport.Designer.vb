@@ -41,6 +41,12 @@ Partial Class Transport
         Me.SelectLoanCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.OK = New System.Windows.Forms.Button()
+        Me.ddlPicks = New System.Windows.Forms.ComboBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.ddlXCOs = New System.Windows.Forms.ComboBox()
+        Me.lblTrnDate = New System.Windows.Forms.Label()
+        Me.txtBoxNotes = New System.Windows.Forms.TextBox()
         Me.ToolStrip6 = New System.Windows.Forms.ToolStrip()
         Me.TlSComboBoxDate = New System.Windows.Forms.ToolStripComboBox()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
@@ -66,7 +72,6 @@ Partial Class Transport
         Me.toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.BindingNavigatorSaveItem = New System.Windows.Forms.ToolStripButton()
         Me.DataGridViewSearch = New System.Windows.Forms.DataGridView()
-        Me.txtBoxNotes = New System.Windows.Forms.TextBox()
         CType(Me.MasterBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DetailsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.LoanCategoriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -190,6 +195,11 @@ Partial Class Transport
         'SplitContainer1.Panel1
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
+        Me.SplitContainer1.Panel1.Controls.Add(Me.OK)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.ddlPicks)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label1)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.ddlXCOs)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblTrnDate)
         Me.SplitContainer1.Panel1.Controls.Add(Me.txtBoxNotes)
         Me.SplitContainer1.Panel1.Controls.Add(Me.ToolStrip6)
         Me.SplitContainer1.Panel1.Controls.Add(Me.LinkLabel1)
@@ -207,6 +217,62 @@ Partial Class Transport
         Me.SplitContainer1.Size = New System.Drawing.Size(1284, 749)
         Me.SplitContainer1.SplitterDistance = 129
         Me.SplitContainer1.TabIndex = 10
+        '
+        'OK
+        '
+        Me.OK.Location = New System.Drawing.Point(424, 97)
+        Me.OK.Name = "OK"
+        Me.OK.Size = New System.Drawing.Size(30, 23)
+        Me.OK.TabIndex = 260
+        Me.OK.Text = "&OK"
+        '
+        'ddlPicks
+        '
+        Me.ddlPicks.FormattingEnabled = True
+        Me.ddlPicks.Location = New System.Drawing.Point(297, 97)
+        Me.ddlPicks.Name = "ddlPicks"
+        Me.ddlPicks.Size = New System.Drawing.Size(121, 21)
+        Me.ddlPicks.TabIndex = 259
+        '
+        'Label1
+        '
+        Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.Label1.ForeColor = System.Drawing.Color.Blue
+        Me.Label1.Location = New System.Drawing.Point(233, 97)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(58, 20)
+        Me.Label1.TabIndex = 258
+        Me.Label1.Text = "Pick:"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'ddlXCOs
+        '
+        Me.ddlXCOs.FormattingEnabled = True
+        Me.ddlXCOs.Location = New System.Drawing.Point(106, 97)
+        Me.ddlXCOs.Name = "ddlXCOs"
+        Me.ddlXCOs.Size = New System.Drawing.Size(121, 21)
+        Me.ddlXCOs.TabIndex = 257
+        '
+        'lblTrnDate
+        '
+        Me.lblTrnDate.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblTrnDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.lblTrnDate.ForeColor = System.Drawing.Color.Blue
+        Me.lblTrnDate.Location = New System.Drawing.Point(36, 97)
+        Me.lblTrnDate.Name = "lblTrnDate"
+        Me.lblTrnDate.Size = New System.Drawing.Size(64, 20)
+        Me.lblTrnDate.TabIndex = 256
+        Me.lblTrnDate.Text = "Company:"
+        Me.lblTrnDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtBoxNotes
+        '
+        Me.txtBoxNotes.Location = New System.Drawing.Point(505, 12)
+        Me.txtBoxNotes.Multiline = True
+        Me.txtBoxNotes.Name = "txtBoxNotes"
+        Me.txtBoxNotes.Size = New System.Drawing.Size(353, 63)
+        Me.txtBoxNotes.TabIndex = 254
         '
         'ToolStrip6
         '
@@ -279,10 +345,10 @@ Partial Class Transport
         Me.chkBoxIsActive.ForeColor = System.Drawing.Color.Blue
         Me.chkBoxIsActive.Location = New System.Drawing.Point(36, 77)
         Me.chkBoxIsActive.Name = "chkBoxIsActive"
-        Me.chkBoxIsActive.Size = New System.Drawing.Size(76, 17)
+        Me.chkBoxIsActive.Size = New System.Drawing.Size(125, 17)
         Me.chkBoxIsActive.TabIndex = 242
         Me.chkBoxIsActive.TabStop = False
-        Me.chkBoxIsActive.Text = "Is Active"
+        Me.chkBoxIsActive.Text = "Όλες οι κινήσεις"
         Me.chkBoxIsActive.UseVisualStyleBackColor = True
         '
         'SplitContainer3
@@ -458,14 +524,6 @@ Partial Class Transport
         Me.DataGridViewSearch.Size = New System.Drawing.Size(1284, 45)
         Me.DataGridViewSearch.TabIndex = 6
         '
-        'txtBoxNotes
-        '
-        Me.txtBoxNotes.Location = New System.Drawing.Point(503, 34)
-        Me.txtBoxNotes.Multiline = True
-        Me.txtBoxNotes.Name = "txtBoxNotes"
-        Me.txtBoxNotes.Size = New System.Drawing.Size(353, 63)
-        Me.txtBoxNotes.TabIndex = 254
-        '
         'Transport
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -545,4 +603,9 @@ Partial Class Transport
     Friend WithEvents DateTimePicker2 As DateTimePicker
     Friend WithEvents DateTimePicker1 As DateTimePicker
     Friend WithEvents txtBoxNotes As TextBox
+    Friend WithEvents lblTrnDate As Label
+    Friend WithEvents ddlXCOs As ComboBox
+    Friend WithEvents ddlPicks As ComboBox
+    Friend WithEvents Label1 As Label
+    Friend WithEvents OK As Button
 End Class
