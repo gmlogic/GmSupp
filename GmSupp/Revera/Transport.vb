@@ -2,6 +2,7 @@
 Imports System.Data.Linq
 Imports System.Data.SqlClient
 Imports System.Transactions
+Imports Softone
 Imports GmSupp
 Imports GmSupp.Hglp
 
@@ -80,7 +81,7 @@ Public Class Transport
 
         Me.ddlPicks.Enabled = False
         Me.OK.Enabled = False
-        CurUserRole = "Logistics"
+        'CurUserRole = "Logistics"
         If CurUser = "gmlogic" Then
             'conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
             'Select Case conString.InitialCatalog
@@ -794,7 +795,7 @@ Public Class Transport
             DateTimePicker1.Value = "01/01/" & Year(CTODate)
         End If
     End Sub
-    Dim CompId = 0
+    Dim CompId As Short = 0
     Private Sub ddlXCOs_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlXCOs.SelectedIndexChanged
         Dim s As ComboBox = sender
         If Not s.SelectedItem = "Επιλέγξτε" Then
@@ -857,31 +858,118 @@ Public Class Transport
         If Me.MasterDataGridView.SelectedRows.Count > 0 Then
             Dim DrSel As DataGridViewSelectedRowCollection = Me.MasterDataGridView.SelectedRows
             For Each ds As DataGridViewRow In DrSel
-                Try
-
-
-                    'ds.Cells("ToCompany").Value = CompId
-                    ds.Cells("ToFinDoc").Value = Me.ddlPicks.SelectedValue
-                    ds.Cells("PickDoc").Value = Me.ddlPicks.Text
-                Catch ex As Exception
-
-                End Try
-
-                'as Revera.ccCTransport
-                'If Not ds.Cells("Check").Value = check Then
-                '    ds.Cells("Check").Value = check
-                'End If
+                ds.Cells("ToCompany").Value = CompId
+                ds.Cells("ToFinDoc").Value = Me.ddlPicks.SelectedValue
+                ds.Cells("PickDoc").Value = Me.ddlPicks.Text
             Next
-            'For i As Integer = 0 To DrSel.Count - 1
-            '    m_DataSet.Tables(MasterTableName).DefaultView(DrSel(i).Index).Item("Check") = True
-            'Next
-        Else
-            'For Each ds As DataGridViewRow In Me.MasterDataGridView.Rows
-            '    ds.Cells("Check").Value = check
-            'Next
-            'For i As Integer = 0 To m_DataSet.Tables(MasterTableName).DefaultView.Count - 1
-            '    m_DataSet.Tables(MasterTableName).DefaultView(i).Item("Check") = True
-            'Next
+        End If
+    End Sub
+
+    Private Sub cmdPrint_Click(sender As Object, e As EventArgs) Handles cmdPrint.Click
+        If Me.MasterDataGridView.SelectedRows.Count = 0 Then
+            MsgBox("Λάθος!!! Επιλέξτε γραμμές για εκτύπωση", MsgBoxStyle.Critical, "cmdPrint_Click")
+            Exit Sub
+        End If
+
+        If Me.MasterDataGridView.SelectedRows.Count > 0 Then
+            Dim DrSel As DataGridViewSelectedRowCollection = Me.MasterDataGridView.SelectedRows
+            If Not IO.File.Exists(S1Path & "XDll.dll") Then
+                'Return Login'
+                MsgBox("Connection Error:" & S1Path & "XDll.dll", MsgBoxStyle.Critical, strAppName)
+            End If
+
+            Dim PrinterName = ""
+            Dim pd As New PrintDialog()
+
+            ' Open the printer dialog box, and then allow the user to select a printer.
+            pd.PrinterSettings = New Drawing.Printing.PrinterSettings()
+            If pd.ShowDialog = DialogResult.OK Then
+                PrinterName = pd.PrinterSettings.PrinterName
+            End If
+
+            XSupport.InitInterop(0, S1Path & "XDll.dll")
+
+            For Each ds As DataGridViewRow In DrSel
+                Dim ToCompany As Short = ds.Cells("ToCompany").Value
+                Dim ToFinDoc As Integer = ds.Cells("ToFinDoc").Value
+
+                Dim XCOFile = "C:\Softone\REVERA.xco" 'S1Path & CompName.Replace("SERTORIUS", "REVERA").Replace("ReveraLite".ToUpper, "REVERA").Replace("HglpLite".ToUpper, "HGLP").ToUpper & ".xco"
+                Select Case ToCompany
+                    Case 5000
+                        XCOFile = "C:\Softone\" & "SERTORIUS" & ".XCO"
+                        If Not IO.File.Exists(XCOFile) Then
+                            XCOFile = "C:\Softone\" & "REVERA" & ".XCO"
+                        End If
+                    Case 4000
+                        XCOFile = "C:\Softone\" & "REVERA" & ".XCO"
+                    Case 1000
+                        XCOFile = "C:\Softone\" & "HGLP" & ".XCO"
+                    Case 2001
+                        XCOFile = "C:\Softone\" & "LK" & ".XCO"
+                    Case Else
+                        MsgBox("Λάθος!!! Εταιρεία", MsgBoxStyle.Critical, "cmdPrint")
+                        Exit Sub
+                End Select
+                If Not IO.File.Exists(XCOFile) Then
+                    MsgBox("Λάθος!!! XCOFile", MsgBoxStyle.Critical, "cmdPrint")
+                    Exit Sub
+                End If
+
+                Try
+                    Dim Branch = 1000
+                    Dim DTLogin = CTODate 'DateTime.Now
+                    s1Conn = Nothing
+                    s1Conn = XSupport.Login(XCOFile, "gmlogic", "1mgergm++",
+                                               Company.ToString, Branch.ToString, DTLogin)
+
+                    If s1Conn.ConnectionInfo IsNot Nothing Then
+                        'Login = True
+                        'UserId = s1Conn.ConnectionInfo.UserId
+
+                        Dim S1obj As XModule
+                        S1obj = s1Conn.CreateModule("SALDOC") 'Soft1Object
+
+                        Dim myArray(4) As String
+                        S1obj.LocateData(ToFinDoc)
+                        Dim dt As DataTable = S1obj.GetTable("FINDOC").CreateDataTable(True)
+                        myArray(0) = S1obj.Handle
+
+                        Dim xt As Softone.XTable
+                        Dim td As New DataTable
+                        Dim sql = "SELECT se.TEMPLATES FROM FINDOC AS fi INNER JOIN SERIES AS se ON fi.COMPANY = se.COMPANY AND fi.SOSOURCE = se.SOSOURCE AND fi.SERIES = se.SERIES WHERE fi.FINDOC = :1" & ToFinDoc
+                        xt = s1Conn.GetSQLDataSet(sql, {ToFinDoc})
+                        td = xt.CreateDataTable(True)
+                        Dim templ As Short = xt(0, "TEMPLATES")
+                        myArray(1) = templ     'Print Form Code
+                        myArray(2) = PrinterName '"PDF file" 'cmbPrinters.SelectedItem.ToString  'Printer Name or File Name Type (928, 437, EXCEL, WORD, METAFILE)
+                        myArray(3) = "E:\temp\Data\" & dt(0)("FINCODE") & ".pdf"
+                        Dim SysRequest As Object = s1Conn.GetStockObj("SysRequest", True)
+                        'SoftOne Object
+                        s1Conn.CallPublished(SysRequest, "PrintForm", myArray)
+                        'Soft1Conn.CallPublished("SysRequest.PrintForm', VarArray(vPURModule,100,'928', vFile,4));
+
+                        'Dim sourcePath = "C:\test\" & "_" + item.FINDOC.ToString & ".PDF"
+                        'Dim destinationPath = "C:\test\" & item.FINCODE & "_" & String.Format("{0:yyyyMMdd}", item.TRNDATE) & "_" & item.CODE & "_" + item.QTY1.ToString & ".PDF"
+                        'Dim info As IO.FileInfo = New IO.FileInfo(sourcePath)
+                        'If info.Exists Then
+                        '    info.MoveTo(destinationPath)
+                        'End If
+
+                    Else
+                        Me.Text = strAppName
+                        MsgBox("Connection Error! s1Conn.ConnectionInfo Is Nothing", MsgBoxStyle.Critical, strAppName)
+                    End If
+
+                Catch ex As Exception
+                    Me.Text = strAppName
+                    MsgBox("Connection Error:" & vbCrLf & S1Path & vbCrLf & CurUser & vbCrLf & ex.ToString, MsgBoxStyle.Critical, strAppName)
+                    'MsgBox(SERVER & vbCrLf & GetExceptionInfo(ex))
+
+                Finally
+                    'Me.Cursor = Cursors.Default
+                End Try
+            Next
+            'XSupport.EndInterop()
         End If
     End Sub
 #End Region
@@ -961,6 +1049,7 @@ Public Class Transport
         Next
         Return dt
     End Function
+
 
 
 

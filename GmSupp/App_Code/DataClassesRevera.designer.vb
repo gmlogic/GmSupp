@@ -145,6 +145,12 @@ Partial Public Class DataClassesReveraDataContext
     End Sub
     Partial Private Sub DeleteccCTransport(instance As Revera.ccCTransport)
     End Sub
+    Partial Private Sub InsertSERIES(instance As Revera.SERIES)
+    End Sub
+    Partial Private Sub UpdateSERIES(instance As Revera.SERIES)
+    End Sub
+    Partial Private Sub DeleteSERIES(instance As Revera.SERIES)
+    End Sub
   #End Region
 	
 	Public Sub New()
@@ -295,6 +301,12 @@ Partial Public Class DataClassesReveraDataContext
 	Public ReadOnly Property ccCTransports() As System.Data.Linq.Table(Of Revera.ccCTransport)
 		Get
 			Return Me.GetTable(Of Revera.ccCTransport)
+		End Get
+	End Property
+	
+	Public ReadOnly Property SERIES() As System.Data.Linq.Table(Of Revera.SERIES)
+		Get
+			Return Me.GetTable(Of Revera.SERIES)
 		End Get
 	End Property
 	
@@ -10865,6 +10877,8 @@ Namespace Revera
 		
 		Private _FINDOCs As EntitySet(Of FINDOC)
 		
+		Private _SERIES As EntitySet(Of SERIES)
+		
     #Region "Extensibility Method Definitions"
     Partial Private Sub OnLoaded()
     End Sub
@@ -10945,6 +10959,7 @@ Namespace Revera
 		Public Sub New()
 			MyBase.New
 			Me._FINDOCs = New EntitySet(Of FINDOC)(AddressOf Me.attach_FINDOCs, AddressOf Me.detach_FINDOCs)
+			Me._SERIES = New EntitySet(Of SERIES)(AddressOf Me.attach_SERIES, AddressOf Me.detach_SERIES)
 			OnCreated
 		End Sub
 		
@@ -11235,6 +11250,16 @@ Namespace Revera
 			End Set
 		End Property
 		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="FPRM_SERIES", Storage:="_SERIES", ThisKey:="COMPANY,SOSOURCE,FPRMS", OtherKey:="COMPANY,SOSOURCE,FPRMS")>  _
+		Public Property SERIES() As EntitySet(Of SERIES)
+			Get
+				Return Me._SERIES
+			End Get
+			Set
+				Me._SERIES.Assign(value)
+			End Set
+		End Property
+		
 		Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
 		
 		Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
@@ -11259,6 +11284,16 @@ Namespace Revera
 		End Sub
 		
 		Private Sub detach_FINDOCs(ByVal entity As FINDOC)
+			Me.SendPropertyChanging
+			entity.FPRM = Nothing
+		End Sub
+		
+		Private Sub attach_SERIES(ByVal entity As SERIES)
+			Me.SendPropertyChanging
+			entity.FPRM = Me
+		End Sub
+		
+		Private Sub detach_SERIES(ByVal entity As SERIES)
 			Me.SendPropertyChanging
 			entity.FPRM = Nothing
 		End Sub
@@ -11433,6 +11468,8 @@ Namespace Revera
 		
 		Private _SERIESNUM As Integer
 		
+		Private _SERIES1 As EntityRef(Of SERIES)
+		
     #Region "Extensibility Method Definitions"
     Partial Private Sub OnLoaded()
     End Sub
@@ -11464,6 +11501,7 @@ Namespace Revera
 		
 		Public Sub New()
 			MyBase.New
+			Me._SERIES1 = CType(Nothing, EntityRef(Of SERIES))
 			OnCreated
 		End Sub
 		
@@ -11475,6 +11513,9 @@ Namespace Revera
 			Set
 				If ((Me._COMPANY = value)  _
 							= false) Then
+					If Me._SERIES1.HasLoadedOrAssignedValue Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
 					Me.OnCOMPANYChanging(value)
 					Me.SendPropertyChanging
 					Me._COMPANY = value
@@ -11492,6 +11533,9 @@ Namespace Revera
 			Set
 				If ((Me._SOSOURCE = value)  _
 							= false) Then
+					If Me._SERIES1.HasLoadedOrAssignedValue Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
 					Me.OnSOSOURCEChanging(value)
 					Me.SendPropertyChanging
 					Me._SOSOURCE = value
@@ -11509,6 +11553,9 @@ Namespace Revera
 			Set
 				If ((Me._SERIES = value)  _
 							= false) Then
+					If Me._SERIES1.HasLoadedOrAssignedValue Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
 					Me.OnSERIESChanging(value)
 					Me.SendPropertyChanging
 					Me._SERIES = value
@@ -11548,6 +11595,38 @@ Namespace Revera
 					Me._SERIESNUM = value
 					Me.SendPropertyChanged("SERIESNUM")
 					Me.OnSERIESNUMChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="SERIES_SERIESNUM", Storage:="_SERIES1", ThisKey:="COMPANY,SOSOURCE,SERIES", OtherKey:="COMPANY,SOSOURCE,SERIES", IsForeignKey:=true, DeleteOnNull:=true, DeleteRule:="CASCADE")>  _
+		Public Property SERIES1() As SERIES
+			Get
+				Return Me._SERIES1.Entity
+			End Get
+			Set
+				Dim previousValue As SERIES = Me._SERIES1.Entity
+				If ((Object.Equals(previousValue, value) = false)  _
+							OrElse (Me._SERIES1.HasLoadedOrAssignedValue = false)) Then
+					Me.SendPropertyChanging
+					If ((previousValue Is Nothing)  _
+								= false) Then
+						Me._SERIES1.Entity = Nothing
+						previousValue.SERIESNUMs.Remove(Me)
+					End If
+					Me._SERIES1.Entity = value
+					If ((value Is Nothing)  _
+								= false) Then
+						value.SERIESNUMs.Add(Me)
+						Me._COMPANY = value.COMPANY
+						Me._SOSOURCE = value.SOSOURCE
+						Me._SERIES = value.SERIES
+					Else
+						Me._COMPANY = CType(Nothing, Short)
+						Me._SOSOURCE = CType(Nothing, Integer)
+						Me._SERIES = CType(Nothing, Short)
+					End If
+					Me.SendPropertyChanged("SERIES1")
 				End If
 			End Set
 		End Property
@@ -11654,6 +11733,10 @@ Namespace Revera
 		Private _MTRDOCs As EntitySet(Of MTRDOC)
 		
 		Private _FINDOCs As EntitySet(Of FINDOC)
+		
+		Private _SERIES As EntitySet(Of SERIES)
+		
+		Private _SERIES1 As EntitySet(Of SERIES)
 		
     #Region "Extensibility Method Definitions"
     Partial Private Sub OnLoaded()
@@ -11816,6 +11899,8 @@ Namespace Revera
 			MyBase.New
 			Me._MTRDOCs = New EntitySet(Of MTRDOC)(AddressOf Me.attach_MTRDOCs, AddressOf Me.detach_MTRDOCs)
 			Me._FINDOCs = New EntitySet(Of FINDOC)(AddressOf Me.attach_FINDOCs, AddressOf Me.detach_FINDOCs)
+			Me._SERIES = New EntitySet(Of SERIES)(AddressOf Me.attach_SERIES, AddressOf Me.detach_SERIES)
+			Me._SERIES1 = New EntitySet(Of SERIES)(AddressOf Me.attach_SERIES1, AddressOf Me.detach_SERIES1)
 			OnCreated
 		End Sub
 		
@@ -12435,6 +12520,26 @@ Namespace Revera
 			End Set
 		End Property
 		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="BRANCH_SERIES", Storage:="_SERIES", ThisKey:="COMPANY,BRANCH", OtherKey:="COMPANY,BRANCH")>  _
+		Public Property SERIES() As EntitySet(Of SERIES)
+			Get
+				Return Me._SERIES
+			End Get
+			Set
+				Me._SERIES.Assign(value)
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="BRANCH_SERIES1", Storage:="_SERIES1", ThisKey:="COMPANY,BRANCH", OtherKey:="COMPANY,BRANCHSEC")>  _
+		Public Property SERIES1() As EntitySet(Of SERIES)
+			Get
+				Return Me._SERIES1
+			End Get
+			Set
+				Me._SERIES1.Assign(value)
+			End Set
+		End Property
+		
 		Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
 		
 		Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
@@ -12471,6 +12576,26 @@ Namespace Revera
 		Private Sub detach_FINDOCs(ByVal entity As FINDOC)
 			Me.SendPropertyChanging
 			entity.BRANCH1 = Nothing
+		End Sub
+		
+		Private Sub attach_SERIES(ByVal entity As SERIES)
+			Me.SendPropertyChanging
+			entity.BRANCH1 = Me
+		End Sub
+		
+		Private Sub detach_SERIES(ByVal entity As SERIES)
+			Me.SendPropertyChanging
+			entity.BRANCH1 = Nothing
+		End Sub
+		
+		Private Sub attach_SERIES1(ByVal entity As SERIES)
+			Me.SendPropertyChanging
+			entity.BRANCH2 = Me
+		End Sub
+		
+		Private Sub detach_SERIES1(ByVal entity As SERIES)
+			Me.SendPropertyChanging
+			entity.BRANCH2 = Nothing
 		End Sub
 	End Class
 	
@@ -20148,6 +20273,8 @@ Namespace Revera
 		
 		Private _TRDR1 As EntityRef(Of TRDR)
 		
+		Private _SERIES1 As EntityRef(Of SERIES)
+		
     #Region "Extensibility Method Definitions"
     Partial Private Sub OnLoaded()
     End Sub
@@ -20849,6 +20976,7 @@ Namespace Revera
 			Me._FINDOC2 = CType(Nothing, EntityRef(Of FINDOC))
 			Me._FPRM = CType(Nothing, EntityRef(Of FPRM))
 			Me._TRDR1 = CType(Nothing, EntityRef(Of TRDR))
+			Me._SERIES1 = CType(Nothing, EntityRef(Of SERIES))
 			OnCreated
 		End Sub
 		
@@ -20860,7 +20988,8 @@ Namespace Revera
 			Set
 				If ((Me._COMPANY = value)  _
 							= false) Then
-					If (Me._BRANCH1.HasLoadedOrAssignedValue OrElse Me._FPRM.HasLoadedOrAssignedValue) Then
+					If ((Me._BRANCH1.HasLoadedOrAssignedValue OrElse Me._FPRM.HasLoadedOrAssignedValue)  _
+								OrElse Me._SERIES1.HasLoadedOrAssignedValue) Then
 						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
 					End If
 					Me.OnCOMPANYChanging(value)
@@ -20914,7 +21043,7 @@ Namespace Revera
 			Set
 				If ((Me._SOSOURCE = value)  _
 							= false) Then
-					If Me._FPRM.HasLoadedOrAssignedValue Then
+					If (Me._FPRM.HasLoadedOrAssignedValue OrElse Me._SERIES1.HasLoadedOrAssignedValue) Then
 						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
 					End If
 					Me.OnSOSOURCEChanging(value)
@@ -21002,6 +21131,9 @@ Namespace Revera
 			Set
 				If ((Me._SERIES = value)  _
 							= false) Then
+					If Me._SERIES1.HasLoadedOrAssignedValue Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
 					Me.OnSERIESChanging(value)
 					Me.SendPropertyChanging
 					Me._SERIES = value
@@ -23862,6 +23994,38 @@ Namespace Revera
 			End Set
 		End Property
 		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="SERIES_FINDOC", Storage:="_SERIES1", ThisKey:="COMPANY,SOSOURCE,SERIES", OtherKey:="COMPANY,SOSOURCE,SERIES", IsForeignKey:=true)>  _
+		Public Property SERIES1() As SERIES
+			Get
+				Return Me._SERIES1.Entity
+			End Get
+			Set
+				Dim previousValue As SERIES = Me._SERIES1.Entity
+				If ((Object.Equals(previousValue, value) = false)  _
+							OrElse (Me._SERIES1.HasLoadedOrAssignedValue = false)) Then
+					Me.SendPropertyChanging
+					If ((previousValue Is Nothing)  _
+								= false) Then
+						Me._SERIES1.Entity = Nothing
+						previousValue.FINDOCs.Remove(Me)
+					End If
+					Me._SERIES1.Entity = value
+					If ((value Is Nothing)  _
+								= false) Then
+						value.FINDOCs.Add(Me)
+						Me._COMPANY = value.COMPANY
+						Me._SOSOURCE = value.SOSOURCE
+						Me._SERIES = value.SERIES
+					Else
+						Me._COMPANY = CType(Nothing, Short)
+						Me._SOSOURCE = CType(Nothing, Integer)
+						Me._SERIES = CType(Nothing, Short)
+					End If
+					Me.SendPropertyChanged("SERIES1")
+				End If
+			End Set
+		End Property
+		
 		Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
 		
 		Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
@@ -24579,6 +24743,1667 @@ Namespace Revera
 						= false) Then
 				RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 			End If
+		End Sub
+	End Class
+	
+	<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.SERIES")>  _
+	Partial Public Class SERIES
+		Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+		
+		Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+		
+		Private _COMPANY As Short
+		
+		Private _SOSOURCE As Integer
+		
+		Private _SOREDIR As Integer
+		
+		Private _SERIES As Short
+		
+		Private _CODE As String
+		
+		Private _FPRMS As Short
+		
+		Private _TFPRMS As Short
+		
+		Private _NAME As String
+		
+		Private _COMMENTS As String
+		
+		Private _ISACTIVE As Short
+		
+		Private _BRANCH As System.Nullable(Of Short)
+		
+		Private _WHOUSE As System.Nullable(Of Short)
+		
+		Private _BRANCHSEC As System.Nullable(Of Short)
+		
+		Private _WHOUSESEC As System.Nullable(Of Short)
+		
+		Private _WHOUSEBIN As System.Nullable(Of Short)
+		
+		Private _BUSUNITS As System.Nullable(Of Short)
+		
+		Private _PROCDEF As System.Nullable(Of Short)
+		
+		Private _AUTONUMBER As Short
+		
+		Private _FINCODEGENERATE As Short
+		
+		Private _HANDMD As Short
+		
+		Private _ISRESTRICTED As Short
+		
+		Private _PRINTMODE As Short
+		
+		Private _SOPRINTER As String
+		
+		Private _SOFORMREDIR As Integer
+		
+		Private _TEMPLATES As System.Nullable(Of Short)
+		
+		Private _COPIES As Short
+		
+		Private _CHKPRINTDOC As Short
+		
+		Private _REPRINTDOC As Short
+		
+		Private _REPRINTMD As Short
+		
+		Private _PRINTDOCAPPRV As Short
+		
+		Private _USECUSDISP As Short
+		
+		Private _SSOSOURCE As System.Nullable(Of Integer)
+		
+		Private _SSERIES As System.Nullable(Of Short)
+		
+		Private _CSERIES As System.Nullable(Of Short)
+		
+		Private _PAYMD As Short
+		
+		Private _PFINPAYTERMS As Short
+		
+		Private _PSERIES As System.Nullable(Of Short)
+		
+		Private _GLSERIES As System.Nullable(Of Short)
+		
+		Private _ALSERIES As System.Nullable(Of Short)
+		
+		Private _AMODE As Short
+		
+		Private _ASERIES As System.Nullable(Of Short)
+		
+		Private _VSERIES As System.Nullable(Of Short)
+		
+		Private _ESERIES As System.Nullable(Of Short)
+		
+		Private _SPCSMD As Short
+		
+		Private _PRDMD As Short
+		
+		Private _PRDSERIES As System.Nullable(Of Short)
+		
+		Private _PRDITEMD As Short
+		
+		Private _PRDITEMSERIES As System.Nullable(Of Short)
+		
+		Private _CHQAUTO As Short
+		
+		Private _SOISCONV As Short
+		
+		Private _SONOCONV As Short
+		
+		Private _SERIESACCESS As String
+		
+		Private _SERIESPAY As String
+		
+		Private _SERIESCNV As String
+		
+		Private _BGPREFIX As String
+		
+		Private _TRACEPRN As Short
+		
+		Private _ECOLLABORATION As System.Nullable(Of Short)
+		
+		Private _GSISPACKAGES As System.Nullable(Of Short)
+		
+		Private _INSDATE As System.Nullable(Of Date)
+		
+		Private _INSUSER As System.Nullable(Of Short)
+		
+		Private _UPDDATE As System.Nullable(Of Date)
+		
+		Private _UPDUSER As System.Nullable(Of Short)
+		
+		Private _SERIESHIS As String
+		
+		Private _SOPRSNMD As System.Nullable(Of Short)
+		
+		Private _CALCELM As System.Nullable(Of Integer)
+		
+		Private _SERIESNUMs As EntitySet(Of SERIESNUM)
+		
+		Private _FINDOCs As EntitySet(Of FINDOC)
+		
+		Private _BRANCH1 As EntityRef(Of BRANCH)
+		
+		Private _BRANCH2 As EntityRef(Of BRANCH)
+		
+		Private _FPRM As EntityRef(Of FPRM)
+		
+    #Region "Extensibility Method Definitions"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnCOMPANYChanging(value As Short)
+    End Sub
+    Partial Private Sub OnCOMPANYChanged()
+    End Sub
+    Partial Private Sub OnSOSOURCEChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnSOSOURCEChanged()
+    End Sub
+    Partial Private Sub OnSOREDIRChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnSOREDIRChanged()
+    End Sub
+    Partial Private Sub OnSERIESChanging(value As Short)
+    End Sub
+    Partial Private Sub OnSERIESChanged()
+    End Sub
+    Partial Private Sub OnCODEChanging(value As String)
+    End Sub
+    Partial Private Sub OnCODEChanged()
+    End Sub
+    Partial Private Sub OnFPRMSChanging(value As Short)
+    End Sub
+    Partial Private Sub OnFPRMSChanged()
+    End Sub
+    Partial Private Sub OnTFPRMSChanging(value As Short)
+    End Sub
+    Partial Private Sub OnTFPRMSChanged()
+    End Sub
+    Partial Private Sub OnNAMEChanging(value As String)
+    End Sub
+    Partial Private Sub OnNAMEChanged()
+    End Sub
+    Partial Private Sub OnCOMMENTSChanging(value As String)
+    End Sub
+    Partial Private Sub OnCOMMENTSChanged()
+    End Sub
+    Partial Private Sub OnISACTIVEChanging(value As Short)
+    End Sub
+    Partial Private Sub OnISACTIVEChanged()
+    End Sub
+    Partial Private Sub OnBRANCHChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnBRANCHChanged()
+    End Sub
+    Partial Private Sub OnWHOUSEChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnWHOUSEChanged()
+    End Sub
+    Partial Private Sub OnBRANCHSECChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnBRANCHSECChanged()
+    End Sub
+    Partial Private Sub OnWHOUSESECChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnWHOUSESECChanged()
+    End Sub
+    Partial Private Sub OnWHOUSEBINChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnWHOUSEBINChanged()
+    End Sub
+    Partial Private Sub OnBUSUNITSChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnBUSUNITSChanged()
+    End Sub
+    Partial Private Sub OnPROCDEFChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnPROCDEFChanged()
+    End Sub
+    Partial Private Sub OnAUTONUMBERChanging(value As Short)
+    End Sub
+    Partial Private Sub OnAUTONUMBERChanged()
+    End Sub
+    Partial Private Sub OnFINCODEGENERATEChanging(value As Short)
+    End Sub
+    Partial Private Sub OnFINCODEGENERATEChanged()
+    End Sub
+    Partial Private Sub OnHANDMDChanging(value As Short)
+    End Sub
+    Partial Private Sub OnHANDMDChanged()
+    End Sub
+    Partial Private Sub OnISRESTRICTEDChanging(value As Short)
+    End Sub
+    Partial Private Sub OnISRESTRICTEDChanged()
+    End Sub
+    Partial Private Sub OnPRINTMODEChanging(value As Short)
+    End Sub
+    Partial Private Sub OnPRINTMODEChanged()
+    End Sub
+    Partial Private Sub OnSOPRINTERChanging(value As String)
+    End Sub
+    Partial Private Sub OnSOPRINTERChanged()
+    End Sub
+    Partial Private Sub OnSOFORMREDIRChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnSOFORMREDIRChanged()
+    End Sub
+    Partial Private Sub OnTEMPLATESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnTEMPLATESChanged()
+    End Sub
+    Partial Private Sub OnCOPIESChanging(value As Short)
+    End Sub
+    Partial Private Sub OnCOPIESChanged()
+    End Sub
+    Partial Private Sub OnCHKPRINTDOCChanging(value As Short)
+    End Sub
+    Partial Private Sub OnCHKPRINTDOCChanged()
+    End Sub
+    Partial Private Sub OnREPRINTDOCChanging(value As Short)
+    End Sub
+    Partial Private Sub OnREPRINTDOCChanged()
+    End Sub
+    Partial Private Sub OnREPRINTMDChanging(value As Short)
+    End Sub
+    Partial Private Sub OnREPRINTMDChanged()
+    End Sub
+    Partial Private Sub OnPRINTDOCAPPRVChanging(value As Short)
+    End Sub
+    Partial Private Sub OnPRINTDOCAPPRVChanged()
+    End Sub
+    Partial Private Sub OnUSECUSDISPChanging(value As Short)
+    End Sub
+    Partial Private Sub OnUSECUSDISPChanged()
+    End Sub
+    Partial Private Sub OnSSOSOURCEChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnSSOSOURCEChanged()
+    End Sub
+    Partial Private Sub OnSSERIESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnSSERIESChanged()
+    End Sub
+    Partial Private Sub OnCSERIESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnCSERIESChanged()
+    End Sub
+    Partial Private Sub OnPAYMDChanging(value As Short)
+    End Sub
+    Partial Private Sub OnPAYMDChanged()
+    End Sub
+    Partial Private Sub OnPFINPAYTERMSChanging(value As Short)
+    End Sub
+    Partial Private Sub OnPFINPAYTERMSChanged()
+    End Sub
+    Partial Private Sub OnPSERIESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnPSERIESChanged()
+    End Sub
+    Partial Private Sub OnGLSERIESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnGLSERIESChanged()
+    End Sub
+    Partial Private Sub OnALSERIESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnALSERIESChanged()
+    End Sub
+    Partial Private Sub OnAMODEChanging(value As Short)
+    End Sub
+    Partial Private Sub OnAMODEChanged()
+    End Sub
+    Partial Private Sub OnASERIESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnASERIESChanged()
+    End Sub
+    Partial Private Sub OnVSERIESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnVSERIESChanged()
+    End Sub
+    Partial Private Sub OnESERIESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnESERIESChanged()
+    End Sub
+    Partial Private Sub OnSPCSMDChanging(value As Short)
+    End Sub
+    Partial Private Sub OnSPCSMDChanged()
+    End Sub
+    Partial Private Sub OnPRDMDChanging(value As Short)
+    End Sub
+    Partial Private Sub OnPRDMDChanged()
+    End Sub
+    Partial Private Sub OnPRDSERIESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnPRDSERIESChanged()
+    End Sub
+    Partial Private Sub OnPRDITEMDChanging(value As Short)
+    End Sub
+    Partial Private Sub OnPRDITEMDChanged()
+    End Sub
+    Partial Private Sub OnPRDITEMSERIESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnPRDITEMSERIESChanged()
+    End Sub
+    Partial Private Sub OnCHQAUTOChanging(value As Short)
+    End Sub
+    Partial Private Sub OnCHQAUTOChanged()
+    End Sub
+    Partial Private Sub OnSOISCONVChanging(value As Short)
+    End Sub
+    Partial Private Sub OnSOISCONVChanged()
+    End Sub
+    Partial Private Sub OnSONOCONVChanging(value As Short)
+    End Sub
+    Partial Private Sub OnSONOCONVChanged()
+    End Sub
+    Partial Private Sub OnSERIESACCESSChanging(value As String)
+    End Sub
+    Partial Private Sub OnSERIESACCESSChanged()
+    End Sub
+    Partial Private Sub OnSERIESPAYChanging(value As String)
+    End Sub
+    Partial Private Sub OnSERIESPAYChanged()
+    End Sub
+    Partial Private Sub OnSERIESCNVChanging(value As String)
+    End Sub
+    Partial Private Sub OnSERIESCNVChanged()
+    End Sub
+    Partial Private Sub OnBGPREFIXChanging(value As String)
+    End Sub
+    Partial Private Sub OnBGPREFIXChanged()
+    End Sub
+    Partial Private Sub OnTRACEPRNChanging(value As Short)
+    End Sub
+    Partial Private Sub OnTRACEPRNChanged()
+    End Sub
+    Partial Private Sub OnECOLLABORATIONChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnECOLLABORATIONChanged()
+    End Sub
+    Partial Private Sub OnGSISPACKAGESChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnGSISPACKAGESChanged()
+    End Sub
+    Partial Private Sub OnINSDATEChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnINSDATEChanged()
+    End Sub
+    Partial Private Sub OnINSUSERChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnINSUSERChanged()
+    End Sub
+    Partial Private Sub OnUPDDATEChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnUPDDATEChanged()
+    End Sub
+    Partial Private Sub OnUPDUSERChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnUPDUSERChanged()
+    End Sub
+    Partial Private Sub OnSERIESHISChanging(value As String)
+    End Sub
+    Partial Private Sub OnSERIESHISChanged()
+    End Sub
+    Partial Private Sub OnSOPRSNMDChanging(value As System.Nullable(Of Short))
+    End Sub
+    Partial Private Sub OnSOPRSNMDChanged()
+    End Sub
+    Partial Private Sub OnCALCELMChanging(value As System.Nullable(Of Integer))
+    End Sub
+    Partial Private Sub OnCALCELMChanged()
+    End Sub
+    #End Region
+		
+		Public Sub New()
+			MyBase.New
+			Me._SERIESNUMs = New EntitySet(Of SERIESNUM)(AddressOf Me.attach_SERIESNUMs, AddressOf Me.detach_SERIESNUMs)
+			Me._FINDOCs = New EntitySet(Of FINDOC)(AddressOf Me.attach_FINDOCs, AddressOf Me.detach_FINDOCs)
+			Me._BRANCH1 = CType(Nothing, EntityRef(Of BRANCH))
+			Me._BRANCH2 = CType(Nothing, EntityRef(Of BRANCH))
+			Me._FPRM = CType(Nothing, EntityRef(Of FPRM))
+			OnCreated
+		End Sub
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMPANY", DbType:="SmallInt NOT NULL", IsPrimaryKey:=true)>  _
+		Public Property COMPANY() As Short
+			Get
+				Return Me._COMPANY
+			End Get
+			Set
+				If ((Me._COMPANY = value)  _
+							= false) Then
+					If ((Me._BRANCH1.HasLoadedOrAssignedValue OrElse Me._BRANCH2.HasLoadedOrAssignedValue)  _
+								OrElse Me._FPRM.HasLoadedOrAssignedValue) Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
+					Me.OnCOMPANYChanging(value)
+					Me.SendPropertyChanging
+					Me._COMPANY = value
+					Me.SendPropertyChanged("COMPANY")
+					Me.OnCOMPANYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOSOURCE", DbType:="Int NOT NULL", IsPrimaryKey:=true)>  _
+		Public Property SOSOURCE() As Integer
+			Get
+				Return Me._SOSOURCE
+			End Get
+			Set
+				If ((Me._SOSOURCE = value)  _
+							= false) Then
+					If Me._FPRM.HasLoadedOrAssignedValue Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
+					Me.OnSOSOURCEChanging(value)
+					Me.SendPropertyChanging
+					Me._SOSOURCE = value
+					Me.SendPropertyChanged("SOSOURCE")
+					Me.OnSOSOURCEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOREDIR", DbType:="Int NOT NULL")>  _
+		Public Property SOREDIR() As Integer
+			Get
+				Return Me._SOREDIR
+			End Get
+			Set
+				If ((Me._SOREDIR = value)  _
+							= false) Then
+					Me.OnSOREDIRChanging(value)
+					Me.SendPropertyChanging
+					Me._SOREDIR = value
+					Me.SendPropertyChanged("SOREDIR")
+					Me.OnSOREDIRChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SERIES", DbType:="SmallInt NOT NULL", IsPrimaryKey:=true)>  _
+		Public Property SERIES() As Short
+			Get
+				Return Me._SERIES
+			End Get
+			Set
+				If ((Me._SERIES = value)  _
+							= false) Then
+					Me.OnSERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._SERIES = value
+					Me.SendPropertyChanged("SERIES")
+					Me.OnSERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CODE", DbType:="VarChar(10) NOT NULL", CanBeNull:=false)>  _
+		Public Property CODE() As String
+			Get
+				Return Me._CODE
+			End Get
+			Set
+				If (String.Equals(Me._CODE, value) = false) Then
+					Me.OnCODEChanging(value)
+					Me.SendPropertyChanging
+					Me._CODE = value
+					Me.SendPropertyChanged("CODE")
+					Me.OnCODEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FPRMS", DbType:="SmallInt NOT NULL")>  _
+		Public Property FPRMS() As Short
+			Get
+				Return Me._FPRMS
+			End Get
+			Set
+				If ((Me._FPRMS = value)  _
+							= false) Then
+					If Me._FPRM.HasLoadedOrAssignedValue Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
+					Me.OnFPRMSChanging(value)
+					Me.SendPropertyChanging
+					Me._FPRMS = value
+					Me.SendPropertyChanged("FPRMS")
+					Me.OnFPRMSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TFPRMS", DbType:="SmallInt NOT NULL")>  _
+		Public Property TFPRMS() As Short
+			Get
+				Return Me._TFPRMS
+			End Get
+			Set
+				If ((Me._TFPRMS = value)  _
+							= false) Then
+					Me.OnTFPRMSChanging(value)
+					Me.SendPropertyChanging
+					Me._TFPRMS = value
+					Me.SendPropertyChanged("TFPRMS")
+					Me.OnTFPRMSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_NAME", DbType:="VarChar(128)")>  _
+		Public Property NAME() As String
+			Get
+				Return Me._NAME
+			End Get
+			Set
+				If (String.Equals(Me._NAME, value) = false) Then
+					Me.OnNAMEChanging(value)
+					Me.SendPropertyChanging
+					Me._NAME = value
+					Me.SendPropertyChanged("NAME")
+					Me.OnNAMEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COMMENTS", DbType:="VarChar(512)")>  _
+		Public Property COMMENTS() As String
+			Get
+				Return Me._COMMENTS
+			End Get
+			Set
+				If (String.Equals(Me._COMMENTS, value) = false) Then
+					Me.OnCOMMENTSChanging(value)
+					Me.SendPropertyChanging
+					Me._COMMENTS = value
+					Me.SendPropertyChanged("COMMENTS")
+					Me.OnCOMMENTSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ISACTIVE", DbType:="SmallInt NOT NULL")>  _
+		Public Property ISACTIVE() As Short
+			Get
+				Return Me._ISACTIVE
+			End Get
+			Set
+				If ((Me._ISACTIVE = value)  _
+							= false) Then
+					Me.OnISACTIVEChanging(value)
+					Me.SendPropertyChanging
+					Me._ISACTIVE = value
+					Me.SendPropertyChanged("ISACTIVE")
+					Me.OnISACTIVEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BRANCH", DbType:="SmallInt")>  _
+		Public Property BRANCH() As System.Nullable(Of Short)
+			Get
+				Return Me._BRANCH
+			End Get
+			Set
+				If (Me._BRANCH.Equals(value) = false) Then
+					If Me._BRANCH1.HasLoadedOrAssignedValue Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
+					Me.OnBRANCHChanging(value)
+					Me.SendPropertyChanging
+					Me._BRANCH = value
+					Me.SendPropertyChanged("BRANCH")
+					Me.OnBRANCHChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSE", DbType:="SmallInt")>  _
+		Public Property WHOUSE() As System.Nullable(Of Short)
+			Get
+				Return Me._WHOUSE
+			End Get
+			Set
+				If (Me._WHOUSE.Equals(value) = false) Then
+					Me.OnWHOUSEChanging(value)
+					Me.SendPropertyChanging
+					Me._WHOUSE = value
+					Me.SendPropertyChanged("WHOUSE")
+					Me.OnWHOUSEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BRANCHSEC", DbType:="SmallInt")>  _
+		Public Property BRANCHSEC() As System.Nullable(Of Short)
+			Get
+				Return Me._BRANCHSEC
+			End Get
+			Set
+				If (Me._BRANCHSEC.Equals(value) = false) Then
+					If Me._BRANCH2.HasLoadedOrAssignedValue Then
+						Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+					End If
+					Me.OnBRANCHSECChanging(value)
+					Me.SendPropertyChanging
+					Me._BRANCHSEC = value
+					Me.SendPropertyChanged("BRANCHSEC")
+					Me.OnBRANCHSECChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSESEC", DbType:="SmallInt")>  _
+		Public Property WHOUSESEC() As System.Nullable(Of Short)
+			Get
+				Return Me._WHOUSESEC
+			End Get
+			Set
+				If (Me._WHOUSESEC.Equals(value) = false) Then
+					Me.OnWHOUSESECChanging(value)
+					Me.SendPropertyChanging
+					Me._WHOUSESEC = value
+					Me.SendPropertyChanged("WHOUSESEC")
+					Me.OnWHOUSESECChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_WHOUSEBIN", DbType:="SmallInt")>  _
+		Public Property WHOUSEBIN() As System.Nullable(Of Short)
+			Get
+				Return Me._WHOUSEBIN
+			End Get
+			Set
+				If (Me._WHOUSEBIN.Equals(value) = false) Then
+					Me.OnWHOUSEBINChanging(value)
+					Me.SendPropertyChanging
+					Me._WHOUSEBIN = value
+					Me.SendPropertyChanged("WHOUSEBIN")
+					Me.OnWHOUSEBINChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BUSUNITS", DbType:="SmallInt")>  _
+		Public Property BUSUNITS() As System.Nullable(Of Short)
+			Get
+				Return Me._BUSUNITS
+			End Get
+			Set
+				If (Me._BUSUNITS.Equals(value) = false) Then
+					Me.OnBUSUNITSChanging(value)
+					Me.SendPropertyChanging
+					Me._BUSUNITS = value
+					Me.SendPropertyChanged("BUSUNITS")
+					Me.OnBUSUNITSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PROCDEF", DbType:="SmallInt")>  _
+		Public Property PROCDEF() As System.Nullable(Of Short)
+			Get
+				Return Me._PROCDEF
+			End Get
+			Set
+				If (Me._PROCDEF.Equals(value) = false) Then
+					Me.OnPROCDEFChanging(value)
+					Me.SendPropertyChanging
+					Me._PROCDEF = value
+					Me.SendPropertyChanged("PROCDEF")
+					Me.OnPROCDEFChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_AUTONUMBER", DbType:="SmallInt NOT NULL")>  _
+		Public Property AUTONUMBER() As Short
+			Get
+				Return Me._AUTONUMBER
+			End Get
+			Set
+				If ((Me._AUTONUMBER = value)  _
+							= false) Then
+					Me.OnAUTONUMBERChanging(value)
+					Me.SendPropertyChanging
+					Me._AUTONUMBER = value
+					Me.SendPropertyChanged("AUTONUMBER")
+					Me.OnAUTONUMBERChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_FINCODEGENERATE", DbType:="SmallInt NOT NULL")>  _
+		Public Property FINCODEGENERATE() As Short
+			Get
+				Return Me._FINCODEGENERATE
+			End Get
+			Set
+				If ((Me._FINCODEGENERATE = value)  _
+							= false) Then
+					Me.OnFINCODEGENERATEChanging(value)
+					Me.SendPropertyChanging
+					Me._FINCODEGENERATE = value
+					Me.SendPropertyChanged("FINCODEGENERATE")
+					Me.OnFINCODEGENERATEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_HANDMD", DbType:="SmallInt NOT NULL")>  _
+		Public Property HANDMD() As Short
+			Get
+				Return Me._HANDMD
+			End Get
+			Set
+				If ((Me._HANDMD = value)  _
+							= false) Then
+					Me.OnHANDMDChanging(value)
+					Me.SendPropertyChanging
+					Me._HANDMD = value
+					Me.SendPropertyChanged("HANDMD")
+					Me.OnHANDMDChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ISRESTRICTED", DbType:="SmallInt NOT NULL")>  _
+		Public Property ISRESTRICTED() As Short
+			Get
+				Return Me._ISRESTRICTED
+			End Get
+			Set
+				If ((Me._ISRESTRICTED = value)  _
+							= false) Then
+					Me.OnISRESTRICTEDChanging(value)
+					Me.SendPropertyChanging
+					Me._ISRESTRICTED = value
+					Me.SendPropertyChanged("ISRESTRICTED")
+					Me.OnISRESTRICTEDChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRINTMODE", DbType:="SmallInt NOT NULL")>  _
+		Public Property PRINTMODE() As Short
+			Get
+				Return Me._PRINTMODE
+			End Get
+			Set
+				If ((Me._PRINTMODE = value)  _
+							= false) Then
+					Me.OnPRINTMODEChanging(value)
+					Me.SendPropertyChanging
+					Me._PRINTMODE = value
+					Me.SendPropertyChanged("PRINTMODE")
+					Me.OnPRINTMODEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOPRINTER", DbType:="VarChar(64)")>  _
+		Public Property SOPRINTER() As String
+			Get
+				Return Me._SOPRINTER
+			End Get
+			Set
+				If (String.Equals(Me._SOPRINTER, value) = false) Then
+					Me.OnSOPRINTERChanging(value)
+					Me.SendPropertyChanging
+					Me._SOPRINTER = value
+					Me.SendPropertyChanged("SOPRINTER")
+					Me.OnSOPRINTERChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOFORMREDIR", DbType:="Int NOT NULL")>  _
+		Public Property SOFORMREDIR() As Integer
+			Get
+				Return Me._SOFORMREDIR
+			End Get
+			Set
+				If ((Me._SOFORMREDIR = value)  _
+							= false) Then
+					Me.OnSOFORMREDIRChanging(value)
+					Me.SendPropertyChanging
+					Me._SOFORMREDIR = value
+					Me.SendPropertyChanged("SOFORMREDIR")
+					Me.OnSOFORMREDIRChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TEMPLATES", DbType:="SmallInt")>  _
+		Public Property TEMPLATES() As System.Nullable(Of Short)
+			Get
+				Return Me._TEMPLATES
+			End Get
+			Set
+				If (Me._TEMPLATES.Equals(value) = false) Then
+					Me.OnTEMPLATESChanging(value)
+					Me.SendPropertyChanging
+					Me._TEMPLATES = value
+					Me.SendPropertyChanged("TEMPLATES")
+					Me.OnTEMPLATESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_COPIES", DbType:="SmallInt NOT NULL")>  _
+		Public Property COPIES() As Short
+			Get
+				Return Me._COPIES
+			End Get
+			Set
+				If ((Me._COPIES = value)  _
+							= false) Then
+					Me.OnCOPIESChanging(value)
+					Me.SendPropertyChanging
+					Me._COPIES = value
+					Me.SendPropertyChanged("COPIES")
+					Me.OnCOPIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CHKPRINTDOC", DbType:="SmallInt NOT NULL")>  _
+		Public Property CHKPRINTDOC() As Short
+			Get
+				Return Me._CHKPRINTDOC
+			End Get
+			Set
+				If ((Me._CHKPRINTDOC = value)  _
+							= false) Then
+					Me.OnCHKPRINTDOCChanging(value)
+					Me.SendPropertyChanging
+					Me._CHKPRINTDOC = value
+					Me.SendPropertyChanged("CHKPRINTDOC")
+					Me.OnCHKPRINTDOCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_REPRINTDOC", DbType:="SmallInt NOT NULL")>  _
+		Public Property REPRINTDOC() As Short
+			Get
+				Return Me._REPRINTDOC
+			End Get
+			Set
+				If ((Me._REPRINTDOC = value)  _
+							= false) Then
+					Me.OnREPRINTDOCChanging(value)
+					Me.SendPropertyChanging
+					Me._REPRINTDOC = value
+					Me.SendPropertyChanged("REPRINTDOC")
+					Me.OnREPRINTDOCChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_REPRINTMD", DbType:="SmallInt NOT NULL")>  _
+		Public Property REPRINTMD() As Short
+			Get
+				Return Me._REPRINTMD
+			End Get
+			Set
+				If ((Me._REPRINTMD = value)  _
+							= false) Then
+					Me.OnREPRINTMDChanging(value)
+					Me.SendPropertyChanging
+					Me._REPRINTMD = value
+					Me.SendPropertyChanged("REPRINTMD")
+					Me.OnREPRINTMDChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRINTDOCAPPRV", DbType:="SmallInt NOT NULL")>  _
+		Public Property PRINTDOCAPPRV() As Short
+			Get
+				Return Me._PRINTDOCAPPRV
+			End Get
+			Set
+				If ((Me._PRINTDOCAPPRV = value)  _
+							= false) Then
+					Me.OnPRINTDOCAPPRVChanging(value)
+					Me.SendPropertyChanging
+					Me._PRINTDOCAPPRV = value
+					Me.SendPropertyChanged("PRINTDOCAPPRV")
+					Me.OnPRINTDOCAPPRVChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_USECUSDISP", DbType:="SmallInt NOT NULL")>  _
+		Public Property USECUSDISP() As Short
+			Get
+				Return Me._USECUSDISP
+			End Get
+			Set
+				If ((Me._USECUSDISP = value)  _
+							= false) Then
+					Me.OnUSECUSDISPChanging(value)
+					Me.SendPropertyChanging
+					Me._USECUSDISP = value
+					Me.SendPropertyChanged("USECUSDISP")
+					Me.OnUSECUSDISPChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SSOSOURCE", DbType:="Int")>  _
+		Public Property SSOSOURCE() As System.Nullable(Of Integer)
+			Get
+				Return Me._SSOSOURCE
+			End Get
+			Set
+				If (Me._SSOSOURCE.Equals(value) = false) Then
+					Me.OnSSOSOURCEChanging(value)
+					Me.SendPropertyChanging
+					Me._SSOSOURCE = value
+					Me.SendPropertyChanged("SSOSOURCE")
+					Me.OnSSOSOURCEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SSERIES", DbType:="SmallInt")>  _
+		Public Property SSERIES() As System.Nullable(Of Short)
+			Get
+				Return Me._SSERIES
+			End Get
+			Set
+				If (Me._SSERIES.Equals(value) = false) Then
+					Me.OnSSERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._SSERIES = value
+					Me.SendPropertyChanged("SSERIES")
+					Me.OnSSERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CSERIES", DbType:="SmallInt")>  _
+		Public Property CSERIES() As System.Nullable(Of Short)
+			Get
+				Return Me._CSERIES
+			End Get
+			Set
+				If (Me._CSERIES.Equals(value) = false) Then
+					Me.OnCSERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._CSERIES = value
+					Me.SendPropertyChanged("CSERIES")
+					Me.OnCSERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PAYMD", DbType:="SmallInt NOT NULL")>  _
+		Public Property PAYMD() As Short
+			Get
+				Return Me._PAYMD
+			End Get
+			Set
+				If ((Me._PAYMD = value)  _
+							= false) Then
+					Me.OnPAYMDChanging(value)
+					Me.SendPropertyChanging
+					Me._PAYMD = value
+					Me.SendPropertyChanged("PAYMD")
+					Me.OnPAYMDChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PFINPAYTERMS", DbType:="SmallInt NOT NULL")>  _
+		Public Property PFINPAYTERMS() As Short
+			Get
+				Return Me._PFINPAYTERMS
+			End Get
+			Set
+				If ((Me._PFINPAYTERMS = value)  _
+							= false) Then
+					Me.OnPFINPAYTERMSChanging(value)
+					Me.SendPropertyChanging
+					Me._PFINPAYTERMS = value
+					Me.SendPropertyChanged("PFINPAYTERMS")
+					Me.OnPFINPAYTERMSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PSERIES", DbType:="SmallInt")>  _
+		Public Property PSERIES() As System.Nullable(Of Short)
+			Get
+				Return Me._PSERIES
+			End Get
+			Set
+				If (Me._PSERIES.Equals(value) = false) Then
+					Me.OnPSERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._PSERIES = value
+					Me.SendPropertyChanged("PSERIES")
+					Me.OnPSERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_GLSERIES", DbType:="SmallInt")>  _
+		Public Property GLSERIES() As System.Nullable(Of Short)
+			Get
+				Return Me._GLSERIES
+			End Get
+			Set
+				If (Me._GLSERIES.Equals(value) = false) Then
+					Me.OnGLSERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._GLSERIES = value
+					Me.SendPropertyChanged("GLSERIES")
+					Me.OnGLSERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ALSERIES", DbType:="SmallInt")>  _
+		Public Property ALSERIES() As System.Nullable(Of Short)
+			Get
+				Return Me._ALSERIES
+			End Get
+			Set
+				If (Me._ALSERIES.Equals(value) = false) Then
+					Me.OnALSERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._ALSERIES = value
+					Me.SendPropertyChanged("ALSERIES")
+					Me.OnALSERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_AMODE", DbType:="SmallInt NOT NULL")>  _
+		Public Property AMODE() As Short
+			Get
+				Return Me._AMODE
+			End Get
+			Set
+				If ((Me._AMODE = value)  _
+							= false) Then
+					Me.OnAMODEChanging(value)
+					Me.SendPropertyChanging
+					Me._AMODE = value
+					Me.SendPropertyChanged("AMODE")
+					Me.OnAMODEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ASERIES", DbType:="SmallInt")>  _
+		Public Property ASERIES() As System.Nullable(Of Short)
+			Get
+				Return Me._ASERIES
+			End Get
+			Set
+				If (Me._ASERIES.Equals(value) = false) Then
+					Me.OnASERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._ASERIES = value
+					Me.SendPropertyChanged("ASERIES")
+					Me.OnASERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_VSERIES", DbType:="SmallInt")>  _
+		Public Property VSERIES() As System.Nullable(Of Short)
+			Get
+				Return Me._VSERIES
+			End Get
+			Set
+				If (Me._VSERIES.Equals(value) = false) Then
+					Me.OnVSERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._VSERIES = value
+					Me.SendPropertyChanged("VSERIES")
+					Me.OnVSERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ESERIES", DbType:="SmallInt")>  _
+		Public Property ESERIES() As System.Nullable(Of Short)
+			Get
+				Return Me._ESERIES
+			End Get
+			Set
+				If (Me._ESERIES.Equals(value) = false) Then
+					Me.OnESERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._ESERIES = value
+					Me.SendPropertyChanged("ESERIES")
+					Me.OnESERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SPCSMD", DbType:="SmallInt NOT NULL")>  _
+		Public Property SPCSMD() As Short
+			Get
+				Return Me._SPCSMD
+			End Get
+			Set
+				If ((Me._SPCSMD = value)  _
+							= false) Then
+					Me.OnSPCSMDChanging(value)
+					Me.SendPropertyChanging
+					Me._SPCSMD = value
+					Me.SendPropertyChanged("SPCSMD")
+					Me.OnSPCSMDChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRDMD", DbType:="SmallInt NOT NULL")>  _
+		Public Property PRDMD() As Short
+			Get
+				Return Me._PRDMD
+			End Get
+			Set
+				If ((Me._PRDMD = value)  _
+							= false) Then
+					Me.OnPRDMDChanging(value)
+					Me.SendPropertyChanging
+					Me._PRDMD = value
+					Me.SendPropertyChanged("PRDMD")
+					Me.OnPRDMDChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRDSERIES", DbType:="SmallInt")>  _
+		Public Property PRDSERIES() As System.Nullable(Of Short)
+			Get
+				Return Me._PRDSERIES
+			End Get
+			Set
+				If (Me._PRDSERIES.Equals(value) = false) Then
+					Me.OnPRDSERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._PRDSERIES = value
+					Me.SendPropertyChanged("PRDSERIES")
+					Me.OnPRDSERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRDITEMD", DbType:="SmallInt NOT NULL")>  _
+		Public Property PRDITEMD() As Short
+			Get
+				Return Me._PRDITEMD
+			End Get
+			Set
+				If ((Me._PRDITEMD = value)  _
+							= false) Then
+					Me.OnPRDITEMDChanging(value)
+					Me.SendPropertyChanging
+					Me._PRDITEMD = value
+					Me.SendPropertyChanged("PRDITEMD")
+					Me.OnPRDITEMDChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_PRDITEMSERIES", DbType:="SmallInt")>  _
+		Public Property PRDITEMSERIES() As System.Nullable(Of Short)
+			Get
+				Return Me._PRDITEMSERIES
+			End Get
+			Set
+				If (Me._PRDITEMSERIES.Equals(value) = false) Then
+					Me.OnPRDITEMSERIESChanging(value)
+					Me.SendPropertyChanging
+					Me._PRDITEMSERIES = value
+					Me.SendPropertyChanged("PRDITEMSERIES")
+					Me.OnPRDITEMSERIESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CHQAUTO", DbType:="SmallInt NOT NULL")>  _
+		Public Property CHQAUTO() As Short
+			Get
+				Return Me._CHQAUTO
+			End Get
+			Set
+				If ((Me._CHQAUTO = value)  _
+							= false) Then
+					Me.OnCHQAUTOChanging(value)
+					Me.SendPropertyChanging
+					Me._CHQAUTO = value
+					Me.SendPropertyChanged("CHQAUTO")
+					Me.OnCHQAUTOChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOISCONV", DbType:="SmallInt NOT NULL")>  _
+		Public Property SOISCONV() As Short
+			Get
+				Return Me._SOISCONV
+			End Get
+			Set
+				If ((Me._SOISCONV = value)  _
+							= false) Then
+					Me.OnSOISCONVChanging(value)
+					Me.SendPropertyChanging
+					Me._SOISCONV = value
+					Me.SendPropertyChanged("SOISCONV")
+					Me.OnSOISCONVChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SONOCONV", DbType:="SmallInt NOT NULL")>  _
+		Public Property SONOCONV() As Short
+			Get
+				Return Me._SONOCONV
+			End Get
+			Set
+				If ((Me._SONOCONV = value)  _
+							= false) Then
+					Me.OnSONOCONVChanging(value)
+					Me.SendPropertyChanging
+					Me._SONOCONV = value
+					Me.SendPropertyChanged("SONOCONV")
+					Me.OnSONOCONVChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SERIESACCESS", DbType:="VarChar(4000)")>  _
+		Public Property SERIESACCESS() As String
+			Get
+				Return Me._SERIESACCESS
+			End Get
+			Set
+				If (String.Equals(Me._SERIESACCESS, value) = false) Then
+					Me.OnSERIESACCESSChanging(value)
+					Me.SendPropertyChanging
+					Me._SERIESACCESS = value
+					Me.SendPropertyChanged("SERIESACCESS")
+					Me.OnSERIESACCESSChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SERIESPAY", DbType:="VarChar(2000)")>  _
+		Public Property SERIESPAY() As String
+			Get
+				Return Me._SERIESPAY
+			End Get
+			Set
+				If (String.Equals(Me._SERIESPAY, value) = false) Then
+					Me.OnSERIESPAYChanging(value)
+					Me.SendPropertyChanging
+					Me._SERIESPAY = value
+					Me.SendPropertyChanged("SERIESPAY")
+					Me.OnSERIESPAYChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SERIESCNV", DbType:="VarChar(2000)")>  _
+		Public Property SERIESCNV() As String
+			Get
+				Return Me._SERIESCNV
+			End Get
+			Set
+				If (String.Equals(Me._SERIESCNV, value) = false) Then
+					Me.OnSERIESCNVChanging(value)
+					Me.SendPropertyChanging
+					Me._SERIESCNV = value
+					Me.SendPropertyChanged("SERIESCNV")
+					Me.OnSERIESCNVChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_BGPREFIX", DbType:="VarChar(10)")>  _
+		Public Property BGPREFIX() As String
+			Get
+				Return Me._BGPREFIX
+			End Get
+			Set
+				If (String.Equals(Me._BGPREFIX, value) = false) Then
+					Me.OnBGPREFIXChanging(value)
+					Me.SendPropertyChanging
+					Me._BGPREFIX = value
+					Me.SendPropertyChanged("BGPREFIX")
+					Me.OnBGPREFIXChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_TRACEPRN", DbType:="SmallInt NOT NULL")>  _
+		Public Property TRACEPRN() As Short
+			Get
+				Return Me._TRACEPRN
+			End Get
+			Set
+				If ((Me._TRACEPRN = value)  _
+							= false) Then
+					Me.OnTRACEPRNChanging(value)
+					Me.SendPropertyChanging
+					Me._TRACEPRN = value
+					Me.SendPropertyChanged("TRACEPRN")
+					Me.OnTRACEPRNChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_ECOLLABORATION", DbType:="SmallInt")>  _
+		Public Property ECOLLABORATION() As System.Nullable(Of Short)
+			Get
+				Return Me._ECOLLABORATION
+			End Get
+			Set
+				If (Me._ECOLLABORATION.Equals(value) = false) Then
+					Me.OnECOLLABORATIONChanging(value)
+					Me.SendPropertyChanging
+					Me._ECOLLABORATION = value
+					Me.SendPropertyChanged("ECOLLABORATION")
+					Me.OnECOLLABORATIONChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_GSISPACKAGES", DbType:="SmallInt")>  _
+		Public Property GSISPACKAGES() As System.Nullable(Of Short)
+			Get
+				Return Me._GSISPACKAGES
+			End Get
+			Set
+				If (Me._GSISPACKAGES.Equals(value) = false) Then
+					Me.OnGSISPACKAGESChanging(value)
+					Me.SendPropertyChanging
+					Me._GSISPACKAGES = value
+					Me.SendPropertyChanged("GSISPACKAGES")
+					Me.OnGSISPACKAGESChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_INSDATE", DbType:="DateTime")>  _
+		Public Property INSDATE() As System.Nullable(Of Date)
+			Get
+				Return Me._INSDATE
+			End Get
+			Set
+				If (Me._INSDATE.Equals(value) = false) Then
+					Me.OnINSDATEChanging(value)
+					Me.SendPropertyChanging
+					Me._INSDATE = value
+					Me.SendPropertyChanged("INSDATE")
+					Me.OnINSDATEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_INSUSER", DbType:="SmallInt")>  _
+		Public Property INSUSER() As System.Nullable(Of Short)
+			Get
+				Return Me._INSUSER
+			End Get
+			Set
+				If (Me._INSUSER.Equals(value) = false) Then
+					Me.OnINSUSERChanging(value)
+					Me.SendPropertyChanging
+					Me._INSUSER = value
+					Me.SendPropertyChanged("INSUSER")
+					Me.OnINSUSERChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_UPDDATE", DbType:="DateTime")>  _
+		Public Property UPDDATE() As System.Nullable(Of Date)
+			Get
+				Return Me._UPDDATE
+			End Get
+			Set
+				If (Me._UPDDATE.Equals(value) = false) Then
+					Me.OnUPDDATEChanging(value)
+					Me.SendPropertyChanging
+					Me._UPDDATE = value
+					Me.SendPropertyChanged("UPDDATE")
+					Me.OnUPDDATEChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_UPDUSER", DbType:="SmallInt")>  _
+		Public Property UPDUSER() As System.Nullable(Of Short)
+			Get
+				Return Me._UPDUSER
+			End Get
+			Set
+				If (Me._UPDUSER.Equals(value) = false) Then
+					Me.OnUPDUSERChanging(value)
+					Me.SendPropertyChanging
+					Me._UPDUSER = value
+					Me.SendPropertyChanged("UPDUSER")
+					Me.OnUPDUSERChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SERIESHIS", DbType:="VarChar(2000)")>  _
+		Public Property SERIESHIS() As String
+			Get
+				Return Me._SERIESHIS
+			End Get
+			Set
+				If (String.Equals(Me._SERIESHIS, value) = false) Then
+					Me.OnSERIESHISChanging(value)
+					Me.SendPropertyChanging
+					Me._SERIESHIS = value
+					Me.SendPropertyChanged("SERIESHIS")
+					Me.OnSERIESHISChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SOPRSNMD", DbType:="SmallInt")>  _
+		Public Property SOPRSNMD() As System.Nullable(Of Short)
+			Get
+				Return Me._SOPRSNMD
+			End Get
+			Set
+				If (Me._SOPRSNMD.Equals(value) = false) Then
+					Me.OnSOPRSNMDChanging(value)
+					Me.SendPropertyChanging
+					Me._SOPRSNMD = value
+					Me.SendPropertyChanged("SOPRSNMD")
+					Me.OnSOPRSNMDChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_CALCELM", DbType:="Int")>  _
+		Public Property CALCELM() As System.Nullable(Of Integer)
+			Get
+				Return Me._CALCELM
+			End Get
+			Set
+				If (Me._CALCELM.Equals(value) = false) Then
+					Me.OnCALCELMChanging(value)
+					Me.SendPropertyChanging
+					Me._CALCELM = value
+					Me.SendPropertyChanged("CALCELM")
+					Me.OnCALCELMChanged
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="SERIES_SERIESNUM", Storage:="_SERIESNUMs", ThisKey:="COMPANY,SOSOURCE,SERIES", OtherKey:="COMPANY,SOSOURCE,SERIES")>  _
+		Public Property SERIESNUMs() As EntitySet(Of SERIESNUM)
+			Get
+				Return Me._SERIESNUMs
+			End Get
+			Set
+				Me._SERIESNUMs.Assign(value)
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="SERIES_FINDOC", Storage:="_FINDOCs", ThisKey:="COMPANY,SOSOURCE,SERIES", OtherKey:="COMPANY,SOSOURCE,SERIES")>  _
+		Public Property FINDOCs() As EntitySet(Of FINDOC)
+			Get
+				Return Me._FINDOCs
+			End Get
+			Set
+				Me._FINDOCs.Assign(value)
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="BRANCH_SERIES", Storage:="_BRANCH1", ThisKey:="COMPANY,BRANCH", OtherKey:="COMPANY,BRANCH", IsForeignKey:=true)>  _
+		Public Property BRANCH1() As BRANCH
+			Get
+				Return Me._BRANCH1.Entity
+			End Get
+			Set
+				Dim previousValue As BRANCH = Me._BRANCH1.Entity
+				If ((Object.Equals(previousValue, value) = false)  _
+							OrElse (Me._BRANCH1.HasLoadedOrAssignedValue = false)) Then
+					Me.SendPropertyChanging
+					If ((previousValue Is Nothing)  _
+								= false) Then
+						Me._BRANCH1.Entity = Nothing
+						previousValue.SERIES.Remove(Me)
+					End If
+					Me._BRANCH1.Entity = value
+					If ((value Is Nothing)  _
+								= false) Then
+						value.SERIES.Add(Me)
+						Me._COMPANY = value.COMPANY
+						Me._BRANCH = value.BRANCH
+					Else
+						Me._COMPANY = CType(Nothing, Short)
+						Me._BRANCH = CType(Nothing, Nullable(Of Short))
+					End If
+					Me.SendPropertyChanged("BRANCH1")
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="BRANCH_SERIES1", Storage:="_BRANCH2", ThisKey:="COMPANY,BRANCHSEC", OtherKey:="COMPANY,BRANCH", IsForeignKey:=true)>  _
+		Public Property BRANCH2() As BRANCH
+			Get
+				Return Me._BRANCH2.Entity
+			End Get
+			Set
+				Dim previousValue As BRANCH = Me._BRANCH2.Entity
+				If ((Object.Equals(previousValue, value) = false)  _
+							OrElse (Me._BRANCH2.HasLoadedOrAssignedValue = false)) Then
+					Me.SendPropertyChanging
+					If ((previousValue Is Nothing)  _
+								= false) Then
+						Me._BRANCH2.Entity = Nothing
+						previousValue.SERIES1.Remove(Me)
+					End If
+					Me._BRANCH2.Entity = value
+					If ((value Is Nothing)  _
+								= false) Then
+						value.SERIES1.Add(Me)
+						Me._COMPANY = value.COMPANY
+						Me._BRANCHSEC = value.BRANCH
+					Else
+						Me._COMPANY = CType(Nothing, Short)
+						Me._BRANCHSEC = CType(Nothing, Nullable(Of Short))
+					End If
+					Me.SendPropertyChanged("BRANCH2")
+				End If
+			End Set
+		End Property
+		
+		<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="FPRM_SERIES", Storage:="_FPRM", ThisKey:="COMPANY,SOSOURCE,FPRMS", OtherKey:="COMPANY,SOSOURCE,FPRMS", IsForeignKey:=true)>  _
+		Public Property FPRM() As FPRM
+			Get
+				Return Me._FPRM.Entity
+			End Get
+			Set
+				Dim previousValue As FPRM = Me._FPRM.Entity
+				If ((Object.Equals(previousValue, value) = false)  _
+							OrElse (Me._FPRM.HasLoadedOrAssignedValue = false)) Then
+					Me.SendPropertyChanging
+					If ((previousValue Is Nothing)  _
+								= false) Then
+						Me._FPRM.Entity = Nothing
+						previousValue.SERIES.Remove(Me)
+					End If
+					Me._FPRM.Entity = value
+					If ((value Is Nothing)  _
+								= false) Then
+						value.SERIES.Add(Me)
+						Me._COMPANY = value.COMPANY
+						Me._SOSOURCE = value.SOSOURCE
+						Me._FPRMS = value.FPRMS
+					Else
+						Me._COMPANY = CType(Nothing, Short)
+						Me._SOSOURCE = CType(Nothing, Integer)
+						Me._FPRMS = CType(Nothing, Short)
+					End If
+					Me.SendPropertyChanged("FPRM")
+				End If
+			End Set
+		End Property
+		
+		Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+		
+		Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+		
+		Protected Overridable Sub SendPropertyChanging()
+			If ((Me.PropertyChangingEvent Is Nothing)  _
+						= false) Then
+				RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+			End If
+		End Sub
+		
+		Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+			If ((Me.PropertyChangedEvent Is Nothing)  _
+						= false) Then
+				RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+			End If
+		End Sub
+		
+		Private Sub attach_SERIESNUMs(ByVal entity As SERIESNUM)
+			Me.SendPropertyChanging
+			entity.SERIES1 = Me
+		End Sub
+		
+		Private Sub detach_SERIESNUMs(ByVal entity As SERIESNUM)
+			Me.SendPropertyChanging
+			entity.SERIES1 = Nothing
+		End Sub
+		
+		Private Sub attach_FINDOCs(ByVal entity As FINDOC)
+			Me.SendPropertyChanging
+			entity.SERIES1 = Me
+		End Sub
+		
+		Private Sub detach_FINDOCs(ByVal entity As FINDOC)
+			Me.SendPropertyChanging
+			entity.SERIES1 = Nothing
 		End Sub
 	End Class
 	

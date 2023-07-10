@@ -71,6 +71,7 @@ Partial Class Transport
         Me.OpenToolStripButton = New System.Windows.Forms.ToolStripButton()
         Me.toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.BindingNavigatorSaveItem = New System.Windows.Forms.ToolStripButton()
+        Me.cmdPrint = New System.Windows.Forms.ToolStripButton()
         Me.DataGridViewSearch = New System.Windows.Forms.DataGridView()
         CType(Me.MasterBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DetailsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -390,7 +391,7 @@ Partial Class Transport
         Me.BindingNavigatorMaster.BindingSource = Me.MasterBindingSource
         Me.BindingNavigatorMaster.CountItem = Me.BindingNavigatorCountItem1
         Me.BindingNavigatorMaster.DeleteItem = Nothing
-        Me.BindingNavigatorMaster.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem1, Me.BindingNavigatorMovePreviousItem1, Me.BindingNavigatorSeparator3, Me.BindingNavigatorPositionItem1, Me.BindingNavigatorCountItem1, Me.BindingNavigatorSeparator4, Me.BindingNavigatorMoveNextItem1, Me.BindingNavigatorMoveLastItem1, Me.BindingNavigatorSeparator5, Me.BindingNavigatorMasterAddNewItem, Me.BindingNavigatorMasterDeleteItem, Me.OpenToolStripButton, Me.toolStripSeparator, Me.BindingNavigatorSaveItem})
+        Me.BindingNavigatorMaster.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem1, Me.BindingNavigatorMovePreviousItem1, Me.BindingNavigatorSeparator3, Me.BindingNavigatorPositionItem1, Me.BindingNavigatorCountItem1, Me.BindingNavigatorSeparator4, Me.BindingNavigatorMoveNextItem1, Me.BindingNavigatorMoveLastItem1, Me.BindingNavigatorSeparator5, Me.BindingNavigatorMasterAddNewItem, Me.BindingNavigatorMasterDeleteItem, Me.OpenToolStripButton, Me.toolStripSeparator, Me.BindingNavigatorSaveItem, Me.cmdPrint})
         Me.BindingNavigatorMaster.Location = New System.Drawing.Point(0, 0)
         Me.BindingNavigatorMaster.MoveFirstItem = Me.BindingNavigatorMoveFirstItem1
         Me.BindingNavigatorMaster.MoveLastItem = Me.BindingNavigatorMoveLastItem1
@@ -514,6 +515,16 @@ Partial Class Transport
         Me.BindingNavigatorSaveItem.Size = New System.Drawing.Size(23, 22)
         Me.BindingNavigatorSaveItem.Text = "Save Data"
         '
+        'cmdPrint
+        '
+        Me.cmdPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.cmdPrint.Image = Global.GmSupp.My.Resources.Resources.Printer_Folder
+        Me.cmdPrint.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.cmdPrint.Name = "cmdPrint"
+        Me.cmdPrint.Size = New System.Drawing.Size(23, 22)
+        Me.cmdPrint.Tag = "1"
+        Me.cmdPrint.Text = "Εκτύπωση Αίτησης"
+        '
         'DataGridViewSearch
         '
         Me.DataGridViewSearch.BackgroundColor = System.Drawing.SystemColors.Control
@@ -594,6 +605,7 @@ Partial Class Transport
     Friend WithEvents OpenToolStripButton As ToolStripButton
     Friend WithEvents toolStripSeparator As ToolStripSeparator
     Friend WithEvents BindingNavigatorSaveItem As ToolStripButton
+    Friend WithEvents cmdPrint As ToolStripButton
     Friend WithEvents DataGridViewSearch As DataGridView
     Friend WithEvents chkBoxIsActive As CheckBox
     Friend WithEvents ToolStrip6 As ToolStrip

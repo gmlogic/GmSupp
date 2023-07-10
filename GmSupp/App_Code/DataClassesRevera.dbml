@@ -511,6 +511,7 @@
       <Column Name="SOVAL" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
       <Column Name="SODATA" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
       <Association Name="FPRM_FINDOC" Member="FINDOCs" ThisKey="COMPANY,SOSOURCE,FPRMS" OtherKey="COMPANY,SOSOURCE,FPRMS" Type="FINDOC" />
+      <Association Name="FPRM_SERIES" Member="SERIES" ThisKey="COMPANY,SOSOURCE,FPRMS" OtherKey="COMPANY,SOSOURCE,FPRMS" Type="SERIES" />
     </Type>
   </Table>
   <Table Name="dbo.RESTMODE" Member="RESTMODEs">
@@ -529,6 +530,7 @@
       <Column Name="SERIES" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="FISCPRD" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="SERIESNUM" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="SERIES_SERIESNUM" Member="SERIES1" ThisKey="COMPANY,SOSOURCE,SERIES" OtherKey="COMPANY,SOSOURCE,SERIES" Type="SERIES" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.BRANCH" Member="BRANCHes">
@@ -572,6 +574,8 @@
       <Column Name="KADTAXIS" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="BRANCH_MTRDOC" Member="MTRDOCs" ThisKey="COMPANY,BRANCH" OtherKey="COMPANY,BRANCHSEC" Type="MTRDOC" />
       <Association Name="BRANCH_FINDOC" Member="FINDOCs" ThisKey="COMPANY,BRANCH" OtherKey="COMPANY,BRANCH" Type="FINDOC" />
+      <Association Name="BRANCH_SERIES" Member="SERIES" ThisKey="COMPANY,BRANCH" OtherKey="COMPANY,BRANCH" Type="SERIES" />
+      <Association Name="BRANCH_SERIES1" Member="SERIES1" ThisKey="COMPANY,BRANCH" OtherKey="COMPANY,BRANCHSEC" Type="SERIES" />
     </Type>
   </Table>
   <Table Name="dbo.MTRDOC" Member="MTRDOCs">
@@ -1152,6 +1156,7 @@
       <Association Name="FINDOC_FINDOC1" Member="FINDOC2" ThisKey="FINDOCS" OtherKey="FINDOC" Type="FINDOC" IsForeignKey="true" />
       <Association Name="FPRM_FINDOC" Member="FPRM" ThisKey="COMPANY,SOSOURCE,FPRMS" OtherKey="COMPANY,SOSOURCE,FPRMS" Type="FPRM" IsForeignKey="true" />
       <Association Name="TRDR_FINDOC" Member="TRDR1" ThisKey="TRDR" OtherKey="TRDR" Type="TRDR" IsForeignKey="true" />
+      <Association Name="SERIES_FINDOC" Member="SERIES1" ThisKey="COMPANY,SOSOURCE,SERIES" OtherKey="COMPANY,SOSOURCE,SERIES" Type="SERIES" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.ccCTransport" Member="ccCTransports">
@@ -1184,6 +1189,80 @@
       <Column Name="createdBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="modifiedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="modifiedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SERIES" Member="SERIES">
+    <Type Name="SERIES">
+      <Column Name="COMPANY" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SOSOURCE" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SOREDIR" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SERIES" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CODE" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="FPRMS" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TFPRMS" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="NAME" Type="System.String" DbType="VarChar(128)" CanBeNull="true" />
+      <Column Name="COMMENTS" Type="System.String" DbType="VarChar(512)" CanBeNull="true" />
+      <Column Name="ISACTIVE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="BRANCH" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="WHOUSE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="BRANCHSEC" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="WHOUSESEC" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="WHOUSEBIN" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="BUSUNITS" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="PROCDEF" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="AUTONUMBER" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="FINCODEGENERATE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="HANDMD" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ISRESTRICTED" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PRINTMODE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="SOPRINTER" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+      <Column Name="SOFORMREDIR" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TEMPLATES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="COPIES" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="CHKPRINTDOC" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="REPRINTDOC" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="REPRINTMD" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PRINTDOCAPPRV" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="USECUSDISP" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="SSOSOURCE" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SSERIES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="CSERIES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="PAYMD" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PFINPAYTERMS" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PSERIES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="GLSERIES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="ALSERIES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="AMODE" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ASERIES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="VSERIES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="ESERIES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="SPCSMD" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PRDMD" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PRDSERIES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="PRDITEMD" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PRDITEMSERIES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="CHQAUTO" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="SOISCONV" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="SONOCONV" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="SERIESACCESS" Type="System.String" DbType="VarChar(4000)" CanBeNull="true" />
+      <Column Name="SERIESPAY" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
+      <Column Name="SERIESCNV" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
+      <Column Name="BGPREFIX" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="TRACEPRN" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ECOLLABORATION" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="GSISPACKAGES" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="INSDATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="INSUSER" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="UPDDATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="UPDUSER" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="SERIESHIS" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
+      <Column Name="SOPRSNMD" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="CALCELM" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="SERIES_SERIESNUM" Member="SERIESNUMs" ThisKey="COMPANY,SOSOURCE,SERIES" OtherKey="COMPANY,SOSOURCE,SERIES" Type="SERIESNUM" />
+      <Association Name="SERIES_FINDOC" Member="FINDOCs" ThisKey="COMPANY,SOSOURCE,SERIES" OtherKey="COMPANY,SOSOURCE,SERIES" Type="FINDOC" />
+      <Association Name="BRANCH_SERIES" Member="BRANCH1" ThisKey="COMPANY,BRANCH" OtherKey="COMPANY,BRANCH" Type="BRANCH" IsForeignKey="true" />
+      <Association Name="BRANCH_SERIES1" Member="BRANCH2" ThisKey="COMPANY,BRANCHSEC" OtherKey="COMPANY,BRANCH" Type="BRANCH" IsForeignKey="true" />
+      <Association Name="FPRM_SERIES" Member="FPRM" ThisKey="COMPANY,SOSOURCE,FPRMS" OtherKey="COMPANY,SOSOURCE,FPRMS" Type="FPRM" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.GetWHouseBalance" Method="GetWHouseBalance">
