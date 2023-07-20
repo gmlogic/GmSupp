@@ -73,6 +73,7 @@ Partial Class Transport
         Me.BindingNavigatorSaveItem = New System.Windows.Forms.ToolStripButton()
         Me.cmdPrint = New System.Windows.Forms.ToolStripButton()
         Me.DataGridViewSearch = New System.Windows.Forms.DataGridView()
+        Me.PanelPickDoc = New System.Windows.Forms.Panel()
         CType(Me.MasterBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DetailsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.LoanCategoriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -91,6 +92,7 @@ Partial Class Transport
         CType(Me.BindingNavigatorMaster, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigatorMaster.SuspendLayout()
         CType(Me.DataGridViewSearch, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelPickDoc.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmdSelect
@@ -196,11 +198,7 @@ Partial Class Transport
         'SplitContainer1.Panel1
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
-        Me.SplitContainer1.Panel1.Controls.Add(Me.OK)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.ddlPicks)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.Label1)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.ddlXCOs)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.lblTrnDate)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.PanelPickDoc)
         Me.SplitContainer1.Panel1.Controls.Add(Me.txtBoxNotes)
         Me.SplitContainer1.Panel1.Controls.Add(Me.ToolStrip6)
         Me.SplitContainer1.Panel1.Controls.Add(Me.LinkLabel1)
@@ -221,7 +219,7 @@ Partial Class Transport
         '
         'OK
         '
-        Me.OK.Location = New System.Drawing.Point(424, 97)
+        Me.OK.Location = New System.Drawing.Point(389, 2)
         Me.OK.Name = "OK"
         Me.OK.Size = New System.Drawing.Size(30, 23)
         Me.OK.TabIndex = 260
@@ -230,7 +228,7 @@ Partial Class Transport
         'ddlPicks
         '
         Me.ddlPicks.FormattingEnabled = True
-        Me.ddlPicks.Location = New System.Drawing.Point(297, 97)
+        Me.ddlPicks.Location = New System.Drawing.Point(262, 2)
         Me.ddlPicks.Name = "ddlPicks"
         Me.ddlPicks.Size = New System.Drawing.Size(121, 21)
         Me.ddlPicks.TabIndex = 259
@@ -240,7 +238,7 @@ Partial Class Transport
         Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
         Me.Label1.ForeColor = System.Drawing.Color.Blue
-        Me.Label1.Location = New System.Drawing.Point(233, 97)
+        Me.Label1.Location = New System.Drawing.Point(198, 2)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(58, 20)
         Me.Label1.TabIndex = 258
@@ -250,7 +248,7 @@ Partial Class Transport
         'ddlXCOs
         '
         Me.ddlXCOs.FormattingEnabled = True
-        Me.ddlXCOs.Location = New System.Drawing.Point(106, 97)
+        Me.ddlXCOs.Location = New System.Drawing.Point(71, 2)
         Me.ddlXCOs.Name = "ddlXCOs"
         Me.ddlXCOs.Size = New System.Drawing.Size(121, 21)
         Me.ddlXCOs.TabIndex = 257
@@ -260,7 +258,7 @@ Partial Class Transport
         Me.lblTrnDate.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.lblTrnDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
         Me.lblTrnDate.ForeColor = System.Drawing.Color.Blue
-        Me.lblTrnDate.Location = New System.Drawing.Point(36, 97)
+        Me.lblTrnDate.Location = New System.Drawing.Point(1, 2)
         Me.lblTrnDate.Name = "lblTrnDate"
         Me.lblTrnDate.Size = New System.Drawing.Size(64, 20)
         Me.lblTrnDate.TabIndex = 256
@@ -344,7 +342,7 @@ Partial Class Transport
         Me.chkBoxIsActive.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkBoxIsActive.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
         Me.chkBoxIsActive.ForeColor = System.Drawing.Color.Blue
-        Me.chkBoxIsActive.Location = New System.Drawing.Point(36, 77)
+        Me.chkBoxIsActive.Location = New System.Drawing.Point(36, 67)
         Me.chkBoxIsActive.Name = "chkBoxIsActive"
         Me.chkBoxIsActive.Size = New System.Drawing.Size(125, 17)
         Me.chkBoxIsActive.TabIndex = 242
@@ -535,6 +533,18 @@ Partial Class Transport
         Me.DataGridViewSearch.Size = New System.Drawing.Size(1284, 45)
         Me.DataGridViewSearch.TabIndex = 6
         '
+        'PanelPickDoc
+        '
+        Me.PanelPickDoc.Controls.Add(Me.lblTrnDate)
+        Me.PanelPickDoc.Controls.Add(Me.OK)
+        Me.PanelPickDoc.Controls.Add(Me.ddlXCOs)
+        Me.PanelPickDoc.Controls.Add(Me.ddlPicks)
+        Me.PanelPickDoc.Controls.Add(Me.Label1)
+        Me.PanelPickDoc.Location = New System.Drawing.Point(36, 90)
+        Me.PanelPickDoc.Name = "PanelPickDoc"
+        Me.PanelPickDoc.Size = New System.Drawing.Size(429, 27)
+        Me.PanelPickDoc.TabIndex = 261
+        '
         'Transport
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -567,6 +577,7 @@ Partial Class Transport
         Me.BindingNavigatorMaster.ResumeLayout(False)
         Me.BindingNavigatorMaster.PerformLayout()
         CType(Me.DataGridViewSearch, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelPickDoc.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -620,4 +631,5 @@ Partial Class Transport
     Friend WithEvents ddlPicks As ComboBox
     Friend WithEvents Label1 As Label
     Friend WithEvents OK As Button
+    Friend WithEvents PanelPickDoc As Panel
 End Class

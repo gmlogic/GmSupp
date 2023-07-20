@@ -79,8 +79,15 @@ Public Class Transport
             Me.ddlXCOs.SelectedIndex = 0
         End If
 
+        If Not CurUserRole = "Admins" Then
+            Me.PanelPickDoc.Visible = False
+            If CurUserRole = "Logistics" Then
+                Me.PanelPickDoc.Visible = True
+            End If
+        End If
         Me.ddlPicks.Enabled = False
         Me.OK.Enabled = False
+
         'CurUserRole = "Logistics"
         If CurUser = "gmlogic" Then
             'conString.ConnectionString = My.Settings.Item("GenConnectionString") '"server=" & SERVER & ";user id=gm;" & "password=1mgergm++;initial catalog=" & DATABASE
@@ -883,6 +890,7 @@ Public Class Transport
 
             ' Open the printer dialog box, and then allow the user to select a printer.
             pd.PrinterSettings = New Drawing.Printing.PrinterSettings()
+            pd.PrinterSettings.Copies = 3
             If pd.ShowDialog = DialogResult.OK Then
                 PrinterName = pd.PrinterSettings.PrinterName
             End If
@@ -945,7 +953,10 @@ Public Class Transport
                         myArray(3) = "E:\temp\Data\" & dt(0)("FINCODE") & ".pdf"
                         Dim SysRequest As Object = s1Conn.GetStockObj("SysRequest", True)
                         'SoftOne Object
-                        s1Conn.CallPublished(SysRequest, "PrintForm", myArray)
+                        For no = 1 To pd.PrinterSettings.Copies
+                            s1Conn.CallPublished(SysRequest, "PrintForm", myArray)
+                        Next
+
                         'Soft1Conn.CallPublished("SysRequest.PrintForm', VarArray(vPURModule,100,'928', vFile,4));
 
                         'Dim sourcePath = "C:\test\" & "_" + item.FINDOC.ToString & ".PDF"
