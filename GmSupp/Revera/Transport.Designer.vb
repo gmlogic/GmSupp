@@ -41,11 +41,13 @@ Partial Class Transport
         Me.SelectLoanCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.chkBoxCancelled = New System.Windows.Forms.CheckBox()
+        Me.PanelPickDoc = New System.Windows.Forms.Panel()
+        Me.lblTrnDate = New System.Windows.Forms.Label()
         Me.OK = New System.Windows.Forms.Button()
+        Me.ddlXCOs = New System.Windows.Forms.ComboBox()
         Me.ddlPicks = New System.Windows.Forms.ComboBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.ddlXCOs = New System.Windows.Forms.ComboBox()
-        Me.lblTrnDate = New System.Windows.Forms.Label()
         Me.txtBoxNotes = New System.Windows.Forms.TextBox()
         Me.ToolStrip6 = New System.Windows.Forms.ToolStrip()
         Me.TlSComboBoxDate = New System.Windows.Forms.ToolStripComboBox()
@@ -73,7 +75,6 @@ Partial Class Transport
         Me.BindingNavigatorSaveItem = New System.Windows.Forms.ToolStripButton()
         Me.cmdPrint = New System.Windows.Forms.ToolStripButton()
         Me.DataGridViewSearch = New System.Windows.Forms.DataGridView()
-        Me.PanelPickDoc = New System.Windows.Forms.Panel()
         CType(Me.MasterBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DetailsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.LoanCategoriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -83,6 +84,7 @@ Partial Class Transport
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        Me.PanelPickDoc.SuspendLayout()
         Me.ToolStrip6.SuspendLayout()
         CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer3.Panel1.SuspendLayout()
@@ -92,7 +94,6 @@ Partial Class Transport
         CType(Me.BindingNavigatorMaster, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigatorMaster.SuspendLayout()
         CType(Me.DataGridViewSearch, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.PanelPickDoc.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmdSelect
@@ -198,6 +199,7 @@ Partial Class Transport
         'SplitContainer1.Panel1
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
+        Me.SplitContainer1.Panel1.Controls.Add(Me.chkBoxCancelled)
         Me.SplitContainer1.Panel1.Controls.Add(Me.PanelPickDoc)
         Me.SplitContainer1.Panel1.Controls.Add(Me.txtBoxNotes)
         Me.SplitContainer1.Panel1.Controls.Add(Me.ToolStrip6)
@@ -217,6 +219,43 @@ Partial Class Transport
         Me.SplitContainer1.SplitterDistance = 129
         Me.SplitContainer1.TabIndex = 10
         '
+        'chkBoxCancelled
+        '
+        Me.chkBoxCancelled.AutoSize = True
+        Me.chkBoxCancelled.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
+        Me.chkBoxCancelled.ForeColor = System.Drawing.Color.Blue
+        Me.chkBoxCancelled.Location = New System.Drawing.Point(177, 67)
+        Me.chkBoxCancelled.Name = "chkBoxCancelled"
+        Me.chkBoxCancelled.Size = New System.Drawing.Size(93, 17)
+        Me.chkBoxCancelled.TabIndex = 262
+        Me.chkBoxCancelled.TabStop = False
+        Me.chkBoxCancelled.Text = "+ Cancelled"
+        Me.chkBoxCancelled.UseVisualStyleBackColor = True
+        '
+        'PanelPickDoc
+        '
+        Me.PanelPickDoc.Controls.Add(Me.lblTrnDate)
+        Me.PanelPickDoc.Controls.Add(Me.OK)
+        Me.PanelPickDoc.Controls.Add(Me.ddlXCOs)
+        Me.PanelPickDoc.Controls.Add(Me.ddlPicks)
+        Me.PanelPickDoc.Controls.Add(Me.Label1)
+        Me.PanelPickDoc.Location = New System.Drawing.Point(36, 90)
+        Me.PanelPickDoc.Name = "PanelPickDoc"
+        Me.PanelPickDoc.Size = New System.Drawing.Size(429, 27)
+        Me.PanelPickDoc.TabIndex = 261
+        '
+        'lblTrnDate
+        '
+        Me.lblTrnDate.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblTrnDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.lblTrnDate.ForeColor = System.Drawing.Color.Blue
+        Me.lblTrnDate.Location = New System.Drawing.Point(1, 2)
+        Me.lblTrnDate.Name = "lblTrnDate"
+        Me.lblTrnDate.Size = New System.Drawing.Size(64, 20)
+        Me.lblTrnDate.TabIndex = 256
+        Me.lblTrnDate.Text = "Company:"
+        Me.lblTrnDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'OK
         '
         Me.OK.Location = New System.Drawing.Point(389, 2)
@@ -224,6 +263,14 @@ Partial Class Transport
         Me.OK.Size = New System.Drawing.Size(30, 23)
         Me.OK.TabIndex = 260
         Me.OK.Text = "&OK"
+        '
+        'ddlXCOs
+        '
+        Me.ddlXCOs.FormattingEnabled = True
+        Me.ddlXCOs.Location = New System.Drawing.Point(71, 2)
+        Me.ddlXCOs.Name = "ddlXCOs"
+        Me.ddlXCOs.Size = New System.Drawing.Size(121, 21)
+        Me.ddlXCOs.TabIndex = 257
         '
         'ddlPicks
         '
@@ -244,26 +291,6 @@ Partial Class Transport
         Me.Label1.TabIndex = 258
         Me.Label1.Text = "Pick:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'ddlXCOs
-        '
-        Me.ddlXCOs.FormattingEnabled = True
-        Me.ddlXCOs.Location = New System.Drawing.Point(71, 2)
-        Me.ddlXCOs.Name = "ddlXCOs"
-        Me.ddlXCOs.Size = New System.Drawing.Size(121, 21)
-        Me.ddlXCOs.TabIndex = 257
-        '
-        'lblTrnDate
-        '
-        Me.lblTrnDate.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblTrnDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.lblTrnDate.ForeColor = System.Drawing.Color.Blue
-        Me.lblTrnDate.Location = New System.Drawing.Point(1, 2)
-        Me.lblTrnDate.Name = "lblTrnDate"
-        Me.lblTrnDate.Size = New System.Drawing.Size(64, 20)
-        Me.lblTrnDate.TabIndex = 256
-        Me.lblTrnDate.Text = "Company:"
-        Me.lblTrnDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtBoxNotes
         '
@@ -533,18 +560,6 @@ Partial Class Transport
         Me.DataGridViewSearch.Size = New System.Drawing.Size(1284, 45)
         Me.DataGridViewSearch.TabIndex = 6
         '
-        'PanelPickDoc
-        '
-        Me.PanelPickDoc.Controls.Add(Me.lblTrnDate)
-        Me.PanelPickDoc.Controls.Add(Me.OK)
-        Me.PanelPickDoc.Controls.Add(Me.ddlXCOs)
-        Me.PanelPickDoc.Controls.Add(Me.ddlPicks)
-        Me.PanelPickDoc.Controls.Add(Me.Label1)
-        Me.PanelPickDoc.Location = New System.Drawing.Point(36, 90)
-        Me.PanelPickDoc.Name = "PanelPickDoc"
-        Me.PanelPickDoc.Size = New System.Drawing.Size(429, 27)
-        Me.PanelPickDoc.TabIndex = 261
-        '
         'Transport
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -565,6 +580,7 @@ Partial Class Transport
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        Me.PanelPickDoc.ResumeLayout(False)
         Me.ToolStrip6.ResumeLayout(False)
         Me.ToolStrip6.PerformLayout()
         Me.SplitContainer3.Panel1.ResumeLayout(False)
@@ -577,7 +593,6 @@ Partial Class Transport
         Me.BindingNavigatorMaster.ResumeLayout(False)
         Me.BindingNavigatorMaster.PerformLayout()
         CType(Me.DataGridViewSearch, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.PanelPickDoc.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -632,4 +647,5 @@ Partial Class Transport
     Friend WithEvents Label1 As Label
     Friend WithEvents OK As Button
     Friend WithEvents PanelPickDoc As Panel
+    Friend WithEvents chkBoxCancelled As CheckBox
 End Class
