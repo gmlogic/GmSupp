@@ -161,13 +161,12 @@ Public Class Transport
 
             qwh = qwh.Where(Function(f) f.DeliveryDate >= DateTimePicker1.Value.Date And f.DeliveryDate <= DateTimePicker2.Value)
 
-            qwh = qwh.Where(Function(f) f.TruckTrailerPlate.ToUpper = "CANCELLED".ToUpper)
-            If Me.chkBoxCancelled.Checked Then
-                qwh = qwh.Where(Function(f) f.TruckTrailerPlate.ToUpper = "CANCELLED".ToUpper)
-            End If
-
             If Not Me.chkBoxIsActive.Checked Then
                 qwh = qwh.Where(Function(f) Not (If(f.TruckArrival, False) = True And If(f.EnterforLoad, False) = True And If(f.LeaveFactory, False) = True))
+            End If
+
+            If Not Me.chkBoxCancelled.Checked Then
+                qwh = qwh.Where(Function(f) Not f.TruckTrailerPlate.ToUpper = "CANCELLED".ToUpper)
             End If
 
             Me.MasterBindingSource.DataSource = qwh
