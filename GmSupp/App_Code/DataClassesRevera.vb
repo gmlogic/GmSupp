@@ -229,6 +229,8 @@ Partial Public Class DataClassesReveraDataContext
     <ResultType(GetType(Revera.GetPendingOrdersDetailsResult))>
     Public Function GetPendingOrders(<Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="COMPANY", DbType:="SmallInt")> ByVal cOMPANY As System.Nullable(Of Short),
                                      <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="CODE", DbType:="VarChar(25)")> ByVal cODE As String,
+                                     <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="MTRLNAME", DbType:="VarChar(25)")> ByVal mTRLNAME As String,
+                                     <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="REMARKS", DbType:="VarChar(25)")> ByVal rEMARKS As String,
                                      <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="MTRL", DbType:="Int")> ByVal mTRL As System.Nullable(Of Integer),
                                      <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="FOrderNo", DbType:="Int")> ByVal fOrderNo As System.Nullable(Of Integer),
                                      <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="TOrderNo", DbType:="Int")> ByVal tOrderNo As System.Nullable(Of Integer),
@@ -241,7 +243,7 @@ Partial Public Class DataClassesReveraDataContext
                                      <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="DFROM", DbType:="DateTime")> ByVal dFROM As System.Nullable(Of Date),
                                      <Global.System.Data.Linq.Mapping.ParameterAttribute(Name:="DTO", DbType:="DateTime")> ByVal dTO As System.Nullable(Of Date)
                                      ) As IMultipleResults
-        Dim result As IExecuteResult = Me.ExecuteMethodCall(Me, CType(MethodInfo.GetCurrentMethod, MethodInfo), cOMPANY, cODE, mTRL, fOrderNo, tOrderNo, fINCODE, fPRMS, restMode, applicant, highers, Pending, dFROM, dTO)
+        Dim result As IExecuteResult = Me.ExecuteMethodCall(Me, CType(MethodInfo.GetCurrentMethod, MethodInfo), cOMPANY, cODE, mTRLNAME, rEMARKS, mTRL, fOrderNo, tOrderNo, fINCODE, fPRMS, restMode, applicant, highers, Pending, dFROM, dTO)
         'Return CType(result.ReturnValue, ISingleResult(Of Revera.GetPendingOrdersHeaderResult))
         Return CType(result.ReturnValue, IMultipleResults)
     End Function

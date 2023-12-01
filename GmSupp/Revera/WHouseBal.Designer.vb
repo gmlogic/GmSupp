@@ -58,7 +58,7 @@ Partial Class WHouseBal
         Me.radioBtnService = New System.Windows.Forms.RadioButton()
         Me.radioBtnMtrl = New System.Windows.Forms.RadioButton()
         Me.txtBoxRemarks = New System.Windows.Forms.TextBox()
-        Me.txtBoxName = New System.Windows.Forms.TextBox()
+        Me.txtBoxMtrlName = New System.Windows.Forms.TextBox()
         Me.txtBoxMtrlCode = New System.Windows.Forms.TextBox()
         Me.ToolStrip6 = New System.Windows.Forms.ToolStrip()
         Me.TlSComboBoxDate = New System.Windows.Forms.ToolStripComboBox()
@@ -71,9 +71,6 @@ Partial Class WHouseBal
         Me.LnkLblSetUser = New System.Windows.Forms.LinkLabel()
         Me.ddlΗighers = New System.Windows.Forms.ComboBox()
         Me.txtBoxOrderNo = New System.Windows.Forms.TextBox()
-        Me.GmChkListBoxRestMode = New GmSupp.GmChkListBox()
-        Me.GmChkListBoxAplicant = New GmSupp.GmChkListBox()
-        Me.GmChkListBoxFprms = New GmSupp.GmChkListBox()
         Me.PanelChUsers = New System.Windows.Forms.Panel()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtBoxccCRecipients = New System.Windows.Forms.TextBox()
@@ -138,6 +135,10 @@ Partial Class WHouseBal
         Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ΕγκρίσειςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DetailsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.GmChkListBoxAplicant = New GmSupp.GmChkListBox()
+        Me.GmChkListBoxFprms = New GmSupp.GmChkListBox()
+        Me.GmChkListBoxRestMode = New GmSupp.GmChkListBox()
+        Me.LblTime = New System.Windows.Forms.Label()
         Label2 = New System.Windows.Forms.Label()
         Label1 = New System.Windows.Forms.Label()
         Label8 = New System.Windows.Forms.Label()
@@ -315,11 +316,12 @@ Partial Class WHouseBal
         'SplitContainer1.Panel1
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
+        Me.SplitContainer1.Panel1.Controls.Add(Me.LblTime)
         Me.SplitContainer1.Panel1.Controls.Add(Me.GroupBoxStatus)
         Me.SplitContainer1.Panel1.Controls.Add(Me.GroupBox1)
         Me.SplitContainer1.Panel1.Controls.Add(Me.txtBoxRemarks)
         Me.SplitContainer1.Panel1.Controls.Add(Label2)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.txtBoxName)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtBoxMtrlName)
         Me.SplitContainer1.Panel1.Controls.Add(Label1)
         Me.SplitContainer1.Panel1.Controls.Add(Me.txtBoxMtrlCode)
         Me.SplitContainer1.Panel1.Controls.Add(Label8)
@@ -494,18 +496,18 @@ Partial Class WHouseBal
         Me.txtBoxRemarks.Size = New System.Drawing.Size(231, 20)
         Me.txtBoxRemarks.TabIndex = 253
         '
-        'txtBoxName
+        'txtBoxMtrlName
         '
-        Me.txtBoxName.AcceptsReturn = True
-        Me.txtBoxName.BackColor = System.Drawing.SystemColors.Window
-        Me.txtBoxName.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtBoxName.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtBoxName.Location = New System.Drawing.Point(130, 91)
-        Me.txtBoxName.MaxLength = 0
-        Me.txtBoxName.Name = "txtBoxName"
-        Me.txtBoxName.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtBoxName.Size = New System.Drawing.Size(231, 20)
-        Me.txtBoxName.TabIndex = 251
+        Me.txtBoxMtrlName.AcceptsReturn = True
+        Me.txtBoxMtrlName.BackColor = System.Drawing.SystemColors.Window
+        Me.txtBoxMtrlName.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtBoxMtrlName.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtBoxMtrlName.Location = New System.Drawing.Point(130, 91)
+        Me.txtBoxMtrlName.MaxLength = 0
+        Me.txtBoxMtrlName.Name = "txtBoxMtrlName"
+        Me.txtBoxMtrlName.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtBoxMtrlName.Size = New System.Drawing.Size(231, 20)
+        Me.txtBoxMtrlName.TabIndex = 251
         '
         'txtBoxMtrlCode
         '
@@ -598,12 +600,9 @@ Partial Class WHouseBal
         Me.Panel1.Controls.Add(Me.LnkLblSetUser)
         Me.Panel1.Controls.Add(Me.ddlΗighers)
         Me.Panel1.Controls.Add(Me.txtBoxOrderNo)
-        Me.Panel1.Controls.Add(Me.GmChkListBoxRestMode)
         Me.Panel1.Controls.Add(Label5)
-        Me.Panel1.Controls.Add(Me.GmChkListBoxAplicant)
         Me.Panel1.Controls.Add(Label4)
         Me.Panel1.Controls.Add(Label7)
-        Me.Panel1.Controls.Add(Me.GmChkListBoxFprms)
         Me.Panel1.Location = New System.Drawing.Point(543, 6)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(516, 152)
@@ -644,30 +643,6 @@ Partial Class WHouseBal
         Me.txtBoxOrderNo.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtBoxOrderNo.Size = New System.Drawing.Size(300, 20)
         Me.txtBoxOrderNo.TabIndex = 265
-        '
-        'GmChkListBoxRestMode
-        '
-        Me.GmChkListBoxRestMode.GmCheck = False
-        Me.GmChkListBoxRestMode.Location = New System.Drawing.Point(198, 103)
-        Me.GmChkListBoxRestMode.Name = "GmChkListBoxRestMode"
-        Me.GmChkListBoxRestMode.Size = New System.Drawing.Size(300, 25)
-        Me.GmChkListBoxRestMode.TabIndex = 262
-        '
-        'GmChkListBoxAplicant
-        '
-        Me.GmChkListBoxAplicant.GmCheck = False
-        Me.GmChkListBoxAplicant.Location = New System.Drawing.Point(198, 74)
-        Me.GmChkListBoxAplicant.Name = "GmChkListBoxAplicant"
-        Me.GmChkListBoxAplicant.Size = New System.Drawing.Size(300, 25)
-        Me.GmChkListBoxAplicant.TabIndex = 262
-        '
-        'GmChkListBoxFprms
-        '
-        Me.GmChkListBoxFprms.GmCheck = False
-        Me.GmChkListBoxFprms.Location = New System.Drawing.Point(198, 28)
-        Me.GmChkListBoxFprms.Name = "GmChkListBoxFprms"
-        Me.GmChkListBoxFprms.Size = New System.Drawing.Size(300, 25)
-        Me.GmChkListBoxFprms.TabIndex = 263
         '
         'PanelChUsers
         '
@@ -1322,6 +1297,42 @@ Partial Class WHouseBal
         Me.ΕγκρίσειςToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
         Me.ΕγκρίσειςToolStripMenuItem.Text = "Εγκρίσεις"
         '
+        'GmChkListBoxAplicant
+        '
+        Me.GmChkListBoxAplicant.GmCheck = False
+        Me.GmChkListBoxAplicant.Location = New System.Drawing.Point(0, 0)
+        Me.GmChkListBoxAplicant.Name = "GmChkListBoxAplicant"
+        Me.GmChkListBoxAplicant.Size = New System.Drawing.Size(300, 25)
+        Me.GmChkListBoxAplicant.TabIndex = 0
+        '
+        'GmChkListBoxFprms
+        '
+        Me.GmChkListBoxFprms.GmCheck = False
+        Me.GmChkListBoxFprms.Location = New System.Drawing.Point(0, 0)
+        Me.GmChkListBoxFprms.Name = "GmChkListBoxFprms"
+        Me.GmChkListBoxFprms.Size = New System.Drawing.Size(300, 25)
+        Me.GmChkListBoxFprms.TabIndex = 0
+        '
+        'GmChkListBoxRestMode
+        '
+        Me.GmChkListBoxRestMode.GmCheck = False
+        Me.GmChkListBoxRestMode.Location = New System.Drawing.Point(0, 0)
+        Me.GmChkListBoxRestMode.Name = "GmChkListBoxRestMode"
+        Me.GmChkListBoxRestMode.Size = New System.Drawing.Size(300, 25)
+        Me.GmChkListBoxRestMode.TabIndex = 0
+        '
+        'LblTime
+        '
+        Me.LblTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.LblTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
+        Me.LblTime.ForeColor = System.Drawing.Color.Blue
+        Me.LblTime.Location = New System.Drawing.Point(145, 42)
+        Me.LblTime.Name = "LblTime"
+        Me.LblTime.Size = New System.Drawing.Size(81, 23)
+        Me.LblTime.TabIndex = 299
+        Me.LblTime.Text = "" & Global.Microsoft.VisualBasic.ChrW(9)
+        Me.LblTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'WHouseBal
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1405,7 +1416,7 @@ Partial Class WHouseBal
     Public WithEvents Label_99 As Label
     Friend WithEvents DateTimePicker2 As DateTimePicker
     Friend WithEvents DateTimePicker1 As DateTimePicker
-    Public WithEvents txtBoxName As TextBox
+    Public WithEvents txtBoxMtrlName As TextBox
     Public WithEvents txtBoxMtrlCode As TextBox
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ExcelToolStripButton As ToolStripButton
@@ -1472,4 +1483,5 @@ Partial Class WHouseBal
     Friend WithEvents txtBoxccCRecipients As TextBox
     Public WithEvents RadioBtnReceived As RadioButton
     Public WithEvents RadioBtnccCRecipients As RadioButton
+    Friend WithEvents LblTime As Label
 End Class

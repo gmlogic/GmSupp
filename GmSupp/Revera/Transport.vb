@@ -420,6 +420,7 @@ Public Class Transport
                 Me.MasterDataGridView.Columns.Insert(i, col)
             Next
 
+            Me.MasterDataGridView.Columns.Add("Time", "Arrival-LeaveFactory")
 
             Dim columnComboBox As New DataGridViewComboBoxColumn()
             'columnComboBox.DataPropertyName = "CCCPRIORITY"
@@ -448,6 +449,7 @@ Public Class Transport
             For Each row As DataGridViewRow In MasterDataGridView.Rows
 
                 'Dim item As Revera.ccCTransport = row.DataBoundItem
+                Dim item As Revera.ccCTransport = row.DataBoundItem
                 'If Not IsNothing(item) Then
                 Try
                     For Each coln As DataGridViewColumn In Me.MasterDataGridView.Columns
@@ -479,6 +481,17 @@ Public Class Transport
                                     row.Cells("Comments").ReadOnly = False
                             End Select
                         End If
+                        If item.TruckArrivalTime IsNot Nothing And item.LeaveFactoryTime IsNot Nothing Then
+                            Dim myticks As Integer = System.Environment.TickCount
+                            Dim MySpan As TimeSpan = TimeSpan.FromTicks(item.LeaveFactoryTime.Value.Subtract(item.TruckArrivalTime.Value).Ticks)
+                            'Label1.Text = MySpan.Hours.ToString & " Hours, " & MySpan.Minutes.ToString & " Minutes, " & MySpan.Seconds.ToString & " Seconds"
+                            'If MySpan.Hours > 0 Then
+                            If Not (MySpan.Hours = 0 And MySpan.Minutes = 0) Then
+                                row.Cells("Time").Value = String.Format("{0}:{1}", String.Format("{0:00}", MySpan.Hours), String.Format("{0:00}", MySpan.Minutes))
+                            End If
+                            'End If
+                        End If
+                        'item.LeaveFactoryTime.Value.Subtract(item.TruckArrivalTime.Value)
                     Next
 
                 Catch ex As Exception

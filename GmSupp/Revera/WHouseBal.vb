@@ -192,9 +192,9 @@ Public Class WHouseBal
             '    Case "LK"
             '        CompanyT = 2001 '1001
             'End Select
-            Me.txtBoxMtrlCode.Text = "" '"1A231F401N3*"
+            Me.txtBoxMtrlCode.Text = "0006342" '"1A231F401N3*"
             If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
-                Me.txtBoxName.Text = "*ssd*"
+                Me.txtBoxMtrlName.Text = "*ssd*"
             End If
 
             'Me.txtBoxFinCode.Text = "ΑIT0000050" '"ΠΑΡ0001593"
@@ -550,7 +550,7 @@ Public Class WHouseBal
 
             Dim mTRL As System.Nullable(Of Integer)
             Dim mTRLCODE As String
-            Dim nAME As String
+            Dim mTRLNAME As String
             Dim rEMARKS As String
             Dim cOMPANY As System.Nullable(Of Short)
             Dim sODTYPE As System.Nullable(Of Short)
@@ -581,7 +581,7 @@ Public Class WHouseBal
 
             mTRL = 0 'Nothing
             mTRLCODE = If(Me.txtBoxMtrlCode.Text.Trim = "", Nothing, Me.txtBoxMtrlCode.Text.Replace("*", "%").Trim)
-            nAME = If(Me.txtBoxName.Text.Trim = "", Nothing, Me.txtBoxName.Text.Replace("*", "%").Trim)
+            mTRLNAME = If(Me.txtBoxMtrlName.Text.Trim = "", Nothing, Me.txtBoxMtrlName.Text.Replace("*", "%").Trim)
             rEMARKS = If(Me.txtBoxRemarks.Text.Trim = "", Nothing, Me.txtBoxRemarks.Text.Replace("*", "%").Trim)
             cOMPANY = CompanyS
             If Me.radioBtnMtrl.Checked Then
@@ -638,12 +638,14 @@ Public Class WHouseBal
 
             If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
                 'Dim res As New List(Of Revera.GetWHouseBalanceResult)
-                Dim Res = db.GetWHouseBalance(cOMPANY, sODTYPE, mTRLCODE, nAME, Nothing, Nothing, Nothing, 0, 0, 0, rEMARKS, 0, 0, dFROM, dTO).ToList
+                Dim Res = db.GetWHouseBalance(cOMPANY, sODTYPE, mTRLCODE, mTRLNAME, Nothing, Nothing, Nothing, 0, 0, 0, rEMARKS, 0, 0, dFROM, dTO).ToList
                 Me.MasterBindingSource.DataSource = New SortableBindingList(Of Revera.GetWHouseBalanceResult)(Res)
             End If
             'If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
             If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
-                Dim res As IMultipleResults = db.GetPendingOrders(cOMPANY, mTRLCODE, 0, fOrderNo, tOrderNo, fINCODE, fPRMS, rESTMODE, aPplicant, aHighers, aPending, dFROM, dTO)
+                Dim StartTime As Date = Now
+                Dim res As IMultipleResults = db.GetPendingOrders(cOMPANY, mTRLCODE, mTRLNAME, rEMARKS, 0, fOrderNo, tOrderNo, fINCODE, fPRMS, rESTMODE, aPplicant, aHighers, aPending, dFROM, dTO)
+                'Dim res As IMultipleResults = db.GetPendingOrders(cOMPANY, mTRLCODE, 0, fOrderNo, tOrderNo, fINCODE, fPRMS, rESTMODE, aPplicant, aHighers, aPending, dFROM, dTO)
                 Dim POrdHead = res.GetResult(Of Revera.GetPendingOrdersHeaderResult).ToList
                 Dim POrdDet = res.GetResult(Of Revera.GetPendingOrdersDetailsResult).ToList
                 If POrdHead.Count = 0 Then
@@ -656,6 +658,9 @@ Public Class WHouseBal
                     MsgBox("Προσοχή !!! Δεν βρέθηκαν εγγραφές.", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
                     Exit Sub
                 End If
+
+                Dim EndTime As TimeSpan = TimeSpan.FromTicks(Now.ToLocalTime.Subtract(StartTime).Ticks)
+                Me.LblTime.Text = String.Format("{0}:{1}", String.Format("{0:00}", EndTime.Minutes), String.Format("{0:00}", EndTime.Seconds))
                 'POrdHead = POrdHead.Union(POrdHead2).ToList
                 'POrdDet = POrdDet.Union(POrdDet2).ToList
                 'End If
@@ -688,9 +693,22 @@ Public Class WHouseBal
                 ''End If
 
 
-                If Not Me.txtBoxMtrlCode.Text.Trim = "" Then
-                    POrdDet = POrdDet.Where(Function(f) f.CODE Like mTRLCODE.Replace("%", "*")).ToList
-                End If
+                'If Not Me.txtBoxMtrlCode.Text.Trim = "" Then
+                '    POrdDet = POrdDet.Where(Function(f) f.CODE Like mTRLCODE.Replace("%", "*")).ToList
+                '    Dim ls1 = POrdDet.Select(Of Integer)(Function(f) f.FINDOC).ToList
+                '    POrdHead = POrdHead.Where(Function(f) ls1.Contains(f.FINDOC)).ToList
+                'End If
+
+                'If Not Me.txtBoxName.Text.Trim = "" Then
+                '    POrdDet = POrdDet.Where(Function(f) f.NAME Like nAME.Replace("%", "*")).ToList
+                '    Dim ls1 = POrdDet.Select(Of Integer)(Function(f) f.FINDOC).ToList
+                '    POrdHead = POrdHead.Where(Function(f) ls1.Contains(f.FINDOC)).ToList
+                'End If
+                'If Not Me.txtBoxRemarks.Text.Trim = "" Then
+                '    POrdDet = POrdDet.Where(Function(f) f.REMARKS Like rEMARKS.Replace("%", "*")).ToList
+                '    Dim ls1 = POrdDet.Select(Of Integer)(Function(f) f.FINDOC).ToList
+                '    POrdHead = POrdHead.Where(Function(f) ls1.Contains(f.FINDOC)).ToList
+                'End If
 
                 If Not Me.RadioBtnAll.Checked Then
                     If Me.RadioBtnToAproved.Checked Then
@@ -709,6 +727,10 @@ Public Class WHouseBal
                         POrdHead = POrdHead.Where(Function(f) f.ccCRecipients IsNot Nothing AndAlso f.ccCRecipients.Contains(CUserName)).ToList
                     End If
                 End If
+
+                Dim ls1 = POrdDet.Select(Of Integer)(Function(f) f.FINDOC).ToList
+                POrdHead = POrdHead.Where(Function(f) ls1.Contains(f.FINDOC)).ToList
+
                 'Dim POrds As New List(Of Revera.GetPendingOrdersDetailsResult)
                 'POrds = (From hd In POrdHead Join dt In POrdDet On hd.NO_ Equals dt.NO_
                 '         Select New Revera.GetPendingOrdersDetailsResult With {.NO_ = hd.NO_,
