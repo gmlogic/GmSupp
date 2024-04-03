@@ -29,7 +29,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>40</ApplicationRevision>
+    <ApplicationRevision>42</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -71,10 +71,10 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>E4DB724AB5F2A7BD17CBE24A409BC5EC3E7B6C1E</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>6C6656938FE9EDFE063B358D840112C2826FE2E6</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>GmSupp_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>GmSupp_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -535,6 +535,7 @@
       <LastGenOutput>DataClassesRevera.designer.vb</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <None Include="GmSupp_1_TemporaryKey.pfx" />
     <None Include="GmSupp_TemporaryKey.pfx" />
     <None Include="My Project\DataSources\ccCBCLabel.datasource" />
     <None Include="My Project\DataSources\GmSupp.Hglp.cccPriceList.datasource" />

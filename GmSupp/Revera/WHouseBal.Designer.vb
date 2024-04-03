@@ -47,6 +47,7 @@ Partial Class WHouseBal
         Me.ΠεριγραφήΕτικέταςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.LblTime = New System.Windows.Forms.Label()
         Me.GroupBoxStatus = New System.Windows.Forms.GroupBox()
         Me.RadioBtnccCRecipients = New System.Windows.Forms.RadioButton()
         Me.RadioBtnReceived = New System.Windows.Forms.RadioButton()
@@ -135,10 +136,10 @@ Partial Class WHouseBal
         Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ΕγκρίσειςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DetailsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.BtnEditApplicantLogs = New System.Windows.Forms.Button()
         Me.GmChkListBoxAplicant = New GmSupp.GmChkListBox()
         Me.GmChkListBoxFprms = New GmSupp.GmChkListBox()
         Me.GmChkListBoxRestMode = New GmSupp.GmChkListBox()
-        Me.LblTime = New System.Windows.Forms.Label()
         Label2 = New System.Windows.Forms.Label()
         Label1 = New System.Windows.Forms.Label()
         Label8 = New System.Windows.Forms.Label()
@@ -342,6 +343,18 @@ Partial Class WHouseBal
         Me.SplitContainer1.Size = New System.Drawing.Size(1284, 749)
         Me.SplitContainer1.SplitterDistance = 224
         Me.SplitContainer1.TabIndex = 10
+        '
+        'LblTime
+        '
+        Me.LblTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.LblTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
+        Me.LblTime.ForeColor = System.Drawing.Color.Blue
+        Me.LblTime.Location = New System.Drawing.Point(145, 42)
+        Me.LblTime.Name = "LblTime"
+        Me.LblTime.Size = New System.Drawing.Size(81, 23)
+        Me.LblTime.TabIndex = 299
+        Me.LblTime.Text = "" & Global.Microsoft.VisualBasic.ChrW(9)
+        Me.LblTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'GroupBoxStatus
         '
@@ -646,6 +659,7 @@ Partial Class WHouseBal
         '
         'PanelChUsers
         '
+        Me.PanelChUsers.Controls.Add(Me.BtnEditApplicantLogs)
         Me.PanelChUsers.Controls.Add(Me.Label9)
         Me.PanelChUsers.Controls.Add(Label10)
         Me.PanelChUsers.Controls.Add(Me.txtBoxccCRecipients)
@@ -1297,6 +1311,15 @@ Partial Class WHouseBal
         Me.ΕγκρίσειςToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
         Me.ΕγκρίσειςToolStripMenuItem.Text = "Εγκρίσεις"
         '
+        'BtnEditApplicantLogs
+        '
+        Me.BtnEditApplicantLogs.Location = New System.Drawing.Point(617, 51)
+        Me.BtnEditApplicantLogs.Name = "BtnEditApplicantLogs"
+        Me.BtnEditApplicantLogs.Size = New System.Drawing.Size(75, 23)
+        Me.BtnEditApplicantLogs.TabIndex = 284
+        Me.BtnEditApplicantLogs.Text = "EditApplicantLogs"
+        Me.BtnEditApplicantLogs.UseVisualStyleBackColor = True
+        '
         'GmChkListBoxAplicant
         '
         Me.GmChkListBoxAplicant.GmCheck = False
@@ -1320,18 +1343,6 @@ Partial Class WHouseBal
         Me.GmChkListBoxRestMode.Name = "GmChkListBoxRestMode"
         Me.GmChkListBoxRestMode.Size = New System.Drawing.Size(300, 25)
         Me.GmChkListBoxRestMode.TabIndex = 0
-        '
-        'LblTime
-        '
-        Me.LblTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.LblTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
-        Me.LblTime.ForeColor = System.Drawing.Color.Blue
-        Me.LblTime.Location = New System.Drawing.Point(145, 42)
-        Me.LblTime.Name = "LblTime"
-        Me.LblTime.Size = New System.Drawing.Size(81, 23)
-        Me.LblTime.TabIndex = 299
-        Me.LblTime.Text = "" & Global.Microsoft.VisualBasic.ChrW(9)
-        Me.LblTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'WHouseBal
         '
@@ -1484,4 +1495,5 @@ Partial Class WHouseBal
     Public WithEvents RadioBtnReceived As RadioButton
     Public WithEvents RadioBtnccCRecipients As RadioButton
     Friend WithEvents LblTime As Label
+    Friend WithEvents BtnEditApplicantLogs As Button
 End Class

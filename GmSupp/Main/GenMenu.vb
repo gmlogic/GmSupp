@@ -113,8 +113,8 @@ Public Class GenMenu
             loginf.Text = "Εισαγωγή στοιχείων"
             'ch.keskesiadis radrad
             If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
-                loginf.UsernameTextBox.Text = "g.ksms" '"a.tsilikas" '"a.momtsos" '"ch.keskesiadis" '"t.andreoglou" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
-                loginf.PasswordTextBox.Text = "Gr@Ks5584" '"Ts@An9923" '"radrad" '"An@Ti6912" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
+                loginf.UsernameTextBox.Text = "ch.keskesiadis" '"g.ksms" '"a.tsilikas" '"a.momtsos" '"t.andreoglou" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
+                loginf.PasswordTextBox.Text = "radrad" '"Gr@Ks5584" '"Ts@An9923" '"An@Ti6912" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
                 'loginf.UsernameTextBox.Text = "gmlogic" '"d.makaridis" '
                 'loginf.PasswordTextBox.Text = "1mgergm++" '"Ma@Di55489" '
                 'If loginf.UsernameTextBox.Text = "ch.keskesiadis" Then

@@ -165,9 +165,11 @@ Public Class WHouseBal
             Me.SplitContainer2.SplitterDistance = Me.SplitContainer2.Width - (Me.SplitContainer2.Width / 2)
             Me.MasterDataGridView.ContextMenuStrip = Me.ContextMenuStrip2
             inRole = roles.Where(Function(f) {"Developer", "Admins"}.Contains(f)).FirstOrDefault
+            Me.BtnEditApplicantLogs.Visible = True
             If inRole Is Nothing Then
                 Me.lblUsers.Visible = False
                 Me.ddlUsers.Visible = False
+                Me.BtnEditApplicantLogs.Visible = False
             End If
         End If
 
@@ -3088,7 +3090,45 @@ Public Class WHouseBal
         Return res
         Throw New NotImplementedException()
     End Function
+    Private Function GetChApplicant(res As List(Of GetPendingOrdersDetailsResult)) As List(Of Integer)
+        Dim ls As New List(Of Integer)
+        For Each re In res
+            'Α) Αίτηση προσφοράς
+            'Β) Παραγγελία 
+            'Γ) Παραλαβή υλικού
+            '2000    ΑΠΡΦ	Αίτηση Προσφοράς	2000
+            '2021    ΠΑΡ	Παραγγελία Σε Προμηθευτή Παράδοση Καβάλα	2021
+            '2022    ΠΑΡ ΕΔΡΑ	Παραγγελία Σε Προμηθευτή Παράδοση Έδρα	2021
+            '2023    ΠΑΡ ΑΤΛ	Παραγγελία Σε Προμηθευτή Παράδοση Έδρα	2021
+            '2041    ΔΠ	Δελτίο Αποστολής Προμηθευτή	2041
+            '2045    ΔΠΠ	Δελτίο Ποσοτικής Παραλαβής	2045
+            Dim msns = db.MTRLINEs.Where(Function(f) f.FINDOC1.COMPANY = Company And f.FINDOC1.SOSOURCE = 1251 And {2041, 2045}.Contains(f.FINDOC1.SERIES) And f.ccCAFINDOC = re.FINDOC And f.ccCAMTRLINES = re.MTRLINES).ToList
 
+            If msns.Count = 0 Then
+                ls.Add(re.FINDOC)
+                'Dim APRF As String = ""
+                'Dim PAR As String = ""
+                'Dim DP As String = ""
+                'For Each msn In msns
+                '    Select Case msn.FINDOC1.SERIES
+                '        Case 2000
+                '            APRF = "[" & msn.FINDOC1.FINCODE & "" & "," & msn.FINDOC1.TRNDATE & "]"
+                '        Case 2021, 2022, 2023
+                '            PAR = "[" & msn.FINDOC1.FINCODE & "" & "," & msn.FINDOC1.TRNDATE & "]"
+                '        Case 2041, 2045
+                '            DP = "[" & msn.FINDOC1.FINCODE & "" & "," & msn.FINDOC1.TRNDATE & "]"
+                '    End Select
+                'Next
+                're.ApplicationLog = "[" & APRF & "," & PAR & "," & DP & "]"
+                'If DP = "" Then
+
+                'End If
+            End If
+        Next
+        ls = ls.Distinct.ToList
+        Return ls
+        Throw New NotImplementedException()
+    End Function
     Private Sub VisibleHigher(v As Boolean)
         Me.ToolStripSeparator10.Visible = v
         Me.ToolStripLabel2.Visible = v
@@ -3459,6 +3499,26 @@ Public Class WHouseBal
 
     Private Sub RadioBtn_CheckedChanged(sender As Object, e As EventArgs) Handles RadioBtnAll.CheckedChanged, RadioBtnToAproved.CheckedChanged, RadioBtnPending.CheckedChanged, RadioBtnApproved.CheckedChanged
         If Me.MasterBindingSource.Count > 0 Then
+            Cmd_Select()
+        End If
+    End Sub
+
+    Private Sub BtnEditApplicantLogs_Click(sender As Object, e As EventArgs) Handles BtnEditApplicantLogs.Click
+        If Me.MasterBindingSource.Count > 0 Then
+            Dim POrdHead As List(Of Integer) = CType(Me.MasterBindingSource.DataSource, List(Of Revera.GetPendingOrdersHeaderResult)).Select(Of Integer)(Function(f) f.FINDOC).ToList
+            Dim fins = db.FINDOCs.Where(Function(f) POrdHead.Contains(f.FINDOC)).ToList
+            For Each fi In fins
+                If Me.VscsBindingSource.DataSource IsNot Nothing Then
+                    Dim res = CType(Me.VscsBindingSource.DataSource, List(Of GetPendingOrdersDetailsResult)).Where(Function(f) f.FINDOC = fi.FINDOC).ToList
+                    Dim ls = GetChApplicant(res)
+                    If ls IsNot Nothing AndAlso ls.Count > 0 Then
+                        fi.VARCHAR02 = fi.VARCHAR02.Replace("Γιαννίκος Αλέξανδρος:OK", "Γιαννίκος Αλέξανδρος:OK|Πούλιας Θωμάς:OK")
+                        fi.UPDUSER = 99
+                        fi.UPDDATE = Now
+                    End If
+                End If
+            Next
+            DataSafe()
             Cmd_Select()
         End If
     End Sub
