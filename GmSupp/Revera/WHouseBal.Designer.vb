@@ -73,6 +73,7 @@ Partial Class WHouseBal
         Me.ddlΗighers = New System.Windows.Forms.ComboBox()
         Me.txtBoxOrderNo = New System.Windows.Forms.TextBox()
         Me.PanelChUsers = New System.Windows.Forms.Panel()
+        Me.BtnEditApplicantLogs = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtBoxccCRecipients = New System.Windows.Forms.TextBox()
         Me.txtBoxFinCode = New System.Windows.Forms.TextBox()
@@ -136,7 +137,6 @@ Partial Class WHouseBal
         Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ΕγκρίσειςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DetailsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.BtnEditApplicantLogs = New System.Windows.Forms.Button()
         Me.GmChkListBoxAplicant = New GmSupp.GmChkListBox()
         Me.GmChkListBoxFprms = New GmSupp.GmChkListBox()
         Me.GmChkListBoxRestMode = New GmSupp.GmChkListBox()
@@ -672,6 +672,15 @@ Partial Class WHouseBal
         Me.PanelChUsers.Name = "PanelChUsers"
         Me.PanelChUsers.Size = New System.Drawing.Size(1050, 118)
         Me.PanelChUsers.TabIndex = 290
+        '
+        'BtnEditApplicantLogs
+        '
+        Me.BtnEditApplicantLogs.Location = New System.Drawing.Point(617, 51)
+        Me.BtnEditApplicantLogs.Name = "BtnEditApplicantLogs"
+        Me.BtnEditApplicantLogs.Size = New System.Drawing.Size(75, 23)
+        Me.BtnEditApplicantLogs.TabIndex = 284
+        Me.BtnEditApplicantLogs.Text = "EditApplicantLogs"
+        Me.BtnEditApplicantLogs.UseVisualStyleBackColor = True
         '
         'Label9
         '
@@ -1310,15 +1319,6 @@ Partial Class WHouseBal
         Me.ΕγκρίσειςToolStripMenuItem.Name = "ΕγκρίσειςToolStripMenuItem"
         Me.ΕγκρίσειςToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
         Me.ΕγκρίσειςToolStripMenuItem.Text = "Εγκρίσεις"
-        '
-        'BtnEditApplicantLogs
-        '
-        Me.BtnEditApplicantLogs.Location = New System.Drawing.Point(617, 51)
-        Me.BtnEditApplicantLogs.Name = "BtnEditApplicantLogs"
-        Me.BtnEditApplicantLogs.Size = New System.Drawing.Size(75, 23)
-        Me.BtnEditApplicantLogs.TabIndex = 284
-        Me.BtnEditApplicantLogs.Text = "EditApplicantLogs"
-        Me.BtnEditApplicantLogs.UseVisualStyleBackColor = True
         '
         'GmChkListBoxAplicant
         '
