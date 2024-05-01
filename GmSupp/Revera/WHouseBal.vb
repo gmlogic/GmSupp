@@ -2494,6 +2494,10 @@ Public Class WHouseBal
             Me.VscsBindingSource.EndEdit()
             Dim fin As New Revera.FINDOC
             If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
+                If Me.VscsBindingSource.Count > 15 Then
+                    MsgBox("Προσοχή !!! Επιτρέπονται μέχρι 15 γραμμές ανα αίτηση", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                    Exit Sub
+                End If
                 Dim Qtys = CType(Me.VscsBindingSource.DataSource, SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)).Where(Function(f) If(f.NUM03, 0) = 0).FirstOrDefault
                 If Not IsNothing(Qtys) Then
                     MsgBox("Προσοχή !!! Λάθος ποσότητα.", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
