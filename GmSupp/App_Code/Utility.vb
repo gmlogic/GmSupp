@@ -351,6 +351,7 @@ Public Class Utility
             For Each _IPAddress As System.Net.IPAddress In _IPHostEntry.AddressList
                 If _IPAddress.AddressFamily.ToString() = "InterNetwork" Then
                     _IP = _IPAddress.ToString()
+                    Exit For
                 End If
             Next
 

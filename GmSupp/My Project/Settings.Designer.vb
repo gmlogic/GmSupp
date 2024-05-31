@@ -153,6 +153,17 @@ Namespace My
                 Return CType(Me("NVFConnectionString"),String)
             End Get
         End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.12.201,55555;Initial Catalog=Agustino;Persist Security Info=T"& _ 
+            "rue;User ID=gm;Password=1mgergm++")>  _
+        Public ReadOnly Property AgustinoConnectionString() As String
+            Get
+                Return CType(Me("AgustinoConnectionString"),String)
+            End Get
+        End Property
     End Class
 End Namespace
 

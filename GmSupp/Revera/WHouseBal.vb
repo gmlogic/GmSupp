@@ -64,8 +64,14 @@ Public Class WHouseBal
         'End If
         'If Me.Tag = "SERTORIUS" Then
         conString.DataSource = "192.168.12.201,55555"
-        conString.InitialCatalog = "Revera"
-        CompanyS = 5000
+        conString.InitialCatalog = CompName.ToUpper.Replace("SERTORIUS", "REVERA") '"Revera"
+        If conString.InitialCatalog = "REVERA" Then
+            CompanyS = 5000
+        End If
+        If conString.InitialCatalog = "AGUSTINO" Then
+            CompanyS = 5001
+        End If
+
         'End If
         ''If Me.Tag = "CENTROFARO" Then
         ''    conString.DataSource = "192.168.12.201,55555"
@@ -99,8 +105,8 @@ Public Class WHouseBal
         'End If
 
 
-        UserManagerStore.Context.Database.Connection.ConnectionString = db.Connection.ConnectionString
-        RoleManagerStore.Context.Database.Connection.ConnectionString = db.Connection.ConnectionString
+        UserManagerStore.Context.Database.Connection.ConnectionString = My.Settings.ReveraConnectionString ' db.Connection.ConnectionString
+        RoleManagerStore.Context.Database.Connection.ConnectionString = My.Settings.ReveraConnectionString 'db.Connection.ConnectionString
 
         Dim uss = UserManager.Users.Where(Function(f) Not f.UserName = "gmlogic").OrderBy(Function(f) f.UserName).ToList
         'If CurUserRole = "Admins" Then
@@ -2563,6 +2569,9 @@ Public Class WHouseBal
                 fin = Findoc_AddingNew(fin, 1251, 1000)
                 fin.BRANCH = 2000 'Αποθήκη Ν.Καρβάλης
                 fin.TRDR = 39611 'Προμηθευτής Αίτησης' wfm.ddlSuppliers.SelectedValue
+                If CompName = "AGUSTINO" Then
+                    fin.TRDR = 96370
+                End If
                 'fin.TRDR = wfm.ddlSuppliers.SelectedValue
                 'fin.TRDBRANCH = db.trd.
                 'fin.SALESMAN = 1006

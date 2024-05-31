@@ -20,6 +20,7 @@ Public Class GenMenu
         Test_LK = 15
         Test_REVERA = 16
         Test_NVF = 17
+        Test_AGUSTINO = 18
         HGLP = 21
         LNK = 22
         CENTR = 23
@@ -27,6 +28,7 @@ Public Class GenMenu
         LK = 25
         REVERA = 26
         NVF = 27
+        AGUSTINO = 28
     End Enum
 
     Private Sub GenMenu_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -493,6 +495,27 @@ Public Class GenMenu
             Exit Sub
         End If
         If CompName.Replace("SERTORIUS", "REVERA") = "REVERA" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole)) Then
+            Me.ΥπόλοιπαΕιδώνToolStripMenuItem.Visible = False
+            Me.ΑποθήκηToolStripMenuItem.Visible = True
+            If {"Managers"}.Contains(curUserRole) Then
+                Me.ΑποθήκηToolStripMenuItem.Visible = False
+            End If
+            Me.TransportsToolStripMenuItem.Visible = False
+            If {"Logistics", "Managers", "Pili"}.Contains(curUserRole) Then
+                Me.TransportsToolStripMenuItem.Visible = True
+            End If
+
+            Me.UsersToolStripMenuItem.Visible = False
+            Me.ΕκτύπωσηΕτικετώνBarcodeToolStripMenuItem.Visible = True
+            Me.BarCodeGeneratorToolStripMenuItem.Visible = False
+            Me.ΔημιουργίαToolStripMenuItem.Visible = False
+            Me.ΔιαγραφήToolStripMenuItem.Visible = False
+            Me.S1ApplicantsToolStripMenuItem.Visible = False
+            SetDBs(dbs.REVERA)
+            Exit Sub
+        End If
+
+        If CompName = "AGUSTINO" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole)) Then
             Me.ΑποθήκηToolStripMenuItem.Visible = True
             If {"Managers"}.Contains(curUserRole) Then
                 Me.ΑποθήκηToolStripMenuItem.Visible = False
@@ -544,7 +567,7 @@ Public Class GenMenu
             Case dbs.Test_Centr
                 My.Settings.Item("GenConnectionString") = My.Settings.CentroConnectionString.ToString.Replace("192.168.12.201,55555", "192.168.10.108\SqlExpress")
             Case dbs.Test_Hglp
-                My.Settings.Item("GenConnectionString") = My.Settings.HglpConnectionString.ToString.Replace("192.168.12.201,55555", "192.168.10.108\SqlExpress")
+                My.Settings.Item("GenConnectionString") = My.Settings.HglpConnectionString.ToString.Replace("192.168.12.201,55555", ".")
             Case dbs.Test_LNK
                 My.Settings.Item("GenConnectionString") = My.Settings.LNKConnectionString.ToString.Replace("192.168.12.201,55555", "192.168.10.108\SqlExpress")
             Case dbs.Test_LK
@@ -552,6 +575,8 @@ Public Class GenMenu
             Case dbs.Test_PFIC
                 My.Settings.Item("GenConnectionString") = My.Settings.HglpConnectionString.ToString.Replace("192.168.12.201,55555", "192.168.10.108\SqlExpress")
             Case dbs.Test_REVERA
+                My.Settings.Item("GenConnectionString") = My.Settings.HglpConnectionString.ToString.Replace("192.168.12.201,55555", "192.168.10.108\SqlExpress")
+            Case dbs.AGUSTINO
                 My.Settings.Item("GenConnectionString") = My.Settings.HglpConnectionString.ToString.Replace("192.168.12.201,55555", "192.168.10.108\SqlExpress")
             Case dbs.CENTR
                 My.Settings.Item("GenConnectionString") = My.Settings.CentroConnectionString.ToString
@@ -567,6 +592,8 @@ Public Class GenMenu
                 My.Settings.Item("GenConnectionString") = My.Settings.ReveraConnectionString.ToString
             Case dbs.NVF
                 My.Settings.Item("GenConnectionString") = My.Settings.NVFConnectionString.ToString
+            Case dbs.AGUSTINO
+                My.Settings.Item("GenConnectionString") = My.Settings.AgustinoConnectionString.ToString
         End Select
         'If My.Settings.GenConnectionString.Contains("192.168.12.201") Then
         '    My.Settings.Item("GenConnectionString") = My.Settings.GenConnectionString.Replace("Data Source=192.168.12.201", "Data Source=192.168.12.201,55555")
