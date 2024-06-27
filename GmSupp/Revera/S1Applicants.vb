@@ -127,12 +127,11 @@ Public Class S1Applicants
             Me.Cursor = Cursors.NoMove2D
             LoadData()
             db.Log = Console.Out
-            'Μεταφορείς:
-            'Δρομολόγια:
-            'CheckZIP:
-            'Dim q = From cd In db.cccMultiCompDatas Join m In db.MTRLs On cd.mtrl Equals m.MTRL
-            '        Where m.COMPANY = CompanyS
-            '        Select cd.cccMultiCompData, cd.CompanyT, cd.mtrl, m.CODE, m.NAME, cd.ExpccCUser
+            'in View ccCS1Applicants --  Always from Revera get AspNetUsers
+            ' Select Case dbo.UFTBL01.COMPANY, dbo.UFTBL01.SOSOURCE, dbo.UFTBL01.UFTBL01, dbo.UFTBL01.CODE, dbo.UFTBL01.NAME, dbo.UFTBL01.ISACTIVE, dbo.UFTBL01.ccCUser, AspUsers.Name As AspNetUsersName
+            'From Revera.dbo.AspNetUsers AS AspUsers RIGHT OUTER Join
+            '              dbo.UFTBL01 ON AspUsers.UserName = dbo.UFTBL01.ccCUser
+            'Where (dbo.UFTBL01.SOSOURCE = 1251)
 
             Dim q = db.ccCS1Applicants.Where(Function(f) f.COMPANY = Company And f.SOSOURCE = 1251)
 
@@ -867,13 +866,13 @@ Public Class S1Applicants
             Dim conString As New SqlConnectionStringBuilder
             db.Connection.ConnectionString = My.Settings.GenConnectionString
             db.CommandTimeout = 360
-            If CurUser = "g.igglesis" Then
-                dbPFIC.Connection.ConnectionString = My.Settings.PFICConnectionString
-            End If
+            'If CurUser = "g.igglesis" Then
+            '    dbPFIC.Connection.ConnectionString = My.Settings.PFICConnectionString
+            'End If
 
-            If {"panagiotis", "katerina", "gkonstantatos"}.Contains(CurUser) Then
-                dbPFIC.Connection.ConnectionString = My.Settings.LKConnectionString
-            End If
+            'If {"panagiotis", "katerina", "gkonstantatos"}.Contains(CurUser) Then
+            '    dbPFIC.Connection.ConnectionString = My.Settings.LKConnectionString
+            'End If
             'Data Source=192.168.1.102;Initial Catalog=Orario;Persist Security Info=True;User ID=ecollgl;Password=_ecollgl_
             'Data Source=.\SqlExpress;Initial Catalog=Orario;Integrated Security=True
             'Me.MasterBindingSource.DataSource = db.CCCCheckZips.Where(Function(f) f.ZIP = 0)

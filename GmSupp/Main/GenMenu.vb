@@ -278,6 +278,10 @@ Public Class GenMenu
                 Company = 5000
             End If
 
+            If CompName.ToUpper = "AGUSTINO" Then
+                Company = 5001
+            End If
+
             'If {"REVERA", "SERTORIUS"}.Contains(CompName.ToUpper) Then
             Login = False
             Dim us = CheckUsers(Company, CurUser, Pass)
@@ -576,7 +580,7 @@ Public Class GenMenu
                 My.Settings.Item("GenConnectionString") = My.Settings.HglpConnectionString.ToString.Replace("192.168.12.201,55555", "192.168.10.108\SqlExpress")
             Case dbs.Test_REVERA
                 My.Settings.Item("GenConnectionString") = My.Settings.HglpConnectionString.ToString.Replace("192.168.12.201,55555", "192.168.10.108\SqlExpress")
-            Case dbs.AGUSTINO
+            Case dbs.Test_AGUSTINO
                 My.Settings.Item("GenConnectionString") = My.Settings.HglpConnectionString.ToString.Replace("192.168.12.201,55555", "192.168.10.108\SqlExpress")
             Case dbs.CENTR
                 My.Settings.Item("GenConnectionString") = My.Settings.CentroConnectionString.ToString

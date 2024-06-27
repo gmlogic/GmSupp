@@ -392,7 +392,7 @@ Public Class WHouseBal
         Dim Highers As New Dictionary(Of String, String)
         Highers.Add("<Επιλέγξτε>", 0)
 
-        UserManagerStore.Context.Database.Connection.ConnectionString = db.Connection.ConnectionString
+        'UserManagerStore.Context.Database.Connection.ConnectionString = db.Connection.ConnectionString
 
         'Dim cuser As GmIdentityUser = GmUserManager.ChkUser(curUser.Replace("gmlogic", "gm"))
         'If Not IsNothing(cuser) Then
@@ -738,6 +738,7 @@ Public Class WHouseBal
 
                 Dim ls1 = POrdDet.Select(Of Integer)(Function(f) f.FINDOC).ToList
                 POrdHead = POrdHead.Where(Function(f) ls1.Contains(f.FINDOC)).ToList
+                'POrdHead = POrdHead.OrderBy(Function(f) f.TRNDATE)
 
                 'Dim POrds As New List(Of Revera.GetPendingOrdersDetailsResult)
                 'POrds = (From hd In POrdHead Join dt In POrdDet On hd.NO_ Equals dt.NO_
@@ -3081,7 +3082,7 @@ Public Class WHouseBal
             '2023    ΠΑΡ ΑΤΛ	Παραγγελία Σε Προμηθευτή Παράδοση Έδρα	2021
             '2041    ΔΠ	Δελτίο Αποστολής Προμηθευτή	2041
             '2045    ΔΠΠ	Δελτίο Ποσοτικής Παραλαβής	2045
-            Dim msns = db.MTRLINEs.Where(Function(f) f.FINDOC1.COMPANY = Company And f.FINDOC1.SOSOURCE = 1251 And {2000, 2021, 2022, 2023, 2041, 2045}.Contains(f.FINDOC1.SERIES) And f.ccCAFINDOC = re.FINDOC And f.ccCAMTRLINES = re.MTRLINES)
+            Dim msns = db.MTRLINEs.Where(Function(f) f.FINDOC1.COMPANY = CompanyS And f.FINDOC1.SOSOURCE = 1251 And {2000, 2021, 2022, 2023, 2041, 2045}.Contains(f.FINDOC1.SERIES) And f.ccCAFINDOC = re.FINDOC And f.ccCAMTRLINES = re.MTRLINES)
             If msns.Count > 0 Then
                 Dim APRF As String = ""
                 Dim PAR As String = ""
