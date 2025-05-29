@@ -71,10 +71,11 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>6C6656938FE9EDFE063B358D840112C2826FE2E6</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>0211DB81D4975E7B2D400DAF2FBB1D48E72109F5</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>GmSupp_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>

@@ -476,6 +476,10 @@ Public Class WHouseBal
                 Me.VscsBindingSource.DataSource = New SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)
             End If
             For Each v In mtrls
+                If v.IMPEXPQTY1 >= v.REMAINLIMMIN AndAlso v.IMPEXPQTY1 <= v.REMAINLIMMAX Then
+                    MsgBox("Προσοχή !!! Υπόλοιπο κωδικού " & $"{v.CODE} = {v.IMPEXPQTY1}" & vbCrLf & "εντός ορίων. " & $"MIN:{v.REMAINLIMMIN} MAX:{v.REMAINLIMMAX}", MsgBoxStyle.Critical, " Cmd_Add")
+                    Continue For
+                End If
                 Dim Codes As String() = {"10024"}
                 addVsc = CType(Me.VscsBindingSource.DataSource, SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)).Where(Function(f) f.CODE = v.CODE).FirstOrDefault '.SingleOrDefault
                 If Not IsNothing(addVsc) Then
@@ -3288,7 +3292,11 @@ Public Class WHouseBal
             NMTRLINE.VAT = v.VAT
             NMTRLINE.QTY1 = v.QTY1
             NMTRLINE.QTY = NMTRLINE.QTY1
-            NMTRLINE.QTY2 = NMTRLINE.QTY1
+            If NMTRLINE.MTRL1 Is Nothing Then
+                Dim mtrl1 As Revera.MTRL = db.MTRLs.Where(Function(f) f.MTRL = v.MTRL).FirstOrDefault
+                NMTRLINE.MTRL1=MTRL1
+            End If
+            NMTRLINE.QTY2 = NMTRLINE.QTY1 * If(NMTRLINE.MTRL1.MU21, 1)
             NMTRLINE.UFTBL02 = v.UFTBL02 ' 106
             NMTRLINE.cccTrdDep = v.cccTrdDep ' 55
             NMTRLINE.cccTrdr = v.cccTrdr ' 35465
