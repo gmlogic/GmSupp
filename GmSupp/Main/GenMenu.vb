@@ -79,7 +79,7 @@ Public Class GenMenu
 
 
         'MsgBox("Καλή Χρονιά !!!" & vbCrLf & "  -- 2018 --", MsgBoxStyle.Information)
-        If {"192.168.10.1081", "192.168.51.13"}.Contains(LocalIP) Then
+        If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
             CurUser = "gmlogic"
             CurPass = "1mgergm++"
             CurUserRole = "Developer"
@@ -88,9 +88,13 @@ Public Class GenMenu
             'CurPass = "radrad"
             'CurUserRole = "Admins"
             'CompName = "SERTORIUS"
-            CurUser = "k.pili"
-            CurPass = "Ke@Pi0258"
-            CurUserRole = "Pili"
+            'CurUser = "k.pili"
+            'CurPass = "Ke@Pi0258"
+            'CurUserRole = "Pili"
+            'CompName = "AGUSTINO"
+            CurUser = "s.samaras"
+            CurPass = "Sa@St4356"
+            CurUserRole = "logistics"
             CompName = "AGUSTINO"
             'CompName = "HGLP"
             'CompName = "NVF"

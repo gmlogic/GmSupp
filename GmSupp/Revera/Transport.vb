@@ -843,6 +843,9 @@ Public Class Transport
                 Case "LK"
                     ConStr = My.Settings.LKConnectionString.ToString
                     CompId = 2001
+                Case "AGUSTINO"
+                    ConStr = My.Settings.AgustinoConnectionString.ToString
+                    CompId = 5001
                 Case Else
                     MsgBox("Λάθος!!! Εταιρεία", MsgBoxStyle.Critical, "OK_Click")
                     Exit Sub
@@ -931,6 +934,8 @@ Public Class Transport
                         XCOFile = "C:\Softone\" & "HGLP" & ".XCO"
                     Case 2001
                         XCOFile = "C:\Softone\" & "LK" & ".XCO"
+                    Case 5001
+                        XCOFile = "C:\Softone\" & "AGUSTINO" & ".XCO"
                     Case Else
                         MsgBox("Λάθος!!! Εταιρεία", MsgBoxStyle.Critical, "cmdPrint")
                         Exit Sub
