@@ -229,6 +229,10 @@ Public Class WHouseBal
         emptyFromDep = {New Revera.UFTBL02 With {.NAME = "<Επιλέγξτε>", .UFTBL02 = 0}}
 
         FromDep = (emptyFromDep.ToList.Union(db.UFTBL02s.Where(Function(f) f.COMPANY = CompanyS And f.SOSOURCE = 1251 And f.ISACTIVE = 1).OrderBy(Function(f) f.NAME).ToList)).ToList
+        If Facilities IsNot Nothing Then
+            FromDep = FromDep.Where(Function(f) f.UFTBL02 = 3).ToList
+        End If
+
 
         Dim emptyTrdr() As Revera.TRDR
         emptyTrdr = {New Revera.TRDR With {.NAME = "<Επιλέγξτε>", .TRDR = 0}}
@@ -242,11 +246,19 @@ Public Class WHouseBal
                                         Where(Function(f) f.COMPANY = CompanyS And f.SODTYPE = 13 And f.ISACTIVE = 1 And f.TRDEXTRA.BOOL01 = 1 And db.cccTrdDeps.
                                         Select(Function(f1) f1.trdr).Contains(f.TRDR)).OrderBy(Function(f) f.NAME).ToList)).ToList
 
+        If Facilities IsNot Nothing Then
+            Trdrs = Trdrs.Where(Function(f) f.NAME = "MEDPHOS ΥΠΟΚΑΤΑΣΤΗΜΑ ΑΛΛΟΔΑΠΗΣ").ToList
+        End If
+
         Dim emptycccTrdDep() As Revera.cccTrdDep
         emptycccTrdDep = {New Revera.cccTrdDep With {.Name = "<Επιλέγξτε>", .cccTrdDep = 0}}
 
         cccTrdDeps = (emptycccTrdDep.ToList.Union(db.cccTrdDeps.Where(Function(f) Trdrs.
                                         Select(Function(f1) f1.TRDR).Contains(f.trdr)).OrderBy(Function(f) f.Name).ToList)).ToList
+
+        If Facilities IsNot Nothing Then
+            cccTrdDeps = cccTrdDeps.Where(Function(f) f.Code = 15).ToList
+        End If
 
         Dim emptySupplier() As Revera.TRDR
         emptySupplier = {New Revera.TRDR With {.NAME = "<Επιλέγξτε>", .TRDR = 0}}
@@ -476,7 +488,7 @@ Public Class WHouseBal
                 Me.VscsBindingSource.DataSource = New SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)
             End If
             For Each v In mtrls
-                If v.IMPEXPQTY1 >= v.REMAINLIMMIN AndAlso v.IMPEXPQTY1 <= v.REMAINLIMMAX Then
+                If v.REMAINLIMMIN <> 0 AndAlso v.REMAINLIMMAX <> 0 AndAlso v.IMPEXPQTY1 >= v.REMAINLIMMIN AndAlso v.IMPEXPQTY1 <= v.REMAINLIMMAX Then
                     MsgBox("Προσοχή !!! Υπόλοιπο κωδικού " & $"{v.CODE} = {v.IMPEXPQTY1}" & vbCrLf & "εντός ορίων. " & $"MIN:{v.REMAINLIMMIN} MAX:{v.REMAINLIMMAX}", MsgBoxStyle.Critical, " Cmd_Add")
                     Continue For
                 End If
@@ -2520,39 +2532,44 @@ Public Class WHouseBal
                 'wfm.ddlTrdr.DataSource = Trdrs
                 'wfm.cccTrdDeps = cccTrdDeps
                 'wfm.ddlApplicant.DataSource = Applicants
-                SetGmChkListBox()
+                If Facilities <> "VELESTINO" Then
+                    SetGmChkListBox()
+                End If
+
                 wfm.ShowDialog()
                 If wfm.FrmCancel Then
                     wfm.FrmCancel = False
                     Exit Sub
                 End If
-                'If wfm.ddlSuppliers.SelectedValue = 0 Then
-                '    MsgBox("Υποχρεωτική επιλογή <Προμηθευτής>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
-                '    Exit Sub
-                'End If
-                If wfm.ddlFromcccTrdDep.SelectedValue = 0 Then
-                    MsgBox("Υποχρεωτική επιλογή <Από Τμήμα>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
-                    Exit Sub
+                If Facilities <> "VELESTINO" Then
+                    'If wfm.ddlSuppliers.SelectedValue = 0 Then
+                    '    MsgBox("Υποχρεωτική επιλογή <Προμηθευτής>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                    '    Exit Sub
+                    'End If
+                    If wfm.ddlFromcccTrdDep.SelectedValue = 0 Then
+                        MsgBox("Υποχρεωτική επιλογή <Από Τμήμα>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                        Exit Sub
+                    End If
+                    If wfm.ddlTrdr.SelectedValue = 0 Then
+                        MsgBox("Υποχρεωτική επιλογή <Για Πελάτη>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                        Exit Sub
+                    End If
+                    If wfm.ddlcccTrdDep.SelectedValue = 0 Then
+                        MsgBox("Υποχρεωτική επιλογή <Για Τμήμα Πελάτη>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                        Exit Sub
+                    End If
+                    'If wfm.ddlApplicant.SelectedValue = 0 Then
+                    '    MsgBox("Υποχρεωτική επιλογή <ο Αιτών>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                    '    Exit Sub
+                    'End If
+                    'If wfm.txtBoxRequestNo.Text.Trim = "" Then
+                    '    MsgBox("Υποχρεωτικός αρ.Αίτησης", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                    '    Exit Sub
+                    'End If
+                    'If MsgBox("Ολοκλήρωση Παραγγελίας;", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, My.Application.Info.AssemblyName) = MsgBoxResult.No Then
+                    '    Exit Sub
+                    'End If
                 End If
-                If wfm.ddlTrdr.SelectedValue = 0 Then
-                    MsgBox("Υποχρεωτική επιλογή <Για Πελάτη>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
-                    Exit Sub
-                End If
-                If wfm.ddlcccTrdDep.SelectedValue = 0 Then
-                    MsgBox("Υποχρεωτική επιλογή <Για Τμήμα Πελάτη>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
-                    Exit Sub
-                End If
-                'If wfm.ddlApplicant.SelectedValue = 0 Then
-                '    MsgBox("Υποχρεωτική επιλογή <ο Αιτών>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
-                '    Exit Sub
-                'End If
-                'If wfm.txtBoxRequestNo.Text.Trim = "" Then
-                '    MsgBox("Υποχρεωτικός αρ.Αίτησης", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
-                '    Exit Sub
-                'End If
-                'If MsgBox("Ολοκλήρωση Παραγγελίας;", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, My.Application.Info.AssemblyName) = MsgBoxResult.No Then
-                '    Exit Sub
-                'End If
                 If wfm.ddlΗighers.SelectedValue = "0" Then
                     MsgBox("Υποχρεωτική επιλογή <Έγκριση ανωτέρου>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
                     Exit Sub
@@ -3525,6 +3542,14 @@ Public Class WHouseBal
         End If
     End Sub
 
+    Private Sub radioBtnService_CheckedChanged(sender As Object, e As EventArgs) Handles radioBtnMtrl.CheckedChanged, radioBtnService.CheckedChanged
+        Dim s As RadioButton = sender
+        txtBoxMtrlName.Text = ""
+        If s.Name = "radioBtnService" AndAlso s.Checked Then
+            txtBoxMtrlName.Text = "*ΕΞΟΔΑ*"
+        End If
+    End Sub
+
     Private Sub BtnEditApplicantLogs_Click(sender As Object, e As EventArgs) Handles BtnEditApplicantLogs.Click
         If Me.MasterBindingSource.Count > 0 Then
             Dim POrdHead As List(Of Integer) = CType(Me.MasterBindingSource.DataSource, List(Of Revera.GetPendingOrdersHeaderResult)).Select(Of Integer)(Function(f) f.FINDOC).ToList
@@ -3544,7 +3569,6 @@ Public Class WHouseBal
             Cmd_Select()
         End If
     End Sub
-
 
 #End Region
 

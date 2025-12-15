@@ -106,6 +106,7 @@ Module AAGenModule
     Public CurUser As String
     Public UserId As Integer
     Public CurPass As String
+    Public Facilities As String
 
     Public GUser As New Revera.USER
 

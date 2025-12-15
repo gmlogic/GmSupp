@@ -123,6 +123,12 @@ Public Class AAGenLogin
         Me.GmChkListBoxRoles.dgv_Styling()
         'Me.GmChkListBoxAplicant.BringToFront()
 
+        '1.	Μαρτίνο Καϊάφα και Δημήτρη Γκανέτσο στην Αταλάντη
+        '2.	Τσιτσιμάνη Βλάσση και Βαγγέλη Ζιαζιά στην Αυλίδα 
+        '3.	Νιζάμη Αλέξανδρο Βελεστίνο 
+
+        Me.ddlFacility.DataSource = New List(Of String) From {"<Επιλέγξτε>", "ATALANTI", "AYLIDA", "VELESTINO"}
+
 
         Me.txtBoxDecrypt.Visible = False
         Me.PanelApplicant.Visible = False
@@ -133,6 +139,11 @@ Public Class AAGenLogin
             Me.lblRoles.Visible = False
             Me.GmChkListBoxRoles.Visible = False
             Me.btnSetRoles.Visible = False
+            Me.txtBoxRole.Visible = False
+            Me.btnAddRole.Visible = False
+            Me.LblFacility.Visible = False
+            Me.ddlFacility.Visible = False
+            Me.BtnSetFacility.Visible = False
 
             Me.Label3.Visible = False
             Me.Label4.visible = False
@@ -240,7 +251,7 @@ Public Class AAGenLogin
     Private Sub cmdOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdOK.Click
         Try
 
-
+#Region "List(Of Revera.USER)"
             Dim uss As New List(Of Revera.USER)
             '9005    ΣΥΝΤΗΡΗΣΗ	ΣΥΝΤΗΡΗΣΗ	901	7845123
             '9007    g.kazoglou	g.kazoglou	901	Ka@Ge1744
@@ -288,6 +299,7 @@ Public Class AAGenLogin
             uss.Add(New Revera.USER With {.USERS = 9026, .CODE = "s.fourlis", .CODE1 = "Fo@St2883"})
             uss.Add(New Revera.USER With {.USERS = 9027, .CODE = "a.karakasidis", .CODE1 = "Ka@An3412"})
             uss.Add(New Revera.USER With {.USERS = 9028, .CODE = "ch.thalassinos", .CODE1 = "Th@Ch1313"})
+#End Region
 
             If Action = "Add" Then
 
@@ -355,7 +367,6 @@ Public Class AAGenLogin
 
                                 If usClaim Is Nothing Then
                                     usClaim = New Security.Claims.Claim("Higher", Me.ddlΗighers.SelectedValue)
-                                    UserManager.AddClaim(user.Id, usClaim)
                                 End If
                                 Me.txtBoxΗigher.Text = ""
                                 Dim usClaims = UserManager.GetClaims(cuser.Id).Where(Function(f) f.Type = "Higher") '.FirstOrDefault
@@ -706,7 +717,13 @@ Public Class AAGenLogin
             End If
         Next
 
+        Dim usClaim = UserManager.GetClaims(cuser.Id).Where(Function(f) f.Type = "Facilities").FirstOrDefault
 
+        If usClaim Is Nothing Then
+            Me.ddlFacility.SelectedItem = "<Επιλέγξτε>"
+        Else
+            Me.ddlFacility.SelectedItem = usClaim.Value
+        End If
 
 
 
@@ -861,4 +878,21 @@ Public Class AAGenLogin
 
     End Function
 
+    Private Sub BtnSetFacility_Click(sender As Object, e As EventArgs) Handles BtnSetFacility.Click
+        If UsernameTextBox IsNot Nothing Then
+            Dim selectedName As String = ddlFacility.SelectedItem.ToString()
+            If selectedName <> "<Επιλέγξτε>" Then
+                'UserManagerStore.Context.Database.Connection.ConnectionString = db.Connection.ConnectionString
+                Dim user As IdentityUser = UserManager.Users.Where(Function(f) f.UserName = UsernameTextBox.Text).FirstOrDefault
+                If Not IsNothing(user) Then
+                    Dim usClaim = UserManager.GetClaims(user.Id).Where(Function(f) f.Type = "Facilities").FirstOrDefault
+
+                    If usClaim Is Nothing Then
+                        UserManager.AddClaim(user.Id, New Security.Claims.Claim("Facilities", selectedName))
+                    End If
+                End If
+            End If
+
+        End If
+    End Sub
 End Class

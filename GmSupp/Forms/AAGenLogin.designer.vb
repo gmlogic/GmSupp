@@ -47,9 +47,12 @@ Partial Class AAGenLogin
         Me.ddlΗighers = New System.Windows.Forms.ComboBox()
         Me.txtBoxΗigher = New System.Windows.Forms.TextBox()
         Me.btnDeleteHigher = New System.Windows.Forms.Button()
-        Me.GmChkListBoxRoles = New GmSupp.GmChkListBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.LblFacility = New System.Windows.Forms.Label()
+        Me.BtnSetFacility = New System.Windows.Forms.Button()
+        Me.GmChkListBoxRoles = New GmSupp.GmChkListBox()
+        Me.ddlFacility = New System.Windows.Forms.ComboBox()
         Label9 = New System.Windows.Forms.Label()
         Me.PanelApplicant.SuspendLayout()
         Me.SuspendLayout()
@@ -77,7 +80,8 @@ Partial Class AAGenLogin
         Me.lblUserName.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblUserName.Size = New System.Drawing.Size(110, 23)
         Me.lblUserName.TabIndex = 5
-        Me.lblUserName.Text = "&Όνομα:"
+        Me.lblUserName.Text = "&User:"
+        Me.lblUserName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         '_lblLabels_1
         '
@@ -91,6 +95,7 @@ Partial Class AAGenLogin
         Me._lblLabels_1.Size = New System.Drawing.Size(110, 23)
         Me._lblLabels_1.TabIndex = 7
         Me._lblLabels_1.Text = "&Κωδικός:"
+        Me._lblLabels_1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'cmdOK
         '
@@ -140,6 +145,7 @@ Partial Class AAGenLogin
         Me.Label1.Size = New System.Drawing.Size(110, 23)
         Me.Label1.TabIndex = 184
         Me.Label1.Text = "&Επιβεβαίωση:"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtBoxOldPass
         '
@@ -162,6 +168,7 @@ Partial Class AAGenLogin
         Me.lblOldPass.Size = New System.Drawing.Size(110, 23)
         Me.lblOldPass.TabIndex = 185
         Me.lblOldPass.Text = "Παλαιός Κωδικός:"
+        Me.lblOldPass.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lblOldPass.Visible = False
         '
         'ddlUsers
@@ -230,7 +237,7 @@ Partial Class AAGenLogin
         '
         Me.PanelApplicant.Controls.Add(Label9)
         Me.PanelApplicant.Controls.Add(Me.ddlApplicant)
-        Me.PanelApplicant.Location = New System.Drawing.Point(466, 9)
+        Me.PanelApplicant.Location = New System.Drawing.Point(518, 232)
         Me.PanelApplicant.Name = "PanelApplicant"
         Me.PanelApplicant.Size = New System.Drawing.Size(285, 39)
         Me.PanelApplicant.TabIndex = 275
@@ -262,6 +269,7 @@ Partial Class AAGenLogin
         Me.Label2.Size = New System.Drawing.Size(110, 23)
         Me.Label2.TabIndex = 278
         Me.Label2.Text = "Επωνυμία:"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtBoxName
         '
@@ -326,14 +334,6 @@ Partial Class AAGenLogin
         Me.btnDeleteHigher.TabIndex = 286
         Me.btnDeleteHigher.UseVisualStyleBackColor = False
         '
-        'GmChkListBoxRoles
-        '
-        Me.GmChkListBoxRoles.GmCheck = False
-        Me.GmChkListBoxRoles.Location = New System.Drawing.Point(57, 6)
-        Me.GmChkListBoxRoles.Name = "GmChkListBoxRoles"
-        Me.GmChkListBoxRoles.Size = New System.Drawing.Size(300, 25)
-        Me.GmChkListBoxRoles.TabIndex = 273
-        '
         'Label3
         '
         Me.Label3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
@@ -358,12 +358,62 @@ Partial Class AAGenLogin
         Me.Label4.Text = "Ανώτερος :" & Global.Microsoft.VisualBasic.ChrW(9)
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
+        'LblFacility
+        '
+        Me.LblFacility.BackColor = System.Drawing.SystemColors.Control
+        Me.LblFacility.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.LblFacility.Cursor = System.Windows.Forms.Cursors.Default
+        Me.LblFacility.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
+        Me.LblFacility.ForeColor = System.Drawing.Color.Blue
+        Me.LblFacility.Location = New System.Drawing.Point(444, 9)
+        Me.LblFacility.Name = "LblFacility"
+        Me.LblFacility.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.LblFacility.Size = New System.Drawing.Size(56, 23)
+        Me.LblFacility.TabIndex = 299
+        Me.LblFacility.Text = "Facility:"
+        Me.LblFacility.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'BtnSetFacility
+        '
+        Me.BtnSetFacility.BackColor = System.Drawing.SystemColors.Control
+        Me.BtnSetFacility.Cursor = System.Windows.Forms.Cursors.Default
+        Me.BtnSetFacility.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.BtnSetFacility.Location = New System.Drawing.Point(679, 9)
+        Me.BtnSetFacility.Name = "BtnSetFacility"
+        Me.BtnSetFacility.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BtnSetFacility.Size = New System.Drawing.Size(76, 26)
+        Me.BtnSetFacility.TabIndex = 298
+        Me.BtnSetFacility.Text = "Set Facility"
+        Me.BtnSetFacility.UseVisualStyleBackColor = False
+        '
+        'GmChkListBoxRoles
+        '
+        Me.GmChkListBoxRoles.GmCheck = False
+        Me.GmChkListBoxRoles.Location = New System.Drawing.Point(57, 6)
+        Me.GmChkListBoxRoles.Name = "GmChkListBoxRoles"
+        Me.GmChkListBoxRoles.Size = New System.Drawing.Size(300, 25)
+        Me.GmChkListBoxRoles.TabIndex = 273
+        '
+        'ddlFacility
+        '
+        Me.ddlFacility.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
+        Me.ddlFacility.DisplayMember = "NAME"
+        Me.ddlFacility.FormattingEnabled = True
+        Me.ddlFacility.Location = New System.Drawing.Point(506, 9)
+        Me.ddlFacility.Name = "ddlFacility"
+        Me.ddlFacility.Size = New System.Drawing.Size(167, 21)
+        Me.ddlFacility.TabIndex = 300
+        Me.ddlFacility.ValueMember = "UFTBL01"
+        '
         'AAGenLogin
         '
         Me.AcceptButton = Me.cmdOK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(815, 283)
+        Me.Controls.Add(Me.ddlFacility)
+        Me.Controls.Add(Me.LblFacility)
+        Me.Controls.Add(Me.BtnSetFacility)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.btnDeleteHigher)
@@ -429,4 +479,7 @@ Partial Class AAGenLogin
     Public WithEvents btnDeleteHigher As Button
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
+    Public WithEvents LblFacility As Label
+    Public WithEvents BtnSetFacility As Button
+    Friend WithEvents ddlFacility As ComboBox
 End Class

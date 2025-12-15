@@ -29,7 +29,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>53</ApplicationRevision>
+    <ApplicationRevision>54</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -71,11 +71,10 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>0211DB81D4975E7B2D400DAF2FBB1D48E72109F5</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>881701F61EC75443FD005D9B8C3F1885B50E47C4</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>
-    </ManifestKeyFile>
+    <ManifestKeyFile>GmSupp_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -537,6 +536,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="GmSupp_1_TemporaryKey.pfx" />
+    <None Include="GmSupp_2_TemporaryKey.pfx" />
     <None Include="GmSupp_TemporaryKey.pfx" />
     <None Include="My Project\DataSources\ccCBCLabel.datasource" />
     <None Include="My Project\DataSources\GmSupp.Hglp.cccPriceList.datasource" />

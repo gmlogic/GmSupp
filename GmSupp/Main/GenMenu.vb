@@ -80,24 +80,41 @@ Public Class GenMenu
 
         'MsgBox("Καλή Χρονιά !!!" & vbCrLf & "  -- 2018 --", MsgBoxStyle.Information)
         If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
-            CurUser = "gmlogic"
-            CurPass = "1mgergm++"
-            CurUserRole = "Developer"
+            'CurUser = "gmlogic"
+            'CurPass = "1mgergm++"
+            'CurUserRole = "Developer"
 
-            'CurUser = "ch.keskesiadis"
-            'CurPass = "radrad"
-            'CurUserRole = "Admins"
-            'CompName = "SERTORIUS"
+            CurUser = "ch.keskesiadis"
+            CurPass = "radrad"
+            CurUserRole = "Admins"
+            CompName = "AGUSTINO"
             'CurUser = "k.pili"
             'CurPass = "Ke@Pi0258"
             'CurUserRole = "Pili"
             'CompName = "AGUSTINO"
-            CurUser = "s.samaras"
-            CurPass = "Sa@St4356"
-            CurUserRole = "logistics"
-            CompName = "AGUSTINO"
+            'CurUser = "s.samaras"
+            'CurPass = "Sa@St4356"
+            'CurUserRole = "logistics"
+            'CompName = "AGUSTINO"
             'CompName = "HGLP"
             'CompName = "NVF"
+
+            'CurUser = "a.nizamis"
+            'CurPass = "123"
+            ''CurUserRole = "Users"
+            'CompName = "SERTORIUS"
+            ''Facilities = "VELESTINO"
+
+            'CurUser = "a.lazaridis"
+            'CurPass = "La@An5589"
+            'CurUserRole = "Users"
+            'CompName = "SERTORIUS"
+
+            'CurUser = "g.pagkos"
+            'CurPass = "radrad"
+            'CurUserRole = "Users"
+            'CompName = "AGUSTINO"
+
             For Each mn As ToolStripItem In Me.MenuStrip.Items
                 mn.Visible = False
             Next
@@ -123,8 +140,8 @@ Public Class GenMenu
             loginf.Text = "Εισαγωγή στοιχείων"
             'ch.keskesiadis radrad
             If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
-                loginf.UsernameTextBox.Text = "s.iordanoglou" '"ch.keskesiadis" '"g.ksms" '"a.tsilikas" '"a.momtsos" '"t.andreoglou" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
-                loginf.PasswordTextBox.Text = "Sa@Io1522" '"radrad" '"Gr@Ks5584" '"Ts@An9923" '"An@Ti6912" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
+                loginf.UsernameTextBox.Text = "a.nizamis" '"s.iordanoglou" '"ch.keskesiadis" '"g.ksms" '"a.tsilikas" '"a.momtsos" '"t.andreoglou" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
+                loginf.PasswordTextBox.Text = "123" '"Sa@Io1522" '"radrad" '"Gr@Ks5584" '"Ts@An9923" '"An@Ti6912" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
                 'loginf.UsernameTextBox.Text = "gmlogic" '"d.makaridis" '
                 'loginf.PasswordTextBox.Text = "1mgergm++" '"Ma@Di55489" '
                 'If loginf.UsernameTextBox.Text = "ch.keskesiadis" Then
@@ -463,6 +480,14 @@ Public Class GenMenu
                 'End If
                 CurUserRole = UserManager.GetRoles(us.Id).FirstOrDefault
                 Dim gg = UserManager.GetRoles(us.Id).ToList
+
+                Dim usClaim = UserManager.GetClaims(us.Id).Where(Function(f) f.Type = "Facilities" And f.Value = "VELESTINO").FirstOrDefault
+                If usClaim IsNot Nothing Then
+                    Facilities = usClaim.Value
+                Else
+                    Facilities = "KAVALA"
+                End If
+
             End If
 
 
@@ -506,7 +531,7 @@ Public Class GenMenu
             Me.TransportsToolStripMenuItem.Visible = True
             Exit Sub
         End If
-        If CompName.Replace("SERTORIUS", "REVERA") = "REVERA" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole)) Then
+        If Facilities Is Nothing AndAlso CompName.Replace("SERTORIUS", "REVERA") = "REVERA" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole)) Then
             Me.ΥπόλοιπαΕιδώνToolStripMenuItem.Visible = False
             Me.ΑποθήκηToolStripMenuItem.Visible = True
             If {"Managers"}.Contains(curUserRole) Then
@@ -527,7 +552,7 @@ Public Class GenMenu
             Exit Sub
         End If
 
-        If CompName = "AGUSTINO" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole)) Then
+        If Facilities IsNot Nothing OrElse CompName = "AGUSTINO" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole)) Then
             Me.ΑποθήκηToolStripMenuItem.Visible = True
             If {"Managers"}.Contains(curUserRole) Then
                 Me.ΑποθήκηToolStripMenuItem.Visible = False
