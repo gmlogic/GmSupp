@@ -7,6 +7,7 @@ Imports GmSupp
 Imports GmSupp.Hglp
 Imports GmSupp.Revera
 Imports Microsoft.AspNet.Identity
+Imports Newtonsoft.Json.Linq
 Imports OfficeOpenXml
 Imports OfficeOpenXml.Style
 
@@ -229,9 +230,9 @@ Public Class WHouseBal
         emptyFromDep = {New Revera.UFTBL02 With {.NAME = "<Επιλέγξτε>", .UFTBL02 = 0}}
 
         FromDep = (emptyFromDep.ToList.Union(db.UFTBL02s.Where(Function(f) f.COMPANY = CompanyS And f.SOSOURCE = 1251 And f.ISACTIVE = 1).OrderBy(Function(f) f.NAME).ToList)).ToList
-        If Facilities IsNot Nothing Then
-            FromDep = FromDep.Where(Function(f) f.UFTBL02 = 3).ToList
-        End If
+        'If Facilities <> "KAVALA" Then
+        '    FromDep = FromDep.Where(Function(f) f.UFTBL02 = 3).ToList
+        'End If
 
 
         Dim emptyTrdr() As Revera.TRDR
@@ -246,9 +247,9 @@ Public Class WHouseBal
                                         Where(Function(f) f.COMPANY = CompanyS And f.SODTYPE = 13 And f.ISACTIVE = 1 And f.TRDEXTRA.BOOL01 = 1 And db.cccTrdDeps.
                                         Select(Function(f1) f1.trdr).Contains(f.TRDR)).OrderBy(Function(f) f.NAME).ToList)).ToList
 
-        If Facilities IsNot Nothing Then
-            Trdrs = Trdrs.Where(Function(f) f.NAME = "MEDPHOS ΥΠΟΚΑΤΑΣΤΗΜΑ ΑΛΛΟΔΑΠΗΣ").ToList
-        End If
+        'If Facilities <> "KAVALA" Then
+        '    Trdrs = Trdrs.Where(Function(f) f.NAME = "MEDPHOS ΥΠΟΚΑΤΑΣΤΗΜΑ ΑΛΛΟΔΑΠΗΣ").ToList
+        'End If
 
         Dim emptycccTrdDep() As Revera.cccTrdDep
         emptycccTrdDep = {New Revera.cccTrdDep With {.Name = "<Επιλέγξτε>", .cccTrdDep = 0}}
@@ -256,9 +257,9 @@ Public Class WHouseBal
         cccTrdDeps = (emptycccTrdDep.ToList.Union(db.cccTrdDeps.Where(Function(f) Trdrs.
                                         Select(Function(f1) f1.TRDR).Contains(f.trdr)).OrderBy(Function(f) f.Name).ToList)).ToList
 
-        If Facilities IsNot Nothing Then
-            cccTrdDeps = cccTrdDeps.Where(Function(f) f.Code = 15).ToList
-        End If
+        'If Facilities <> "KAVALA" Then
+        '    cccTrdDeps = cccTrdDeps.Where(Function(f) f.Code = 15).ToList
+        'End If
 
         Dim emptySupplier() As Revera.TRDR
         emptySupplier = {New Revera.TRDR With {.NAME = "<Επιλέγξτε>", .TRDR = 0}}
@@ -2532,7 +2533,7 @@ Public Class WHouseBal
                 'wfm.ddlTrdr.DataSource = Trdrs
                 'wfm.cccTrdDeps = cccTrdDeps
                 'wfm.ddlApplicant.DataSource = Applicants
-                If Facilities <> "VELESTINO" Then
+                If Facilities = "KAVALA" Then
                     SetGmChkListBox()
                 End If
 
@@ -2541,7 +2542,7 @@ Public Class WHouseBal
                     wfm.FrmCancel = False
                     Exit Sub
                 End If
-                If Facilities <> "VELESTINO" Then
+                If Facilities = "KAVALA" Then
                     'If wfm.ddlSuppliers.SelectedValue = 0 Then
                     '    MsgBox("Υποχρεωτική επιλογή <Προμηθευτής>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
                     '    Exit Sub
@@ -2569,12 +2570,12 @@ Public Class WHouseBal
                     'If MsgBox("Ολοκλήρωση Παραγγελίας;", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, My.Application.Info.AssemblyName) = MsgBoxResult.No Then
                     '    Exit Sub
                     'End If
-                End If
-                If wfm.ddlΗighers.SelectedValue = "0" Then
-                    MsgBox("Υποχρεωτική επιλογή <Έγκριση ανωτέρου>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
-                    Exit Sub
-                End If
 
+                    If wfm.ddlΗighers.SelectedValue = "0" Then
+                        MsgBox("Υποχρεωτική επιλογή <Έγκριση ανωτέρου>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                        Exit Sub
+                    End If
+                End If
                 'Dim cuser As GmIdentityUser = GmUserManager.ChkUser(CurUser.Replace("gmlogic", "gm"))
                 'If cuser Is Nothing Then
                 '    MsgBox("Error User: " & CurUser, MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
@@ -2588,7 +2589,9 @@ Public Class WHouseBal
                 'do save
 
                 fin.TRNDATE = wfm.DateTimePicker1.Value.ToShortDateString
-                fin = Findoc_AddingNew(fin, 1251, 1000)
+                If Facilities = "KAVALA" Then
+                    fin = Findoc_AddingNew(fin, 1251, 1000)
+                End If
                 fin.BRANCH = 2000 'Αποθήκη Ν.Καρβάλης
                 fin.TRDR = 39611 'Προμηθευτής Αίτησης' wfm.ddlSuppliers.SelectedValue
                 If CompName = "AGUSTINO" Then
@@ -2608,12 +2611,53 @@ Public Class WHouseBal
                 'fin.VARCHAR02 = fin.VARCHAR02.Replace("<Επιλέγξτε>", "")
                 fin.ccCRecipients = wfm.GmChkListBoxRecipients.TlStxtBox.Text
                 fin.DATE01 = wfm.DateTimePicker2.Value
-
                 '10  Εγκεκριμένη
                 '16  Αίτηση πρός έγκριση
                 '17  Αρχική έγκριση
                 '18  Αίτηση πρός έγκριση ανωτέρου
                 fin.FINSTATES = 16 'Αίτηση πρός έγκριση
+
+                If Facilities <> "KAVALA" Then
+                    Select Case MsgBox("Να αποθηκευθούν οι αλλαγές;", MsgBoxStyle.YesNoCancel + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, "")
+                        Case MsgBoxResult.No
+                            ' The data is not safe.
+                            wfm.txtBoxVARCHAR01.Text = ""
+                            wfm.txtBoxREMARKS.Text = ""
+                            wfm.txtBoxRequestNo.Text = ""
+                            Me.TlsBtnClear.PerformClick()
+                        Case MsgBoxResult.Yes
+                            ' Save the changes.
+                            '"ATALANTI", "AYLIDA", "VELESTINO"
+                            If Facilities = "ATALANTI" Then
+                                fin.SERIES = 1023
+                            End If
+                            If Facilities = "AYLIDA" Then
+                                fin.SERIES = 1024
+                            End If
+                            If Facilities = "VELESTINO" Then
+                                fin.SERIES = 1026
+                            End If
+                            fin.VATSTS = 1341
+                            fin.FINSTATES = 10 'Εγκεκριμένη
+                            Dim mls1 = CType(Me.VscsBindingSource.DataSource, SortableBindingList(Of Revera.GetPendingOrdersDetailsResult))
+                            For Each v In mls1
+                                'v.UFTBL02 = CShort(wfm.ddlFromcccTrdDep.SelectedValue) 'Τμήμα κόστους = 106 'ΣΥΝΤ.ΟΡΓΑΝΑ
+                                'v.cccTrdDep = CInt(wfm.ddlcccTrdDep.SelectedValue) 'Κωδικός Τμήματος DBTableName : cccTrdDep = 55 'ΤΜ.ΤΕΧΝΟΛ.ΕΛΕΓΧΟΥ
+                                'v.cccTrdr = CInt(wfm.ddlTrdr.SelectedValue) 'Κωδικός πελάτη cccTrdr = 35465 'PFIC LTD.
+                                'v.WHOUSE = 1000
+                                v.QTY1 = v.NUM03 'Αιτ.Ποσ
+                                fin = MTRLINE_AddingNew(v, fin)
+                            Next
+
+                            Dim ss = PostWithWS(fin, Facilities)
+                            wfm.txtBoxVARCHAR01.Text = ""
+                            wfm.txtBoxREMARKS.Text = ""
+                            wfm.txtBoxRequestNo.Text = ""
+                            Me.TlsBtnClear.PerformClick()
+                        Case MsgBoxResult.Cancel
+                    End Select
+                    Exit Sub
+                End If
 
                 'If Not IsNothing(cuser) Then
                 '    fin.ccCApplicant = cuser.Name
@@ -2859,6 +2903,158 @@ Public Class WHouseBal
         'Throw New NotImplementedException()
     End Sub
 
+    Private Async Function PostWithWS(fin As Revera.FINDOC, facilities As String) As Task(Of Object)
+        If clientID Is Nothing Then
+            clientID = Await Utility.LoginWS()
+        End If
+
+        Dim _error As String = Nothing
+
+        Dim ws As JObject = BaseWS("PURDOC", clientID)
+
+        ws("DATA")("PURDOC") = New JArray(BuildPURDOC(fin))
+        'ws("DATA")("ITELINES") = BuildITELINES(fin.MTRLINEs.ToList)
+        ws("DATA")("SRVLINES") = BuildITELINES(fin.MTRLINEs.ToList)
+        'ws("DATA")("SRVLINES") = BuildSRVLINES(fin.FINDOC)
+
+        Dim sStr = Newtonsoft.Json.Linq.JObject.FromObject(ws).ToString()
+
+        ' Print JSON string
+        Console.WriteLine(sStr)
+
+        Dim Result As String = Await Utility.executeRequestAsync(sStr)
+
+        If Result.Contains("error") Then
+            Throw New NotImplementedException(Result.ToString)
+        End If
+
+        Dim JObjD = Newtonsoft.Json.JsonConvert.DeserializeObject(Result)
+
+        'Dim fin1 As New FINDOC_MTRLINE
+        Dim newId As Integer
+        If JObjD("success").ToString = "True" Then
+            Dim data As JObject = JObjD("data")
+            'Dim saldoc As JObject = data("SALDOC")(0)
+            newId = CInt(JObjD("id").ToString)
+            'fin1.FINCODE = saldoc!FINCODE ' JObjD.SelectToken("SALDOC[0].FINCODE").ToString
+            'fin1.TRDR_NAME = saldoc!TRDR_CUSTOMER_NAME
+            'fin1.BRANCH_EMAIL = saldoc!TRDR_CUSBRANCH_EMAIL
+            'fin1.EMAIL = saldoc!TRDR_CUSTOMER_EMAIL
+            'fin1.BRANCH_EMAIL = saldoc!TRDR_CUSBRANCH_EMAIL
+            'SaveData = True
+            'update
+            sStr = "UPDATE MTRLINES SET ccCAFINDOC = MTRLINES.FINDOC, ccCAMTRLINES = MTRLINES.MTRLINES 
+                        FROM FINDOC AS fi INNER JOIN MTRLINES ON fi.FINDOC = MTRLINES.FINDOC
+                        WHERE fi.FINDOC = " & newId
+            Dim ws1 As JObject = UpdateWS("Update_ccCAFINDOC_ccCAMTRLINES", clientID, newId)
+            sStr = Newtonsoft.Json.Linq.JObject.FromObject(ws1).ToString()
+
+            Result = Await Utility.executeRequestAsync(sStr)
+        Else
+            If Not JObjD("error").ToString = "No data" Then 'other error
+                'MsgBox(JLObj("error").ToString, MsgBoxStyle.Critical, "BeforePost")
+                Throw New NotImplementedException(JObjD("error").ToString)
+                _error = JObjD("error").ToString
+                'ExistDeKagro = True
+                'Exit Sub
+            End If
+        End If
+
+        Return _error
+        'Throw New NotImplementedException()
+    End Function
+    Public Shared Function BaseWS(objectName As String, clientID As String) As JObject
+        Return New JObject(
+        New JProperty("SERVICE", "SetData"),
+        New JProperty("clientID", clientID),
+        New JProperty("APPID", 1007),
+        New JProperty("OBJECT", objectName),
+        New JProperty("KEY", ""),
+        New JProperty("DATA", New JObject())
+    )
+    End Function
+
+    Public Shared Function UpdateWS(SqlName As String, clientID As String, param1 As String) As JObject
+        Return New JObject(
+        New JProperty("SERVICE", "SqlData"),
+        New JProperty("clientID", clientID),
+        New JProperty("APPID", 1007),
+        New JProperty("SqlName", SqlName),
+        New JProperty("param1", param1)
+    )
+    End Function
+
+    Function BuildPURDOC(fin As Revera.FINDOC) As JObject
+        Return New JObject(
+        New JProperty("SERIES", fin.SERIES),
+        New JProperty("BRANCH", fin.BRANCH),
+        New JProperty("TRDR", fin.TRDR),
+        New JProperty("FINSTATES", fin.FINSTATES),
+        New JProperty("COMMENTS", fin.COMMENTS),
+        New JProperty("COMMENTS1", fin.COMMENTS1),
+        New JProperty("REMARKS", fin.REMARKS),
+        New JProperty("VARCHAR01", fin.VARCHAR01),
+        New JProperty("VARCHAR02", fin.VARCHAR02),
+        New JProperty("VATSTS", fin.VATSTS),
+        New JProperty("UFTBL01", fin.UFTBL01),
+        New JProperty("UFTBL02", fin.UFTBL02),
+        New JProperty("INT01", fin.INT01),
+        New JProperty("INT02", fin.FINDOC)
+    )
+    End Function
+
+    Function BuildITELINES(lines As List(Of Revera.MTRLINE)) As JArray
+
+        Dim arr As New JArray()
+
+        If lines Is Nothing OrElse lines.Count = 0 Then
+            Return arr
+        End If
+
+        Dim AddLineNum As Integer = 0
+
+        For Each ln In lines
+
+            Dim o As New JObject()
+
+            AddLineNum += 1
+            o("LINENUM") = 8888800 + AddLineNum
+            o("MTRL") = ln.MTRL
+            o("QTY1") = ln.QTY1
+
+            If ln.PRICE IsNot Nothing Then
+                o("PRICE") = ln.PRICE
+            End If
+
+            If ln.VAT > 0 Then
+                o("VAT") = ln.VAT
+            End If
+
+            If Not String.IsNullOrEmpty(ln.COMMENTS1) Then
+                o("COMMENTS1") = ln.COMMENTS1
+            End If
+
+            ' --- αντιστοίχιση (όπως στο JS)
+            If ln.FINDOC > 0 Then
+                o("CCCAGFINDOC") = ln.FINDOC
+            End If
+
+            If ln.MTRLINES > 0 Then
+                o("CCCAGMTRLINES") = ln.MTRLINES
+            End If
+
+            If ln.MTRL > 0 Then
+                o("CCCAGMTRL") = ln.MTRL
+            End If
+
+            arr.Add(o)
+
+        Next
+
+        Return arr
+
+    End Function
+
 
     Private Sub SendEmail(wfm As WHouseBalFR)
         Dim ΤοEmail = wfm.txtBoxFrom.Text
@@ -2945,13 +3141,12 @@ Public Class WHouseBal
 
         wfm.DateTimePicker1.Value = CTODate
         'wfm.bindingSource.DataSource = New SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)(dets)
-        wfm.ddlTrdr.SelectedIndex = 0
+        If wfm.ddlTrdr.SelectedIndex <> -1 Then wfm.ddlTrdr.SelectedIndex = 0
         If wfm.ddlcccTrdDep.Items.Count > 0 Then
             wfm.ddlcccTrdDep.SelectedIndex = 0
         End If
-        wfm.ddlApplicant.SelectedIndex = 0
+        If wfm.ddlApplicant.SelectedIndex <> -1 Then wfm.ddlApplicant.SelectedIndex = 0
         'wfm.ddlSuppliers.SelectedIndex = 0
-
         Me.BindingNavigatorSaveItem.Enabled = False
         Me.SplitContainer2.SplitterDistance = Me.SplitContainer2.Width
         Me.SplitContainer2.Panel2.Visible = False
@@ -3311,7 +3506,7 @@ Public Class WHouseBal
             NMTRLINE.QTY = NMTRLINE.QTY1
             If NMTRLINE.MTRL1 Is Nothing Then
                 Dim mtrl1 As Revera.MTRL = db.MTRLs.Where(Function(f) f.MTRL = v.MTRL).FirstOrDefault
-                NMTRLINE.MTRL1=MTRL1
+                NMTRLINE.MTRL1 = mtrl1
             End If
             NMTRLINE.QTY2 = NMTRLINE.QTY1 * If(NMTRLINE.MTRL1.MU21, 1)
             NMTRLINE.UFTBL02 = v.UFTBL02 ' 106

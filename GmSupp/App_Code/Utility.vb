@@ -431,6 +431,76 @@ Public Class Utility
     End Function
 #End Region
 
+    Public Shared Async Function executeRequestAsync(requestData As String, Optional Method As String = "POST") As Task(Of String)
 
+        Return Await Task.Run(Function()
+                                  Return executeRequest(requestData, Method)
+                              End Function)
+    End Function
+
+    Public Shared Function executeRequest(requestData As String, Optional Method As String = "POST", Optional JsDunction As String = Nothing) As String
+
+        Dim request As Net.HttpWebRequest = Nothing
+        Dim responseFromServer As String = ""
+
+        Try
+            If Method = "POST" Then
+                request = CType(
+                Net.WebRequest.Create("http://001-dekagro.oncloud.gr/s1services"),
+                Net.HttpWebRequest
+            )
+            End If
+
+            request.Method = Method
+            request.ContentType = "application/x-www-form-urlencoded"
+            request.AutomaticDecompression =
+            Net.DecompressionMethods.GZip Or Net.DecompressionMethods.Deflate
+
+            Dim byteArray = Text.Encoding.UTF8.GetBytes(requestData)
+            request.ContentLength = byteArray.Length
+
+            Using dataStream = request.GetRequestStream()
+                dataStream.Write(byteArray, 0, byteArray.Length)
+            End Using
+
+            Dim Soft1Encoding = Text.Encoding.GetEncoding(1253)
+
+            Using response = CType(request.GetResponse(), Net.HttpWebResponse)
+                Using responseStream = response.GetResponseStream()
+                    Using reader As New IO.StreamReader(responseStream, Soft1Encoding)
+                        responseFromServer = reader.ReadToEnd()
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            responseFromServer = "Error: " & ex.Message
+        End Try
+
+        Return responseFromServer
+    End Function
+
+    Friend Shared Async Function LoginWS() As Task(Of String)
+        Dim sStr As String = Newtonsoft.Json.Linq.JObject.FromObject(New With {
+                                                                           .service = "login",
+                                                                           .username = "gmlogic",
+                                                                           .password = "gmlogic1",
+                                                                           .appId = "1007",
+                                                                           .COMPANY = "5000",
+                                                                           .BRANCH = "1000",
+                                                                           .MODULE = "0",
+                                                                           .REFID = "9999"}).ToString
+        'Dim result As Task(Of String) = Nothing
+        'result = Utility.executeRequestAsync(sStr)
+        Dim jsonResult As String = Await Utility.executeRequestAsync(sStr)
+        Dim gg As Newtonsoft.Json.Linq.JObject = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonResult)
+        If gg("success").ToString = "False" Then
+            MsgBox("Dekagro error connection ", MsgBoxStyle.Critical, "GmMySettings")
+            Throw New Exception()
+        End If
+        Return gg.GetValue("clientID").ToString
+        'Return clientID
+        'Throw New NotImplementedException()
+    End Function
 
 End Class

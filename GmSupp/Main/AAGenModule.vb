@@ -118,6 +118,7 @@ Module AAGenModule
     Public UserManagerStore As New Microsoft.AspNet.Identity.EntityFramework.UserStore(Of Microsoft.AspNet.Identity.EntityFramework.IdentityUser)
     Public UserManager As New Microsoft.AspNet.Identity.UserManager(Of Microsoft.AspNet.Identity.EntityFramework.IdentityUser)(UserManagerStore) 'New Microsoft.AspNet.Identity.EntityFramework.UserStore(Of Microsoft.AspNet.Identity.EntityFramework.IdentityUser))
 
+    Public clientID As String = Nothing
     Public dep As TableDependency.SqlClient.SqlTableDependency(Of Utility.triggeredClass) = Nothing
 
     Sub Main()

@@ -79,7 +79,7 @@ Public Class GenMenu
 
 
         'MsgBox("Καλή Χρονιά !!!" & vbCrLf & "  -- 2018 --", MsgBoxStyle.Information)
-        If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
+        If {"192.168.10.1081", "192.168.51.13"}.Contains(LocalIP) Then
             'CurUser = "gmlogic"
             'CurPass = "1mgergm++"
             'CurUserRole = "Developer"
@@ -99,10 +99,10 @@ Public Class GenMenu
             'CompName = "HGLP"
             'CompName = "NVF"
 
-            'CurUser = "a.nizamis"
-            'CurPass = "123"
-            ''CurUserRole = "Users"
-            'CompName = "SERTORIUS"
+            CurUser = "a.nizamis"
+            CurPass = "123"
+            'CurUserRole = "Users"
+            CompName = "SERTORIUS"
             ''Facilities = "VELESTINO"
 
             'CurUser = "a.lazaridis"
@@ -140,8 +140,8 @@ Public Class GenMenu
             loginf.Text = "Εισαγωγή στοιχείων"
             'ch.keskesiadis radrad
             If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
-                loginf.UsernameTextBox.Text = "a.nizamis" '"s.iordanoglou" '"ch.keskesiadis" '"g.ksms" '"a.tsilikas" '"a.momtsos" '"t.andreoglou" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
-                loginf.PasswordTextBox.Text = "123" '"Sa@Io1522" '"radrad" '"Gr@Ks5584" '"Ts@An9923" '"An@Ti6912" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
+                loginf.UsernameTextBox.Text = "a.momtsos" '"g.ksms" '"ch.keskesiadis" '"a.nizamis" '"s.iordanoglou" '"a.tsilikas" '"t.andreoglou" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
+                loginf.PasswordTextBox.Text = "radrad" '"Gr@Ks5584" '"radrad" '"123" '"Sa@Io1522" '"Ts@An9923" '"An@Ti6912" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
                 'loginf.UsernameTextBox.Text = "gmlogic" '"d.makaridis" '
                 'loginf.PasswordTextBox.Text = "1mgergm++" '"Ma@Di55489" '
                 'If loginf.UsernameTextBox.Text = "ch.keskesiadis" Then
@@ -481,7 +481,7 @@ Public Class GenMenu
                 CurUserRole = UserManager.GetRoles(us.Id).FirstOrDefault
                 Dim gg = UserManager.GetRoles(us.Id).ToList
 
-                Dim usClaim = UserManager.GetClaims(us.Id).Where(Function(f) f.Type = "Facilities" And f.Value = "VELESTINO").FirstOrDefault
+                Dim usClaim = UserManager.GetClaims(us.Id).Where(Function(f) f.Type = "Facilities").FirstOrDefault
                 If usClaim IsNot Nothing Then
                     Facilities = usClaim.Value
                 Else
