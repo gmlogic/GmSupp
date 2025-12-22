@@ -453,6 +453,7 @@ Public Class WHouseBal
                            Where ce.Cells("Check").Value = True
 
             If chkLists.Count = 0 Then
+                MsgBox("Προσοχή !!! Κάντε επιλογή Είδους/Υπηρεσίας.", MsgBoxStyle.Critical, "ToolStripMenuItemSOCARRIER_Click")
                 Exit Sub
             End If
 
@@ -540,7 +541,20 @@ Public Class WHouseBal
 
             Me.BindingNavigatorSaveItem.Enabled = True
             Me.SplitContainer2.Panel2.Visible = True
-            Me.SplitContainer2.SplitterDistance = Me.SplitContainer2.Width - (Me.SplitContainer2.Width / 4)
+            If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
+                Me.SplitContainer2.SplitterDistance = Me.SplitContainer2.Width - (Me.SplitContainer2.Width / 1.8)
+                'Me.MTRLINEsDataGridView.RowTemplate.Height = 22
+                'If Me.radioBtnService.Checked Then
+                Me.MTRLINEsDataGridView.RowTemplate.Height = 50
+                'End If
+                If MTRLINEsDataGridView.Columns("Παρατηρήσεις") IsNot Nothing Then
+                    MTRLINEsDataGridView.Columns("Παρατηρήσεις").Width = 460
+                    'MTRLINEsDataGridView.Columns("Παρατηρήσεις").DefaultCellStyle.WrapMode = DataGridViewTriState.True
+                End If
+            End If
+            If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
+                Me.SplitContainer2.SplitterDistance = Me.SplitContainer2.Width - (Me.SplitContainer2.Width / 4)
+            End If
 
         Catch ex As Exception
             MsgBox(ex.Message)

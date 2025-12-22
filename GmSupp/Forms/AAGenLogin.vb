@@ -367,6 +367,7 @@ Public Class AAGenLogin
 
                                 If usClaim Is Nothing Then
                                     usClaim = New Security.Claims.Claim("Higher", Me.ddlΗighers.SelectedValue)
+                                    UserManager.AddClaim(user.Id, usClaim)
                                 End If
                                 Me.txtBoxΗigher.Text = ""
                                 Dim usClaims = UserManager.GetClaims(cuser.Id).Where(Function(f) f.Type = "Higher") '.FirstOrDefault
