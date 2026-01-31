@@ -1351,7 +1351,7 @@ Partial Class WHouseBal
         Me.ClientSize = New System.Drawing.Size(1284, 749)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Name = "WHouseBal"
-        Me.Text = "Υπόλοιπα Ειδών/Αίτηση"
+        Me.Text = "Νέα Αίτηση/Υπόλοιπα Ειδών"
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.ContextMenuStrip1.ResumeLayout(False)

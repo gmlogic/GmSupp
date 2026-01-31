@@ -79,7 +79,7 @@ Public Class GenMenu
 
 
         'MsgBox("Καλή Χρονιά !!!" & vbCrLf & "  -- 2018 --", MsgBoxStyle.Information)
-        If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
+        If {"192.168.10.1081", "192.168.51.13"}.Contains(LocalIP) Then
             'CurUser = "gmlogic"
             'CurPass = "1mgergm++"
             'CurUserRole = "Developer"
@@ -146,8 +146,11 @@ Public Class GenMenu
             loginf.Text = "Εισαγωγή στοιχείων"
             'ch.keskesiadis radrad
             If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
-                loginf.UsernameTextBox.Text = "a.momtsos" '"g.ksms" '"ch.keskesiadis" '"a.nizamis" '"s.iordanoglou" '"a.tsilikas" '"t.andreoglou" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
-                loginf.PasswordTextBox.Text = "radrad" '"Gr@Ks5584" '"radrad" '"123" '"Sa@Io1522" '"Ts@An9923" '"An@Ti6912" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
+                Dim usarr = {"d.ganetsos", "m.kaiafas", "th.kouloura", "ch.keskesiadis", "a.momtsos"}
+                Dim pswarr = {"123456", "123", "82438243", "radrad", "radrad"}
+                Dim aa = 5
+                loginf.UsernameTextBox.Text = usarr(aa - 1) ' "th.kouloura" '"m.kaiafas" '"d.ganetsos" '"a.momtsos" '"g.ksms" '"ch.keskesiadis" '"a.nizamis" '"s.iordanoglou" '"a.tsilikas" '"t.andreoglou" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
+                loginf.PasswordTextBox.Text = pswarr(aa - 1) '"82438243" '"123" '"123456" '"radrad" '"Gr@Ks5584" '"radrad" '"123" '"Sa@Io1522" '"Ts@An9923" '"An@Ti6912" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
                 'loginf.UsernameTextBox.Text = "gmlogic" '"d.makaridis" '
                 'loginf.PasswordTextBox.Text = "1mgergm++" '"Ma@Di55489" '
                 'If loginf.UsernameTextBox.Text = "ch.keskesiadis" Then
@@ -320,9 +323,9 @@ Public Class GenMenu
                 'For first time us.S1User = True
                 Dim decryptPass = CryptoUtils.Decrypt(us.encryptPass)
                 If CurPass = decryptPass Then
-                    If us.S1User = False Then
-                        Return True
-                    End If
+                    'If us.S1User = False Then
+                    Return True
+                    'End If
                 Else 'Wrong Pass
                     Return False
                 End If
@@ -558,7 +561,7 @@ Public Class GenMenu
             Exit Sub
         End If
 
-        If Facilities IsNot Nothing OrElse CompName = "AGUSTINO" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole)) Then
+        If curUser <> "gmlogic" AndAlso (Facilities IsNot Nothing OrElse CompName = "AGUSTINO" And ({"Users", "Managers", "1.Γραφέας", "2.Μηχανικός", "3.Προϊστάμενος", "4.Διευθυντής τμήματος", "5.Διευθυντής Εργοστασίου", "Logistics", "Managers", "Pili"}.Contains(curUserRole))) Then
             Me.ΑποθήκηToolStripMenuItem.Visible = True
             If {"Managers"}.Contains(curUserRole) Then
                 Me.ΑποθήκηToolStripMenuItem.Visible = False
@@ -874,5 +877,7 @@ Public Class GenMenu
         SettingForms(sender, e, New Transport, Me.TransportsToolStripMenuItem.Text, 0, True)
     End Sub
 
-
+    Private Sub FrmDtoGeneratorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FrmDtoGeneratorToolStripMenuItem.Click
+        SettingForms(sender, e, New FrmDtoGenerator, "FrmDtoGenerator", 0, True)
+    End Sub
 End Class

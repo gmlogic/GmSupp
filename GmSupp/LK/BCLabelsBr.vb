@@ -95,7 +95,7 @@ Public Class BCLabelsBr
         Me.Panel1.Visible = False
         Me.SplitContainer2.SplitterDistance = Me.SplitContainer2.Width
         Me.SplitContainer2.Panel2.Visible = False
-        If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
+        If Me.Text = "Αποθήκη - Νέα Αίτηση/Υπόλοιπα Ειδών" Then
 
         End If
         If Me.Text = "Αποθήκη - Εκκρεμείς Παραγγελίες" Then
@@ -738,7 +738,7 @@ Public Class BCLabelsBr
             '            Company SODTYPE	MTRL	COMPANY	BMTRL	FISCPRD	QTY1	SODTYPE	BMTRL	NUM02	CODE	NAME	CODE1	CODE2	MTRTYPE	MTRTYPE1	MTRUNIT1	MTRPLACE	REMAINLIMMIN	REMAINLIMMAX	REORDERLEVEL	REMARKS	IMPEXPQTY1	SUMORDERED	SUMRESERVED
             '4000    51	206001	4000	206001	2020	0	NULL	NULL	0	1A2PP0320100	GLOBE VALVE,DN 100,PN 16	NULL	NULL	0	0	101	61 A 3	0	0	0	GLOBE VALVE,DN 100,PN 16 FACE TO FACE : DIN 3202, F1 FLANGED : PN 16 DIN 2501 FACING TYPE C DIN 2526 MATERIAL: BODY : 1.0460/1.0619 TRIM:13% CR	0	0	0
 
-            If Me.Text = "Αποθήκη - Υπόλοιπα Ειδών/Αίτηση" Then
+            If Me.Text = "Αποθήκη - Νέα Αίτηση/Υπόλοιπα Ειδών" Then
                 myArrF = ("CODE,NAME,MTRUNITC,MTRPLACE,IMPEXPQTY1,SUMORDERED,SUMRESERVED,MTRLBAL,REMAINLIMMIN,REMAINLIMMAX,REORDERLEVEL,REMARKS").Split(",")
                 myArrN = ("Κωδικός,Περιγραφή,Μ.Μ,Συνήθης θέση αποθ.,Υπολ.Πραγμ.,Αναμενόμενα,Δεσμευμένα,ΥΠΟΛΟΙΠΟ(υ+α-δ),Ελάχιστο όριο,Μέγιστο όριο,Όριο ανα παραγγελία,Παρατηρήσεις").Split(",")
             End If

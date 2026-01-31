@@ -75,5 +75,13 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=192.168.12.201,55555;Initial Catalog=Agustino;Persist Security Info=True;User ID=gm;Password=1mgergm++</Value>
     </Setting>
+    <Setting Name="TestAgustinoConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=192.168.12.201,55555;Initial Catalog=TestAgustino;User ID=gm;Password=1mgergm++&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=192.168.12.201,55555;Initial Catalog=TestAgustino;User ID=gm;Password=1mgergm++</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

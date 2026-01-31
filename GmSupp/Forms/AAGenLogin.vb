@@ -144,9 +144,10 @@ Public Class AAGenLogin
             Me.LblFacility.Visible = False
             Me.ddlFacility.Visible = False
             Me.BtnSetFacility.Visible = False
+            Me.BtnDelFacility.Visible = False
 
             Me.Label3.Visible = False
-            Me.Label4.visible = False
+            Me.Label4.Visible = False
             Me.ddlΗighers.Visible = False
             Me.btnDeleteHigher.Visible = False
             Me.Text = "Προσθήκη Χρήστη"
@@ -684,6 +685,8 @@ Public Class AAGenLogin
         End If
 
     End Sub
+
+
     Private Sub cmdSelect_Click(sender As Object, e As EventArgs) Handles cmdSelect.Click
         Cmd_Select()
     End Sub
@@ -879,21 +882,61 @@ Public Class AAGenLogin
 
     End Function
 
-    Private Sub BtnSetFacility_Click(sender As Object, e As EventArgs) Handles BtnSetFacility.Click
-        If UsernameTextBox IsNot Nothing Then
-            Dim selectedName As String = ddlFacility.SelectedItem.ToString()
-            If selectedName <> "<Επιλέγξτε>" Then
-                'UserManagerStore.Context.Database.Connection.ConnectionString = db.Connection.ConnectionString
-                Dim user As IdentityUser = UserManager.Users.Where(Function(f) f.UserName = UsernameTextBox.Text).FirstOrDefault
-                If Not IsNothing(user) Then
-                    Dim usClaim = UserManager.GetClaims(user.Id).Where(Function(f) f.Type = "Facilities").FirstOrDefault
+    'Private Sub BtnFacility_Click(sender As Object, e As EventArgs) Handles BtnSetFacility.Click, btnDeleteFacility.Click
+    '    If Not Action = "Edit" Then
+    '        Exit Sub
+    '    End If
+    '    If UsernameTextBox IsNot Nothing Then
+    '        Dim selectedName As String = ddlFacility.SelectedItem.ToString()
+    '        If selectedName <> "<Επιλέγξτε>" Then
+    '            'UserManagerStore.Context.Database.Connection.ConnectionString = db.Connection.ConnectionString
+    '            Dim user As IdentityUser = UserManager.Users.Where(Function(f) f.UserName = UsernameTextBox.Text).FirstOrDefault
+    '            If Not IsNothing(user) Then
+    '                Dim usClaim = UserManager.GetClaims(user.Id).Where(Function(f) f.Type = "Facilities").FirstOrDefault
 
-                    If usClaim Is Nothing Then
-                        UserManager.AddClaim(user.Id, New Security.Claims.Claim("Facilities", selectedName))
-                    End If
-                End If
+    '                If usClaim Is Nothing Then
+    '                    UserManager.AddClaim(user.Id, New Security.Claims.Claim("Facilities", selectedName))
+    '                End If
+    '            End If
+    '        End If
+
+    '    End If
+    'End Sub
+    Private Sub BtnFacility_Click(sender As Object, e As EventArgs) Handles BtnSetFacility.Click, BtnDelFacility.Click
+
+        If Action <> "Edit" Then Exit Sub
+        If UsernameTextBox Is Nothing Then Exit Sub
+        If ddlFacility.SelectedItem Is Nothing Then Exit Sub
+
+        Dim selectedName As String = ddlFacility.SelectedItem.ToString()
+        If selectedName = "<Επιλέγξτε>" Then Exit Sub
+
+        Dim user As IdentityUser =
+        UserManager.Users.FirstOrDefault(Function(f) f.UserName = UsernameTextBox.Text)
+
+        If user Is Nothing Then Exit Sub
+
+        Dim usClaim = UserManager.GetClaims(user.Id) _
+        .FirstOrDefault(Function(f) f.Type = "Facilities" AndAlso f.Value = selectedName)
+
+        ' 👉 ADD
+        If sender Is BtnSetFacility Then
+            If usClaim Is Nothing Then
+                UserManager.AddClaim(user.Id,
+                New Security.Claims.Claim("Facilities", selectedName))
             End If
-
         End If
+
+        ' 👉 DELETE
+        If sender Is BtnDelFacility Then
+            If usClaim IsNot Nothing Then
+                UserManager.RemoveClaim(user.Id, usClaim)
+                ddlFacility.SelectedItem = "<Επιλέγξτε>"
+            End If
+        End If
+
+        MsgBox("Done")
     End Sub
+
+
 End Class

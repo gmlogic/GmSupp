@@ -438,7 +438,91 @@ Public Class Utility
                               End Function)
     End Function
 
-    Public Shared Function executeRequest(requestData As String, Optional Method As String = "POST", Optional JsDunction As String = Nothing) As String
+    Public Shared Function executeRequest(requestData As String, Optional Method As String = "POST", Optional JsFunction As String = Nothing) As String
+
+        Dim request As Net.HttpWebRequest = Nothing
+        Dim responseFromServer As String = ""
+
+        Try
+            ' TLS 1.2 (ΑΠΑΡΑΙΤΗΤΟ)
+            Net.ServicePointManager.SecurityProtocol = Net.SecurityProtocolType.Tls12
+
+            Dim url As String = "https://" & If(CompName = "AGUSTINO", "002", "001") & "-dekagro.oncloud.gr/s1services"
+
+            If Method = "POST" Then
+                If JsFunction Is Nothing Then
+                    url = "https://" & If(CompName = "AGUSTINO", "002", "001") & "-dekagro.oncloud.gr/s1services"
+                Else
+                    url = "https://" & If(CompName = "AGUSTINO", "002", "001") & "-dekagro.oncloud.gr/s1services/JS/api.v1/" & JsFunction
+                End If
+            End If
+
+            If Method = "GET" Then
+                'https://dekagro.oncloud.gr/s1services/JS/api.v1/getTrdBranch
+                'request = TryCast(Net.WebRequest.Create("http://dekagro.oncloud.gr/s1services/JS/api.v1/" & requestData), Net.HttpWebRequest)
+                url = "https://" & If(CompName = "AGUSTINO", "002", "001") & "-dekagro.oncloud.gr/s1services/JS/api.v1/" & JsFunction
+            End If
+
+            request = CType(Net.WebRequest.Create(url), Net.HttpWebRequest)
+
+            request.Method = Method
+            request.ContentType = "application/json"
+            request.Accept = "application/json"
+            request.AutomaticDecompression =
+            Net.DecompressionMethods.GZip Or Net.DecompressionMethods.Deflate
+
+            Dim byteArray As Byte() = Text.Encoding.UTF8.GetBytes(requestData)
+            request.ContentLength = byteArray.Length
+
+            Using dataStream = request.GetRequestStream()
+                dataStream.Write(byteArray, 0, byteArray.Length)
+            End Using
+
+            Using response = CType(request.GetResponse(), Net.HttpWebResponse)
+                Using responseStream = response.GetResponseStream()
+                    Dim soft1Encoding = Text.Encoding.GetEncoding(1253)
+                    Using reader As New IO.StreamReader(responseStream, soft1Encoding)
+                        responseFromServer = reader.ReadToEnd()
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Net.WebException
+            If ex.Response IsNot Nothing Then
+                Using sr As New IO.StreamReader(ex.Response.GetResponseStream())
+                    responseFromServer = sr.ReadToEnd()
+                End Using
+            Else
+                responseFromServer = ex.Message
+            End If
+        End Try
+
+        Return responseFromServer
+    End Function
+
+    Public Shared Async Function ExecuteUpdateFindocAsync(sql As String) As Task(Of String)
+
+        ' ensure clientID
+        If String.IsNullOrEmpty(clientID) Then
+            clientID = Await Utility.LoginWS()
+        End If
+
+        ' build payload
+        Dim jo As New Newtonsoft.Json.Linq.JObject()
+        jo("clientID") = clientID
+        jo("sql") = sql
+
+        Dim payload As String = jo.ToString(Newtonsoft.Json.Formatting.None)
+
+        ' call WS
+        Dim result As String =
+         Utility.executeRequest(payload, "POST", "updateFindoc")
+
+        Return result
+    End Function
+
+
+    Public Shared Function executeRequest1(requestData As String, Optional Method As String = "POST", Optional JsDunction As String = Nothing) As String
 
         Dim request As Net.HttpWebRequest = Nothing
         Dim responseFromServer As String = ""
@@ -446,7 +530,7 @@ Public Class Utility
         Try
             If Method = "POST" Then
                 request = CType(
-                Net.WebRequest.Create("http://001-dekagro.oncloud.gr/s1services"),
+                Net.WebRequest.Create("https://" & If(CompName = "SERTORIUS", "001", "002") & "-dekagro.oncloud.gr/s1services"),
                 Net.HttpWebRequest
             )
             End If
@@ -485,9 +569,9 @@ Public Class Utility
                                                                            .service = "login",
                                                                            .username = "gmlogic",
                                                                            .password = "gmlogic1",
-                                                                           .appId = "1007",
-                                                                           .COMPANY = "5000",
-                                                                           .BRANCH = "1000",
+                                                                           .appId = If(CompName = "SERTORIUS", 1007, 1008),
+                                                                           .COMPANY = If(CompName = "SERTORIUS", 5000, 5001),
+                                                                           .BRANCH = If(CompName = "SERTORIUS", 1000, 2000),
                                                                            .MODULE = "0",
                                                                            .REFID = "9999"}).ToString
         'Dim result As Task(Of String) = Nothing

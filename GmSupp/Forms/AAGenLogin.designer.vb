@@ -53,6 +53,7 @@ Partial Class AAGenLogin
         Me.BtnSetFacility = New System.Windows.Forms.Button()
         Me.GmChkListBoxRoles = New GmSupp.GmChkListBox()
         Me.ddlFacility = New System.Windows.Forms.ComboBox()
+        Me.BtnDelFacility = New System.Windows.Forms.Button()
         Label9 = New System.Windows.Forms.Label()
         Me.PanelApplicant.SuspendLayout()
         Me.SuspendLayout()
@@ -405,12 +406,26 @@ Partial Class AAGenLogin
         Me.ddlFacility.TabIndex = 300
         Me.ddlFacility.ValueMember = "UFTBL01"
         '
+        'btnDeleteFacility
+        '
+        Me.BtnDelFacility.BackColor = System.Drawing.SystemColors.Control
+        Me.BtnDelFacility.Cursor = System.Windows.Forms.Cursors.Default
+        Me.BtnDelFacility.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.BtnDelFacility.Image = CType(resources.GetObject("btnDeleteFacility.Image"), System.Drawing.Image)
+        Me.BtnDelFacility.Location = New System.Drawing.Point(761, 7)
+        Me.BtnDelFacility.Name = "btnDeleteFacility"
+        Me.BtnDelFacility.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BtnDelFacility.Size = New System.Drawing.Size(27, 26)
+        Me.BtnDelFacility.TabIndex = 301
+        Me.BtnDelFacility.UseVisualStyleBackColor = False
+        '
         'AAGenLogin
         '
         Me.AcceptButton = Me.cmdOK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(815, 283)
+        Me.Controls.Add(Me.BtnDelFacility)
         Me.Controls.Add(Me.ddlFacility)
         Me.Controls.Add(Me.LblFacility)
         Me.Controls.Add(Me.BtnSetFacility)
@@ -482,4 +497,5 @@ Partial Class AAGenLogin
     Public WithEvents LblFacility As Label
     Public WithEvents BtnSetFacility As Button
     Friend WithEvents ddlFacility As ComboBox
+    Public WithEvents BtnDelFacility As Button
 End Class

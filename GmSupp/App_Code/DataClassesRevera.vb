@@ -1,123 +1,210 @@
-Imports System.Data.Linq
+﻿Imports System.Data.Linq
 Imports System.Data.Linq.Mapping
 Imports System.Reflection
 
 
 Namespace Revera
+    '  Partial Public Class GetPendingOrdersHeaderResult
+
+    '      Public Property NO_ As Integer
+    '      Public Property COMPANY As Short
+    '      Public Property FINDOC As Integer
+    '      Public Property COMPANY1 As System.Nullable(Of Short)
+    '      Public Property MTRLINES As System.Nullable(Of Integer)
+    '      Public Property SODTYPE As System.Nullable(Of Short)
+    '      Public Property MTRL As System.Nullable(Of Integer)
+    '      Public Property SOSOURCE As System.Nullable(Of Integer)
+    '      Public Property SOREDIR As System.Nullable(Of Integer)
+    '      Public Property SOSOURCE1 As Integer
+    '      Public Property SOREDIR1 As Integer
+    '      Public Property TRNDATE As Date
+    '      Public Property SERIES As Short
+    '      Public Property FPRMS As Short
+
+    '      Public Property FPRMSNAME As String
+
+    '      Public Property FINCODE As String
+    '      Public Property SODTYPE1 As Short
+    '      Public Property TRDR As System.Nullable(Of Integer)
+    '      Public Property CODE As String
+    '      Public Property NAME As String
+    '      Public Property CMPMODE As System.Nullable(Of Short)
+    '      Public Property ISPRINT As Short
+    '      Public Property APPRV As Short
+
+    '      ''' <summary>
+    '      ''' A.INT01 OrderNo
+    '      ''' </summary>
+    '      ''' <returns></returns>
+    '      Public Property OrderNo As System.Nullable(Of Integer)
+
+    '      ''' <summary>
+    '      ''' A.UFTBL01 Applicant
+    '      ''' </summary>
+    '      ''' <returns></returns>
+    '      Public Property Applicant As System.Nullable(Of Short)
+
+    '      ''' <summary>
+    '      ''' uf.NAME from uftbl01
+    '      ''' </summary>
+    '      ''' <returns></returns>
+    '      Public Property ApplicantNAME As String
+
+    '      ''' <summary>
+    '      ''' A.UFTBL02 AS FDeparment
+    '      ''' </summary>
+    '      ''' <returns></returns>
+    '      Public Property FDeparment As System.Nullable(Of Short)
+
+    '      ''' <summary>
+    '      ''' uf.NAME from uftbl02
+    '      ''' </summary>
+    '      ''' <returns></returns>
+    '      Public Property FDeparmentNAME As String
+
+    '      Public Property INSUSER As System.Nullable(Of Short)
+
+    '      Public Property INSUSERNAME As String
+
+    '      ''' <summary>
+    '      ''' select TRIM(us.NAME) + ' (' + TRIM(us.MOBILEPHONE) + ')' from users us where us.USERS = A.ccCRUser
+    '      ''' </summary>
+    '      ''' <returns></returns>
+    '      Public Property AssignmentUser As String
+
+    '      'Public Property ccCApplicant As String
+
+    '      ''' <summary>
+    '      ''' A.VARCHAR02 as Highers
+    '      ''' </summary>
+    '      ''' <returns></returns>
+    '      Public Property Highers As String
+
+    '      ''' <summary>
+    '      ''' A.FINSTATES
+    '      ''' </summary>
+    '      ''' <returns></returns>
+    '      Public Property FINSTATES As System.Nullable(Of Short)
+
+    '      ''' <summary>
+    '      ''' A.FINSTATESNAME
+    '      ''' </summary>
+    '      ''' <returns></returns>
+    '      Public Property FINSTATESNAME As String
+
+    '      ''' <summary>
+    '      ''' A.ccCRecipients
+    '      ''' </summary>
+    '      ''' <returns></returns>
+    '      Public Property ccCRecipients As String
+
+    '      ''' <summary>
+    '      '''  (SELECT COUNT(0) AS Expr1
+    ''''					FROM FINDOC As B INNER JOIN
+    ''''						MTRLINES AS bmt ON B.FINDOC = bmt.FINDOC RIGHT OUTER JOIN
+    ''''						MTRLINES AS amt ON amt.FINDOC = bmt.ccCAFINDOC And amt.MTRLINES = bmt.ccCAMTRLINES
+    ''''					WHERE (B.SERIES IN (2041, 2045)) And (amt.FINDOC = A.FINDOC)) AS DACount
+    '      ''' </summary>
+    '      ''' <returns>COUNT(0)</returns>
+    '      Public Property DACount As Integer
+
+    '      ''' <summary>
+    '      ''' (SELECT COUNT(0) AS Expr1
+    ''''					FROM MTRLINES As MT
+    ''''					WHERE (MT.FINDOC = A.FINDOC)) AS MtCount
+    '      ''' </summary>
+    '      ''' <returns>COUNT(0)</returns>
+    '      Public Property MtCount As Integer?
+
+
+    '  End Class
+
     Partial Public Class GetPendingOrdersHeaderResult
 
         Public Property NO_ As Integer
-        Public Property COMPANY As Short
+
+        ' A.COMPANY (NOT NULL)
+        Public Property COMPANY As Short?
+
         Public Property FINDOC As Integer
-        Public Property COMPANY1 As System.Nullable(Of Short)
-        Public Property MTRLINES As System.Nullable(Of Integer)
-        Public Property SODTYPE As System.Nullable(Of Short)
-        Public Property MTRL As System.Nullable(Of Integer)
-        Public Property SOSOURCE As System.Nullable(Of Integer)
-        Public Property SOREDIR As System.Nullable(Of Integer)
-        Public Property SOSOURCE1 As Integer
-        Public Property SOREDIR1 As Integer
-        Public Property TRNDATE As Date
-        Public Property SERIES As Short
-        Public Property FPRMS As Short
+
+        ' B.COMPANY (LEFT JOIN → NULL)
+        Public Property COMPANY1 As Short?
+
+        ' B.MTRLINES (LEFT JOIN → NULL)
+        Public Property MTRLINES As Integer?
+
+        ' B.SODTYPE (LEFT JOIN → NULL)
+        Public Property SODTYPE As Short?
+
+        ' B.MTRL (LEFT JOIN → NULL)
+        Public Property MTRL As Integer?
+
+        ' B.SOSOURCE / B.SOREDIR (LEFT JOIN → NULL)
+        Public Property SOSOURCE As Integer?
+        Public Property SOREDIR As Integer?
+
+        ' A.SOSOURCE / A.SOREDIR (NOT NULL αλλά safe nullable)
+        Public Property SOSOURCE1 As Integer?
+        Public Property SOREDIR1 As Integer?
+
+        ' TRNDATE (φαίνεται OK αλλά ORDER BY → safe)
+        Public Property TRNDATE As Date?
+
+        Public Property SERIES As Short?
+        Public Property FPRMS As Short?
 
         Public Property FPRMSNAME As String
 
         Public Property FINCODE As String
-        Public Property SODTYPE1 As Short
-        Public Property TRDR As System.Nullable(Of Integer)
+
+        ' A.SODTYPE
+        Public Property SODTYPE1 As Short?
+
+        Public Property TRDR As Integer?
+
         Public Property CODE As String
         Public Property NAME As String
-        Public Property CMPMODE As System.Nullable(Of Short)
-        Public Property ISPRINT As Short
-        Public Property APPRV As Short
 
-        ''' <summary>
-        ''' A.INT01 OrderNo
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property OrderNo As System.Nullable(Of Integer)
+        Public Property CMPMODE As Short?
 
-        ''' <summary>
-        ''' A.UFTBL01 Applicant
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property Applicant As System.Nullable(Of Short)
+        Public Property ISPRINT As Short?
+        Public Property APPRV As Short?
 
-        ''' <summary>
-        ''' uf.NAME from uftbl01
-        ''' </summary>
-        ''' <returns></returns>
+        ' A.INT01 → OrderNo (φαίνεται NULL)
+        Public Property OrderNo As Integer?
+
+        ' A.UFTBL01 (φαίνεται NULL)
+        Public Property Applicant As Short?
+
         Public Property ApplicantNAME As String
 
-        ''' <summary>
-        ''' A.UFTBL02 AS FDeparment
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property FDeparment As System.Nullable(Of Short)
-
-        ''' <summary>
-        ''' uf.NAME from uftbl02
-        ''' </summary>
-        ''' <returns></returns>
+        Public Property FDeparment As Short?
         Public Property FDeparmentNAME As String
 
-        Public Property INSUSER As System.Nullable(Of Short)
-
+        Public Property INSUSER As Short?
         Public Property INSUSERNAME As String
 
-        ''' <summary>
-        ''' select TRIM(us.NAME) + ' (' + TRIM(us.MOBILEPHONE) + ')' from users us where us.USERS = A.ccCRUser
-        ''' </summary>
-        ''' <returns></returns>
         Public Property AssignmentUser As String
 
-        'Public Property ccCApplicant As String
+        ' από B (LEFT JOIN)
+        Public Property cccTrdr As Integer?
+        Public Property cccTrdDep As Integer?
 
-        ''' <summary>
-        ''' A.VARCHAR02 as Highers
-        ''' </summary>
-        ''' <returns></returns>
         Public Property Highers As String
 
-        ''' <summary>
-        ''' A.FINSTATES
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property FINSTATES As System.Nullable(Of Short)
-
-        ''' <summary>
-        ''' A.FINSTATESNAME
-        ''' </summary>
-        ''' <returns></returns>
+        Public Property FINSTATES As Short?
         Public Property FINSTATESNAME As String
 
-        ''' <summary>
-        ''' A.ccCRecipients
-        ''' </summary>
-        ''' <returns></returns>
         Public Property ccCRecipients As String
 
-        ''' <summary>
-        '''  (SELECT COUNT(0) AS Expr1
-		'''					FROM FINDOC As B INNER JOIN
-		'''						MTRLINES AS bmt ON B.FINDOC = bmt.FINDOC RIGHT OUTER JOIN
-		'''						MTRLINES AS amt ON amt.FINDOC = bmt.ccCAFINDOC And amt.MTRLINES = bmt.ccCAMTRLINES
-		'''					WHERE (B.SERIES IN (2041, 2045)) And (amt.FINDOC = A.FINDOC)) AS DACount
-        ''' </summary>
-        ''' <returns>COUNT(0)</returns>
-        Public Property DACount As Integer
+        ' επιστρέφεται ως 0 αλλά κράτα το safe
+        Public Property DACount As Integer?
 
-        ''' <summary>
-        ''' (SELECT COUNT(0) AS Expr1
-		'''					FROM MTRLINES As MT
-		'''					WHERE (MT.FINDOC = A.FINDOC)) AS MtCount
-        ''' </summary>
-        ''' <returns>COUNT(0)</returns>
-        Public Property MtCount As Integer
-
+        Public Property MtCount As Integer?
 
     End Class
+
     Partial Public Class GetPendingOrdersDetailsResult
 
         Public Property NO_ As Integer
@@ -171,7 +258,7 @@ Namespace Revera
         Public Property ccCAMTRLINES As System.Nullable(Of Integer)
 
         ''' <summary>
-        ''' ����.���.1
+        ''' Εγκρ.Ποσ.1
         ''' </summary>
         ''' <returns></returns>
         Public Property NUM03 As Double?
@@ -198,19 +285,19 @@ Namespace Revera
         Public Property TRDRNAME As String
 
         ''' <summary>
-        ''' ������� ������
+        ''' Κωδικός πελάτη
         ''' </summary>
         ''' <returns></returns>
         Public Property cccTrdr As Integer?
 
         ''' <summary>
-        ''' ������� ��������
+        ''' Κωδικός τμήματος
         ''' </summary>
         ''' <returns></returns>
         Public Property cccTrdDep As Integer?
 
         ''' <summary>
-        ''' ����� �������
+        ''' Τμήμα κόστους
         ''' </summary>
         ''' <returns></returns>
         Public Property UFTBL02 As Short?
@@ -220,6 +307,8 @@ Namespace Revera
         ''' </summary>
         ''' <returns></returns>
         Public Property ApplicationLog As String
+
+        Public Property CccDocs As String
 
     End Class
 End Namespace

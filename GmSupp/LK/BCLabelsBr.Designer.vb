@@ -1034,7 +1034,7 @@ Partial Class BCLabelsBr
         Me.Controls.Add(Me.SplitContainer1)
         Me.Name = "BCLabelsBr"
         Me.Tag = "REVERA"
-        Me.Text = "Υπόλοιπα Ειδών/Αίτηση"
+        Me.Text = "Νέα Αίτηση/Υπόλοιπα Ειδών"
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.ContextMenuStrip1.ResumeLayout(False)

@@ -29,7 +29,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>57</ApplicationRevision>
+    <ApplicationRevision>58</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -98,6 +98,9 @@
     <Reference Include="CheckBoxComboBox">
       <HintPath>..\..\..\..\GmSupp\GmSupp\bin\Debug\CheckBoxComboBox.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.5\lib\net451\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\GmSupp\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -129,6 +132,7 @@
       <HintPath>..\..\..\..\GmSupp\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ReportViewer.11.0.3366.16\lib\Microsoft.ReportViewer.Common.dll</HintPath>
     </Reference>
@@ -216,6 +220,13 @@
   <ItemGroup>
     <Compile Include="App_Code\DataClassesRevera.vb">
       <DependentUpon>DataClassesRevera.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\DPMTRLINE.vb" />
+    <Compile Include="Forms\FrmDtoGenerator.Designer.vb">
+      <DependentUpon>FrmDtoGenerator.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmDtoGenerator.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Infrastructure\GmIdentityDbContext.vb" />
     <Compile Include="Infrastructure\GmIdentityUser.vb" />
@@ -420,6 +431,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\FrmDtoGenerator.resx">
+      <DependentUpon>FrmDtoGenerator.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LK\GenBarCode.resx">
       <DependentUpon>GenBarCode.vb</DependentUpon>
     </EmbeddedResource>
@@ -469,6 +483,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Revera\S1Applicants.resx">
       <DependentUpon>S1Applicants.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\ImportExcel.resx">
       <DependentUpon>ImportExcel.vb</DependentUpon>

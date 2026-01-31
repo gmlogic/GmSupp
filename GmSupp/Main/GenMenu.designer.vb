@@ -36,6 +36,7 @@ Partial Class GenMenu
         Me.ΠεριγραφήΕτικέταςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BarCodeGeneratorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TestBarcodeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TransportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FileMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -89,7 +90,7 @@ Partial Class GenMenu
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.TestConnectionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TransportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FrmDtoGeneratorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
         Me.SuspendLayout()
@@ -139,7 +140,7 @@ Partial Class GenMenu
         '
         Me.ΥπόλοιπαΕιδώνToolStripMenuItem.Name = "ΥπόλοιπαΕιδώνToolStripMenuItem"
         Me.ΥπόλοιπαΕιδώνToolStripMenuItem.Size = New System.Drawing.Size(287, 22)
-        Me.ΥπόλοιπαΕιδώνToolStripMenuItem.Text = "Υπόλοιπα Ειδών/Αίτηση"
+        Me.ΥπόλοιπαΕιδώνToolStripMenuItem.Text = "Νέα Αίτηση/Υπόλοιπα Ειδών"
         '
         'ΕκκρεμείςΠαραγγελίεςToolStripMenuItem
         '
@@ -182,6 +183,13 @@ Partial Class GenMenu
         Me.TestBarcodeToolStripMenuItem.Name = "TestBarcodeToolStripMenuItem"
         Me.TestBarcodeToolStripMenuItem.Size = New System.Drawing.Size(287, 22)
         Me.TestBarcodeToolStripMenuItem.Text = "TestBarcode"
+        '
+        'TransportsToolStripMenuItem
+        '
+        Me.TransportsToolStripMenuItem.ForeColor = System.Drawing.Color.Green
+        Me.TransportsToolStripMenuItem.Name = "TransportsToolStripMenuItem"
+        Me.TransportsToolStripMenuItem.Size = New System.Drawing.Size(91, 20)
+        Me.TransportsToolStripMenuItem.Text = "Transports"
         '
         'FileMenu
         '
@@ -299,7 +307,7 @@ Partial Class GenMenu
         '
         'ToolsMenu
         '
-        Me.ToolsMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem, Me.SearchFilesToolStripMenuItem, Me.SelectDBasesToolStripMenuItem, Me.ImportExcelToolStripMenuItem, Me.ChangeSysDateToolStripMenuItem})
+        Me.ToolsMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem, Me.SearchFilesToolStripMenuItem, Me.SelectDBasesToolStripMenuItem, Me.ImportExcelToolStripMenuItem, Me.ChangeSysDateToolStripMenuItem, Me.FrmDtoGeneratorToolStripMenuItem})
         Me.ToolsMenu.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
         Me.ToolsMenu.Name = "ToolsMenu"
         Me.ToolsMenu.Size = New System.Drawing.Size(45, 20)
@@ -309,20 +317,20 @@ Partial Class GenMenu
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.OptionsToolStripMenuItem.Text = "&Options"
         '
         'SearchFilesToolStripMenuItem
         '
         Me.SearchFilesToolStripMenuItem.Name = "SearchFilesToolStripMenuItem"
-        Me.SearchFilesToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
+        Me.SearchFilesToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.SearchFilesToolStripMenuItem.Text = "Search Files"
         '
         'SelectDBasesToolStripMenuItem
         '
         Me.SelectDBasesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TestToolStripMenuItem, Me.ProductionToolStripMenuItem})
         Me.SelectDBasesToolStripMenuItem.Name = "SelectDBasesToolStripMenuItem"
-        Me.SelectDBasesToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
+        Me.SelectDBasesToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.SelectDBasesToolStripMenuItem.Text = "Select DBases"
         '
         'TestToolStripMenuItem
@@ -420,13 +428,13 @@ Partial Class GenMenu
         'ImportExcelToolStripMenuItem
         '
         Me.ImportExcelToolStripMenuItem.Name = "ImportExcelToolStripMenuItem"
-        Me.ImportExcelToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
+        Me.ImportExcelToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ImportExcelToolStripMenuItem.Text = "Import Excel"
         '
         'ChangeSysDateToolStripMenuItem
         '
         Me.ChangeSysDateToolStripMenuItem.Name = "ChangeSysDateToolStripMenuItem"
-        Me.ChangeSysDateToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
+        Me.ChangeSysDateToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ChangeSysDateToolStripMenuItem.Text = "Change SysDate"
         '
         'UsersToolStripMenuItem
@@ -443,34 +451,34 @@ Partial Class GenMenu
         '
         Me.ΧρήστεςToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ΔημιουργίαToolStripMenuItem, Me.ΔιόρθωσηToolStripMenuItem, Me.ΔιαγραφήToolStripMenuItem})
         Me.ΧρήστεςToolStripMenuItem.Name = "ΧρήστεςToolStripMenuItem"
-        Me.ΧρήστεςToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ΧρήστεςToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.ΧρήστεςToolStripMenuItem.Text = "Χρήστες"
         '
         'ΔημιουργίαToolStripMenuItem
         '
         Me.ΔημιουργίαToolStripMenuItem.Name = "ΔημιουργίαToolStripMenuItem"
-        Me.ΔημιουργίαToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ΔημιουργίαToolStripMenuItem.Size = New System.Drawing.Size(148, 22)
         Me.ΔημιουργίαToolStripMenuItem.Tag = "Add"
         Me.ΔημιουργίαToolStripMenuItem.Text = "Δημιουργία"
         '
         'ΔιόρθωσηToolStripMenuItem
         '
         Me.ΔιόρθωσηToolStripMenuItem.Name = "ΔιόρθωσηToolStripMenuItem"
-        Me.ΔιόρθωσηToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ΔιόρθωσηToolStripMenuItem.Size = New System.Drawing.Size(148, 22)
         Me.ΔιόρθωσηToolStripMenuItem.Tag = "Edit"
         Me.ΔιόρθωσηToolStripMenuItem.Text = "Διόρθωση"
         '
         'ΔιαγραφήToolStripMenuItem
         '
         Me.ΔιαγραφήToolStripMenuItem.Name = "ΔιαγραφήToolStripMenuItem"
-        Me.ΔιαγραφήToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ΔιαγραφήToolStripMenuItem.Size = New System.Drawing.Size(148, 22)
         Me.ΔιαγραφήToolStripMenuItem.Tag = "Delete"
         Me.ΔιαγραφήToolStripMenuItem.Text = "Διαγραφή"
         '
         'S1ApplicantsToolStripMenuItem
         '
         Me.S1ApplicantsToolStripMenuItem.Name = "S1ApplicantsToolStripMenuItem"
-        Me.S1ApplicantsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.S1ApplicantsToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.S1ApplicantsToolStripMenuItem.Text = "S1Applicants"
         '
         'WindowsMenu
@@ -559,12 +567,11 @@ Partial Class GenMenu
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(156, 22)
         Me.AboutToolStripMenuItem.Text = "&About ..."
         '
-        'TransportsToolStripMenuItem
+        'FrmDtoGeneratorToolStripMenuItem
         '
-        Me.TransportsToolStripMenuItem.ForeColor = System.Drawing.Color.Green
-        Me.TransportsToolStripMenuItem.Name = "TransportsToolStripMenuItem"
-        Me.TransportsToolStripMenuItem.Size = New System.Drawing.Size(91, 20)
-        Me.TransportsToolStripMenuItem.Text = "Transports"
+        Me.FrmDtoGeneratorToolStripMenuItem.Name = "FrmDtoGeneratorToolStripMenuItem"
+        Me.FrmDtoGeneratorToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FrmDtoGeneratorToolStripMenuItem.Text = "FrmDtoGenerator"
         '
         'GenMenu
         '
@@ -651,4 +658,5 @@ Partial Class GenMenu
     Friend WithEvents ΔιαγραφήToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents S1ApplicantsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents TransportsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents FrmDtoGeneratorToolStripMenuItem As ToolStripMenuItem
 End Class
