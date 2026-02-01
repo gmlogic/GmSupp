@@ -668,55 +668,17 @@ Public Class WHouseBal
                 Exit Sub
             End If
 
-            'Dim grp = chkLists.GroupBy(Function(f) f.Cells("MTRL").Value)
-
-            'If Not Me.chkBoxAuto.Checked AndAlso Not grp.Count = 1 Then
-            '    MsgBox("Προσοχή !!! Επιλέγξατε διαφορετικά είδη.", MsgBoxStyle.Critical, "AddingNew")
-            '    Exit Sub
-            'End If
-
-            'Dim chkFi As List(Of Integer) = (From ce In Me.MasterDataGridView.Rows.Cast(Of DataGridViewRow)
-            '                                 Where ce.Cells("Check").Value = True
-            '                                 Select CType(ce.Cells("Findoc").Value, Integer)).ToList
-
             Dim chkMt As List(Of String) = (From ce In Me.MasterDataGridView.Rows.Cast(Of DataGridViewRow)
                                             Where ce.Cells("Check").Value = True
                                             Select CType(ce.Cells(1).Value, String)).ToList
-
-            'Dim chkLinesNo As List(Of Integer) = (From ce In Me.MasterDataGridView.Rows.Cast(Of DataGridViewRow)
-            '                                      Where ce.Cells("Check").Value = True
-            '                                      Select CType(ce.Cells("LinesNo").Value, Integer)).ToList
 
             Dim lst As New List(Of Revera.GetWHouseBalanceResult)
             lst = CType(Me.MasterBindingSource.DataSource, SortableBindingList(Of Revera.GetWHouseBalanceResult)).ToList
 
             Dim mtrls = lst.Where(Function(f) chkMt.Contains(f.CODE)).ToList
 
-            'If Me.VscsBindingSource.DataSource Is Nothing Then
-            '    Me.VscsBindingSource.DataSource = New SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)(New List(Of Revera.GetPendingOrdersDetailsResult))
-            '    MTRLINEsDataGridView_Styling()
-            'End If
-
-
-            'If Me.VscsBindingSource.DataSource Is Nothing Then
-            '    Me.VscsBindingSource.DataSource = New SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)
-            '    Me.VscsBindingSource.AddNew()
-            '    Me.MTRLINEsDataGridView.Columns.Clear()
-            '    'Me.MTRLINEsDataGridView.DataSource = Me.VscsBindingSource
-            'End If
-
-            'If Me.MTRLINEsDataGridView.ColumnCount = 0 Then
-            '    Me.MTRLINEsDataGridView.DataSource = Me.VscsBindingSource
-            '    MTRLINEsDataGridView_Styling()
             InitMTRLinesGrid()
-            'Me.MTRLINEsDataGridView.Columns.Cast(Of DataGridViewColumn).
-            '        Where(Function(f) editableFields_MTRLINEsDataGridView.Contains(f.DataPropertyName)).
-            '        ForEach(Sub(f As DataGridViewColumn)
-            '                    f.DefaultCellStyle.BackColor = System.Drawing.Color.White
-            '                    f.ReadOnly = False
-            '                    Debug.Print(f.DataPropertyName & "-" & f.ReadOnly)
-            '                End Sub)
-            'End If
+
             For Each v In mtrls
                 If v.REMAINLIMMIN <> 0 AndAlso v.REMAINLIMMAX <> 0 AndAlso v.IMPEXPQTY1 >= v.REMAINLIMMIN AndAlso v.IMPEXPQTY1 <= v.REMAINLIMMAX Then
                     MsgBox("Προσοχή !!! Υπόλοιπο κωδικού " & $"{v.CODE} = {v.IMPEXPQTY1}" & vbCrLf & "εντός ορίων. " & $"MIN:{v.REMAINLIMMIN} MAX:{v.REMAINLIMMAX}", MsgBoxStyle.Critical, " Cmd_Add")
@@ -747,9 +709,7 @@ Public Class WHouseBal
                     addVsc = det
                     Me.VscsBindingSource.AddNew()
                 End If
-
             Next
-
 
             For Each row As DataGridViewRow In chkLists
                 'Set colors
@@ -761,18 +721,9 @@ Public Class WHouseBal
             Me.SplitContainer2.Panel2.Visible = True
             If Me.Text = "Αποθήκη - Νέα Αίτηση/Υπόλοιπα Ειδών" Then
                 Me.SplitContainer2.SplitterDistance = Me.SplitContainer2.Width - (Me.SplitContainer2.Width / 1.8)
-                ''Me.MTRLINEsDataGridView.RowTemplate.Height = 22
-                ''If Me.radioBtnService.Checked Then
-                'Me.MTRLINEsDataGridView.RowTemplate.Height = 50
-                ''End If
-                'If MTRLINEsDataGridView.Columns("Παρατηρήσεις") IsNot Nothing Then
-                '    MTRLINEsDataGridView.Columns("Παρατηρήσεις").Width = 460
-                '    'MTRLINEsDataGridView.Columns("Παρατηρήσεις").DefaultCellStyle.WrapMode = DataGridViewTriState.True
-                'End If
+
                 ' Αν έχει ήδη columns, δεν ξαναστήνουμε τίποτα
-                'If Me.MTRLINEsDataGridView.Columns.Count = 0 Then
-                    FinalizeMTRLinesLayout()
-                'End If
+                FinalizeMTRLinesLayout()
 
             End If
             If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
@@ -784,7 +735,6 @@ Public Class WHouseBal
         End Try
     End Sub
     Private Sub InitMTRLinesGrid()
-
         ' Αν έχει ήδη columns, δεν ξαναστήνουμε τίποτα
         If Me.MTRLINEsDataGridView.Columns.Count > 0 Then Exit Sub
 
@@ -800,7 +750,6 @@ Public Class WHouseBal
 
         ' ΚΛΕΙΔΩΝΕΙ columns
         Me.MTRLINEsDataGridView.AutoGenerateColumns = False
-
     End Sub
 
     Private Sub FinalizeMTRLinesLayout()
@@ -815,6 +764,12 @@ Public Class WHouseBal
 
             If .Columns.Contains("Παρατηρήσεις Είδους") Then
                 .Columns("Παρατηρήσεις Είδους").DefaultCellStyle.WrapMode = DataGridViewTriState.True
+            End If
+
+            If .Columns.Contains("btnDocs") Then
+                .Columns("btnDocs").Width = 100
+                .Columns("btnDocs").DefaultCellStyle.BackColor = System.Drawing.Color.Red
+                .Columns("btnDocs").DefaultCellStyle.ForeColor = System.Drawing.Color.White
             End If
 
             If .Columns.Contains("Docs") Then
@@ -1663,8 +1618,6 @@ Public Class WHouseBal
                 btnCol.Name = "btnDocs"
                 btnCol.HeaderText = "Docs"
                 btnCol.Text = "📎 Αρχείο"
-                btnCol.DefaultCellStyle.BackColor = System.Drawing.Color.Red
-                btnCol.DefaultCellStyle.ForeColor = System.Drawing.Color.White
                 btnCol.UseColumnTextForButtonValue = True
 
                 If Not MTRLINEsDataGridView.Columns.Contains("btnDocs") Then
@@ -1803,17 +1756,17 @@ Public Class WHouseBal
 
     End Sub
 
-    Private Sub TlSBtnHigherEnd_Click(sender As Object, e As EventArgs) Handles TlSBtnHigherEnd.Click
+    Private Async Sub TlSBtnHigherEnd_Click(sender As Object, e As EventArgs) Handles TlSBtnHigherEnd.Click
         If MsgBox("Προσοχή!!! Τελική έγκριση. Να αποθηκευθούν οι αλλαγές;", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, My.Application.Info.AssemblyName) = MsgBoxResult.No Then
             Exit Sub
         End If
         Dim s As ToolStripButton = sender
         Dim findoc As Integer = Me.MasterBindingSource.Current.FINDOC
-        Dim fin1 = db.FINDOCs.Where(Function(f) f.FINDOC = findoc).FirstOrDefault
-        If fin1 Is Nothing Then
-            MsgBox("Error findoc=" & findoc, MsgBoxStyle.Critical, "db.FINDOCs.Where(Function(f) f.FINDOC = findoc).FirstOrDefault")
-            Exit Sub
-        End If
+        'Dim fin1 = db.FINDOCs.Where(Function(f) f.FINDOC = findoc).FirstOrDefault
+        'If fin1 Is Nothing Then
+        '    MsgBox("Error findoc=" & findoc, MsgBoxStyle.Critical, "db.FINDOCs.Where(Function(f) f.FINDOC = findoc).FirstOrDefault")
+        '    Exit Sub
+        'End If
         'Dim Qtys = CType(Me.VscsBindingSource.DataSource, SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)).Where(Function(f) f.QTY1 = 0).FirstOrDefault
         Dim Qtys = CType(Me.VscsBindingSource.DataSource, List(Of Revera.GetPendingOrdersDetailsResult)).Where(Function(f) f.FINDOC = findoc And f.QTY1 = 0).FirstOrDefault
         If Qtys IsNot Nothing Then
@@ -1822,35 +1775,69 @@ Public Class WHouseBal
             End If
         End If
 
-        Dim hs As String = ChkHigher(fin1.VARCHAR02, CUserName)
-        'If hs IsNot Nothing And hs = "STB" Then
+        Dim fin1 = CType(Me.MasterBindingSource.DataSource, List(Of GetPendingOrdersHeaderResult)).Where(Function(f) f.FINDOC = findoc).FirstOrDefault
+        If fin1 Is Nothing Then
+            MsgBox("Error findoc=" & findoc, MsgBoxStyle.Critical, "db.FINDOCs.Where(Function(f) f.FINDOC = findoc).FirstOrDefault")
+            Exit Sub
+        End If
+        Dim higs = Me.MasterBindingSource.Current.Highers.Split("|")
+        'Dim hs As String = ChkHigher(Me.MasterBindingSource.Current.Highers, CUserName)
+        Dim hs As String = ChkHigher(fin1.Highers, CUserName)
+        Dim sStr As String = Nothing
+        Dim result As Object
+        Dim JObj As Object
         Dim res = CType(Me.VscsBindingSource.DataSource, List(Of GetPendingOrdersDetailsResult)).Where(Function(f) f.FINDOC = findoc).ToList
 
         For Each v In res
-            'If Not v.QTY1 = v.NUM03 Then 'Εγκρ.Ποσ.1
-            'Dim mtl = dbAg.MTRLINEs.Where(Function(f) f.FINDOC = v.FINDOC And f.MTRLINES = v.MTRLINES And Not f.QTY1 = v.QTY1).FirstOrDefault
+                sStr &= String.Format("UPDATE MTRLINES
+                        SET QTY1 = {2}
+                        FROM MTRLINES 
+                        WHERE MTRLINES.FINDOC = {0} AND MTRLINES.MTRLINES= {1} ", findoc, v.MTRLINES, v.QTY1)
+            Next
 
-            Dim mtl = GetMtrlLines({"FINDOC", "MTRLINES", "QTY1"}, New Dictionary(Of String, Object) From {{"FINDOC", v.FINDOC}, {"MTRLINES", v.MTRLINES}, {"QTY1 <>", v.QTY1}}).FirstOrDefault()
-
-            If mtl IsNot Nothing Then
-                'If If(v.NUM03, 0) = 0 Then 'Εγκρ.Ποσ.1
-                '    v.NUM03 = v.QTY1
-                'End If
-                mtl.QTY1 = v.QTY1
-            End If
-            'End If
-        Next
-        fin1.VARCHAR02 = fin1.VARCHAR02.Replace(CUserName & ":STB", CUserName & ":OK")
-
+        fin1.Highers = fin1.Highers.Replace(CUserName & ":STB", CUserName & ":OK")
         '10  Εγκεκριμένη
         '16  Αίτηση πρός έγκριση
         '17  Αρχική έγκριση
         '18  Αίτηση πρός έγκριση ανωτέρου
         fin1.FINSTATES = 10 'Εγκεκριμένη
-        fin1.APPRVDATE = Now()
-        fin1.APPRV = 1
-        DataSafe()
-        'VisibleHigher(False)
+        'fin1.APPRVDATE = Now()
+        'fin1.APPRV = 1
+
+        sStr &= String.Format("UPDATE FINDOC SET INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, VARCHAR02='{2}', FINSTATES = {3}  WHERE FINDOC = {0} ", findoc, 9999, fin1.Highers, fin1.FINSTATES)
+
+        result = Await Utility.ExecuteUpdateFindocAsync(sStr)
+
+        JObj = Newtonsoft.Json.JsonConvert.DeserializeObject(result)
+        If JObj("success").ToString = "False" Then
+            MsgBox(JObj("error").ToString, MsgBoxStyle.Critical, "Cmd_Save")
+        End If
+
+        'For Each v In res
+        '    'If Not v.QTY1 = v.NUM03 Then 'Εγκρ.Ποσ.1
+        '    'Dim mtl = dbAg.MTRLINEs.Where(Function(f) f.FINDOC = v.FINDOC And f.MTRLINES = v.MTRLINES And Not f.QTY1 = v.QTY1).FirstOrDefault
+
+        '    Dim mtl = GetMtrlLines({"FINDOC", "MTRLINES", "QTY1"}, New Dictionary(Of String, Object) From {{"FINDOC", v.FINDOC}, {"MTRLINES", v.MTRLINES}, {"QTY1 <>", v.QTY1}}).FirstOrDefault()
+
+        '    If mtl IsNot Nothing Then
+        '        'If If(v.NUM03, 0) = 0 Then 'Εγκρ.Ποσ.1
+        '        '    v.NUM03 = v.QTY1
+        '        'End If
+        '        mtl.QTY1 = v.QTY1
+        '    End If
+        '    'End If
+        'Next
+        'fin1.VARCHAR02 = fin1.VARCHAR02.Replace(CUserName & ":STB", CUserName & ":OK")
+
+        ''10  Εγκεκριμένη
+        ''16  Αίτηση πρός έγκριση
+        ''17  Αρχική έγκριση
+        ''18  Αίτηση πρός έγκριση ανωτέρου
+        'fin1.FINSTATES = 10 'Εγκεκριμένη
+        'fin1.APPRVDATE = Now()
+        'fin1.APPRV = 1
+        'DataSafe()
+        VisibleHigher(False)
         'End If
         Cmd_Select()
 
@@ -2031,17 +2018,17 @@ Public Class WHouseBal
                 'Dim ms = dbAg.MTRLINEs.Where(Function(f) f.FINDOC = item.FINDOC And f.MTRLINES = item.MTRLINES And f.MTRL = item.MTRL).FirstOrDefault
                 Dim ms = GetMtrlLines({"FINDOC", "MTRLINES", "QTY1"}, New Dictionary(Of String, Object) From {{"FINDOC", v.FINDOC}, {"MTRLINES", v.MTRLINES}, {"MTRL =", v.MTRL}}).FirstOrDefault()
                 If Not IsNothing(ms) Then
-                    If Qty1 = "0" Then
-                        ms.QTY1 = Nothing
-                    Else
-                        ms.QTY1 = Qty1
-                    End If
-                    Dim fin = db.FINDOCs.Where(Function(f) f.FINDOC = v.FINDOC).FirstOrDefault
-                    If Not IsNothing(fin) Then
-                        fin.UPDDATE = Now()
-                        Dim cuser = 8888 's1Conn.ConnectionInfo.UserId
-                        fin.UPDUSER = cuser
-                    End If
+                    'If Qty1 = "0" Then
+                    '    ms.QTY1 = Nothing
+                    'Else
+                    '    ms.QTY1 = Qty1
+                    'End If
+                    'Dim fin = db.FINDOCs.Where(Function(f) f.FINDOC = v.FINDOC).FirstOrDefault
+                    'If Not IsNothing(fin) Then
+                    '    fin.UPDDATE = Now()
+                    '    Dim cuser = 8888 's1Conn.ConnectionInfo.UserId
+                    '    fin.UPDUSER = cuser
+                    'End If
                     Me.BindingNavigatorSaveItem.Enabled = True
                 End If
             End If
@@ -2916,11 +2903,6 @@ Public Class WHouseBal
                     Exit Sub
                 End If
 
-                'wfm.DateTimePicker1.Value = CTODate
-                'wfm.bindingSource.DataSource = New SortableBindingList(Of Revera.GetPendingOrdersDetailsResult)(dets)
-                'wfm.ddlTrdr.DataSource = Trdrs
-                'wfm.cccTrdDeps = cccTrdDeps
-                'wfm.ddlApplicant.DataSource = Applicants
                 If Facilities = "KAVALA" Or Facilities = "ATALANTI" Then
                     SetGmChkListBox()
                 End If
@@ -2958,17 +2940,15 @@ Public Class WHouseBal
                     'If MsgBox("Ολοκλήρωση Παραγγελίας;", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, My.Application.Info.AssemblyName) = MsgBoxResult.No Then
                     '    Exit Sub
                     'End If
+                End If
 
+                If {"KAVALA", "ATALANTI"}.Contains(Facilities) Then
+                    If wfm.ddlΗighers.SelectedValue = "0" Then
+                        MsgBox("Υποχρεωτική επιλογή <Έγκριση ανωτέρου>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
+                        Exit Sub
+                    End If
                 End If
-                If wfm.ddlΗighers.SelectedValue = "0" Then
-                    MsgBox("Υποχρεωτική επιλογή <Έγκριση ανωτέρου>", MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
-                    Exit Sub
-                End If
-                'Dim cuser As GmIdentityUser = GmUserManager.ChkUser(CurUser.Replace("gmlogic", "gm"))
-                'If cuser Is Nothing Then
-                '    MsgBox("Error User: " & CurUser, MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
-                '    Exit Sub
-                'End If
+
                 Dim ccCUser = db.ccCS1Applicants.Where(Function(f) f.AspNetUsersName = CUserName).FirstOrDefault
                 If ccCUser Is Nothing Then
                     MsgBox("Προσοχή !!! Δεν υπάρχει στο Softone o αιτών: " & CUserName, MsgBoxStyle.Critical, "BindingNavigatorSaveItem")
@@ -3014,8 +2994,6 @@ Public Class WHouseBal
                 End If
                 fin.MTRDOC = mc
 
-
-                'If Facilities <> "KAVALA" Then
                 Select Case MsgBox("Να αποθηκευθούν οι αλλαγές;", MsgBoxStyle.YesNoCancel + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, "")
                     Case MsgBoxResult.No
                         ' The data is not safe.
@@ -3035,10 +3013,12 @@ Public Class WHouseBal
                         If Facilities = "AYLIDA" Then
                             fin.SERIES = 1024
                             fin.FINSTATES = 10 'Εγκεκριμένη
+                            fin.VARCHAR02 = "OK"
                         End If
                         If Facilities = "VELESTINO" Then
                             fin.SERIES = 1026
                             fin.FINSTATES = 10 'Εγκεκριμένη
+                            fin.VARCHAR02 = "OK"
                         End If
                         fin.VATSTS = 1341
                         Dim mls1 = CType(Me.VscsBindingSource.DataSource, SortableBindingList(Of Revera.GetPendingOrdersDetailsResult))
@@ -3059,6 +3039,9 @@ Public Class WHouseBal
                         Next
 
                         Dim ss = Await PostWithWS(fin, Facilities)
+                        If ss IsNot Nothing Then
+                            MsgBox("Προσοχή !!!.Ακύρωση Αλλαγών" & vbCrLf & "_error:" & ss, MsgBoxStyle.Critical, "Προσοχή !!!")
+                        End If
                         wfm.txtBoxVARCHAR01.Text = ""
                         wfm.txtBoxREMARKS.Text = ""
                         wfm.txtBoxRequestNo.Text = ""
@@ -3081,89 +3064,42 @@ Public Class WHouseBal
                     Exit Sub
                 End If
 
-                Dim fin1 = db.FINDOCs.Where(Function(f) f.FINDOC = findoc).FirstOrDefault
+                Dim fin1 = CType(Me.MasterBindingSource.DataSource, List(Of GetPendingOrdersHeaderResult)).Where(Function(f) f.FINDOC = findoc).FirstOrDefault
                 If fin1 Is Nothing Then
                     MsgBox("Error findoc=" & findoc, MsgBoxStyle.Critical, "db.FINDOCs.Where(Function(f) f.FINDOC = findoc).FirstOrDefault")
                     Exit Sub
                 End If
                 Dim higs = Me.MasterBindingSource.Current.Highers.Split("|")
                 Dim hs As String = ChkHigher(Me.MasterBindingSource.Current.Highers, CUserName)
-                Dim sStr As String
+                Dim sStr As String = Nothing
                 Dim result As Object
                 Dim JObj As Object
                 If hs IsNot Nothing And hs = "STB" Then
-                    '    fin1.VARCHAR02 = Me.MasterBindingSource.Current.Highers & "|" & Me.TlsddlΗighers.Text.Trim & ":" & "STB"
-                    '    VisibleHigher(False)
-                    '    If hs = "STB" Then
-                    '        VisibleHigher(True)
-                    '    End If
-                    'Else
-
-                    ''Dim Res = db.ccCVMtrLines.Where(Function(f) f.FINDOC = findoc).ToList
                     Dim res = CType(Me.VscsBindingSource.DataSource, List(Of GetPendingOrdersDetailsResult)).Where(Function(f) f.FINDOC = findoc).ToList
 
                     For Each v In res
-                        'If Not v.QTY1 = v.NUM03 Then 'Εγκρ.Ποσ.1
-                        'Dim mtl = dbAg.MTRLINEs.Where(Function(f) f.FINDOC = v.FINDOC And f.MTRLINES = v.MTRLINES And Not f.QTY1 = v.QTY1).FirstOrDefault
-                        'Dim mtl = GetMtrlLines({"FINDOC", "MTRLINES", "QTY1"}, New Dictionary(Of String, Object) From {{"FINDOC", v.FINDOC}, {"MTRLINES", v.MTRLINES}, {"QTY1 <>", v.QTY1}}).FirstOrDefault()
-                        'If mtl IsNot Nothing Then
-                        '    'If If(v.NUM03, 0) = 0 Then 'Εγκρ.Ποσ.1
-                        '    '    v.NUM03 = v.QTY1
-                        '    'End If
-                        '    mtl.QTY1 = v.QTY1
-                        'End If
-                        ''End If
-                        sStr = String.Format("UPDATE MTRLINES
+                        sStr &= String.Format("UPDATE MTRLINES
                         SET QTY1 = {2}
                         FROM MTRLINES 
                         WHERE MTRLINES.FINDOC = {0} AND MTRLINES.MTRLINES= {1} ", findoc, v.MTRLINES, v.QTY1)
 
-                        result = Await Utility.ExecuteUpdateFindocAsync(sStr)
+                        'result = Await Utility.ExecuteUpdateFindocAsync(sStr)
 
-                        JObj = Newtonsoft.Json.JsonConvert.DeserializeObject(result)
-                        If JObj("success").ToString = "False" Then
-                            MsgBox(JObj("error").ToString, MsgBoxStyle.Critical, "Cmd_Save")
-                        End If
+                        'JObj = Newtonsoft.Json.JsonConvert.DeserializeObject(result)
+                        'If JObj("success").ToString = "False" Then
+                        '    MsgBox(JObj("error").ToString, MsgBoxStyle.Critical, "Cmd_Save")
+                        'End If
                     Next
 
-                    fin1.VARCHAR02 = fin1.VARCHAR02.Replace(CUserName & ":STB", CUserName & ":OK") & "|" & Me.TlsddlΗighers.Text & ":STB"
+                    fin1.Highers = fin1.Highers.Replace(CUserName & ":STB", CUserName & ":OK") & "|" & Me.TlsddlΗighers.Text & ":STB"
                     '10  Εγκεκριμένη
                     '16  Αίτηση πρός έγκριση
                     '17  Αρχική έγκριση
                     '18  Αίτηση πρός έγκριση ανωτέρου
                     fin1.FINSTATES = 16 'Αίτηση πρός έγκριση
-                    'hs = "OK"
-                    'Me.TlsddlΗighers.ComboBox.DataSource = Nothing
-                    'Me.TlsddlΗighers.ComboBox.DisplayMember = "Key"
-                    'Me.TlsddlΗighers.ComboBox.ValueMember = "Value"
-
-                    'If hs = "OK" Then
-                    '    Dim Highers = GetHighers(CurUser)
-                    '    Me.TlsddlΗighers.ComboBox.DataSource = Highers.ToList
-                    '    VisibleHigher(True)
-                    '    Me.BindingNavigatorSaveItem.Enabled = False
-                    'End If
-                    'higs = fin1.VARCHAR02.Split("|")
-                    'Dim lkv = New List(Of KeyValuePair(Of String, String))
-                    'For Each h In higs
-                    '    If h = "" Then Continue For
-                    '    lkv.Add(New KeyValuePair(Of String, String)(h.Split(":")(0), h.Split(":")(1)))
-                    'Next
-                    'fin1.VARCHAR02 = ""
-                    'For Each l In lkv
-                    '    If l.Key = aHighers.Replace("%", "") Then
-                    '        If l.Value = "STB" Then
-                    '            l = New KeyValuePair(Of String, String)(l.Key, "OK")
-                    '        End If
-                    '    End If
-                    '    fin1.VARCHAR02 &= l.Key & ":" & l.Value & "|"
-                    'Next
-                    'If Not fin1.VARCHAR02 = "" Then
-                    '    fin1.VARCHAR02 = fin1.VARCHAR02.Substring(0, fin1.VARCHAR02.Length - 1)
-                    'End If
                 End If
-                Dim fin2 = CType(Me.MasterBindingSource.DataSource, List(Of GetPendingOrdersHeaderResult)).Where(Function(f) f.FINDOC = findoc).FirstOrDefault
-                sStr = String.Format("UPDATE FINDOC SET  INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, VARCHAR02='{2}', FINSTATES = 16  WHERE FINDOC = {0} ", findoc, UserId, fin2.Highers.Replace(CUserName & ":STB", CUserName & ":OK") & "|" & Me.TlsddlΗighers.Text & ":STB")
+
+                sStr &= String.Format("UPDATE FINDOC SET  INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, VARCHAR02='{2}', FINSTATES = 16  WHERE FINDOC = {0} ", findoc, 9999, fin1.Highers)
                 'Sql = String.Format("UPDATE FINDOC SET INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, REMARKS='{2}', FINCODE='{3}' WHERE FINDOC = {0}", CSaldoc.DNewID, UserId, Remarks, CSaldoc.DDocFinDoc.FINCODE) ' 1288495)"
                 'sStr = Newtonsoft.Json.Linq.JObject.FromObject(New With {
                 '                                                                  .clientID = clientID,
@@ -3176,96 +3112,8 @@ Public Class WHouseBal
                     MsgBox(JObj("error").ToString, MsgBoxStyle.Critical, "Cmd_Save")
                 End If
             End If
-
-            Dim gg = db.GetChangeSet
-            Exit Sub
-            If Me.DataSafe() Then
-
-                'SendEmail(wfm)
-                If Me.Text = "Αποθήκη - Νέα Αίτηση/Υπόλοιπα Ειδών" Then
-                    fin = db.FINDOCs.Where(Function(f) f.FINDOC = fin.FINDOC).FirstOrDefault
-                    If fin IsNot Nothing Then
-                        For Each mt In fin.MTRLINEs
-                            mt.ccCAFINDOC = mt.FINDOC
-                            mt.ccCAMTRLINES = mt.MTRLINES
-                        Next
-                        SaveData()
-                    End If
-                    Me.TlsBtnClear.PerformClick()
-                End If
-                SetGmChkListBox() 'Clear Me.VscsBindingSource.DataSource 
-            End If
-            If Me.Text = "Αποθήκη - Εκκρεμείς Αιτήσεις-Παραγγελίες" Then
-                Cmd_Select()
-                'Me.MasterBindingSource.Position = pos
-                'Dim fin1 = db.FINDOCs.Where(Function(f) f.FINDOC = findoc).FirstOrDefault
-                'If fin1 Is Nothing Then
-                '    MsgBox("Error findoc=" & findoc, MsgBoxStyle.Critical, "db.FINDOCs.Where(Function(f) f.FINDOC = findoc).FirstOrDefault")
-                '    Exit Sub
-                'End If
-                'Dim hs As String = ChkHigher(fin1.VARCHAR02, CUserName)
-                ''If hs IsNot Nothing And hs = "OK" Then
-                ''    fin1.VARCHAR02 = Me.MasterBindingSource.Current.Highers & "|" & Me.TlsddlΗighers.Text.Trim & ":" & "STB"
-                ''End If
-                'Me.TlsddlΗighers.ComboBox.DataSource = Nothing
-                'Me.TlsddlΗighers.ComboBox.DisplayMember = "Key"
-                'Me.TlsddlΗighers.ComboBox.ValueMember = "Value"
-
-                'If hs = "OK" Then
-                '    Dim Highers = GetHighers(CurUser)
-                '    Me.TlsddlΗighers.ComboBox.DataSource = Highers.ToList
-                '    VisibleHigher(True)
-                'Else
-                '    VisibleHigher(False)
-                '    Me.BindingNavigatorSaveItem.Enabled = False
-                'End If
-            End If
-        End If
-        Exit Sub
-
-        If Me.VscsBindingSource.Count > 0 Then
-            If MsgBox("Να αποθηκευθούν οι αλλαγές;", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, My.Application.Info.AssemblyName) = MsgBoxResult.No Then
-                Exit Sub
-            End If
-
-            Dim q = Me.MasterDataGridView.Rows.Cast(Of DataGridViewRow).Where(Function(f) f.Cells("Check").Value = True)
-            If q.Count = 0 Then
-                'e.Cancel = True
-                'Exit Sub
-            End If
-            Dim q1 = q.Select(Function(f) f.Cells(1).Value)
-            Dim dets As New List(Of Revera.GetPendingOrdersDetailsResult)
-            If Not detsOld.Count = 0 Then
-                dets.AddRange(detsOld)
-            End If
-
-            'wfm.bindingSource = New BindingSource
-            For Each q2 As DataGridViewRow In q
-                Dim det = New Revera.GetPendingOrdersDetailsResult
-                det.CODE = q2.Cells(1).Value
-                det.NAME = q2.Cells(2).Value
-                det.MTRUNITC = q2.Cells(3).Value
-
-                dets.Add(det)
-
-            Next
-            dets = dets.Distinct(Function(f) f.CODE).ToList
-
-            If dets.Count = 0 Then
-                wfm = New WHouseBalFR
-                Me.TlSBtnUnCheck.PerformClick()
-            End If
-            If Not detsOld Is dets Then
-                detsOld = dets
-            End If
-            Exit Sub
         End If
 
-
-
-        'If Me.DataSafe() Then
-        '    Me.cmdSelect.PerformClick()
-        'End If
         'Throw New NotImplementedException()
     End Sub
 
@@ -3674,10 +3522,15 @@ Public Class WHouseBal
         Dim ws As JObject = BaseWS("PURDOC", clientID)
 
         ws("DATA")("PURDOC") = New JArray(BuildPURDOC(fin))
+
         ws("DATA")("MTRDOC") = New JArray(BuildMTRDOC(fin))
-        'ws("DATA")("ITELINES") = BuildITELINES(fin.MTRLINEs.ToList)
-        ws("DATA")("SRVLINES") = BuildITELINES(fin.MTRLINEs.ToList)
-        'ws("DATA")("SRVLINES") = BuildSRVLINES(fin.FINDOC)
+
+        If Me.radioBtnMtrl.Checked Then
+            ws("DATA")("ITELINES") = BuildITELINES(fin.MTRLINEs.ToList)
+        End If
+        If Me.radioBtnService.Checked Then
+            ws("DATA")("SRVLINES") = BuildITELINES(fin.MTRLINEs.ToList)
+        End If
 
         Dim sStr = Newtonsoft.Json.Linq.JObject.FromObject(ws).ToString()
 
@@ -3708,7 +3561,6 @@ Public Class WHouseBal
             If JObjD("success").ToString = "False" Then
                 _error = JObjD("error").ToString
             End If
-
         Else
             If Not JObjD("error").ToString = "No data" Then 'other error
                 'MsgBox(JLObj("error").ToString, MsgBoxStyle.Critical, "BeforePost")
@@ -3803,18 +3655,18 @@ Public Class WHouseBal
                 o("COMMENTS1") = ln.COMMENTS1
             End If
 
-            ' --- αντιστοίχιση (όπως στο JS)
-            If ln.FINDOC > 0 Then
-                o("CCCAGFINDOC") = ln.FINDOC
-            End If
+            '' --- αντιστοίχιση (όπως στο JS)
+            'If ln.FINDOC > 0 Then
+            '    o("CCCAGFINDOC") = ln.FINDOC
+            'End If
 
-            If ln.MTRLINES > 0 Then
-                o("CCCAGMTRLINES") = ln.MTRLINES
-            End If
+            'If ln.MTRLINES > 0 Then
+            '    o("CCCAGMTRLINES") = ln.MTRLINES
+            'End If
 
-            If ln.MTRL > 0 Then
-                o("CCCAGMTRL") = ln.MTRL
-            End If
+            'If ln.MTRL > 0 Then
+            '    o("CCCAGMTRL") = ln.MTRL
+            'End If
 
             arr.Add(o)
 
@@ -4538,10 +4390,7 @@ Public Class WHouseBal
     End Sub
 
 #End Region
-    Public Function GetMtrlLines(
-        selectFields As IEnumerable(Of String),
-        filters As Dictionary(Of String, Object)
-    ) As List(Of DPMTRLINE)
+    Public Function GetMtrlLines(selectFields As IEnumerable(Of String), filters As Dictionary(Of String, Object)) As List(Of DPMTRLINE)
 
         Using cn As New SqlConnection(My.Settings.ReveraConnectionString.Replace("Revera", If(CompName = "SERTORIUS", "REVERA", "AGUSTINO")))
 

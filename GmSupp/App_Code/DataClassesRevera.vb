@@ -191,6 +191,10 @@ Namespace Revera
         Public Property cccTrdr As Integer?
         Public Property cccTrdDep As Integer?
 
+        ''' <summary>
+        ''' A.VARCHAR02 as Highers
+        ''' </summary>
+        ''' <returns></returns>
         Public Property Highers As String
 
         Public Property FINSTATES As Short?

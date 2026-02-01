@@ -515,8 +515,7 @@ Public Class Utility
         Dim payload As String = jo.ToString(Newtonsoft.Json.Formatting.None)
 
         ' call WS
-        Dim result As String =
-         Utility.executeRequest(payload, "POST", "updateFindoc")
+        Dim result As String = Utility.executeRequest(payload, "POST", "updateFindoc")
 
         Return result
     End Function
