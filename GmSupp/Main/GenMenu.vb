@@ -148,7 +148,7 @@ Public Class GenMenu
             If {"192.168.10.108", "192.168.51.13"}.Contains(LocalIP) Then
                 Dim usarr = {"d.ganetsos", "m.kaiafas", "th.kouloura", "ch.keskesiadis", "a.momtsos", "a.nizamis"}
                 Dim pswarr = {"123456", "123", "82438243", "radrad", "radrad", "123"}
-                Dim aa = 6
+                Dim aa = 5
                 loginf.UsernameTextBox.Text = usarr(aa - 1) ' "th.kouloura" '"m.kaiafas" '"d.ganetsos" '"a.momtsos" '"g.ksms" '"ch.keskesiadis" '"a.nizamis" '"s.iordanoglou" '"a.tsilikas" '"t.andreoglou" '"d.makaridis" ' "th.naris" ' "a.giannikos" ' "m.siopis" '
                 loginf.PasswordTextBox.Text = pswarr(aa - 1) '"82438243" '"123" '"123456" '"radrad" '"Gr@Ks5584" '"radrad" '"123" '"Sa@Io1522" '"Ts@An9923" '"An@Ti6912" '"Ma@Di55489" '"Na@Th3131" '"Gi@Al5879" '"Si@Ma1891" '"AV$2865" Si@Ma1891
                 'loginf.UsernameTextBox.Text = "gmlogic" '"d.makaridis" '

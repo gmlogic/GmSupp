@@ -169,7 +169,10 @@ Namespace Revera
         Public Property CMPMODE As Short?
 
         Public Property ISPRINT As Short?
+
         Public Property APPRV As Short?
+
+        Public Property APPRVDATE As Date?
 
         ' A.INT01 → OrderNo (φαίνεται NULL)
         Public Property OrderNo As Integer?

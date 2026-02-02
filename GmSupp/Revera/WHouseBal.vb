@@ -1801,10 +1801,11 @@ Public Class WHouseBal
         '17  Αρχική έγκριση
         '18  Αίτηση πρός έγκριση ανωτέρου
         fin1.FINSTATES = 10 'Εγκεκριμένη
-        'fin1.APPRVDATE = Now()
-        'fin1.APPRV = 1
+        fin1.APPRVDATE = Now()
+        fin1.APPRV = 1
 
-        sStr &= String.Format("UPDATE FINDOC SET INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, VARCHAR02='{2}', FINSTATES = {3}  WHERE FINDOC = {0} ", findoc, 9999, fin1.Highers, fin1.FINSTATES)
+        sStr &= String.Format("UPDATE FINDOC SET INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, VARCHAR02='{2}', FINSTATES = {3}, APPRVDATE = CONVERT(datetime, '{4}', 120), APPRV = {5}  WHERE FINDOC = {0} ",
+                              findoc, 9999, fin1.Highers.Replace("'", "''"), fin1.FINSTATES, fin1.APPRVDATE.ToString("yyyy-MM-dd HH:mm:ss"), fin1.APPRV = 1)
 
         result = Await Utility.ExecuteUpdateFindocAsync(sStr)
 
