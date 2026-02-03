@@ -1805,7 +1805,7 @@ Public Class WHouseBal
         fin1.APPRV = 1
 
         sStr &= String.Format("UPDATE FINDOC SET INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, VARCHAR02='{2}', FINSTATES = {3}, APPRVDATE = CONVERT(datetime, '{4}', 120), APPRV = {5}  WHERE FINDOC = {0} ",
-                              findoc, 9999, fin1.Highers.Replace("'", "''"), fin1.FINSTATES, fin1.APPRVDATE.ToString("yyyy-MM-dd HH:mm:ss"), fin1.APPRV = 1)
+                              findoc, 9999, fin1.Highers.Replace("'", "''"), fin1.FINSTATES, fin1.APPRVDATE.GetValueOrDefault(DateTime.Now).ToString("yyyy-MM-dd HH:mm:ss"), fin1.APPRV)
 
         result = Await Utility.ExecuteUpdateFindocAsync(sStr)
 
@@ -3106,12 +3106,21 @@ Public Class WHouseBal
                 '                                                                  .clientID = clientID,
                 '                                                                  .sql = Sql
                 '                                                        }).ToString
-                result = Await Utility.ExecuteUpdateFindocAsync(sStr)
+                ' Ask the user if we should save the changes.
+                Select Case MsgBox("Να αποθηκευθούν οι αλλαγές;", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation + MsgBoxStyle.DefaultButton2, "") 'MeLabel)
+                    Case MsgBoxResult.No
+                        ' The data is not safe.
 
-                JObj = Newtonsoft.Json.JsonConvert.DeserializeObject(result)
-                If JObj("success").ToString = "False" Then
-                    MsgBox(JObj("error").ToString, MsgBoxStyle.Critical, "Cmd_Save")
-                End If
+                    Case MsgBoxResult.Yes
+                        ' Save the changes.
+                        result = Await Utility.ExecuteUpdateFindocAsync(sStr)
+
+                        JObj = Newtonsoft.Json.JsonConvert.DeserializeObject(result)
+                        If JObj("success").ToString = "False" Then
+                            MsgBox(JObj("error").ToString, MsgBoxStyle.Critical, "Cmd_Save")
+                        End If
+                End Select
+                Cmd_Select()
             End If
         End If
 
