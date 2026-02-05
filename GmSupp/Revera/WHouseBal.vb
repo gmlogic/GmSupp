@@ -309,11 +309,12 @@ Public Class WHouseBal
 
         Dim Highers As Dictionary(Of String, String) = GetAllHigherUsers(loginUser.Id)
 
-        'Dim Recipients As Dictionary(Of String, String) = GetRecipientsFromSelectedHigher(loginUser.Id)
-
-        Dim Recipients As Dictionary(Of String, String) = usss.ToList().Where(Function(u) UserManager.GetRoles(u.Id).Contains("Κοινοποίηση")).ToDictionary(Function(u) u.Name, Function(u) u.Id)
-
-        'Dim Recipients As New Dictionary(Of String, String)
+        Dim Recipients As New Dictionary(Of String, String)
+        If Facilities = "KAVALA" Then
+            Recipients = usss.ToList().Where(Function(u) UserManager.GetRoles(u.Id).Contains("Κοινοποίηση")).ToDictionary(Function(u) u.Name, Function(u) u.Id)
+        Else
+            Recipients = GetRecipientsFromSelectedHigher(loginUser.Id)
+        End If
 
         'For Each u In usss.ToList()
         '    If UserManager.GetRoles(u.Id).Contains("Κοινοποίηση") Then
