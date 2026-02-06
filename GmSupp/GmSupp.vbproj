@@ -29,7 +29,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>63</ApplicationRevision>
+    <ApplicationRevision>64</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -221,6 +221,7 @@
     <Compile Include="App_Code\DataClassesRevera.vb">
       <DependentUpon>DataClassesRevera.dbml</DependentUpon>
     </Compile>
+    <Compile Include="App_Code\NetworkConnection.vb" />
     <Compile Include="Entities\DPMTRLINE.vb" />
     <Compile Include="Forms\FrmDtoGenerator.Designer.vb">
       <DependentUpon>FrmDtoGenerator.vb</DependentUpon>

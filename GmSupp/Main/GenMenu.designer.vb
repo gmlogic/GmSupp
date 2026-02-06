@@ -71,6 +71,7 @@ Partial Class GenMenu
         Me.NVFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImportExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChangeSysDateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FrmDtoGeneratorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UsersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ΧρήστεςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ΔημιουργίαToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -90,7 +91,6 @@ Partial Class GenMenu
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.TestConnectionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FrmDtoGeneratorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
         Me.SuspendLayout()
@@ -437,6 +437,12 @@ Partial Class GenMenu
         Me.ChangeSysDateToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ChangeSysDateToolStripMenuItem.Text = "Change SysDate"
         '
+        'FrmDtoGeneratorToolStripMenuItem
+        '
+        Me.FrmDtoGeneratorToolStripMenuItem.Name = "FrmDtoGeneratorToolStripMenuItem"
+        Me.FrmDtoGeneratorToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FrmDtoGeneratorToolStripMenuItem.Text = "FrmDtoGenerator"
+        '
         'UsersToolStripMenuItem
         '
         Me.UsersToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ΧρήστεςToolStripMenuItem, Me.S1ApplicantsToolStripMenuItem})
@@ -566,12 +572,6 @@ Partial Class GenMenu
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(156, 22)
         Me.AboutToolStripMenuItem.Text = "&About ..."
-        '
-        'FrmDtoGeneratorToolStripMenuItem
-        '
-        Me.FrmDtoGeneratorToolStripMenuItem.Name = "FrmDtoGeneratorToolStripMenuItem"
-        Me.FrmDtoGeneratorToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.FrmDtoGeneratorToolStripMenuItem.Text = "FrmDtoGenerator"
         '
         'GenMenu
         '

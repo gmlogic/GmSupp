@@ -71,7 +71,7 @@ Partial Class LoginForm1
         Me.PasswordTextBox.Name = "PasswordTextBox"
         Me.PasswordTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.PasswordTextBox.Size = New System.Drawing.Size(220, 20)
-        Me.PasswordTextBox.TabIndex = 3
+        Me.PasswordTextBox.TabIndex = 2
         '
         'OK
         '
@@ -96,7 +96,7 @@ Partial Class LoginForm1
         Me.DateTimePicker1.Location = New System.Drawing.Point(124, 23)
         Me.DateTimePicker1.Name = "DateTimePicker1"
         Me.DateTimePicker1.Size = New System.Drawing.Size(104, 20)
-        Me.DateTimePicker1.TabIndex = 18
+        Me.DateTimePicker1.TabIndex = 0
         Me.DateTimePicker1.Value = New Date(2006, 10, 31, 0, 0, 0, 0)
         '
         'Label1
@@ -114,7 +114,7 @@ Partial Class LoginForm1
         Me.ddlXCOs.Location = New System.Drawing.Point(15, 147)
         Me.ddlXCOs.Name = "ddlXCOs"
         Me.ddlXCOs.Size = New System.Drawing.Size(121, 21)
-        Me.ddlXCOs.TabIndex = 20
+        Me.ddlXCOs.TabIndex = 3
         '
         'LoginForm1
         '

@@ -181,4 +181,97 @@ Public Class FrmDtoGenerator
         Return vbType
     End Function
 
+    Private Sub BtnCopyToNas_Click(sender As Object, e As EventArgs) Handles BtnCopyToNas.Click
+
+        Dim nasPath As String = "\\nas0\Soft1 Requests Kavala"
+        Dim adUser As String = "g.softonis"   ' <-- DOMAIN\user
+        Dim adPass As String = "5$dOe)#nW3i@"  ' <-- βάλε το σωστό
+
+        Using ofd As New OpenFileDialog()
+            ofd.Title = "Επιλέξτε αρχείο για αντιγραφή στο NAS"
+            ofd.CheckFileExists = True
+            ofd.Multiselect = False
+
+            If ofd.ShowDialog() <> DialogResult.OK Then Exit Sub
+
+            Dim sourceFile As String = ofd.FileName
+            Dim destFile As String =
+            IO.Path.Combine(nasPath, IO.Path.GetFileName(sourceFile))
+
+            Try
+                Dim rc As Integer = ConnectToShare(nasPath, adUser, adPass)
+
+                If rc <> 0 Then
+                    Throw New Exception($"Αποτυχία σύνδεσης στο NAS. Error code: {rc}")
+                End If
+
+                Try
+                    Dim path As String = "\\nas0\Soft1 Requests Kavala"
+
+                    Dim files = IO.Directory.GetFiles(path, "*.*", IO.SearchOption.AllDirectories)
+
+                    For Each f In files
+                        'IO.File.Delete(f)
+                        Debug.WriteLine(f)   ' full path
+                    Next
+
+
+                    MessageBox.Show($"Βρέθηκαν {files.Length} αρχεία.")
+
+                Catch ex As UnauthorizedAccessException
+                    MessageBox.Show("Δεν υπάρχει δικαίωμα σε κάποιον υποφάκελο.")
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message)
+                End Try
+
+
+                ' 🔐 Σύνδεση στο NAS με AD credentials
+                'ConnectToShare(nasPath, adUser, adPass)
+
+                ' 📂 Αν υπάρχει ήδη, ρώτα τον χρήστη
+                If IO.File.Exists(destFile) Then
+
+                    Dim res = MessageBox.Show(
+                    $"Το αρχείο '{IO.Path.GetFileName(destFile)}' υπάρχει ήδη στο NAS." & vbCrLf &
+                    "Θέλετε να αντικατασταθεί;",
+                    "Υπάρχον αρχείο",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                )
+
+                    If res = DialogResult.No Then
+                        Exit Sub
+                    End If
+
+                    ' overwrite με έγκριση
+                    IO.File.Copy(sourceFile, destFile, True)
+
+                Else
+                    ' κανονικό copy
+                    IO.File.Copy(sourceFile, destFile)
+                End If
+
+                MessageBox.Show(
+                "Η αντιγραφή ολοκληρώθηκε επιτυχώς.",
+                "OK",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            )
+
+            Catch ex As Exception
+                MessageBox.Show(
+                ex.Message,
+                "Σφάλμα",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            )
+
+            Finally
+                ' 🔌 Κλείσιμο σύνδεσης NAS
+                DisconnectShare(nasPath)
+            End Try
+        End Using
+
+    End Sub
+
 End Class

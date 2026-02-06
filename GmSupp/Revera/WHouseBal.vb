@@ -1800,11 +1800,11 @@ Public Class WHouseBal
         Dim res = CType(Me.VscsBindingSource.DataSource, List(Of GetPendingOrdersDetailsResult)).Where(Function(f) f.FINDOC = findoc).ToList
 
         For Each v In res
-                sStr &= String.Format("UPDATE MTRLINES
+            sStr &= String.Format(Globalization.CultureInfo.InvariantCulture, "UPDATE MTRLINES
                         SET QTY1 = {2}
                         FROM MTRLINES 
                         WHERE MTRLINES.FINDOC = {0} AND MTRLINES.MTRLINES= {1} ", findoc, v.MTRLINES, v.QTY1)
-            Next
+        Next
 
         fin1.Highers = fin1.Highers.Replace(CUserName & ":STB", CUserName & ":OK")
         '10  Εγκεκριμένη
@@ -1815,7 +1815,7 @@ Public Class WHouseBal
         fin1.APPRVDATE = Now()
         fin1.APPRV = 1
 
-        sStr &= String.Format("UPDATE FINDOC SET INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, VARCHAR02='{2}', FINSTATES = {3}, APPRVDATE = CONVERT(datetime, '{4}', 120), APPRV = {5}  WHERE FINDOC = {0} ",
+        sStr &= String.Format(Globalization.CultureInfo.InvariantCulture, "UPDATE FINDOC SET INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, VARCHAR02='{2}', FINSTATES = {3}, APPRVDATE = CONVERT(datetime, '{4}', 120), APPRV = {5}  WHERE FINDOC = {0} ",
                               findoc, 9999, fin1.Highers.Replace("'", "''"), fin1.FINSTATES, fin1.APPRVDATE.GetValueOrDefault(DateTime.Now).ToString("yyyy-MM-dd HH:mm:ss"), fin1.APPRV)
 
         result = Await Utility.ExecuteUpdateFindocAsync(sStr)
@@ -2049,7 +2049,9 @@ Public Class WHouseBal
 
     Private Sub MTRLINEsDataGridView_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles MTRLINEsDataGridView.CellContentClick
 
-        ' Έλεγχος ότι πατήθηκε το σωστό κουμπί
+        ' -------------------------
+        ' Έλεγχοι
+        ' -------------------------
         If e.RowIndex < 0 Then Exit Sub
         If MTRLINEsDataGridView.Columns(e.ColumnIndex).Name <> "btnDocs" Then Exit Sub
 
@@ -2058,13 +2060,118 @@ Public Class WHouseBal
             ofd.Filter = "PDF files (*.pdf)|*.pdf|Όλα τα αρχεία (*.*)|*.*"
             ofd.Multiselect = False
 
-            If ofd.ShowDialog() = DialogResult.OK Then
-                ' Γέμισμα του πεδίου cccDocs
-                MTRLINEsDataGridView.Rows(e.RowIndex).Cells("Docs").Value = ofd.FileName
-            End If
+            If ofd.ShowDialog() <> DialogResult.OK Then Exit Sub
+
+            Dim sourceFile As String = ofd.FileName
+
+            ' -------------------------
+            ' NAS PATH
+            ' -------------------------
+            Dim nasRoot As String = "\\nas0"
+            Dim nasFolder As String '= GetNasFolderByFacility(facility)
+            Select Case Facilities
+                Case "KAVALA"
+                    nasFolder = "Soft1 Requests Kavala"
+                Case "ATALANTI"
+                    nasFolder = "Soft1 Requests Atalanti"
+                Case "AYLIDA"
+                    nasFolder = "Soft1 Requests Avlida"
+                Case "VELESTINO"
+                    nasFolder = "Soft1 Requests Velestino"
+                Case Else
+                    Throw New Exception("Άγνωστο εργοστάσιο: " & Facilities)
+            End Select
+
+            Dim nasPath As String = IO.Path.Combine(nasRoot, nasFolder)
+
+            Dim destFile As String =
+            IO.Path.Combine(nasPath, IO.Path.GetFileName(sourceFile))
+
+            ' -------------------------
+            ' SERVICE ACCOUNT (AD)
+            ' -------------------------
+            Dim adUser As String = "g.softonis"
+            Dim adPass As String = "5$dOe)#nW3i@"
+
+            Try
+                ' Σύνδεση στο NAS (session-based)
+                '"\\nas0\Soft1 Requests Kavala"
+                '"\\nas0\Soft1 Requests Kavala"
+                '"\\nas0\Soft1 Requests Kavala"
+                '"g.softonis"
+                '"g.softonis"
+                '"5$dOe)#nW3i@"
+                '"5$dOe)#nW3i@"
+                ' 🔌 Κλείσιμο σύνδεσης NAS
+                'DisconnectShare(nasPath)
+                Dim rc As Integer = ConnectToShare(nasPath, adUser, adPass)
+
+                If rc <> 0 Then
+                    Throw New Exception($"Αποτυχία σύνδεσης στο NAS. Error code: {rc}")
+                End If
+
+                ' -------------------------
+                ' Έλεγχος overwrite
+                ' -------------------------
+                If IO.File.Exists(destFile) Then
+                    Dim res = MessageBox.Show(
+                    $"Το αρχείο '{IO.Path.GetFileName(destFile)}' υπάρχει ήδη." & vbCrLf &
+                    "Θέλετε να αντικατασταθεί;",
+                    "Υπάρχον αρχείο",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                )
+
+                    If res = DialogResult.No Then Exit Sub
+
+                    IO.File.Copy(sourceFile, destFile, True)
+                Else
+                    IO.File.Copy(sourceFile, destFile)
+                End If
+
+                ' Μετά το File.Copy
+                If Not IO.File.Exists(destFile) Then
+                    Throw New Exception("Η αντιγραφή απέτυχε.")
+                End If
+
+                ' -------------------------
+                ' ΕΜΦΑΝΙΣΗ ΣΤΟ GRID (μόνο filename)
+                ' -------------------------
+                Dim fileNameOnly As String = IO.Path.GetFileName(destFile)
+
+                MTRLINEsDataGridView.Rows(e.RowIndex).Cells("Docs").Value = fileNameOnly
+                'With MTRLINEsDataGridView.Rows(e.RowIndex).Cells("Docs")
+                '    .Value = fileNameOnly     ' τι βλέπει ο χρήστης
+                'End With
+
+                MessageBox.Show(
+                "Το αρχείο αποθηκεύτηκε επιτυχώς.",
+                "OK",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            )
+
+            Catch ex As Exception
+                MessageBox.Show(
+                ex.Message,
+                "Σφάλμα",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error)
+            Finally
+                ' 🔌 Κλείσιμο σύνδεσης NAS
+                DisconnectShare(nasPath)
+            End Try
         End Using
 
     End Sub
+    Private Function IsShareConnected(uncPath As String) As Boolean
+        Try
+            Return IO.Directory.Exists(uncPath)
+        Catch
+            Return False
+        End Try
+    End Function
+
     Private Sub DataGridView1_DataError(ByVal sender As Object, ByVal e As DataGridViewDataErrorEventArgs) Handles MTRLINEsDataGridView.DataError
 
         If editableFields_MTRLINEsDataGridView.Contains(sender.Columns(e.ColumnIndex).DataPropertyName) Then
@@ -3090,7 +3197,7 @@ Public Class WHouseBal
                     Dim res = CType(Me.VscsBindingSource.DataSource, List(Of GetPendingOrdersDetailsResult)).Where(Function(f) f.FINDOC = findoc).ToList
 
                     For Each v In res
-                        sStr &= String.Format("UPDATE MTRLINES
+                        sStr &= String.Format(Globalization.CultureInfo.InvariantCulture, "UPDATE MTRLINES
                         SET QTY1 = {2}
                         FROM MTRLINES 
                         WHERE MTRLINES.FINDOC = {0} AND MTRLINES.MTRLINES= {1} ", findoc, v.MTRLINES, v.QTY1)
@@ -3111,7 +3218,7 @@ Public Class WHouseBal
                     fin1.FINSTATES = 16 'Αίτηση πρός έγκριση
                 End If
 
-                sStr &= String.Format("UPDATE FINDOC SET  INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, VARCHAR02='{2}', FINSTATES = 16  WHERE FINDOC = {0} ", findoc, 9999, fin1.Highers)
+                sStr &= String.Format(Globalization.CultureInfo.InvariantCulture, "UPDATE FINDOC SET  INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, VARCHAR02='{2}', FINSTATES = 16  WHERE FINDOC = {0} ", findoc, 9999, fin1.Highers)
                 'Sql = String.Format("UPDATE FINDOC SET INSDATE = GETDATE(), INSUSER = {1}, UPDDATE = GETDATE(), UPDUSER = {1}, REMARKS='{2}', FINCODE='{3}' WHERE FINDOC = {0}", CSaldoc.DNewID, UserId, Remarks, CSaldoc.DDocFinDoc.FINCODE) ' 1288495)"
                 'sStr = Newtonsoft.Json.Linq.JObject.FromObject(New With {
                 '                                                                  .clientID = clientID,
@@ -3635,11 +3742,13 @@ Public Class WHouseBal
         New JProperty("INT02", fin.FINDOC)
     )
     End Function
+
     Function BuildMTRDOC(fin As Revera.FINDOC) As JObject
         Return New JObject(
         New JProperty("WHOUSE", fin.MTRDOC.WHOUSE)
     )
     End Function
+
     Function BuildITELINES(lines As List(Of Revera.MTRLINE)) As JArray
 
         Dim arr As New JArray()
@@ -3662,7 +3771,47 @@ Public Class WHouseBal
             o("NUM03") = ln.NUM03
             o("cccTrdDep") = ln.cccTrdDep
             o("cccTrdr") = ln.cccTrdr
-            o("CccDocs") = ln.CccDocs
+            ' =========================
+            ' CccDocs → FULL NAS PATH
+            ' =========================
+            If Not String.IsNullOrWhiteSpace(ln.CccDocs) Then
+
+                Dim cccDocsValue As String = ln.CccDocs.Trim()
+
+                ' Αν είναι ήδη full path ή URL → ΜΗΝ ΠΡΟΣΘΕΣΕΙΣ ΤΙΠΟΤΑ
+                If cccDocsValue.StartsWith("\\") _
+                    OrElse cccDocsValue.StartsWith("http://", StringComparison.OrdinalIgnoreCase) _
+                    OrElse cccDocsValue.StartsWith("https://", StringComparison.OrdinalIgnoreCase) Then
+
+                    o("CccDocs") = cccDocsValue
+
+                Else
+                    ' =========================
+                    ' ΜΟΝΟ filename → βάλε NAS path
+                    ' =========================
+                    Dim nasRoot As String = "\\nas0"
+                    Dim nasFolder As String
+
+                    Select Case Facilities
+                        Case "KAVALA"
+                            nasFolder = "Soft1 Requests Kavala"
+                        Case "ATALANTI"
+                            nasFolder = "Soft1 Requests Atalanti"
+                        Case "AYLIDA"
+                            nasFolder = "Soft1 Requests Avlida"
+                        Case "VELESTINO"
+                            nasFolder = "Soft1 Requests Velestino"
+                        Case Else
+                            Throw New Exception("Άγνωστο εργοστάσιο: " & Facilities)
+                    End Select
+
+                    Dim nasPath As String = IO.Path.Combine(nasRoot, nasFolder)
+
+                    ' τελικό πλήρες path
+                    o("CccDocs") = IO.Path.Combine(nasPath, cccDocsValue)
+                End If
+            End If
+
 
             If ln.PRICE IsNot Nothing Then
                 o("PRICE") = ln.PRICE
