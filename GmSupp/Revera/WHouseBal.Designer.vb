@@ -318,6 +318,7 @@ Partial Class WHouseBal
         'SplitContainer1.Panel1
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
+        Me.SplitContainer1.Panel1.Controls.Add(Me.BtnUpload)
         Me.SplitContainer1.Panel1.Controls.Add(Me.LblTime)
         Me.SplitContainer1.Panel1.Controls.Add(Me.GroupBoxStatus)
         Me.SplitContainer1.Panel1.Controls.Add(Me.GroupBox1)
@@ -660,7 +661,6 @@ Partial Class WHouseBal
         '
         'PanelChUsers
         '
-        Me.PanelChUsers.Controls.Add(Me.BtnUpload)
         Me.PanelChUsers.Controls.Add(Me.BtnEditApplicantLogs)
         Me.PanelChUsers.Controls.Add(Me.Label9)
         Me.PanelChUsers.Controls.Add(Label10)
@@ -677,7 +677,7 @@ Partial Class WHouseBal
         '
         'BtnUpload
         '
-        Me.BtnUpload.Location = New System.Drawing.Point(704, 50)
+        Me.BtnUpload.Location = New System.Drawing.Point(1177, 233)
         Me.BtnUpload.Name = "BtnUpload"
         Me.BtnUpload.Size = New System.Drawing.Size(75, 23)
         Me.BtnUpload.TabIndex = 299
@@ -903,6 +903,7 @@ Partial Class WHouseBal
         '
         Me.BindingNavigatorPositionItem1.AccessibleName = "Position"
         Me.BindingNavigatorPositionItem1.AutoSize = False
+        Me.BindingNavigatorPositionItem1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.BindingNavigatorPositionItem1.Name = "BindingNavigatorPositionItem1"
         Me.BindingNavigatorPositionItem1.Size = New System.Drawing.Size(50, 21)
         Me.BindingNavigatorPositionItem1.Text = "0"
@@ -1129,6 +1130,7 @@ Partial Class WHouseBal
         '
         Me.ToolStripTextBox1.AccessibleName = "Position"
         Me.ToolStripTextBox1.AutoSize = False
+        Me.ToolStripTextBox1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.ToolStripTextBox1.Name = "ToolStripTextBox1"
         Me.ToolStripTextBox1.Size = New System.Drawing.Size(50, 23)
         Me.ToolStripTextBox1.Text = "0"
