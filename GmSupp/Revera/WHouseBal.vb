@@ -2050,7 +2050,7 @@ Public Class WHouseBal
     End Sub
 
 
-    Private Async Sub MTRLINEsDataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) 'Handles MTRLINEsDataGridView.CellContentClick
+    Private Async Sub MTRLINEsDataGridViewAsync_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) 'Handles MTRLINEsDataGridView.CellContentClick
 
         If e.RowIndex < 0 Then Exit Sub
         If MTRLINEsDataGridView.Columns(e.ColumnIndex).Name <> "btnDocs" Then Exit Sub
