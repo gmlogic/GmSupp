@@ -73,6 +73,7 @@ Partial Class WHouseBal
         Me.ddlΗighers = New System.Windows.Forms.ComboBox()
         Me.txtBoxOrderNo = New System.Windows.Forms.TextBox()
         Me.PanelChUsers = New System.Windows.Forms.Panel()
+        Me.BtnUpload = New System.Windows.Forms.Button()
         Me.BtnEditApplicantLogs = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtBoxccCRecipients = New System.Windows.Forms.TextBox()
@@ -659,6 +660,7 @@ Partial Class WHouseBal
         '
         'PanelChUsers
         '
+        Me.PanelChUsers.Controls.Add(Me.BtnUpload)
         Me.PanelChUsers.Controls.Add(Me.BtnEditApplicantLogs)
         Me.PanelChUsers.Controls.Add(Me.Label9)
         Me.PanelChUsers.Controls.Add(Label10)
@@ -672,6 +674,15 @@ Partial Class WHouseBal
         Me.PanelChUsers.Name = "PanelChUsers"
         Me.PanelChUsers.Size = New System.Drawing.Size(1050, 118)
         Me.PanelChUsers.TabIndex = 290
+        '
+        'BtnUpload
+        '
+        Me.BtnUpload.Location = New System.Drawing.Point(704, 50)
+        Me.BtnUpload.Name = "BtnUpload"
+        Me.BtnUpload.Size = New System.Drawing.Size(75, 23)
+        Me.BtnUpload.TabIndex = 299
+        Me.BtnUpload.Text = "UpLoad"
+        Me.BtnUpload.UseVisualStyleBackColor = True
         '
         'BtnEditApplicantLogs
         '
@@ -892,7 +903,6 @@ Partial Class WHouseBal
         '
         Me.BindingNavigatorPositionItem1.AccessibleName = "Position"
         Me.BindingNavigatorPositionItem1.AutoSize = False
-        Me.BindingNavigatorPositionItem1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.BindingNavigatorPositionItem1.Name = "BindingNavigatorPositionItem1"
         Me.BindingNavigatorPositionItem1.Size = New System.Drawing.Size(50, 21)
         Me.BindingNavigatorPositionItem1.Text = "0"
@@ -1119,7 +1129,6 @@ Partial Class WHouseBal
         '
         Me.ToolStripTextBox1.AccessibleName = "Position"
         Me.ToolStripTextBox1.AutoSize = False
-        Me.ToolStripTextBox1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.ToolStripTextBox1.Name = "ToolStripTextBox1"
         Me.ToolStripTextBox1.Size = New System.Drawing.Size(50, 23)
         Me.ToolStripTextBox1.Text = "0"
@@ -1496,4 +1505,5 @@ Partial Class WHouseBal
     Public WithEvents RadioBtnccCRecipients As RadioButton
     Friend WithEvents LblTime As Label
     Friend WithEvents BtnEditApplicantLogs As Button
+    Friend WithEvents BtnUpload As Button
 End Class
