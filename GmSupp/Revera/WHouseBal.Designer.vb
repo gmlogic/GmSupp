@@ -47,6 +47,7 @@ Partial Class WHouseBal
         Me.ΠεριγραφήΕτικέταςToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.BtnUpload = New System.Windows.Forms.Button()
         Me.LblTime = New System.Windows.Forms.Label()
         Me.GroupBoxStatus = New System.Windows.Forms.GroupBox()
         Me.RadioBtnccCRecipients = New System.Windows.Forms.RadioButton()
@@ -73,7 +74,6 @@ Partial Class WHouseBal
         Me.ddlΗighers = New System.Windows.Forms.ComboBox()
         Me.txtBoxOrderNo = New System.Windows.Forms.TextBox()
         Me.PanelChUsers = New System.Windows.Forms.Panel()
-        Me.BtnUpload = New System.Windows.Forms.Button()
         Me.BtnEditApplicantLogs = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtBoxccCRecipients = New System.Windows.Forms.TextBox()
@@ -345,6 +345,15 @@ Partial Class WHouseBal
         Me.SplitContainer1.Size = New System.Drawing.Size(1284, 749)
         Me.SplitContainer1.SplitterDistance = 224
         Me.SplitContainer1.TabIndex = 10
+        '
+        'BtnUpload
+        '
+        Me.BtnUpload.Location = New System.Drawing.Point(1177, 233)
+        Me.BtnUpload.Name = "BtnUpload"
+        Me.BtnUpload.Size = New System.Drawing.Size(75, 23)
+        Me.BtnUpload.TabIndex = 299
+        Me.BtnUpload.Text = "UpLoad"
+        Me.BtnUpload.UseVisualStyleBackColor = True
         '
         'LblTime
         '
@@ -674,15 +683,6 @@ Partial Class WHouseBal
         Me.PanelChUsers.Name = "PanelChUsers"
         Me.PanelChUsers.Size = New System.Drawing.Size(1050, 118)
         Me.PanelChUsers.TabIndex = 290
-        '
-        'BtnUpload
-        '
-        Me.BtnUpload.Location = New System.Drawing.Point(1177, 233)
-        Me.BtnUpload.Name = "BtnUpload"
-        Me.BtnUpload.Size = New System.Drawing.Size(75, 23)
-        Me.BtnUpload.TabIndex = 299
-        Me.BtnUpload.Text = "UpLoad"
-        Me.BtnUpload.UseVisualStyleBackColor = True
         '
         'BtnEditApplicantLogs
         '

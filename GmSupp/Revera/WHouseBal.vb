@@ -1633,9 +1633,9 @@ Public Class WHouseBal
 
                 If Not MTRLINEsDataGridView.Columns.Contains("btnDocs") Then
                     Dim colbtn = MTRLINEsDataGridView.Columns.Cast(Of DataGridViewColumn).Where(Function(f) f.DataPropertyName = "CccDocs").FirstOrDefault
-                    If Not CurUserRole = "Admins" Then
-                        MTRLINEsDataGridView.Columns.Insert(colbtn.Index, btnCol)
-                    End If
+                    'If Not CurUserRole = "Admins" Then
+                    MTRLINEsDataGridView.Columns.Insert(colbtn.Index, btnCol)
+                    'End If
                 End If
             End If
 
@@ -2050,7 +2050,7 @@ Public Class WHouseBal
     End Sub
 
 
-    Private Async Sub MTRLINEsDataGridView_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles MTRLINEsDataGridView.CellContentClick
+    Private Async Sub MTRLINEsDataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) 'Handles MTRLINEsDataGridView.CellContentClick
 
         If e.RowIndex < 0 Then Exit Sub
         If MTRLINEsDataGridView.Columns(e.ColumnIndex).Name <> "btnDocs" Then Exit Sub
@@ -2117,7 +2117,7 @@ Public Class WHouseBal
         End Using
     End Function
 
-    Private Sub MTRLINEsDataGridView_CellContentClickold(sender As Object, e As DataGridViewCellEventArgs) ' Handles MTRLINEsDataGridView.CellContentClick
+    Private Sub MTRLINEsDataGridView_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles MTRLINEsDataGridView.CellContentClick
 
         ' -------------------------
         ' Έλεγχοι
@@ -2137,7 +2137,7 @@ Public Class WHouseBal
             ' -------------------------
             ' NAS PATH
             ' -------------------------
-            Dim nasRoot As String = "\\192.168.10.12"
+            Dim nasRoot As String = "\\nas0"
             Dim nasFolder As String '= GetNasFolderByFacility(facility)
             Select Case Facilities
                 Case "KAVALA"
@@ -2249,7 +2249,7 @@ Public Class WHouseBal
             ' -------------------------
             ' NAS PATH
             ' -------------------------
-            Dim nasRoot As String = "\\192.168.10.12"
+            Dim nasRoot As String = "\\nas0"
             Dim nasFolder As String '= GetNasFolderByFacility(facility)
             Select Case Facilities
                 Case "KAVALA"
@@ -3965,7 +3965,7 @@ Public Class WHouseBal
                     ' =========================
                     ' ΜΟΝΟ filename → βάλε NAS path
                     ' =========================
-                    Dim nasRoot As String = "\\192.168.10.12"
+                    Dim nasRoot As String = "\\nas0"
                     Dim nasFolder As String
 
                     Select Case Facilities
