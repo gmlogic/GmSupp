@@ -101,6 +101,30 @@ Public Class WHouseBalFR
         End If
     End Sub
 
+    Private Sub ddlΗighers_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlΗighers.SelectedIndexChanged
+
+        If WHouseBal.Recipients Is Nothing Then Exit Sub
+        If ddlΗighers.SelectedValue = "0" Then Exit Sub
+
+        Dim selectedHigherId As String = ddlΗighers.SelectedValue.ToString()
+
+        ' Reset datasource για καθαρό refresh
+        Me.GmChkListBoxRecipients.dgv.DataSource = Nothing
+
+        ' Αν είναι <Επιλέξτε>
+        If selectedHigherId = "0" Then
+            Me.GmChkListBoxRecipients.dgv.DataSource = WHouseBal.Recipients.ToList()
+            Exit Sub
+        End If
+
+        ' Φιλτράρισμα
+        Dim filtered = WHouseBal.Recipients.Where(Function(kv) kv.Value <> selectedHigherId).ToList()
+
+        Me.GmChkListBoxRecipients.dgv.DataSource = filtered
+
+    End Sub
+
+
     'Private Sub ddlApplicant_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlApplicant.SelectedIndexChanged
     '    Dim s As ComboBox = sender
     '    If Not s.SelectedValue = 0 Then

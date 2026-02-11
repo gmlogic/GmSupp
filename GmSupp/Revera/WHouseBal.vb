@@ -42,13 +42,7 @@ Public Class WHouseBal
 #End Region
 #Region "02-Declare Propertys"
     Public Property Series As Integer
-        Get
-            Return m_Series
-        End Get
-        Set(ByVal value As Integer)
-            m_Series = value
-        End Set
-    End Property
+    Public Shared Property Recipients As Dictionary(Of String, String)
 
 #End Region
 #Region "03-Load Form"
@@ -309,7 +303,7 @@ Public Class WHouseBal
 
         Dim Highers As Dictionary(Of String, String) = GetAllHigherUsers(loginUser.Id)
 
-        Dim Recipients As New Dictionary(Of String, String)
+
         If Facilities = "KAVALA" Then
             Recipients = usss.ToList().Where(Function(u) UserManager.GetRoles(u.Id).Contains("Κοινοποίηση")).OrderBy(Function(u) u.Name).ToDictionary(Function(u) u.Name, Function(u) u.Id)
         Else
@@ -322,12 +316,12 @@ Public Class WHouseBal
         '    End If
         'Next
 
-        For Each h In Highers.Values.ToList()
-            If Recipients.ContainsValue(h) Then
-                Dim keyToRemove = Recipients.First(Function(r) r.Value = h).Key
-                Recipients.Remove(keyToRemove)
-            End If
-        Next
+        'For Each h In Highers.Values.ToList()
+        '    If Recipients.ContainsValue(h) Then
+        '        Dim keyToRemove = Recipients.First(Function(r) r.Value = h).Key
+        '        Recipients.Remove(keyToRemove)
+        '    End If
+        'Next
 
         Me.ddlΗighers.DropDownStyle = ComboBoxStyle.DropDownList
         Me.ddlΗighers.DisplayMember = "Key"
@@ -370,7 +364,7 @@ Public Class WHouseBal
         wfm.ddlΗighers.DataSource = Highers.ToList
 
         'Κοινοποίηση Αίτησης σε :
-        wfm.GmChkListBoxRecipients.dgv.DataSource = Recipients.ToList
+        'wfm.GmChkListBoxRecipients.dgv.DataSource = Recipients.ToList
         wfm.GmChkListBoxRecipients.dgv_Styling()
         wfm.GmChkListBoxRecipients.TlStxtBox.Text = Nothing
         wfm.GmChkListBoxRecipients.TlStxtBox.ReadOnly = True
