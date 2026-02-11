@@ -30,12 +30,12 @@
     <InstallUrl>\\192.168.10.12\gmapp\GmSupp\</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>72</ApplicationRevision>
+    <ApplicationRevision>84</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <BootstrapperEnabled>false</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -72,10 +72,11 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>881701F61EC75443FD005D9B8C3F1885B50E47C4</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>D2A889BB6A5847F72296DD22DD4851AC500EE6CB</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>GmSupp_2_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -552,8 +553,12 @@
       <LastGenOutput>DataClassesRevera.designer.vb</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <None Include="GmLogic_CodeSigning.pfx" />
+    <None Include="GmSupp.pfx" />
     <None Include="GmSupp_1_TemporaryKey.pfx" />
     <None Include="GmSupp_2_TemporaryKey.pfx" />
+    <None Include="GmSupp_3_TemporaryKey.pfx" />
+    <None Include="GmSupp_ClickOnce_CodeSigning.pfx" />
     <None Include="GmSupp_TemporaryKey.pfx" />
     <None Include="My Project\DataSources\ccCBCLabel.datasource" />
     <None Include="My Project\DataSources\GmSupp.Hglp.cccPriceList.datasource" />

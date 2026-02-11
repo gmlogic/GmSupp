@@ -311,7 +311,7 @@ Public Class WHouseBal
 
         Dim Recipients As New Dictionary(Of String, String)
         If Facilities = "KAVALA" Then
-            Recipients = usss.ToList().Where(Function(u) UserManager.GetRoles(u.Id).Contains("Κοινοποίηση")).ToDictionary(Function(u) u.Name, Function(u) u.Id)
+            Recipients = usss.ToList().Where(Function(u) UserManager.GetRoles(u.Id).Contains("Κοινοποίηση")).OrderBy(Function(u) u.Name).ToDictionary(Function(u) u.Name, Function(u) u.Id)
         Else
             Recipients = GetRecipientsFromSelectedHigher(loginUser.Id)
         End If
@@ -4711,7 +4711,9 @@ Public Class WHouseBal
         Dim s As RadioButton = sender
         txtBoxMtrlName.Text = ""
         If s.Name = "radioBtnService" AndAlso s.Checked Then
-            txtBoxMtrlName.Text = "*ΕΞΟΔΑ*"
+            If Facilities <> "KAVALA" Then
+                txtBoxMtrlName.Text = "*ΕΞΟΔΑ*"
+            End If
         End If
     End Sub
 
